@@ -32,6 +32,10 @@ Route::filter('auth', 'Core\Filters\Auth@auth');
 
 Route::group(array('before' => 'auth'), function() {
 
+    // Nodes
+    Route::get('nodes/hierarchy/{collectionId}', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
+    Route::get('nodes/list/{collectionId}', array('as' => 'nodes.list', 'uses' => 'NodesController@list'));
+
     Route::resource('collections', 'CollectionsController');
 
 });

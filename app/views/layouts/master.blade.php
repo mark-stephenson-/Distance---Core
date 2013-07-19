@@ -45,8 +45,9 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="#">Bradford Teaching Hospitals NHS Foundation Trust</a></li>
-                                <li><a href="#">Demo - St Elsewhere NHS Trust</a></li>
+                                @foreach(Collection::all() as $collection)
+                                    <li><a href="#">{{ $collection->name }}</a></li>
+                                @endforeach
                             </ul>
                         </div>
 
@@ -55,6 +56,8 @@
                     <section class="body">
                         <div class="row-fluid">
                             <div class="span12">
+                                @include('partials.alerts')
+                                
                                 @yield('body')
                             </div>
                         </div>

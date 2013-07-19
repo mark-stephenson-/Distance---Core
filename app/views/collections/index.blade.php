@@ -30,9 +30,11 @@
                     {{ $collection->api_key }}
                 </td>
                 <td width="330">
-                    <a href="#" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
-                    <a href="#" class="btn btn-small"><i class="icon-list"></i> Node List</a>
-                    <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                    @if (Config::get('core.features.hierarchy'))
+                        <a href="{{ route('nodes.hierarchy', array($collection->id)) }}" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
+                    @endif
+                    <a href="{{ route("nodes.list", array($collection->id)) }}" class="btn btn-small"><i class="icon-list"></i> Node List</a>
+                    <a href="{{ route('collections.edit', array($collection->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
