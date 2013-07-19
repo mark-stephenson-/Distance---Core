@@ -33,7 +33,7 @@
                         <ul>
                             <li><a href="#">Sam Jordan</a></li>
                             <li><a href="#"><i class="icon-cog"></i></a></li>
-                            <li><a href="#"><i class="icon-signout "></i></a></li>
+                            <li><a href="{{ route('logout') }}"><i class="icon-signout "></i></a></li>
                         </ul>
                     </nav>
                 </header>
@@ -57,7 +57,7 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 @include('partials.alerts')
-                                
+
                                 @yield('body')
                             </div>
                         </div>

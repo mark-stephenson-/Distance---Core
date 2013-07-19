@@ -14,8 +14,12 @@
 
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="auth span5 offset3">
+                <div class="content auth span5 offset3">
+                        <header>
+                            @yield('header')
+                        </header>
                         <section class="body">
+                            @include('partials.alerts')
                             @yield('body')
                         </section>
                     </div>

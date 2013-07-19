@@ -1,9 +1,10 @@
 @extends('layouts.auth')
 
-@section('body')
+@section('header')
     <h1>The Core</h1>
-                    
-    @include('partials.alerts')
+@stop
+
+@section('body')
     
     {{ Form::open(['class' => 'form-horizontal']) }}
 
