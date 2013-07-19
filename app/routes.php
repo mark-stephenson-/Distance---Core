@@ -11,6 +11,10 @@
 |
 */
 
+Route::any('/', array('as' => 'root', function() {
+    return Redirect::route('collections.index');
+}));
+
 // Authentication
 Route::get('login', array('as' => 'login', 'uses' => 'AuthController@showLogin'));
 Route::get('login/{userId}/{token}', array('uses' => 'AuthController@processReviewerLogin'));
@@ -23,3 +27,11 @@ Route::get('forgot-password/{code}', array('as' => 'reset-password', 'uses' => '
 Route::post('forgot-password/{code}', array('uses' => 'AuthController@processResetPassword'));
 
 Route::get('logout', array('as' => 'logout', 'uses' => 'AuthController@processLogout'));
+
+Route::filter('auth', 'Core\Filters\Auth@auth');
+
+Route::group(array('before' => 'auth'), function() {
+
+    Route::resource('collections', 'CollectionsController');
+
+});

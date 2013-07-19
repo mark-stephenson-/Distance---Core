@@ -50,56 +50,12 @@
                             </ul>
                         </div>
 
-                        <h1> Collections</h1>
+                        @yield('header')
                     </header>
                     <section class="body">
                         <div class="row-fluid">
                             <div class="span12">
-                                <p>Etiam porta sem malesuada magna mollis euismod. Maecenas sed diam eget risus varius blandit sit amet non magna. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec id elit non mi porta gravida at eget metus.</p>
-
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                Leeds Teaching Hospital NHS Trust
-                                            </td>
-                                            <td width="330">
-                                                <a href="#" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
-                                                <a href="#" class="btn btn-small"><i class="icon-list"></i> Node List</a>
-                                                <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                                                <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Bradford Teaching Hospitals NHS Foundation Trust
-                                            </td>
-                                            <td>
-                                                <a href="#" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
-                                                <a href="#" class="btn btn-small"><i class="icon-list"></i> Node List</a>
-                                                <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                                                <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Demo - St Elsewhere NHS Trust
-                                            </td>
-                                            <td>
-                                                <a href="#" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
-                                                <a href="#" class="btn btn-small"><i class="icon-list"></i> Node List</a>
-                                                <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                                                <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                @yield('body')
                             </div>
                         </div>
                     </section>
