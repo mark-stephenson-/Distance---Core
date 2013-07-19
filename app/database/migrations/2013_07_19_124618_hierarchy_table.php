@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class Hierarchy extends Migration {
+class HierarchyTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -20,6 +20,7 @@ class Hierarchy extends Migration {
             
             $table->integer('lft')->index();
             $table->integer('rgt')->index();
+            $table->integer('tree')->index();
 
             $table->integer('created_by');
             $table->text('permissions')->nullable();

@@ -44,6 +44,9 @@ class CollectionsController extends BaseController
         $collection = new Collection(Input::all());
         $collection->save();
 
+        $collectionHierarchy = new Hierarchy(['collection_id' => $collection->id]);
+        $collectionHierarchy->makeRoot();
+
         return Redirect::route('collections.index')
                 ->with('successes', new MessageBag(array($collection->name . ' has been created.')));
     }
