@@ -3,3 +3,7 @@
 composer.phar
 composer.lock
 .DS_Store
+
+node_modules/
+public/css/*.min.css
+public/js/*.min.js

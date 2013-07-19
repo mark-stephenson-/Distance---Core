@@ -3,8 +3,16 @@
 	"description": "The Laravel Framework.",
 	"keywords": ["framework", "laravel"],
 	"require": {
-		"laravel/framework": "4.0.*"
+		"laravel/framework": "4.0.*",
+        "cartalyst/sentry": "2.0.*",
+        "cartalyst/nested-sets": "2.0.*"
 	},
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.cartalyst.com"
+        }
+    ],
 	"autoload": {
 		"classmap": [
 			"app/commands",
@@ -13,7 +21,13 @@
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php"
-		]
+		],
+        "files": [
+            "app/helpers.php"
+        ],
+        "psr-0": {
+            "Core": "app"
+        }
 	},
 	"scripts": {
 		"post-install-cmd": [
