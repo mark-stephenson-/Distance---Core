@@ -19,7 +19,8 @@
                     <a class="logo" href="/"><i class="icon-css3"></i></a>
                     <ul>
                         <li><a href="#"><i class="icon-th-large"></i> Collections</a></li>
-                        <li><a href="#"><i class="icon-group"></i> Users</a></li>
+                        <li><a href="#"><i class="icon-group"></i> Groups</a></li>
+                        <li><a href="#"><i class="icon-user"></i> Users</a></li>
                         <li><a href="#"><i class="icon-briefcase"></i> Node Types</a></li>
                         <li><a href="#"><i class="icon-lock"></i> API Keys</a></li>
                         <li><a href="#"><i class="icon-apple"></i> App Distribution</a></li>

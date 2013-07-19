@@ -114,7 +114,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
-        'Cartalyst\Sentry\SentryServiceProvider'
+        'Cartalyst\Sentry\SentryServiceProvider',
+        'Cartalyst\NestedSets\NestedSetsServiceProvider',
 
 	),
 
