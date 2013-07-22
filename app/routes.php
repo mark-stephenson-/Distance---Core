@@ -34,7 +34,10 @@ Route::group(array('before' => 'auth'), function() {
 
     // Nodes
     Route::get('nodes/hierarchy/{collectionId}', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
-    Route::get('nodes/list/{collectionId}', array('as' => 'nodes.list', 'uses' => 'NodesController@list'));
+    Route::get('nodes/list/{collectionId}', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
+
+    // CRUD
+    Route::get('nodes/create/{collectionId}/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.create', 'uses' => 'NodesController@create'));
 
     Route::resource('collections', 'CollectionsController');
 

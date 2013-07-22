@@ -42,12 +42,12 @@
                     <header>
                         <div class="btn-group change-collection">
                             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                Leeds Teaching Hospital NHS Trust
+                                {{ Session::get('current-collection')->name }}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
                                 @foreach(Collection::all() as $collection)
-                                    <li><a href="#">{{ $collection->name }}</a></li>
+                                    <li><a href="{{ route('nodes.' . Config::get('core.prefrences.preferred-node-view'), [$collection->id]) }}">{{ $collection->name }}</a></li>
                                 @endforeach
                             </ul>
                         </div>

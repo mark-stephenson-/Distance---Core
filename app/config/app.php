@@ -116,6 +116,7 @@ return array(
 
         'Cartalyst\Sentry\SentryServiceProvider',
         'Cartalyst\NestedSets\NestedSetsServiceProvider',
+        'Profiler\ProfilerServiceProvider',
 
 	),
 
@@ -183,7 +184,8 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 
         'MessageBag'      => 'Illuminate\Support\MessageBag',
-        'Sentry'          => 'Cartalyst\Sentry\Facades\Laravel\Sentry'
+        'Sentry'          => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
+        'Profiler'        => 'Profiler\Facades\Profiler',
 
 	),
 

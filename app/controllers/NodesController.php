@@ -25,4 +25,26 @@ class NodesController extends BaseController
         return View::make('nodes.hierarchy', compact('collection', 'branches'));
     }
 
+    public function nodeList($collectionId = 0) {
+
+        if (!Sentry::getUser()->hasAccess('')) {
+            die('no-access');
+        }
+
+        $collection = Collection::find($collectionId);
+
+        if (!$collection) {
+            return Redirect::back()
+                ->withErrors(['That collection could not be found.']);
+        }
+
+        Session::put('current-collection', $collection);
+        Session::put('collection-node-view', 'list');
+
+        $nodes = $collection->nodes;
+
+        return View::make('nodes.list', compact('collection', 'nodes'));
+
+    }
+
 }

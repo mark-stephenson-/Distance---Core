@@ -9,6 +9,11 @@ class Collection extends BaseModel {
         return $this->hasOne('Hierarchy');
     }
 
+    public function nodes()
+    {
+        return $this->hasMany('Node');
+    }
+
     public static function toDropDown()
     {
         $items = [];

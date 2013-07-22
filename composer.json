@@ -5,7 +5,8 @@
 	"require": {
 		"laravel/framework": "4.0.*",
         "cartalyst/sentry": "2.0.*",
-        "cartalyst/nested-sets": "2.0.*"
+        "cartalyst/nested-sets": "2.0.*",
+        "loic-sharma/profiler": "v1.1.2"
 	},
     "repositories": [
         {
