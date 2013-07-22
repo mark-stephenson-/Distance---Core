@@ -9,4 +9,15 @@ class Collection extends BaseModel {
         return $this->hasOne('Hierarchy');
     }
 
+    public static function toDropDown()
+    {
+        $items = [];
+
+        foreach(static::all() as $item) {
+            $items[$item->id] = $item->name;
+        }
+
+        return $items;
+    }
+
 }

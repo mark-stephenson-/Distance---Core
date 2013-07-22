@@ -42,6 +42,7 @@ module.exports = function(grunt) {
                     'public/js/app.min.js': [
                         'public/js/bootstrap/bootstrap-dropdown.js',
                         'public/js/bootstrap/bootstrap-modal.js',
+                        'public/js/select2.js',
                         'public/js/app.js'
                     ]
                 }
@@ -54,6 +55,7 @@ module.exports = function(grunt) {
                     'public/js/app.min.js': [
                         'public/js/bootstrap/bootstrap-dropdown.js',
                         'public/js/bootstrap/bootstrap-modal.js',
+                        'public/js/select2.js',
                         'public/js/app.js'
                     ]
                 }

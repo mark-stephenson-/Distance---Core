@@ -18,10 +18,10 @@
                 <nav class="main">
                     <a class="logo" href="/"><i class="icon-css3"></i></a>
                     <ul>
-                        <li><a href="#"><i class="icon-th-large"></i> Collections</a></li>
+                        <li><a href="{{ route('collections.index') }}"><i class="icon-th-large"></i> Collections</a></li>
                         <li><a href="#"><i class="icon-group"></i> Groups</a></li>
                         <li><a href="#"><i class="icon-user"></i> Users</a></li>
-                        <li><a href="#"><i class="icon-briefcase"></i> Node Types</a></li>
+                        <li><a href="{{ route('node-types.index') }}"><i class="icon-briefcase"></i> Node Types</a></li>
                         <li><a href="#"><i class="icon-lock"></i> API Keys</a></li>
                         <li><a href="#"><i class="icon-apple"></i> App Distribution</a></li>
                         <li><a href="#"><i class="icon-folder-open"></i> Resources</a></li>
@@ -83,7 +83,11 @@
     </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
         <script src="/js/app.min.js"></script>
+        <script>
+            @yield('js')
+        </script>
 
     </body>
 </html>

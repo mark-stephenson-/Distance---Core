@@ -12,3 +12,23 @@ function formModel($model, $routeName) {
         }
     }
 }
+
+function popRadio( $value, $data, $checkedByDefault = false) {
+    if (!$data) return $checkedByDefault;
+    return ($value == $data);
+}
+
+function columnExists($column_name, $table_name) {
+    return (DB::table('information_schema.columns')
+                ->whereTableSchema( Config::get('database.connections.mysql.database') )
+                ->whereTableName($table_name)
+                ->whereColumnName($column_name)
+                ->count() > 0);
+}
+
+function tableExists($table_name) {
+    return (DB::table('information_schema.tables')
+                ->whereTableSchema( Config::get('database.connections.mysql.database') )
+                ->whereTableName($table_name)
+                ->count() > 0);
+}

@@ -1,7 +1,7 @@
 <?php
 namespace Core\Filters;
 
-use Sentry;
+use Sentry, Session, MessageBag, URL, Redirect;
 
 class Auth
 {
