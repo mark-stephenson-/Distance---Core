@@ -5,5 +5,9 @@
         $value = @$data->{$column->name};
     }
 ?>
-<p><em>{{ @$column->description }}</em></p>
-<input type="text" name="nodetype[{{ $column->name }}]" value="{{ Input::old('nodetype.' . $column->name , $value) }}" id="input_{{ $column->name }}" class="validate-geolocation" />
+
+{{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span8 validate-geolocation']) }}
+
+@if ($column->description)
+    <span class="help-block">{{ $column->description }}</span>
+@endif

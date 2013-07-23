@@ -87,6 +87,78 @@ class NodeType extends BaseModel {
         return tableExists($this->tableName());
     }
 
+    public function checkRequiredColumns($post_data)
+    {
+        $columns = $this->requiredColumns();
+        $errors = array();
+
+        if (count($columns)) {
+            foreach($columns as $column) {
+
+                if (empty($post_data[$column->name])) {
+                    $errors[] = $column->label;
+                }
+
+            }
+        }
+
+        return $errors;
+    }
+
+    public function requiredColumns()
+    {
+        $ret = array();
+
+        if (count($this->getAttribute('columns'))) {
+            foreach($this->getAttribute('columns') as $column) {
+                if (isset($column->required) and $column->required) {
+                    $col = new stdClass;
+                    $col->label = $column->label;
+                    $col->name = $column->name;
+                    $ret[] = $col;
+                }
+            }
+        }
+
+        return $ret;
+    }
+
+    public function parseColumns($post_data)
+    {
+        $columns = $this->getAttribute('columns');
+
+        if (count($columns) > 0) {
+            foreach ($post_data as $key => &$val) {
+
+                $column_obj = findObjectInArray($columns, $key, 'name');
+
+                switch ($column_obj->category) {
+                    case 'date':
+                        $d = str_replace('/', '-', $val);
+                        $stamp = strtotime($d);
+                        $val = date('Y-m-d H:i:s', $stamp);
+                        break;
+
+                    case 'html':
+                        $val = stripslashes($val);
+                        break;
+
+                    case 'enum-multi':
+                        if (is_array($val)) {
+                            $val = implode(', ', $val);
+                        }
+                        break;
+                    case 'nodelookup':
+                        $val = (int) $val;
+                        break;
+                }
+
+            }
+        }
+
+        return $post_data;
+    }
+
     /**
      * Returns the admin view for a specified category
      *

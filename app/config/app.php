@@ -117,6 +117,7 @@ return array(
         'Cartalyst\Sentry\SentryServiceProvider',
         'Cartalyst\NestedSets\NestedSetsServiceProvider',
         'Profiler\ProfilerServiceProvider',
+        'Core\Providers\CoreServiceProvider',
 
 	),
 

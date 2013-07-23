@@ -7,6 +7,7 @@
     }
 
 ?>
+{{--
 <div class="resource_container">
     {{ Form::hidden('nodetype[' . $column->name . ']', Input::old('nodetype.' . $column->name , @$data->{$column->name}), array('id' => 'input_' . $column->name)) }}
     <p><em>{{ @$column->description }}</em></p>
@@ -37,3 +38,4 @@
 
     </div>
 </div>
+--}}

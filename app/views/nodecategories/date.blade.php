@@ -9,5 +9,9 @@
         $value = @$data->{$column->name};
     }
 ?>
-<input type="text" name="nodetype[{{ $column->name }}]" value="{{ Input::old('nodetype.' . $column->name, date('d/m/Y', strtotime($value))) }}" id="input_{{ $column->name }}" class="validate-date datepicker" />
-<p><em>{{ @$column->description }}</em></p>
+
+{{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, date('d/m/Y', strtotime($value))), ['class' => 'span8 validate-date datepicker']) }}
+
+@if ($column->description)
+    <span class="help-block">{{ $column->description }}</span>
+@endif

@@ -17,6 +17,8 @@ class Users extends Migration {
         $user = Sentry::getUserProvider()->create(array(
             'email'    => 'core.admin@thedistance.co.uk',
             'password' => 'netsells123',
+            'first_name' => 'Core',
+            'last_name' => 'Admin',
         ));
 
         $user->attemptActivation(null);

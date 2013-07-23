@@ -5,5 +5,9 @@
         $value = @$data->{$column->name};
     }
 ?>
-<p><em>{{ @$column->description }}</em></p>
-<textarea name="nodetype[{{ $column->name }}]" id="input_{{ $column->name }}" class="validate-json">{{ Input::old('nodetype.' . $column->name, $value) }}</textarea>
+
+{{ Form::textarea('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span8 validate-json']) }}
+
+@if ($column->description)
+    <span class="help-block">{{ $column->description }}</span>
+@endif

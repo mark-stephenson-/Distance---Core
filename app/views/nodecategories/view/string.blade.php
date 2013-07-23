@@ -1,1 +1,1 @@
-{{ $data->{$column->name} }}
+<p>{{ $data->{$column->name} }}</p>

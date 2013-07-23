@@ -5,5 +5,9 @@
         $value = @$data->{$column->name};
     }
 ?>
-<input type="text" name="nodetype[{{ $column->name }}]" value="{{ Input::old('nodetype.' . $column->name, $value) }}" id="input_{{ $column->name }}" style="width: 90%" />
-<p><em>{{ @$column->description }}</em></p>
+
+{{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span8']) }}
+
+@if ($column->description)
+    <span class="help-block">{{ $column->description }}</span>
+@endif

@@ -42,7 +42,7 @@
                     <header>
                         <div class="btn-group change-collection">
                             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ Session::get('current-collection')->name }}
+                                {{ @Session::get('current-collection')->name }}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">

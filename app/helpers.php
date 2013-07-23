@@ -13,6 +13,17 @@ function formModel($model, $routeName) {
     }
 }
 
+function findObjectInArray($array = array(), $item = '', $type = '') {
+
+    foreach($array as $object) {
+        if ($object->$type == $item) {
+            return $object;
+        }
+    }
+
+    return null;
+}
+
 function popRadio( $value, $data, $checkedByDefault = false) {
     if (!$data) return $checkedByDefault;
     return ($value == $data);
