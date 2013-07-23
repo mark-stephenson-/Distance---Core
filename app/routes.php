@@ -35,6 +35,7 @@ Route::group(array('before' => 'auth'), function() {
     // Nodes
     Route::get('nodes/hierarchy/{collectionId}', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
     Route::get('nodes/list/{collectionId}', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
+    Route::any('nodes/update-order/{id?}', 'NodesController@updateOrder');
 
     // CRUD
     Route::any('nodes/view/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.view', 'uses' => 'NodesController@view'));

@@ -180,4 +180,12 @@ class NodesController extends BaseController
 
     }
 
+    public function updateOrder($collectionId) {
+        $order = json_decode(urldecode(Input::get('order')));
+
+        // We now have a list of all the nodes currently added to this trust ($trust->nodes) 
+        // and the order from jQuery nestable ($order)
+        $saveOrder = Hierarchy::updateOrder($order, $collectionId);
+    }
+
 }

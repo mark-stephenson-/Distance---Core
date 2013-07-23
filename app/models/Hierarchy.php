@@ -12,4 +12,8 @@ class Hierarchy extends EloquentNode {
         'tree'  => 'tree',
     );
 
+    public function node() {
+        return $this->belongsTo('Node');
+    }
+
 }
