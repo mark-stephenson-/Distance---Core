@@ -180,10 +180,39 @@ class NodesController extends BaseController
 
     }
 
+    public function lookup()
+    {
+        $search = Input::get('q');
+        $collectionId = Input::get('c');
+
+        if (!$collectionId) {
+            $collection = Session::get('current-collection');
+            $collectionId = $collection->id;
+        }
+
+        $nodes = Node::
+                    where('title', 'LIKE', '%' . $search . '%')
+                    ->where('collection_id', '=', $collectionId)
+                    ->take(20);
+
+        if (Input::get('type')) {
+            $nodes->where('node_type', '=', Input::get('type'));
+        }
+
+        $nodes = $nodes->get(array('id', 'title'));
+
+        $output = array();
+        foreach ($nodes as $node) {
+            $output[] = array('id' => $node->id, 'text' => $node->title);
+        }
+
+        return json_encode(array('results' => $output));
+    }
+
     public function updateOrder($collectionId) {
         $order = json_decode(urldecode(Input::get('order')));
 
-        // We now have a list of all the nodes currently added to this trust ($trust->nodes) 
+        // We now have a list of all the nodes currently added to this collection ($collection->nodes) 
         // and the order from jQuery nestable ($order)
         $collection = Collection::find($collectionId);
         $saveOrder = Hierarchy::updateOrder($order, $collection);

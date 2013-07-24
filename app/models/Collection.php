@@ -14,6 +14,11 @@ class Collection extends BaseModel {
         return $this->hasMany('Node');
     }
 
+    public function nodetypes()
+    {
+        return $this->belongsToMany('NodeType');
+    }
+
     public static function toDropDown()
     {
         $items = [];

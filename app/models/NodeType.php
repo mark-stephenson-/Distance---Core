@@ -160,6 +160,29 @@ class NodeType extends BaseModel {
     }
 
     /**
+     * returns an array of id => node type label
+     *
+     * @param  Collection $collection   The associated collection
+     * @param  boolean $withExisting    Include an option for an existing node type
+     *
+     * @return array                    List of node type labels
+     */
+    public static function forSelect(Collection $collection = null, $withExisting = false)
+    {
+        $types = ($collection) ? $collection->nodetypes() : self;
+
+        $return = $types->select(array('*', 'node_types.id as node_types_id'))
+                        ->orderBy('label', 'ASC')
+                        ->lists('label', 'node_types_id');
+        
+        if ($withExisting) {
+            $return['existing'] = "Existing Item";
+        }
+
+        return $return;
+    }
+
+    /**
      * Returns the admin view for a specified category
      *
      * @param  string $category category name
