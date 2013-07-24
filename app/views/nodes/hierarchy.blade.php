@@ -26,20 +26,24 @@
 
 @section('body')
 
-    <p class="pull-right">
+    <div class="btn-group pull-right">
         <a href="{{ route('nodes.list', [$collection->id]) }}" class="btn"><i class="icon-list"></i> Node List</a>
         @if (Sentry::getUser()->hasAccess('nodes.create'))
             <a href="{{ route('nodes.create', [$collection->id]) }}" class="btn"><i class="icon-plus"></i> New Root Node</a>
         @endif
-    </p>
+    </div>
     
     <div class="dd">
         <ol class="dd-list">
             @foreach ($branches->getChildren() as $branch)
-                <li class="dd-item">
-                    <div class="dd-handle" data-item="{{ $branch->id }}">
+                <li class="dd-item" data-id="{{ $branch->id }}">
+                    <div class="dd-handle">
                         {{ $branch->node->title }}
                     </div>
+
+                    @if (count($branch->getChildren()))
+                        @include('nodes.branch', array('branches' => $branch->getChildren()))
+                    @endif
                 </li>
             @endforeach
         </ol>

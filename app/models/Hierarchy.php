@@ -16,4 +16,9 @@ class Hierarchy extends EloquentNode {
         return $this->belongsTo('Node');
     }
 
+    public static function updateOrder($branches, Collection $collection) {
+        $root = $collection->hierarchy;
+        $root->mapTreeAndKeep($branches);
+    }
+
 }

@@ -69,7 +69,7 @@ class NodesController extends BaseController
         $collection = $node->collection;
         
         return View::make('nodes.view', compact(
-            'branch','nodeType','node','revisionData', 'revisionAuthor', 'revisions','collection'
+            'branch','nodeType','node','revisionData', 'revisionAuthor', 'revisions', 'collection'
         ));
     }
 
@@ -185,7 +185,8 @@ class NodesController extends BaseController
 
         // We now have a list of all the nodes currently added to this trust ($trust->nodes) 
         // and the order from jQuery nestable ($order)
-        $saveOrder = Hierarchy::updateOrder($order, $collectionId);
+        $collection = Collection::find($collectionId);
+        $saveOrder = Hierarchy::updateOrder($order, $collection);
     }
 
 }
