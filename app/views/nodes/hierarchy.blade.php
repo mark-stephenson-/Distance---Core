@@ -130,7 +130,7 @@
             <h3>Add Node</h3>
         </div>
         <div class="modal-body">
-            <p>Please select a node type to place as a root node in the hierarchy.</p>
+            <p>Please select a node type to place in the hierarchy.</p>
             {{ Form::select('node_type', NodeType::forSelect($collection, true), null, array('id' => 'node_type_select', 'class' => 'select2'))}}
             <div id="addNodeModalExisting" style="display: none;">
                 {{ Form::hidden('existing_node', null, array('id' => 'existing_node_select')) }}
