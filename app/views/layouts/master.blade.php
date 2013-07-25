@@ -20,7 +20,7 @@
                     <ul>
                         <li><a href="{{ route('collections.index') }}"><i class="icon-th-large"></i> Collections</a></li>
                         <li><a href="#"><i class="icon-group"></i> Groups</a></li>
-                        <li><a href="#"><i class="icon-user"></i> Users</a></li>
+                        <li><a href="{{ route('users.index') }}"><i class="icon-user"></i> Users</a></li>
                         <li><a href="{{ route('node-types.index') }}"><i class="icon-briefcase"></i> Node Types</a></li>
                         <li><a href="#"><i class="icon-lock"></i> API Keys</a></li>
                         <li><a href="#"><i class="icon-apple"></i> App Distribution</a></li>

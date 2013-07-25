@@ -10,8 +10,6 @@
 
 @section('js')
 
-    
-
 @stop
 
 @section('body')
@@ -25,14 +23,14 @@
     <div class="control-group">
         {{ Form::label('title', 'Title', ['class' => 'control-label']) }}
         <div class="controls">
-            {{ Form::text('title', null, ['class' => 'span8']) }}
+            {{ Form::text('title', Input::old('title', $node->title), ['class' => 'span8']) }}
         </div>
     </div>
 
     <div class="control-group">
         {{ Form::label('owned_by', 'Owner', ['class' => 'control-label']) }}
         <div class="controls">
-            {{ Form::select('owned_by', $node->potentialOwners(), null, ['class' => 'span8 select2', 'id' => 'js-owner-select']) }}
+            {{ Form::select('owned_by', $node->potentialOwners(), Input::old('owned_by', $node->owned_by), ['class' => 'span8 select2', 'id' => 'js-owner-select']) }}
         </div>
     </div>
 

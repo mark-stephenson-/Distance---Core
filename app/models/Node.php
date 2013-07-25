@@ -49,6 +49,11 @@ class Node extends BaseModel
         return DB::table( $this->nodeTypeTableName() )->insertGetId($data);
     }
 
+    public function updateDraft($data, $revisionId)
+    {
+        return DB::table( $this->nodeTypeTableName() )->whereId($revisionId)->update($data);
+    }
+
     public function revisions($amount = 10)
     {
         return $this->fetchRevision(null, $amount);

@@ -95,7 +95,6 @@
         <a href="{{ route('nodes.list', [$collection->id]) }}" class="btn"><i class="icon-list"></i> Node List</a>
         @if (Sentry::getUser()->hasAccess('nodes.create'))
             <a href="#" class="btn" id="openRootNodeModal"><i class="icon-plus"></i> New Root Node</a>
-            <!-- {{ route('nodes.create', [$collection->id]) }} -->
         @endif
     </div>
     
@@ -110,6 +109,7 @@
                             <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
                             <a href="#" rel="tooltip" data-id="{{ $branch->id }}" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
                             <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini"><i class="icon-unlink"></i></a>
+                            <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Permissions" class="btn btn-mini"><i class="icon-key"></i></a>
                         </div>
                     </div>
                     <div class="dd-handle">

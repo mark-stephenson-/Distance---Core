@@ -8,7 +8,9 @@
 
     <div class="btn-group pull-right">
         @if (Sentry::getUser()->hasAccess('nodes.edit'))
-            <a href="{{ route('nodes.edit', [$node->id, $revisionData->id]) }}" class="btn">Publish</a>
+            <a href="{{ route('nodes.edit', [$node->id, $revisionData->id]) }}" class="btn"><i class="icon-level-up"></i> Publish</a>
+            <a href="{{ route('nodes.edit', [$node->id, $revisionData->id]) }}" class="btn"><i class="icon-level-down"></i> Retire</a>
+            <a href="{{ route('nodes.edit', [$node->id, $revisionData->id]) }}" class="btn"><i class="icon-key"></i> Permissions</a>
         @endif
         @if (Sentry::getUser()->hasAccess('nodes.edit'))
             <a href="{{ route('nodes.edit', [$node->id, $revisionData->id]) }}" class="btn"><i class="icon-edit"></i> Edit</a>

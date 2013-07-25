@@ -49,6 +49,7 @@ Route::group(array('before' => 'auth'), function() {
     Route::post('nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.update', 'uses' => 'NodesController@update'));
 
     Route::resource('collections', 'CollectionsController');
+    Route::resource('users', 'UsersController');
 
     Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
     Route::resource('node-types', 'NodeTypesController');
