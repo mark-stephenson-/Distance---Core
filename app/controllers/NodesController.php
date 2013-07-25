@@ -180,6 +180,11 @@ class NodesController extends BaseController
 
     }
 
+    public function link($collectionId, $nodeId, $parentId = 0)
+    {
+
+    }
+
     public function lookup()
     {
         $search = Input::get('q');

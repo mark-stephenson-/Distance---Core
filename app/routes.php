@@ -37,6 +37,7 @@ Route::group(array('before' => 'auth'), function() {
     Route::get('nodes/list/{collectionId}', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
     Route::any('nodes/update-order/{id?}', 'NodesController@updateOrder');
     Route::get('nodes/node-lookup', array('as' => 'nodes.lookup', 'uses' => 'NodesController@lookup'));
+    Route::get('nodes/link/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.link', 'uses' => 'NodesController@link'));
 
     // CRUD
     Route::any('nodes/view/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.view', 'uses' => 'NodesController@view'));

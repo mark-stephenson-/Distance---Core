@@ -13,6 +13,23 @@ class Node extends BaseModel
         return $this->belongsTo('NodeType', 'node_type');
     }
 
+    public function getStatusBadgeAttribute()
+    {
+        switch($this->getAttribute('status')) {
+            case 'published':
+                $badge = 'success';
+                break;
+            case 'retired':
+                $badge = 'inverse';
+                break;
+            default:
+                $badge = '';
+                break;
+        }
+
+        return '<span class="label label-' . $badge . '">' . ucfirst($this->getAttribute('status')) . '</span>';
+    }
+
     public function potentialOwners()
     {
         $user = Sentry::getUser();

@@ -10,7 +10,7 @@
 
 @section('js')
 
-    $('#js-owner-select').select2();
+    
 
 @stop
 
@@ -32,7 +32,7 @@
     <div class="control-group">
         {{ Form::label('owned_by', 'Owner', ['class' => 'control-label']) }}
         <div class="controls">
-            {{ Form::select('owned_by', $node->potentialOwners(), null, ['class' => 'span8', 'id' => 'js-owner-select']) }}
+            {{ Form::select('owned_by', $node->potentialOwners(), null, ['class' => 'span8 select2', 'id' => 'js-owner-select']) }}
         </div>
     </div>
 
