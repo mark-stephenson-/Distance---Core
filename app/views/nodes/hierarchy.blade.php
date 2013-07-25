@@ -56,9 +56,15 @@
             }
         });
 
-        $('#openNodeModal').on('click', function(e) {
+        $('#openRootNodeModal').on('click', function(e) {
             e.preventDefault();
             currentNodeId = 0;
+            $('#addNodeModal').modal('show');
+        });
+
+        $('.open-node-modal').on('click', function(e) {
+            e.preventDefault();
+            currentNodeId = $(this).attr('data-id');
             $('#addNodeModal').modal('show');
         });
 
@@ -68,8 +74,16 @@
 
             if (nodeType != 'existing') {
                 var url = "{{ route('nodes.create', [$collection->id]) }}/" + nodeType + '/' + currentNodeId;
-                window.location = url;
+            } else {
+                var nodeId = $('#existing_node_select').val();
+
+                if (nodeId) {
+                    var url = "{{ route('nodes.link') }}/{{ $collection->id }}/" + nodeId + '/' + currentNodeId;
+                } else {
+                    alert('nope');
+                }
             }
+            window.location = url;
 
         });
     </script>
@@ -80,7 +94,7 @@
     <div class="btn-group pull-right">
         <a href="{{ route('nodes.list', [$collection->id]) }}" class="btn"><i class="icon-list"></i> Node List</a>
         @if (Sentry::getUser()->hasAccess('nodes.create'))
-            <a href="#" class="btn" id="openNodeModal"><i class="icon-plus"></i> New Root Node</a>
+            <a href="#" class="btn" id="openRootNodeModal"><i class="icon-plus"></i> New Root Node</a>
             <!-- {{ route('nodes.create', [$collection->id]) }} -->
         @endif
     </div>
@@ -92,9 +106,9 @@
                     <div class="pull-right node-hierarchy-buttons">
                         {{ $branch->node->statusBadge }}
                         <div class="btn-group">
-                            <a href="#" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
-                            <a href="#" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
-                            <a href="#" rel="tooltip" title="Add Link" class="btn btn-mini"><i class="icon-link"></i></a>
+                            <a href="{{ route('nodes.view', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
+                            <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
+                            <a href="#" rel="tooltip" data-id="{{ $branch->id }}" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
                             <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini"><i class="icon-unlink"></i></a>
                         </div>
                     </div>
