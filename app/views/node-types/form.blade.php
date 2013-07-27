@@ -9,7 +9,7 @@
 @stop
 
 @section('js')
-    
+    <script>
     $('#collections, #js-category-select').select2();
 
     $("#js-nodes_container").sortable({
@@ -46,6 +46,8 @@
         e.preventDefault();
         $(this).closest('li').remove();
     });
+
+    </script>
 
 @stop
 

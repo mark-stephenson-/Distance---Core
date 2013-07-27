@@ -69,6 +69,79 @@ class NodeTypesController extends BaseController
         return View::make('node-types.form', compact('nodeType', 'nodeCollections'));
     }
 
+    public function update($nodeTypeId)
+    {
+        $nodeType = NodeType::find($nodeTypeId);
+
+        if (!$nodeType) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That node type could not be found.' )));
+        }
+
+        // Let's run the validator
+        $validator = new Core\Validators\NodeType;
+
+        // If the validator fails
+        if ($validator->fails()) {
+            return \Redirect::back()
+                ->withInput()
+                ->withErrors($validator->messages());
+        }
+
+        $nodeType->label = Input::get('label');
+        
+        $enumCols = array();
+
+        foreach($nodeType->columns as $column) {
+            if ($column->category == 'enum' OR $column->category == 'enum-multi') {
+                $enumCols[$column->name] = $column->values;
+            }
+        }
+
+        // Do a check for enum columns...
+        if (count(Input::get('columns'))) {
+            foreach(Input::get('columns') as $column) {
+
+                if ($column['category'] == 'enum' OR $column['category'] == 'enum-multi') {
+
+                    // Compare the two lists...
+                    $removals = array_diff($enumCols[ $column['name'] ], $column['values']);
+
+                    foreach($removals as $removal) {
+                        DB::table($nodeType->tableName())
+                            ->where( $column['name'], '=', $removal)
+                            ->update(array( $column['name'] => DB::raw('NULL')));
+                    }
+
+                }
+
+            }
+        }
+
+        // We'll cache this so we can remove any columns
+        $removedColumns = $nodeType->columns;
+        $nodeType->columns = Input::get('columns');
+
+        foreach($removedColumns as $key => $val) {
+
+            foreach($nodeType->columns as $new) {
+                if ($new->name == $val->name) {
+                    unset($removedColumns[$key]);
+                }
+            }
+
+        }
+
+        $nodeType->save();
+
+        $nodeType->collections()->sync( Input::get('collections') );
+
+        $nodeType->updateTable($removedColumns);
+
+        return Redirect::route('node-types.index')
+                ->with('successes', new MessageBag(array($nodeType->label . ' has been created.')));
+    }
+
     public function formTemplate()
     {
         return NodeType::viewForCategory(Input::get('category'));

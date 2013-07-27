@@ -87,6 +87,74 @@ class NodeType extends BaseModel {
         return tableExists($this->tableName());
     }
 
+    public function updateTable($removedColumns = array())
+    {
+        // We can only update enums and add new columns, not re-order
+        $categories = Config::get('node-categories');
+
+        $columns_to_add = array();
+
+        foreach ($this->columns as $column) {
+
+            if (columnExists($column->name, $this->tableName())) {
+
+                // We can only update enums...
+                if ($categories[ $column->category ]['type'] == 'enum') {
+                    $values = implode(',', array_map(function($v) {
+                                    return DB::connection()->getPdo()->quote($v);
+                                }, $column->values));
+
+                    $column_name = $column->name;
+
+                    // I know this is bad... but can't find a work-around as mysqli's bindings seems to be broken.
+                    DB::statement("ALTER TABLE " . $this->tableName() . " CHANGE COLUMN `$column_name` `$column_name` ENUM(" . $values . ") NULL");
+                }
+
+            } else {
+
+                // New column!
+                $columns_to_add[] = $column;
+            }
+        }
+
+        // We need to add at least one column...
+        if (count($columns_to_add)) {
+            Schema::table($this->tableName(), function($table) use ($categories, $columns_to_add) {
+                foreach ($columns_to_add as $column) {
+                    $col_type = $categories[ $column->category ]['type'];
+
+                    switch ($col_type) {
+                        case 'enum':
+
+                            $table->enum( $column->name, $column->values )->nullable();
+
+                            break;
+
+                        default:
+
+                            $table->$col_type( $column->name )->nullable();
+
+                            break;
+                    }
+                }
+            });
+        }
+
+        // Removing any?
+        if (count($removedColumns)) {
+
+            // This is generally gonna break things, we'll assume admin is doing this (well, we know cause of permissions)
+            foreach($removedColumns as $column) {
+                Schema::table($this->tableName(), function($table) use ($column) {
+                    $table->dropColumn($column->name);
+                });
+            }
+        }
+
+        // We can't return anything as we can't efficiently check all the new columns have been added
+        // ... well we can, but its new columns * 1 query - probably not worth it
+    }
+
     public function checkRequiredColumns($post_data)
     {
         $columns = $this->requiredColumns();
