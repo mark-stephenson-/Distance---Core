@@ -1,13 +1,18 @@
 <?php
 
-function formModel($model, $routeName) {
-    $class = 'form-horizontal';
+function formModel($model, $routeName, $atts = array()) {
 
     if ($model->exists) {
-        return Form::model($model, array('route' => array($routeName . '.update', $model->id), 'method' => 'PUT', 'class' => $class));
+        $customAttributes = array('route' => array($routeName . '.update', $model->id), 'method' => 'PUT');
     } else {
-        return Form::model($model, array('route' => array($routeName . '.store'), 'class' => $class));
+        $customAttributes = array('route' => array($routeName . '.store'));
     }
+
+    $atts['class'] = 'form-horizontal';
+
+    $atts = array_merge($customAttributes, $atts);
+
+    return Form::model($model, $atts);
 }
 
 function findObjectInArray($array = array(), $item = '', $type = '') {

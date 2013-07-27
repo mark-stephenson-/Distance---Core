@@ -10,7 +10,7 @@
 
 @section('body')
     
-    {{ formModel($user, 'users') }}
+    {{ formModel($user, 'users', ['autocomplete' => 'off']) }}
 
     <div class="control-group">
         {{ Form::label('first_name', 'First Name', ['class' => 'control-label']) }}

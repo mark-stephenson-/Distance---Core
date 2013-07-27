@@ -8,14 +8,19 @@ class User extends Validator
         'last_name'     => 'required',
         'email'         => 'required|email',
         'password'      => array(
-            'required',
-             'confirmed',
+            'confirmed',
         ),
     );
 
     public static $messages = array(
         
     );
+
+    public function requirePassword() {
+        self::$rules['password'][] = 'required';
+
+        return $this;
+    }
 
     public function __construct($attributes = null)
     {
@@ -29,5 +34,7 @@ class User extends Validator
             self::$rules['password'][] = 'regex:' . $passwordRegex;
             self::$messages['regex'] = \Config::get('core.prefrences.password-regex-failure');
         }
+
+        return $this;
     }
 }
