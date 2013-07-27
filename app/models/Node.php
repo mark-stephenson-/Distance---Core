@@ -54,6 +54,49 @@ class Node extends BaseModel
         return DB::table( $this->nodeTypeTableName() )->whereId($revisionId)->update($data);
     }
 
+    public function markAsPublished($revisionId)
+    {
+        // There will only a maximum of one published node, set it as retired
+        // we don't check the success of this, as it could return 0 which would
+        // end up as false
+        DB::table( $this->nodeTypeTableName() )
+            ->where('status', '=', 'published')
+            ->where('node_id', '=', $this->getAttribute('id'))
+            ->update(array('status' => 'retired'));
+
+        // And mark the new one as published
+        $publishUpdate = DB::table( $this->nodeTypeTableName() )
+                            ->where('id', '=', $revisionId)
+                            ->where('node_id', '=', $this->getAttribute('id'))
+                            ->update(array('status' => 'published'));
+
+        // We also need to update the main node table
+        $this->status = 'published';
+        $this->published_revision = $revisionId;
+        $this->published_at = DB::raw('NOW()');
+        $this->retired_at = DB::raw('NULL');
+
+        $nodeUpdate = $this->save();
+
+        return ($publishUpdate and $nodeUpdate);
+    }
+
+    public function markAsRetired($revisionId)
+    {
+        $retireUpdate = DB::table($this->nodeTypeTableName())
+                            ->where('status', '=', 'published')
+                            ->where('node_id', '=', $this->getAttribute('id'))
+                            ->where('id', '=', $revisionId)
+                            ->update(array('status' => 'retired'));
+
+        $this->retired_at = DB::raw('NOW()');
+        $this->status = 'retired';
+
+        $nodeUpdate = $this->save();
+
+        return ($retireUpdate and $nodeUpdate);
+    }
+
     public function revisions($amount = 10)
     {
         return $this->fetchRevision(null, $amount);

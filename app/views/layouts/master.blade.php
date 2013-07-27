@@ -16,7 +16,7 @@
         <div class="row-fluid">
             <div class="span2">
                 <nav class="main">
-                    <a class="logo" href="/"><i class="icon-css3"></i></a>
+                    <a class="logo" href="/"><img src="/images/logo.png" /></a>
                     <ul>
                         <li><a href="{{ route('collections.index') }}"><i class="icon-th-large"></i> Collections</a></li>
                         <li><a href="#"><i class="icon-group"></i> Groups</a></li>

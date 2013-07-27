@@ -347,6 +347,44 @@ class NodesController extends BaseController
         }
     }
 
+    public function markAsPublished($nodeId, $revisionId, $branchId = false)
+    {
+        $node = Node::find($nodeId);
+
+        if (!$node) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That node could not be found.' )));
+        }
+
+        if ($node->markAsPublished($revisionId)) {
+            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+                ->with('successes', new MessageBag(array('The revision has been published.')));
+        } else {
+            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+                ->withErrors(new MessageBag(array('There was an error publishing the revision.')));
+        }
+
+    }
+
+    public function markAsRetired($nodeId, $revisionId, $branchId = false)
+    {
+        $node = Node::find($nodeId);
+
+        if (!$node) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That node could not be found.' )));
+        }
+
+        if ($node->markAsRetired($revisionId)) {
+            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+                ->with('successes', new MessageBag(array('The revision has been retired.')));
+        } else {
+            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+                ->withErrors(new MessageBag(array('There was an error retiring the revision.')));
+        }
+
+    }
+
     public function lookup()
     {
         $search = Input::get('q');
