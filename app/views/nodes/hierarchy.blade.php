@@ -64,8 +64,23 @@
 
         $('.open-node-modal').on('click', function(e) {
             e.preventDefault();
-            currentNodeId = $(this).attr('data-id');
+            currentNodeId = $(this).closest('.dd-item').attr('data-id');
             $('#addNodeModal').modal('show');
+        });
+
+        $('.open-remove-link-modal').on('click', function(e) {
+            e.preventDefault();
+            currentNodeId = $(this).closest('.dd-item').attr('data-id');
+            $('#deleteLinkModal').modal('show');
+        });
+
+        $('#deleteLinkConfirm').on('click', function(e) {
+
+            e.preventDefault();
+
+            var url = "{{ route('nodes.unlink') }}/{{ $collection->id }}/" + currentNodeId;
+            window.location = url;
+
         });
 
         $('#addNodeConfirm').on('click', function(e) {
@@ -107,8 +122,8 @@
                         <div class="btn-group">
                             <a href="{{ route('nodes.view', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
                             <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
-                            <a href="#" rel="tooltip" data-id="{{ $branch->id }}" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
-                            <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini"><i class="icon-unlink"></i></a>
+                            <a href="#" rel="tooltip" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
+                            <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini open-remove-link-modal"><i class="icon-unlink"></i></a>
                             <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Permissions" class="btn btn-mini"><i class="icon-key"></i></a>
                         </div>
                     </div>
@@ -139,6 +154,26 @@
         <div class="modal-footer">
             <a href="#" data-dismiss="modal" class="btn">Close</a>
             <a href="#" class="btn btn-primary" id="addNodeConfirm">Add Node</a>
+        </div>
+    </div>
+
+    <div class="modal hide fade" id="deleteLinkModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Are you sure?</h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this link?</p>
+            <div class="well">
+                <p><strong>This will also&hellip;</strong></p>
+                <ul>
+                    <li>Remove all children <em>links</em> of this node (if it has any). You will be able to find them in the list view.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn">Close</a>
+            <a href="#" class="btn btn-primary" id="deleteLinkConfirm">Yes, I'm Sure</a>
         </div>
     </div>
 

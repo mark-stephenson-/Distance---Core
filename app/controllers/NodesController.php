@@ -333,6 +333,20 @@ class NodesController extends BaseController
             ->with('successes', new \MessageBag(array('The node has been linked.')));
     }
 
+    public function unlink($collectionId, $branchId)
+    {
+        $branch = Hierarchy::find($branchId);
+
+        if ($branch) {
+            $branch->deleteWithChildren();
+            return Redirect::back()
+                    ->with('successes', new MessageBag(array('The node link has been deleted.')));
+        } else {
+            return Redirect::back()
+                    ->with('errors', new MessageBag(array('The node link could not deleted.')));
+        }
+    }
+
     public function lookup()
     {
         $search = Input::get('q');
