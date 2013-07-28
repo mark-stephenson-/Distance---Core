@@ -5,10 +5,6 @@ class CollectionsController extends BaseController
     public function index()
     {
 
-        if (!Sentry::getUser()->hasAccess('collections.index')) {
-            die('no-access');
-        }
-
         $collections = Collection::all();
 
         return View::make('collections.index', compact('collections'));
@@ -16,10 +12,6 @@ class CollectionsController extends BaseController
 
     public function create()
     {
-        if (!Sentry::getUser()->hasAccess('collections.create')) {
-            die('no-access');
-        }
-
         $collection = new Collection;
 
         return View::make('collections.form', compact('collection'));
@@ -27,10 +19,6 @@ class CollectionsController extends BaseController
 
     public function store()
     {
-        if (!Sentry::getUser()->hasAccess('collections.create')) {
-            die('no-access');
-        }
-
         // Let's run the validator
         $validator = new Core\Validators\Collection;
 
@@ -53,10 +41,6 @@ class CollectionsController extends BaseController
 
     public function edit($collectionId)
     {
-        if (!Sentry::getUser()->hasAccess('collections.edit')) {
-            die('no-access');
-        }
-
         $collection = Collection::find($collectionId);
 
         if (!$collection) {
@@ -69,10 +53,6 @@ class CollectionsController extends BaseController
 
     public function update($collectionId)
     {
-        if (!Sentry::getUser()->hasAccess('collections.edit')) {
-            die('no-access');
-        }
-
         $collection = Collection::find($collectionId);
 
         if (!$collection) {

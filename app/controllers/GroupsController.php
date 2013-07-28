@@ -12,7 +12,7 @@ class GroupsController extends BaseController
     public function create()
     {
         $group = new Group;
-        $permissions = Permission::tree($group);
+        $permissions = Permission::tree($group, Collection::get());
 
         return View::make('groups.form', compact('group', 'permissions'));
     }
@@ -51,7 +51,7 @@ class GroupsController extends BaseController
     public function edit($groupId)
     {
         $group = Group::find($groupId);
-        $permissions = Permission::tree($group);
+        $permissions = Permission::tree($group, Collection::get());
 
         return View::make('groups.form', compact('group', 'permissions'));
     }

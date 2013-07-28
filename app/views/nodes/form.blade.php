@@ -15,7 +15,7 @@
 @section('body')
     
     @if ($node->exists)
-        {{ Form::open(['route' => ['nodes.update', $node->id, $revisionData->id, $branchId], 'class' => 'form-horizontal']) }}
+        {{ Form::open(['route' => ['nodes.update', $collection->id, $node->id, $revisionData->id, $branchId], 'class' => 'form-horizontal']) }}
     @else
         {{ Form::open(['route' => ['nodes.store', $collection->id, $nodeType->id, $parentId], 'class' => 'form-horizontal']) }}
     @endif
@@ -36,12 +36,14 @@
 
     <div class="well">
         @foreach($nodeType->columns as $column)
-            <div class="control-group">
-                {{ Form::label($column->name, $column->label, ['class' => 'control-label']) }}
-                <div class="controls">
-                    @include('nodecategories.' . $column->category, array('column' => $column, 'node' => $node, 'data' => @$revisionData))
+            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $column->name))
+                <div class="control-group">
+                    {{ Form::label($column->name, $column->label, ['class' => 'control-label']) }}
+                    <div class="controls">
+                        @include('nodecategories.' . $column->category, array('column' => $column, 'node' => $node, 'data' => @$revisionData))
+                    </div>
                 </div>
-            </div>
+            @endif
         @endforeach
     </div>
 

@@ -48,7 +48,7 @@ Route::filter('checkPermissions', function($request)
 {
     $replacements = [
         'index' => '*',
-        '@show' => '.',
+        'view' => '*',
         'controller' => '',
         '\\' => '.',
         '@' => '.',
@@ -59,7 +59,9 @@ Route::filter('checkPermissions', function($request)
 
     $property = 'cms.' . str_replace(array_keys($replacements), array_values($replacements), strtolower($request->getAction()));
 
-    // dd($property);
+    if (starts_with($property, 'cms.nodes')) {
+        return;
+    }
 
     Log::debug($property);
 

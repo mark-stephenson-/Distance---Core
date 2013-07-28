@@ -28,11 +28,10 @@
                     {{ $userCount = count($group->users) }}
 
                     @if ($userCount)
-                         - {{ implode(', ', $group->users->slice(0, 3)->lists('fullName')) }}&hellip;
+                         - {{ implode(', ', $group->users->slice(0, 5)->lists('fullName')) }}&hellip;
                     @endif
                 </td>
-                <td width="250">
-                    <a href="{{ route('groups.edit', array($group->id)) }}" class="btn btn-small"><i class="icon-group"></i> Members ({{ $userCount }})</a>
+                <td width="150">
                     <a href="{{ route('groups.edit', array($group->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
                 </td>

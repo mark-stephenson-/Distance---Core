@@ -5,10 +5,6 @@ class NodesController extends BaseController
 
     public function hierarchy($collectionId = 0) {
 
-        if (!Sentry::getUser()->hasAccess('')) {
-            die('no-access');
-        }
-
         $collection = Collection::find($collectionId);
 
         if (!$collection) {
@@ -27,10 +23,6 @@ class NodesController extends BaseController
 
     public function nodeList($collectionId = 0) {
 
-        if (!Sentry::getUser()->hasAccess('')) {
-            die('no-access');
-        }
-
         $collection = Collection::find($collectionId);
 
         if (!$collection) {
@@ -47,7 +39,7 @@ class NodesController extends BaseController
 
     }
 
-    public function view($node_id, $revision_id = false, $branch_id = false)
+    public function view($collectionId, $node_id, $revision_id = false, $branch_id = false)
     {
         $node = Node::find($node_id);
 
@@ -74,10 +66,7 @@ class NodesController extends BaseController
     }
 
     public function create($collectionId, $nodeTypeId, $parentId = false) {
-        if (!Sentry::getUser()->hasAccess('')) {
-            die('no-access');
-        }
-
+        
         $nodeType = NodeType::find($nodeTypeId);
         $node = new Node;
         $node->owned_by = Sentry::getUser()->id;
@@ -90,11 +79,7 @@ class NodesController extends BaseController
     }
 
     public function store($collectionId, $nodeTypeId, $parentId = false) {
-        if (!Sentry::getUser()->hasAccess('')) {
-            die('no-access');
-        }
-
-
+        
         $nodeType = NodeType::find($nodeTypeId);
         $node = new Node;
         $node->title = Input::get('title');
@@ -180,7 +165,7 @@ class NodesController extends BaseController
 
     }
 
-    public function edit($nodeId, $revisionId, $branchId = false)
+    public function edit($collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
 

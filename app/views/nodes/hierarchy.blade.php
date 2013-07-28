@@ -120,11 +120,11 @@
                     <div class="pull-right node-hierarchy-buttons">
                         {{ $branch->node->statusBadge }}
                         <div class="btn-group">
-                            <a href="{{ route('nodes.view', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
-                            <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
+                            <a href="{{ route('nodes.view', [$collection->id, $branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
+                            <a href="{{ route('nodes.edit', [$collection->id, $branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
                             <a href="#" rel="tooltip" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
                             <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini open-remove-link-modal"><i class="icon-unlink"></i></a>
-                            <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Permissions" class="btn btn-mini"><i class="icon-key"></i></a>
+                            <!-- <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Permissions" class="btn btn-mini"><i class="icon-key"></i></a> -->
                         </div>
                     </div>
                     <div class="dd-handle">
