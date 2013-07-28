@@ -63,6 +63,7 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::resource('users', 'UsersController');
     Route::resource('groups', 'GroupsController');
     Route::resource('apps', 'AppsController');
+    Route::resource('catalogues', 'CataloguesController');
 
     Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
     Route::resource('node-types', 'NodeTypesController');
