@@ -47,8 +47,8 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::get('nodes/link/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.link', 'uses' => 'NodesController@link'));
     Route::get('nodes/unlink/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.unlink', 'uses' => 'NodesController@unlink'));
 
-    Route::any('nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
-    Route::any('nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
+    Route::any('collections/{collectionId}/nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
+    Route::any('collections/{collectionId}/nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
 
     // CRUD
     Route::any('collections/{collectionId}/nodes/view/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.view', 'uses' => 'NodesController@view'));
@@ -62,6 +62,7 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::resource('collections', 'CollectionsController');
     Route::resource('users', 'UsersController');
     Route::resource('groups', 'GroupsController');
+    Route::resource('apps', 'AppsController');
 
     Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
     Route::resource('node-types', 'NodeTypesController');

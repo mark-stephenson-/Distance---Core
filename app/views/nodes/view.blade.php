@@ -17,7 +17,7 @@
 
             e.preventDefault();
 
-            var url = "{{ route('nodes.publish', [$node->id, $revisionData->id, $branch->id]) }}";
+            var url = "{{ route('nodes.publish', [$collection->id, $node->id, $revisionData->id, $branch->id]) }}";
             window.location = url;
 
         });
@@ -31,7 +31,7 @@
 
             e.preventDefault();
 
-            var url = "{{ route('nodes.retire', [$node->id, $revisionData->id, $branch->id]) }}";
+            var url = "{{ route('nodes.retire', [$collection->id, $node->id, $revisionData->id, $branch->id]) }}";
             window.location = url;
 
         });
@@ -50,13 +50,13 @@
             @endif
 
             @if ($revisionData->status == 'published')
-                <a href="{{ route('nodes.retire', [$node->id, $revisionData->id, $branch->id]) }}" class="btn open-retire-node-modal"><i class="icon-level-down"></i> Retire</a>
+                <a href="#" class="btn open-retire-node-modal"><i class="icon-level-down"></i> Retire</a>
             @endif
 
             <a href="" class="btn"><i class="icon-key"></i> Permissions</a>
         @endif
         @if (Sentry::getUser()->hasAccess('nodes.edit'))
-            <a href="{{ route('nodes.edit', [$node->id, $revisionData->id]) }}" class="btn"><i class="icon-edit"></i> Edit</a>
+            <a href="{{ route('nodes.edit', [$collection->id, $node->id, $revisionData->id]) }}" class="btn"><i class="icon-edit"></i> Edit</a>
         @endif
     </div>
 

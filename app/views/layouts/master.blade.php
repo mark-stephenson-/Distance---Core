@@ -26,7 +26,7 @@
                         @endif
 
                         <li><a href="{{ route('node-types.index') }}"><i class="icon-briefcase"></i> Node Types</a></li>
-                        <li><a href="#"><i class="icon-lock"></i> API Keys</a></li>
+                        <li><a href="{{ route('apps.index') }}"><i class="icon-lock"></i> Apps</a></li>
                         <li><a href="#"><i class="icon-apple"></i> App Distribution</a></li>
                         <li><a href="#"><i class="icon-folder-open"></i> Catalogues</a></li>
                         <li><a href="#"><i class="icon-file"></i> Resources</a></li>

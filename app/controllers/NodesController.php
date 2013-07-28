@@ -189,7 +189,7 @@ class NodesController extends BaseController
         ));
     }
 
-    public function update($nodeId, $revisionId, $branchId = false)
+    public function update($collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
         $bag = new \MessageBag();
@@ -289,10 +289,10 @@ class NodesController extends BaseController
         }
 
         if ($nodeAction == 'create') {
-            return Redirect::route('nodes.view', array($node->id, $nodeResult, $branchId))
+            return Redirect::route('nodes.view', array($collectionId, $node->id, $nodeResult, $branchId))
                 ->with('successes', new MessageBag(array('The node ' . $node->title . ' has been updated.')));
         } else {
-            return Redirect::route('nodes.view', array($node->id, $revisionData->id, $branchId))
+            return Redirect::route('nodes.view', array($collectionId, $node->id, $revisionData->id, $branchId))
                 ->with('successes', new MessageBag(array('The node ' . $node->title . ' has been updated.')));
         }
     }
@@ -332,7 +332,7 @@ class NodesController extends BaseController
         }
     }
 
-    public function markAsPublished($nodeId, $revisionId, $branchId = false)
+    public function markAsPublished($collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
 
@@ -342,16 +342,16 @@ class NodesController extends BaseController
         }
 
         if ($node->markAsPublished($revisionId)) {
-            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+            return Redirect::route('nodes.view', array($collectionId, $nodeId, $revisionId, $branchId))
                 ->with('successes', new MessageBag(array('The revision has been published.')));
         } else {
-            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+            return Redirect::route('nodes.view', array($collectionId, $nodeId, $revisionId, $branchId))
                 ->withErrors(new MessageBag(array('There was an error publishing the revision.')));
         }
 
     }
 
-    public function markAsRetired($nodeId, $revisionId, $branchId = false)
+    public function markAsRetired($collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
 
@@ -361,10 +361,10 @@ class NodesController extends BaseController
         }
 
         if ($node->markAsRetired($revisionId)) {
-            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+            return Redirect::route('nodes.view', array($collectionId, $nodeId, $revisionId, $branchId))
                 ->with('successes', new MessageBag(array('The revision has been retired.')));
         } else {
-            return Redirect::route('nodes.view', array($nodeId, $revisionId, $branchId))
+            return Redirect::route('nodes.view', array($collectionId, $nodeId, $revisionId, $branchId))
                 ->withErrors(new MessageBag(array('There was an error retiring the revision.')));
         }
 
