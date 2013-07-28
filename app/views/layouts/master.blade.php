@@ -19,12 +19,17 @@
                     <a class="logo" href="/"><img src="/images/logo.png" /></a>
                     <ul>
                         <li><a href="{{ route('collections.index') }}"><i class="icon-th-large"></i> Collections</a></li>
-                        <li><a href="#"><i class="icon-group"></i> Groups</a></li>
-                        <li><a href="{{ route('users.index') }}"><i class="icon-user"></i> Users</a></li>
+                        <li><a href="{{ route('groups.index') }}"><i class="icon-group"></i> Groups</a></li>
+
+                        @if (Sentry::getUser()->hasAccess('cms.users.*'))
+                            <li><a href="{{ route('users.index') }}"><i class="icon-user"></i> Users</a></li>
+                        @endif
+
                         <li><a href="{{ route('node-types.index') }}"><i class="icon-briefcase"></i> Node Types</a></li>
                         <li><a href="#"><i class="icon-lock"></i> API Keys</a></li>
                         <li><a href="#"><i class="icon-apple"></i> App Distribution</a></li>
-                        <li><a href="#"><i class="icon-folder-open"></i> Resources</a></li>
+                        <li><a href="#"><i class="icon-folder-open"></i> Catalogues</a></li>
+                        <li><a href="#"><i class="icon-file"></i> Resources</a></li>
                     </ul>
                 </nav>
             </div>

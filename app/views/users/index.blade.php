@@ -7,7 +7,7 @@
 @section('body')
 
     <p class="pull-right">
-        @if (Sentry::getUser()->hasAccess('users.create'))
+        @if (Sentry::getUser()->hasAccess('cms.users.create'))
             <a href="{{ route('users.create') }}" class="btn"><i class="icon-plus"></i> New User</a>
         @endif
     </p>
@@ -41,8 +41,13 @@
                     @endif
                 </td>
                 <td width="150">
-                    <a href="{{ route('users.edit', array($user->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                    <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
+                    @if (Sentry::getUser()->hasAccess('cms.users.update'))
+                        <a href="{{ route('users.edit', array($user->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                    @endif
+
+                    @if (Sentry::getUser()->hasAccess('cms.users.delete'))
+                        <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

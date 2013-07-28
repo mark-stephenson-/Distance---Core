@@ -113,7 +113,7 @@
         @if ($user->exists)
             <input type="submit" class="btn btn-primary" value="Save changes" />
         @else
-            <input type="submit" class="btn btn-primary" value="Create Node" />
+            <input type="submit" class="btn btn-primary" value="Create User" />
         @endif
     </div>
 

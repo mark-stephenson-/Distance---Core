@@ -59,6 +59,7 @@ nav.main {
 
         li {
             a {
+                transition: padding-left 250ms ease-out;
                 padding: 5px 10px 5px 0px;
                 display: block;
                 color: #FFF;
@@ -70,6 +71,9 @@ nav.main {
                 }
 
                 &:hover {
+                    .border-radius(3px);
+                    padding-left: 5px;
+                    background: darken(@backgroundColor, 5%);
                     color: darken(#FFF, 20%);
                     text-decoration: none;
                 }
@@ -122,6 +126,23 @@ div.content {
             section {
                 margin-bottom: 20px;
             }
+        }
+
+        .permission-tree {
+            ul {
+                list-style: none;
+                li {
+                    ul {
+                        li {
+                            display: inline;
+                        }
+                    }
+                }
+            }
+        }
+
+        .checkbox {
+            margin-right: 30px;
         }
 
         #js-nodes_container {

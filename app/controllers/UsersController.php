@@ -2,6 +2,44 @@
 
 class UsersController extends BaseController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->beforeFilter(function() {
+
+            if (!Sentry::getUser()->hasAccess('cms.users.*')) {
+                die("no access");
+            }
+
+        });
+
+        $this->beforeFilter(function() {
+
+            if (!Sentry::getUser()->hasAccess('cms.users.create')) {
+                die("no access");
+            }
+
+        }, ['only' => ['create', 'store']]);
+
+        $this->beforeFilter(function() {
+
+            if (!Sentry::getUser()->hasAccess('cms.users.update')) {
+                die("no access");
+            }
+
+        }, ['only' => ['edit', 'update']]);
+
+        $this->beforeFilter(function() {
+
+            if (!Sentry::getUser()->hasAccess('cms.users.delete')) {
+                die("no access");
+            }
+
+        }, ['only' => ['delete']]);
+    }
+
     public function index()
     {
         $users = Sentry::getUserProvider()->findAll();

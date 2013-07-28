@@ -30,7 +30,14 @@ Route::get('logout', array('as' => 'logout', 'uses' => 'AuthController@processLo
 
 Route::filter('auth', 'Core\Filters\Auth@auth');
 
-Route::group(array('before' => 'auth'), function() {
+App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $exception)
+{
+    if ($exception->getStatusCode() == 403) {
+        die('access denied');
+    }
+});
+
+Route::group(array('before' => ['auth', 'checkPermissions']), function() {
 
     // Nodes
     Route::get('nodes/hierarchy/{collectionId}', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
@@ -54,6 +61,7 @@ Route::group(array('before' => 'auth'), function() {
 
     Route::resource('collections', 'CollectionsController');
     Route::resource('users', 'UsersController');
+    Route::resource('groups', 'GroupsController');
 
     Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
     Route::resource('node-types', 'NodeTypesController');

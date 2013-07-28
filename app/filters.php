@@ -44,6 +44,30 @@ Route::filter('auth.basic', function()
 	return Auth::basic();
 });
 
+Route::filter('checkPermissions', function($request)
+{
+    $replacements = [
+        'index' => '*',
+        '@show' => '.',
+        'controller' => '',
+        '\\' => '.',
+        '@' => '.',
+
+        'edit' => 'update',
+        'store' => 'create',
+    ];
+
+    $property = 'cms.' . str_replace(array_keys($replacements), array_values($replacements), strtolower($request->getAction()));
+
+    // dd($property);
+
+    Log::debug($property);
+
+    if ( ! Sentry::getUser()->hasAccess( $property ) ) {
+        App::abort(403);
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Filter
