@@ -4,8 +4,7 @@ class CollectionsController extends BaseController
 {
     public function index()
     {
-
-        $collections = Collection::all();
+        $collections = Collection::allWithPermission();
 
         return View::make('collections.index', compact('collections'));
     }

@@ -5,6 +5,10 @@ class Catalogue extends BaseModel {
     public function collections() {
         return $this->belongsToMany('Collection');
     }
+
+    public function resources() {
+        return $this->hasMany('Resource');
+    }
     
     public function getRestrictionsAttribute($restrictions)
     {

@@ -1,13 +1,13 @@
 <?php
 
-class CataloguesController extends BaseController
+class ResourcesController extends BaseController
 {
     
 
     public function index() {
-        $catalogues = Catalogue::with('collections')->get();
+        $catalogues = Collection::current()->catalogues()->with('resources')->get();
 
-        return View::make('catalogues.index', compact('catalogues'));
+        return View::make('resources.index', compact('catalogues'));
     }
 
     public function create() {

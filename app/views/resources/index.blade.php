@@ -1,21 +1,16 @@
 @extends('layouts.master')
 
 @section('header')
-    <h1>Catalogues</h1>
+    <h1>Resources</h1>
 @stop
 
 @section('body')
-
-    <p class="pull-right">
-        <a href="{{ route('catalogues.create') }}" class="btn"><i class="icon-plus"></i> New Catalogue</a>
-    </p>
 
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Restrictions</th>
-                <th>Collections</th>
+                <th>Filetypes</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -32,12 +27,8 @@
                         No Restrictions
                     @endif
                 </td>
-                <td>
-                    {{ implode('<br />', $catalogue->collections->lists('name')) }}
-                </td>
                 <td width="150">
-                    <a href="{{ route('catalogues.edit', array($catalogue->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                    <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
+                    <a href="{{ route('catalogues.edit', array($catalogue->id)) }}" class="btn btn-small"><i class="icon-search"></i> View Resources</a>
                 </td>
             </tr>
             @endforeach

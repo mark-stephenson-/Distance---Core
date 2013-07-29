@@ -4,9 +4,39 @@ class Collection extends BaseModel {
 
     protected $fillable = array('name', 'api_key');
 
+    public static function current()
+    {
+        if (Session::get('current-collection')) {
+            return Session::get('current-collection');
+        } else {
+            $collections = self::allWithPermission();
+
+            $current = count($collections) > 0 ? reset($collections) : null;
+            Session::put('current-collection', $current);
+
+            return $current;
+        }
+    }
+
+    public static function allWithPermission()
+    {
+        $collections = self::all();
+
+        $collections = array_filter($collections->all(), function($collection) {
+            return Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.*');
+        });
+
+        return $collections;
+    }
+
     public function hierarchy()
     {
         return $this->hasOne('Hierarchy');
+    }
+
+    public function catalogues()
+    {
+        return $this->belongsToMany('Catalogue');
     }
 
     public function nodes()

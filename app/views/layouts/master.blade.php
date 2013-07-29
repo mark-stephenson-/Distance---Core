@@ -29,7 +29,7 @@
                         <li><a href="{{ route('apps.index') }}"><i class="icon-lock"></i> Apps</a></li>
                         <li><a href="#"><i class="icon-apple"></i> App Distribution</a></li>
                         <li><a href="{{ route('catalogues.index') }}"><i class="icon-folder-open"></i> Catalogues</a></li>
-                        <li><a href="#"><i class="icon-file"></i> Resources</a></li>
+                        <li><a href="{{ route('resources.index') }}"><i class="icon-file"></i> Resources</a></li>
                     </ul>
                 </nav>
             </div>
@@ -47,7 +47,7 @@
                     <header>
                         <div class="btn-group change-collection">
                             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ @Session::get('current-collection')->name }}
+                                {{ Collection::current()->name }}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
