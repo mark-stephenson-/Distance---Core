@@ -44,6 +44,7 @@ module.exports = function(grunt) {
                         'public/js/bootstrap/bootstrap-modal.js',
                         'public/js/bootstrap/bootstrap-tooltip.js',
                         'public/js/jquery.nestable.js',
+                        'public/js/fancybox/jquery.fancybox.js',
                         'public/js/select2.js',
                         'public/js/jquery-ui-1.10.3.custom.js',
                         'public/js/app.js'
@@ -60,6 +61,7 @@ module.exports = function(grunt) {
                         'public/js/bootstrap/bootstrap-modal.js',
                         'public/js/bootstrap/bootstrap-tooltip.js',
                         'public/js/jquery.nestable.js',
+                        'public/js/fancybox/jquery.fancybox.js',
                         'public/js/select2.js',
                         'public/js/jquery-ui-1.10.3.custom.js',
                         'public/js/app.js'

@@ -3,11 +3,21 @@
 class ResourcesController extends BaseController
 {
     
+    public function load($fileName)
+    {
+        return Resource::fetch(urldecode($fileName));
+    }
 
     public function index() {
         $catalogues = Collection::current()->catalogues()->with('resources')->get();
 
         return View::make('resources.index', compact('catalogues'));
+    }
+
+    public function show($catalogueId) {
+        $catalogue = Catalogue::with('resources')->firstOrFail();
+
+        return View::make('resources.show', compact('catalogue'));
     }
 
     public function create() {

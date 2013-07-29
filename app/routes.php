@@ -59,6 +59,9 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::get('collections/{collectionId}/nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.edit', 'uses' => 'NodesController@edit'));
     Route::post('collections/{collectionId}/nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.update', 'uses' => 'NodesController@update'));
 
+    // Restful Resource Addons
+    Route::get('file/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
+
     Route::resource('collections', 'CollectionsController');
     Route::resource('users', 'UsersController');
     Route::resource('groups', 'GroupsController');

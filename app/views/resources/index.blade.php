@@ -11,6 +11,7 @@
             <tr>
                 <th>Name</th>
                 <th>Filetypes</th>
+                <th>Files</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -27,8 +28,11 @@
                         No Restrictions
                     @endif
                 </td>
+                <td>
+                    {{ $catalogue->resources()->count() }}
+                </td>
                 <td width="150">
-                    <a href="{{ route('catalogues.edit', array($catalogue->id)) }}" class="btn btn-small"><i class="icon-search"></i> View Resources</a>
+                    <a href="{{ route('resources.show', array($catalogue->id)) }}" class="btn btn-small"><i class="icon-search"></i> View Resources</a>
                 </td>
             </tr>
             @endforeach
