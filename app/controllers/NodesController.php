@@ -73,15 +73,28 @@ class NodesController extends BaseController
         }
 
         $revisionData = $node->fetchRevision($revision_id);
-        // $breadcrumbs = $node->generateBreadcrumbsFromBranch($branch_id);
 
         $branch = ($branch_id) ? Hierarchy::find($branch_id) : new Hierarchy;
         $revisions = $node->revisions();
         $nodeType = $node->nodetype;
         $collection = $node->collection;
+
+        if ($branch->exists) {
+            $breadcrumbPath = $branch->getPath();
+
+            // We need to shave off the first item as that's the collection root
+            array_shift($breadcrumbPath);
+
+            // ... and the last as we can hard-code that
+            array_pop($breadcrumbPath);
+
+            $breadcrumbs = Hierarchy::with('node')->whereIn('id', $breadcrumbPath)->get();
+        } else {
+            $breadcrumbs = [];
+        }
         
         return View::make('nodes.view', compact(
-            'branch','nodeType','node','revisionData', 'revisionAuthor', 'revisions', 'collection'
+            'branch','nodeType','node','revisionData', 'revisionAuthor', 'revisions', 'collection', 'breadcrumbs'
         ));
     }
 
