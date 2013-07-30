@@ -76,19 +76,100 @@ class AuthController extends BaseController
 
     public function forgotPassword()
     {
-        return View::make('auth.forgot-password');
+        return View::make('auth.forgot-password-step-one');
     }
 
     public function processForgotPassword()
     {
         // Let's run the validator
-        $validator = new Core\Validators\ForgotPassword;
+        $validator = new Core\Validators\ForgotPasswordStepOne;
 
         // If the validator fails
         if ($validator->fails()) {
             return Redirect::back()
                 ->withInput()
                 ->withErrors($validator->messages());
+        }
+
+        try {
+            $user = Sentry::getUserProvider()->findByLogin( Input::get('email') );
+
+            $resetCode = $user->getResetPasswordCode();
+
+            Mail::send('emails.password-reset-step-one', compact('user', 'resetCode'), function($message) use ($user)
+            {
+                $message->to($user->email, $user->full_name)
+                    ->subject(Config::get('core.site_name' . ' - Password Reset'))
+                    ->from(Config::get('core.emails.send_from'));
+            });
+
+            return Redirect::back()
+                ->with('successes', new MessageBag(['If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.']) );
+
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            // That user has not been found, but we don't want to tell them!
+            return Redirect::back()
+                ->with('successes', new MessageBag(['If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.']) );
+        }
+    }
+
+    public function resetPassword($user_id, $code)
+    {
+        try {
+            // Find the user using the user id
+            $user = Sentry::getUserProvider()->findById($user_id);
+
+            // Check if the reset password code is valid
+            if ($user->checkResetPasswordCode($code)) {
+                return View::make('auth.forgot-password-step-two', compact('user'));
+            } else {
+                return Redirect::route('forgot-password')
+                    ->withErrors(array('Sorry, there was an issue with that reset request. Please try again.'));
+            }
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            return Redirect::route('forgot-password')
+                ->withErrors(array('Sorry, there was an issue with that reset request. Please try again.'));
+        }
+    }
+
+    public function processResetPassword($user_id, $code)
+    {
+        try {
+            // Find the user using the user id
+            $user = Sentry::getUserProvider()->findById($user_id);
+
+            // Check if the reset password code is valid
+            if ($user->checkResetPasswordCode($code)) {
+                // Let's run the validator
+                $validator = new Core\Validators\ForgotPasswordStepTwo;
+
+                // If the validator fails
+                if ($validator->fails()) {
+                    return Redirect::back()
+                        ->withErrors($validator->messages());
+                }
+
+                if ($user->attemptResetPassword($code, Input::get('password'))) {
+                    Mail::send('emails.password-reset-complete', compact('user', 'resetCode'), function($message) use ($user)
+                    {
+                        $message->to($user->email, $user->full_name)
+                            ->subject(Config::get('core.site_name' . ' - Password Reset Complete'))
+                            ->from(Config::get('core.emails.send_from'));
+                    });
+
+                    return Redirect::route('login')
+                        ->with('successes', new MessageBag(array('Your password has been reset successfully. You can now use it to login.')));
+                } else {
+                    return Redirect::back()
+                        ->withErrors(array('Sorry, there was an issue resetting your password. Please try again.'));
+                }
+            } else {
+                return Redirect::route('forgot-password')
+                    ->withErrors(array('Sorry, there was an issue with that reset request. Please try again.'));
+            }
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            return Redirect::route('forgot-password')
+                ->withErrors(array('Sorry, there was an issue with that reset request. Please try again.'));
         }
     }
 }
