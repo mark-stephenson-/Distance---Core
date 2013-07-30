@@ -30,6 +30,27 @@ class MeController extends BaseController
             $user->first_name = Input::get('first_name');
             $user->last_name = Input::get('last_name');
             $user->email = Input::get('email');
+            $user->bio = Input::get('bio');
+
+            if (Config::get('core.labels.user_field_1')) {
+                $user->field_1 = Input::get('field_1');
+            }
+
+            if (Config::get('core.labels.user_field_2')) {
+                $user->field_2 = Input::get('field_2');
+            }
+
+            if (Config::get('core.labels.user_field_3')) {
+                $user->field_3 = Input::get('field_3');
+            }
+
+            if (Config::get('core.labels.user_field_4')) {
+                $user->field_4 = Input::get('field_4');
+            }
+
+            if (Config::get('core.labels.user_field_5')) {
+                $user->field_5 = Input::get('field_5');
+            }
 
             if ( Input::get('password') ) {
                 $user->password = Input::get('password');   
