@@ -17,20 +17,6 @@
         </div>
 
         <div class="control-group">
-            {{ Form::label('password', 'New Password', ['class' => 'control-label']) }}
-            <div class="controls">
-                {{ Form::password('password') }}
-            </div>
-        </div>
-
-        <div class="control-group">
-            {{ Form::label('password', 'Confirm Password', ['class' => 'control-label']) }}
-            <div class="controls">
-                {{ Form::password('confirm_password') }}
-            </div>
-        </div>
-
-        <div class="control-group">
             <div class="controls">
                 {{ Form::submit('Request Reset', ['class' => 'btn']) }}
                 <p style="margin-top: 30px"><a href="{{ route('login') }}" style="margin-right: 20px;">Back to login</a></p>
