@@ -6,6 +6,19 @@
 
 @section('body')
 
+    <div class="pull-right">
+
+        <div class="upload_container">
+            <input type="file" multiple="multiple" name="upload" class="file_upload_fallback" id="file_upload_fallback" style="display: block; width: 0px; height: 0px; ">
+            <button id="dropzone" class="btn"><i class="icon-upload"></i> Upload a New Resource</button>
+        </div>
+
+    </div>
+
+    <div class="progress" id="upload_progress">
+      <div class="bar" style="width: 0%;"></div>
+    </div>
+
     <table class="table table-striped resource_table">
         <thead>
             <tr>
@@ -40,6 +53,7 @@
                     @endif
                 </td>
                 <td width="150">
+                    <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     <button class="btn btn-small"><i class="icon-trash"></i> Delete</button>
                 </td>
             </tr>
@@ -59,6 +73,16 @@
                 preload: false
             }
         });
+
+        $("#upload_progress").hide();
+
+        loadResourceUploader('{{ route('resources.process', array($catalogue->id)) }}', function() {
+            document.location.reload(true);
+        }, function() {}, [
+            @if ($catalogue->restrictions)
+                {title : "Allowed Files", extensions : "{{ implode(',', $catalogue->restrictions) }}"},
+            @endif
+        ]);
 
     </script>
 
