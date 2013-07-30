@@ -45,17 +45,19 @@
                 </header>
                 <div class="content">
                     <header>
-                        <div class="btn-group change-collection">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ Collection::current()->name }}
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                @foreach(Collection::all() as $collection)
-                                    <li><a href="{{ route('nodes.' . Config::get('core.prefrences.preferred-node-view'), [$collection->id]) }}">{{ $collection->name }}</a></li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        @if ( count(Collection::all()) )
+                            <div class="btn-group change-collection">
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                    {{ Collection::current()->name }}
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    @foreach(Collection::all() as $collection)
+                                        <li><a href="{{ route('nodes.' . Config::get('core.prefrences.preferred-node-view'), [$collection->id]) }}">{{ $collection->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
                         @yield('header')
                     </header>
