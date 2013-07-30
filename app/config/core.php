@@ -2,6 +2,13 @@
 
 return array(
 
+    'site_name' => 'The Core',
+
+    'emails' => array(
+        'send_from' => 'core@thedistance.co.uk',
+        'site_signature' => 'Regards, <br /> The Core',
+    ),
+
     'labels' => array(
         'user_field_1' => null,
         'user_field_2' => null,
