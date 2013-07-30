@@ -55,6 +55,12 @@ class Permission{
 
                 $html .= "<li><h4>" . $collection->name . "</h4><ul>";
 
+                    $html .= "<li><h5>Collection Permissions</h5></li>";
+
+                    $html .= "<li><label class='checkbox inline'>" . 
+                                            Form::checkbox('permissions[cms.collections.' . $collection->id . '.hierarchy-management]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.hierarchy-management'))
+                                         . "Hierarchy Management</label></li>";
+
                     foreach($collection->nodetypes as $nodetype) {
 
                         $html .= "<li><h5>" . $nodetype->label . "</h5></li>";
@@ -62,7 +68,7 @@ class Permission{
                         foreach ($nodetype->columns as $column) {
                                 
                             $html .= "<li><label class='checkbox inline'>" . 
-                                            Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $column->name . ']', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $column->name)) . $column->label
+                                            Form::checkbox('permissions[cms.collections.' . $collection->id . '.columns.' . $column->name . ']', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $column->name)) . $column->label
                                          . "</label></li>";
 
                         }

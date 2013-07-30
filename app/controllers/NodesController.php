@@ -18,7 +18,9 @@ class NodesController extends BaseController
         $branches = $collection->hierarchy;
         $branches->findChildren();
 
-        return View::make('nodes.hierarchy', compact('collection', 'branches'));
+        $nodeTypes = NodeType::arrayOfTypes();
+
+        return View::make('nodes.hierarchy', compact('collection', 'branches', 'nodeTypes'));
     }
 
     public function nodeList($collectionId = 0) {
