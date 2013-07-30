@@ -73,4 +73,9 @@ class AuthController extends BaseController
 
         return Redirect::route('login')->with('successes', new MessageBag(array( "You have been successfully logged out." )));
     }
+
+    public function forgotPassword()
+    {
+        return View::make('auth.forgot-password');
+    }
 }
