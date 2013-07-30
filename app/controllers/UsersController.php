@@ -136,11 +136,11 @@ class UsersController extends BaseController
             $user->password = Input::get('password');
         }
 
-        $user->permissions = Input::get('permissions', []);
+        // $user->permissions = Input::get('permissions', []);
 
-        foreach (array_diff_key($user->getPermissions(), Input::get('permissions') ?: array()) as $key => $value) {
-            $user->permissions = [$key => 0];
-        }
+        // foreach (array_diff_key($user->getPermissions(), Input::get('permissions') ?: array()) as $key => $value) {
+        //     $user->permissions = [$key => 0];
+        // }
 
         try {
             $user->save();

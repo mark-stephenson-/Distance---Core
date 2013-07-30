@@ -14,7 +14,7 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a href="#info" data-toggle="tab">User Info</a></li>
-        <li><a href="#permissions" data-toggle="tab">Permissions</a></li>
+        <!-- <li><a href="#permissions" data-toggle="tab">Permissions</a></li> -->
     </ul>
 
     <div class="tab-content">
@@ -118,7 +118,7 @@
             </div> 
 
         </div>
-        <div class="tab-pane" id="permissions">
+        <!-- <div class="tab-pane" id="permissions">
             @if ($user->exists)
                 <section class="permission-tree">
                     {{ $permissions }}
@@ -126,7 +126,7 @@
             @else
                 <p>Please create the user before trying to add permission overrides</p>
             @endif
-        </div>
+        </div> -->
     </div>   
 
     <div class="form-actions">
