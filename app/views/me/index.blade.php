@@ -5,8 +5,6 @@
 @stop
 
 @section('body')
-    <h2>Profile Information</h2>
-
     {{ Form::model($user, ['class' => 'form-horizontal', 'autocomplete' => 'off']) }}
 
     <div class="control-group">
