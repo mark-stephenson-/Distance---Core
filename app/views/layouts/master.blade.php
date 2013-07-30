@@ -30,7 +30,7 @@
                 <header class="meta">
                     <nav>
                         <ul>
-                            <li><a href="#">{{ Sentry::getUser()->full_name }}</a></li>
+                            <li><a href="{{ route('me') }}">{{ Sentry::getUser()->full_name ?: Sentry::getUser()->email }}</a></li>
                             <li><a href="#"><i class="icon-cog"></i></a></li>
                             <li><a href="{{ route('logout') }}"><i class="icon-signout "></i></a></li>
                         </ul>

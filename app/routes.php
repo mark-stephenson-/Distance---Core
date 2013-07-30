@@ -39,6 +39,9 @@ App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $except
 
 Route::group(array('before' => ['auth', 'checkPermissions']), function() {
 
+    Route::get('me', array('as' => 'me', 'uses' => 'MeController@index'));
+    Route::post('me', array('as' => 'me.update', 'uses' => 'MeController@update'));
+
     // Nodes
     Route::get('collections/{collectionId}/hierarchy', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
     Route::get('collections/{collectionId}/list', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
