@@ -19,6 +19,9 @@ class Users extends Migration {
             'password' => 'netsells123',
             'first_name' => 'Core',
             'last_name' => 'Admin',
+            'permissions' => array(
+                'superuser' => 1
+            )
         ));
 
         $user->attemptActivation(null);
