@@ -20,7 +20,7 @@
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
                             @if (Sentry::getUser()->hasAccess($item['access']))
-                                <li><a href="{{ route($item['route'], $item['params']) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
+                                <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
                             @endif
                         @endforeach
                     </ul>

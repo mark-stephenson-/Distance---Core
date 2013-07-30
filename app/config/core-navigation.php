@@ -59,5 +59,18 @@ return [
         'access'    => '',
     ],
 
+    /*
+        Custom Node Type Navigation Item
+
+        You only need to change the title, second param, icon and optionally access
+     */
+    // [
+    //     'title'     => 'Pages',
+    //     'route'     => 'nodes.type-list',
+    //     'params'    => ['[collection-id]', 'content-page'],
+    //     'icon'      => 'file',
+    //     'access'    => '',
+    // ],
+
 
 ];

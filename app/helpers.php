@@ -1,5 +1,15 @@
 <?php
 
+function replaceNavigationParams($params) {
+    foreach($params as &$param) {
+        if ($param == '[collection-id]') {
+            $param = ($collection = Collection::current()) ? $collection->id : 0;
+        }
+    }
+
+    return $params;
+}
+
 function formModel($model, $routeName, $atts = array()) {
 
     if ($model->exists) {

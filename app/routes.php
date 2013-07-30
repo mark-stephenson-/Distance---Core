@@ -42,6 +42,7 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     // Nodes
     Route::get('collections/{collectionId}/hierarchy', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
     Route::get('collections/{collectionId}/list', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
+    Route::get('collections/{collectionId}/type-list/{nodeTypeName}', array('as' => 'nodes.type-list', 'uses' => 'NodesController@nodeTypeList'));
     Route::any('nodes/update-order/{id?}', 'NodesController@updateOrder');
     Route::get('nodes/node-lookup', array('as' => 'nodes.lookup', 'uses' => 'NodesController@lookup'));
     Route::get('nodes/link/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.link', 'uses' => 'NodesController@link'));
