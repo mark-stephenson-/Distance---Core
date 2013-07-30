@@ -43,6 +43,8 @@ module.exports = function(grunt) {
                         'public/js/plupload/plupload.full.js',
                         'public/js/plupload/plupload.html5.js',
                         'public/js/plupload/plupload.flash.js',
+                        'public/js/ckeditor/ckeditor.js',
+                        'public/js/ckeditor/adapters/jquery.js',
                         'public/js/bootstrap/bootstrap-dropdown.js',
                         'public/js/bootstrap/bootstrap-modal.js',
                         'public/js/bootstrap/bootstrap-tooltip.js',
@@ -63,6 +65,8 @@ module.exports = function(grunt) {
                         'public/js/plupload/plupload.full.js',
                         'public/js/plupload/plupload.html5.js',
                         'public/js/plupload/plupload.flash.js',
+                        'public/js/ckeditor/ckeditor.js',
+                        'public/js/ckeditor/adapters/jquery.js',
                         'public/js/bootstrap/bootstrap-dropdown.js',
                         'public/js/bootstrap/bootstrap-modal.js',
                         'public/js/bootstrap/bootstrap-tooltip.js',
@@ -85,5 +89,6 @@ module.exports = function(grunt) {
     // Default task(s).
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('prod', ['less:prod', 'uglify:prod']);
+    grunt.registerTask('dev', ['less:dev', 'uglify:dev']);
 
 };
