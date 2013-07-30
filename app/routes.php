@@ -23,8 +23,8 @@ Route::post('login', array('uses' => 'AuthController@processLogin'));
 Route::get('forgot-password', array('as' => 'forgot-password', 'uses' => 'AuthController@forgotPassword'));
 Route::post('forgot-password', array('uses' => 'AuthController@processForgotPassword'));
 
-Route::get('forgot-password/{code}', array('as' => 'reset-password', 'uses' => 'AuthController@resetPassword'));
-Route::post('forgot-password/{code}', array('uses' => 'AuthController@processResetPassword'));
+Route::get('forgot-password/{user_id}/{code}', array('as' => 'reset-password', 'uses' => 'AuthController@resetPassword'));
+Route::post('forgot-password/{user_id}/{code}', array('uses' => 'AuthController@processResetPassword'));
 
 Route::get('logout', array('as' => 'logout', 'uses' => 'AuthController@processLogout'));
 
