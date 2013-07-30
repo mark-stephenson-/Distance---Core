@@ -7,7 +7,7 @@ return [
         'route'     => 'collections.index',
         'params'    => [],
         'icon'      => 'th-large',
-        'access'    => '',
+        'access'    => null,
     ],
     [
         'title'     => 'Groups',
@@ -42,21 +42,21 @@ return [
         'route'     => 'collections.index',
         'params'    => [],
         'icon'      => 'apple',
-        'access'    => '',
+        'access'    => null,
     ],
     [
         'title'     => 'Catalogues',
         'route'     => 'catalogues.index',
         'params'    => [],
         'icon'      => 'folder-open',
-        'access'    => '',
+        'access'    => null,
     ],
     [
         'title'     => 'Resources',
         'route'     => 'resources.index',
         'params'    => [],
         'icon'      => 'file',
-        'access'    => '',
+        'access'    => null,
     ],
 
     /*
@@ -69,7 +69,7 @@ return [
     //     'route'     => 'nodes.type-list',
     //     'params'    => ['[collection-id]', 'content-page'],
     //     'icon'      => 'file',
-    //     'access'    => '',
+    //     'access'    => null,
     // ],
 
 
