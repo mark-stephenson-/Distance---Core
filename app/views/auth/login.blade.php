@@ -11,7 +11,7 @@
         <div class="control-group">
             {{ Form::label('email', 'Email', ['class' => 'control-label']) }}
             <div class="controls">
-                {{ Form::text('email') }}
+                {{ Form::text('email', Input::old('email')) }}
             </div>
         </div>
 

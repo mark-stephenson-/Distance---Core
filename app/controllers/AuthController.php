@@ -78,4 +78,17 @@ class AuthController extends BaseController
     {
         return View::make('auth.forgot-password');
     }
+
+    public function processForgotPassword()
+    {
+        // Let's run the validator
+        $validator = new Core\Validators\ForgotPassword;
+
+        // If the validator fails
+        if ($validator->fails()) {
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($validator->messages());
+        }
+    }
 }
