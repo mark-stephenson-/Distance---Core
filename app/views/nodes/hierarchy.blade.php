@@ -10,11 +10,13 @@
         var currentNodeId = 0;
 
         if ($('.dd').length) {
-            $('.dd').nestable({ 
-                maxDepth: 50,
-                expandBtnHTML: '<button data-action="expand" class="dd-drag-collapse"><i class="icon icon-plus-sign"></i></button>',
-                collapseBtnHTML: '<button data-action="collapse" class="dd-drag-collapse"><i class="icon icon-minus-sign"></i></button>'
-            });
+            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.hierarchy-management'))
+                $('.dd').nestable({ 
+                    maxDepth: 50,
+                    expandBtnHTML: '<button data-action="expand" class="dd-drag-collapse"><i class="icon icon-plus-sign"></i></button>',
+                    collapseBtnHTML: '<button data-action="collapse" class="dd-drag-collapse"><i class="icon icon-minus-sign"></i></button>'
+                });
+            @endif
 
             $('.dd').on('change', function() {
                 json = encodeURIComponent(JSON.stringify($('.dd').nestable('serialize')));
@@ -118,13 +120,18 @@
             @foreach ($branches->getChildren() as $branch)
                 <li class="dd-item" data-id="{{ $branch->id }}">
                     <div class="pull-right node-hierarchy-buttons">
-                        {{ $branch->node->statusBadge }}
+                        <small class="muted"><em>{{ $nodeTypes[$branch->node->node_type]->label }}</em></small> {{ $branch->node->statusBadge }}
                         <div class="btn-group">
                             <a href="{{ route('nodes.view', [$collection->id, $branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
-                            <a href="{{ route('nodes.edit', [$collection->id, $branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
-                            <a href="#" rel="tooltip" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
-                            <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini open-remove-link-modal"><i class="icon-unlink"></i></a>
-                            <!-- <a href="{{ route('nodes.edit', [$branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Permissions" class="btn btn-mini"><i class="icon-key"></i></a> -->
+
+                            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.columns.*'))
+                                <a href="{{ route('nodes.edit', [$collection->id, $branch->node->id, 'branch', $branch->id]) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
+                            @endif
+
+                            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.hierarchy-management'))
+                                <a href="#" rel="tooltip" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
+                                <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini open-remove-link-modal"><i class="icon-unlink"></i></a>
+                            @endif
                         </div>
                     </div>
                     <div class="dd-handle">
@@ -132,7 +139,7 @@
                     </div>
 
                     @if (count($branch->getChildren()))
-                        @include('nodes.branch', array('branches' => $branch->getChildren()))
+                        @include('nodes.branch', array('branches' => $branch->getChildren(), 'nodeTypes' => $nodeTypes))
                     @endif
                 </li>
             @endforeach

@@ -20,7 +20,7 @@
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
                             @if (Sentry::getUser()->hasAccess($item['access']))
-                                <li><a href="{{ route($item['route'], $item['params']) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
+                                <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
                             @endif
                         @endforeach
                     </ul>
@@ -83,6 +83,7 @@
     </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script> CKEDITOR_BASEPATH = '{{ URL::to('') }}/js/ckeditor/'; </script>
         <script src="/js/app.min.js"></script>
         @yield('js')
 

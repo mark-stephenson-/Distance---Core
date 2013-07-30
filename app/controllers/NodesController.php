@@ -18,7 +18,9 @@ class NodesController extends BaseController
         $branches = $collection->hierarchy;
         $branches->findChildren();
 
-        return View::make('nodes.hierarchy', compact('collection', 'branches'));
+        $nodeTypes = NodeType::arrayOfTypes();
+
+        return View::make('nodes.hierarchy', compact('collection', 'branches', 'nodeTypes'));
     }
 
     public function nodeList($collectionId = 0) {
@@ -37,6 +39,24 @@ class NodesController extends BaseController
 
         return View::make('nodes.list', compact('collection', 'nodes'));
 
+    }
+
+    public function nodeTypeList($collectionId = 0, $nodeTypeName = '')
+    {
+        $collection = Collection::find($collectionId);
+        $type = NodeType::where('name', '=', $nodeTypeName)->firstOrFail();
+
+        if (!$collection) {
+            return Redirect::back()
+                ->withErrors(['That collection could not be found.']);
+        }
+
+        Session::put('current-collection', $collection);
+        Session::put('collection-node-view', 'list');
+
+        $nodes = $collection->nodes()->where('node_type', '=', $type->id)->get();
+
+        return View::make('nodes.list', compact('collection', 'nodes'));
     }
 
     public function view($collectionId, $node_id, $revision_id = false, $branch_id = false)

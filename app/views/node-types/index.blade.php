@@ -16,6 +16,7 @@
         <thead>
             <tr>
                 <th>Label</th>
+                <th>Code</th>
                 <th>Collections</th>
                 <th>Columns</th>
                 <th>Actions</th>
@@ -26,6 +27,9 @@
             <tr>
                 <td>
                     {{ $nodeType->label }}
+                </td>
+                <td>
+                    <code>{{ $nodeType->name }}</code>
                 </td>
                 <td>
                     @if (count($nodeType->collections))
@@ -45,7 +49,7 @@
                         No Columns
                     @endif
                 </td>
-                <td width="330">
+                <td width="130">
                     <a href="{{ route('node-types.edit', array($nodeType->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
                 </td>

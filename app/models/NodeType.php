@@ -46,6 +46,16 @@ class NodeType extends BaseModel {
         $this->attributes['columns'] = json_encode($processedColumns);
     }
 
+    public static function arrayOfTypes()
+    {
+        $nodetypes = array();
+        foreach (self::get() as $type) {
+            $nodetypes[ $type->id ] = $type;
+        }
+
+        return $nodetypes;
+    }
+
     public function tableName()
     {
         return 'node_type_' . $this->getAttribute('id');
