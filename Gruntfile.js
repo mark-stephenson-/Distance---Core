@@ -40,6 +40,9 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'public/js/app.min.js': [
+                        'public/js/plupload/plupload.full.js',
+                        'public/js/plupload/plupload.html5.js',
+                        'public/js/plupload/plupload.flash.js',
                         'public/js/bootstrap/bootstrap-dropdown.js',
                         'public/js/bootstrap/bootstrap-modal.js',
                         'public/js/bootstrap/bootstrap-tooltip.js',
@@ -57,6 +60,9 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'public/js/app.min.js': [
+                        'public/js/plupload/plupload.full.js',
+                        'public/js/plupload/plupload.html5.js',
+                        'public/js/plupload/plupload.flash.js',
                         'public/js/bootstrap/bootstrap-dropdown.js',
                         'public/js/bootstrap/bootstrap-modal.js',
                         'public/js/bootstrap/bootstrap-tooltip.js',
