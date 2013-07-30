@@ -36,6 +36,17 @@ function findObjectInArray($array = array(), $item = '', $type = '') {
     return null;
 }
 
+function checkCheckbox($value, $data = array(), $checkedByDefault = false, $icon = false) {
+
+    $data = ($data) ?: array();
+    $data = (!is_array($data)) ? array($data) : $data;
+    $return = in_array($value, $data);
+
+    if (!$icon) return $return;
+
+    return (($return) ? 'ok' : 'remove');
+}
+
 function popRadio( $value, $data, $checkedByDefault = false) {
     if (!$data) return $checkedByDefault;
     return ($value == $data);

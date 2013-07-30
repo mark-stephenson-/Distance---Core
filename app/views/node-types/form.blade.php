@@ -47,6 +47,52 @@
         $(this).closest('li').remove();
     });
 
+    $(document).on('click', '.js-enum-add', function(e) {
+
+        e.preventDefault();
+
+        var enum_container = $(this).closest('.control-group').find('.enum_values');
+
+        // Grab the first element, empty it and stick it at the bottom
+        var ele = enum_container.find('.js-enum-template').clone();
+
+        var first_ele = enum_container.find('div:first input').attr('name');
+        ele.find('input').attr('name', first_ele);
+
+        enum_container.append(ele.html());
+
+    });
+
+    $(document).on('click', '.js-enum-existing-minus', function(e) {
+
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to remove this value? All nodes that have the value set to empty.")) {
+
+            var enum_container = $(this).closest('.input').find('.enum_values');
+            if ( enum_container.children().length == 2) {
+                alert('You must have at least one value');
+            } else {
+                $(this).closest('div').remove();
+            }
+
+        }
+
+    });
+
+    $(document).on('click', '.js-enum-minus', function(e) {
+
+        e.preventDefault();
+
+        var enum_container = $(this).closest('.input').find('.enum_values');
+        if ( enum_container.children().length == 2) {
+            alert('You must have at least one value');
+        } else {
+            $(this).closest('div').remove();
+        }
+
+    });
+
     </script>
 
 @stop

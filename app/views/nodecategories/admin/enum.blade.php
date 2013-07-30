@@ -1,3 +1,4 @@
+<i class="icon-sort drag_handle"></i>
 <?php
 
     $identifier = uniqid();
@@ -10,99 +11,74 @@
     <input type="hidden" name="columns[{{ $identifier }}][name]" value="{{ $data->name }}" />
 @endif
 
-<i class="icon-sort drag_handle"></i>
-
-<div class="input">
-    <label for="input_{{ $identifier }}">
-        Name <em>{{ $category['label'] }}</em>
-        <a href="#" class="js-remove-category">Remove</a>
-</label>
-    <input type="text" id="input_{{ $identifier }}" name="columns[{{ $identifier }}][label]" value="{{ @$data->label }}">
-</div>
-
-<div class="input">
-    Description
-    <label for="input_{{ $identifier }}_description">
-        <input type="text" id="input_{{ $identifier }}_description" name="columns[{{ $identifier }}][description]" value="{{ @$data->description }}">
-    </label>
-</div>
-
-<div class="input">
-    <label for="input_{{ $identifier }}">Possible Values</label>
-    <p><a href="#" class="js-enum-add">Add Value<i class="icon-plus"></i></a></p>
-    <div class="enum_values">
-        @if ($data && $data->values)
-            @foreach($data->values as $value)
-                <div style="margin-bottom: 10px">
-                    <input type="text" id="input_{{ $identifier }}" readonly="true" name="columns[{{ $identifier }}][values][]" value="{{ $value }}" />
-                    @if ($category['name'] == 'enum')
-                        <div class="checkbox">
-                            <label class="inline">
-                                <p>
-                                    Default 
-                                    {{ Form::radio("columns[$identifier][default]", $value, popRadio($value, @$data->default)) }}
-                                </p>
-                            </label>
-                        </div>
-                    @else
-                        <div class="checkbox">
-                            <label class="inline">
-                                <p>
-                                    Default 
-                                    {{ Form::checkbox("columns[$identifier][default][]", $value, checkCheckbox($value, @$data->default)) }}
-                                </p>
-                            </label>
-                        </div>
-                    @endif
-                    <a href="#" class="js-enum-existing-minus">Remove <i class="icon-minus"></i></a>
-                </div>
-            @endforeach
-        @else
-            <div style="margin-bottom: 10px">
-                <input type="text" id="input_{{ $identifier }}" name="columns[{{ $identifier }}][values][]" value="" />
-                <a href="#" class="js-enum-minus">Remove <i class="icon-minus"></i></a>
-            </div>
-        @endif
-
-        <div style="display: none" class="js-enum-template">
-            <div>
-                <input type="text" id="input_{{ $identifier }}" name="" value="" />
-                <a href="#" class="js-enum-minus">Remove <i class="icon-minus"></i></a>
-            </div>
-        </div>
+<div class="control-group">
+    
+    <div class="controls">
+        <p><strong>{{ $category['label'] }}</strong> - <a href="#" class="js-remove-category">Remove Field</a></p>
     </div>
 </div>
 
-
-<div class="checkbox">
-    Required
-    <label class="inline">
-        {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
-        {{ Form::radio("columns[{$identifier}][required]", 0, popRadio(0, @$data->required, true)) }} No
-    </label>
+<div class="control-group">
+    {{ Form::label('columns[' . $identifier . '][label]', 'Name', ['class' => 'control-label']) }}
+    <div class="controls">
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, ['class' => 'span4']) }}
+    </div>
 </div>
 
-<div class="input">
-    Permission
-    <label for="input_{{ $identifier }}_perms">
-        <?php
-            $possiblePermissions = array(
-                'core' => 'Core Admin',
-                'super' => 'Super Admin',
-                'admin' => 'Trust Admin',
-                'write' => 'Author'
-            );
+<div class="control-group">
+    {{ Form::label('columns[' . $identifier . '][description]', 'Description', ['class' => 'control-label']) }}
+    <div class="controls">
+        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, ['class' => 'span4']) }}
+    </div>
+</div>
 
-            if (isset($data)) {
-                $selected = @$data->perms;
-            } else {
-                $selected = 'write';
-            }
+<div class="control-group">
+    {{ Form::label('columns[' . $identifier . '][values][]', 'Possible Values', ['class' => 'control-label']) }}
 
-            if (!$selected) {
-                $selected = 'write';
-            }
-        ?>
-        {{ Form::select("columns[$identifier][perms]", $possiblePermissions, $selected) }}
-    </label>
+        <div class="enum_values">
+            @if ($data && $data->values)
+                @foreach($data->values as $value)
+                <div class="controls spaced">
+                    {{ Form::text('columns[' . $identifier . '][values][]', $value, ['class' => 'span4']) }}
+
+                    <button class="btn btn-small js-enum-existing-minus"><i class="icon-trash"></i></button>
+                    <button class="btn btn-small"><i class="icon-fixed-width icon-{{ checkCheckbox($value, @$data->default, false, true) }}"></i> Default</button>
+
+                    {{--
+                    @if ($category['name'] == 'enum')
+                        {{ Form::radio("columns[$identifier][default][]", $value, checkCheckbox($value, @$data->default, false, true), ['class' => 'checkbox']) }}
+                    @else
+                        {{ Form::checkbox("columns[$identifier][default][]", $value, checkCheckbox($value, @$data->default, false, true), ['class' => 'checkbox']) }}
+                    @endif
+                    --}}
+                </div>
+                @endforeach
+            @endif
+
+            <div style="display: none" class="js-enum-template">
+                <div class="controls spaced">
+                    <input type="text" class="span4" id="input_{{ $identifier }}" name="" value="" />
+
+                    <button class="btn btn-small js-enum-minus"><i class="icon-trash"></i></button>
+                    <button class="btn btn-small"><i class="icon-fixed-width icon-{{ checkCheckbox($value, @$data->default, false, true) }}"></i> Default</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="controls">
+            <p><button class="btn btn-small js-enum-add"><i class="icon-plus"></i> Add Value</button></p>
+        </div>
+</div>
+
+<div class="control-group">
+    {{ Form::label("columns[{$identifier}][required]", 'Required', ['class' => 'control-label']) }}
+    <div class="controls">
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
+        </label>
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][required]", 0, popRadio(0, @$data->required, true)) }} No
+        </label>
+    </div>
 </div>
