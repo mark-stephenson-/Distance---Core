@@ -5,7 +5,7 @@
 @stop
 
 @section('body')
-    {{ Form::open(['class' => 'form-horizontal']) }}
+    {{ formModel($new, 'app-distribution', ['enctype' => 'multipart/form-data']) }}
     
     <div class="control-group">
         {{ Form::label('version', 'Version', ['class' => 'control-label']) }}
