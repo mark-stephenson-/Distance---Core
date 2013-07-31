@@ -68,11 +68,27 @@ class OtaController extends \BaseController {
 
 		if ( ! $version->save() ) {
 			return Redirect::back()
-				->withErrors(new \MessageBag(array('Version ' . $version->version . ' for ' . $version->platform . ' could not been created.')));
+				->withErrors(new MessageBag(array('Version ' . $version->version . ' for ' . $version->platform . ' could not been created.')));
 		}
 
 		return Redirect::route('app-distribution.index')
-			->with('successes', new \MessageBag(array($version->version . ' for ' . $version->platform . ' has been created.')));
+			->with('successes', new MessageBag(array($version->version . ' for ' . $version->platform . ' has been created.')));
 	}
 
+	public function update()
+	{
+		$validator = new Core\Validators\OtaPasswords;
+
+		if ( $validator->fails() ) {
+			return Redirect::back()
+				->withInput()
+				->withErrors($validator->messages());
+		}
+
+		Setting::updateConfig('ota-production_password', Input::get('production_password'));
+		Setting::updateConfig('ota-testing_password', Input::get('testing_password'));
+
+		return Redirect::back()
+			->with('successes', new MessageBag(array('The distribution passwords have been updated successfully.')));
+	}
 }
