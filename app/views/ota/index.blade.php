@@ -6,7 +6,8 @@
 
 @section('body')
     <h2>Current Versions</h2>
-
+    
+    {{ Form::open(['url' => route('app-distribution.update')]) }}
     <table class="table table-striped">
         <thead>
             <tr>
@@ -38,11 +39,11 @@
             <tr>
                 <td colspan="2">
                     <p>Production Password</p>
-                    {{ Form::text('production-password', null, ['class' => 'span10', 'style' => 'text-align: center']) }}
+                    {{ Form::text('production_password', Setting::getConfig('ota-production_password'), ['class' => 'span10', 'style' => 'text-align: center']) }}
                 </td>
                 <td colspan="2">
                     <p>Testing Password</p>
-                    {{ Form::text('testing-password', null, ['class' => 'span10', 'style' => 'text-align: center']) }}
+                    {{ Form::text('testing_password', Setting::getConfig('ota-testing_password'), ['class' => 'span10', 'style' => 'text-align: center']) }}
                 </td>
             </tr>
             <tr>
@@ -53,6 +54,7 @@
             </tr>
         </tbody>
     </table>
+    {{ Form::close() }}
 
     <hr />
 
