@@ -19,7 +19,8 @@ class OtaController extends \BaseController {
 	 */
 	public function create()
 	{
-		return View::make('ota.form');
+		$new = new Ota;
+		return View::make('ota.form', compact('new'));
 	}
 
 	/**
@@ -29,51 +30,49 @@ class OtaController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
-	}
+		$validator = new Core\Validators\Ota;
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
+		if ( $validator->fails() ) {
+			return Redirect::back()
+				->withInput()
+				->withErrors($validator->messages());
+		}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
+		$file = Input::file('file');
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+		if ( $file->getError() ) {
+			return Redirect::back()
+			            ->withInput()
+			            ->withErrors(array('Filesize is too big'));
+		}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
+		// Validator has passed.
+		$path = base_path() . '/resources/ota/' . Input::get('platform') . '/' . Input::get('environment') . '/' . Input::get('version');
+		@mkdir($path, 0777, true);
+
+		// Move stuff into place
+		if ( Input::get('platform') == "ios") {
+			Input::file('file')->move($path, 'app.ipa');
+
+			// \App::make('ipa-distribution', array(base_path() . '/resources/ota/ios/' . Input::get('environment') . '/' . Input::get('version') . '/app.ipa', Input::get('environment'), Input::get('version')));
+		} else if ( Input::get('platform') == "android") {
+			Input::file('file')->move($path, 'app.apk');
+		}
+
+		// Insert into the database.
+		$version = new Ota;
+		$version->platform = Input::get('platform');
+		$version->environment = Input::get('environment');
+		$version->version = Input::get('version');
+		$version->release_notes = Input::get('release_notes');
+
+		if ( ! $version->save() ) {
+			return Redirect::back()
+				->withErrors(new \MessageBag(array($version->version . ' for ' . $version->platform . ' could not been created.')));
+		}
+
+		return Redirect::route('app-distribution.index')
+			->with('successes', new \MessageBag(array($version->version . ' for ' . $version->platform . ' has been created.')));
 	}
 
 }
