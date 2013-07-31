@@ -18,10 +18,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ Ota::ios()->production()->order()->first() ?: '-' }}</td>
-                <td>{{ Ota::android()->production()->order()->first() ?: '-' }}</td>
-                <td>{{ Ota::ios()->testing()->order()->first() ?: '-' }}</td>
-                <td>{{ Ota::android()->testing()->order()->first() ?: '-' }}</td>
+                <td>{{ @Ota::ios()->production()->current()->first()->build_string ?: '-' }}</td>
+                <td>{{ @Ota::android()->production()->current()->first()->build_string ?: '-' }}</td>
+                <td>{{ @Ota::ios()->testing()->current()->first()->build_string ?: '-' }}</td>
+                <td>{{ @Ota::android()->testing()->current()->first()->build_string ?: '-' }}</td>
             </tr>
 
             <tr>
@@ -70,24 +70,40 @@
         <tbody>
             <tr>
                 <td>
-                    @foreach ( Ota::ios()->production()->order()->get() as $v )
-                        {{ $v->version }} () <br />
-                    @endforeach
+                    @if ( $versions = Ota::ios()->production()->order()->get() and count($versions) )
+                        @foreach ( $versions as $v )
+                            {{ $v->build_string }}<br />
+                        @endforeach
+                    @else
+                        -
+                    @endif
                 </td>
                 <td>
-                    @foreach ( Ota::android()->production()->order()->get() as $v )
-                        {{ $v->version }} () <br />
-                    @endforeach
+                    @if ( $versions = Ota::android()->production()->order()->get() and count($versions) )
+                        @foreach ( $versions as $v )
+                            {{ $v->build_string }}<br />
+                        @endforeach
+                    @else
+                        -
+                    @endif
                 </td>
                 <td>
-                    @foreach ( Ota::ios()->testing()->order()->get() as $v )
-                        {{ $v->version }} () <br />
-                    @endforeach
+                    @if ( $versions = Ota::ios()->testing()->order()->get() and count($versions))
+                        @foreach ( $versions as $v )
+                            {{ $v->build_string }}<br />
+                        @endforeach
+                    @else
+                        -
+                    @endif
                 </td>
                 <td>
-                    @foreach ( Ota::android()->testing()->order()->get() as $v )
-                        {{ $v->version }} () <br />
-                    @endforeach
+                    @if ( $versions = Ota::android()->testing()->order()->get() and count($versions))
+                        @foreach ( $versions as $v )
+                            {{ $v->build_string }}<br />
+                        @endforeach
+                    @else
+                        -
+                    @endif
                 </td>
             </tr>
         </tbody>
