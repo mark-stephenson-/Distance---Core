@@ -18,10 +18,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td>{{ Ota::ios()->production()->order()->first() ?: '-' }}</td>
+                <td>{{ Ota::android()->production()->order()->first() ?: '-' }}</td>
+                <td>{{ Ota::ios()->testing()->order()->first() ?: '-' }}</td>
+                <td>{{ Ota::android()->testing()->order()->first() ?: '-' }}</td>
             </tr>
 
             <tr>
@@ -69,10 +69,26 @@
         </thead>
         <tbody>
             <tr>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td>
+                    @foreach ( Ota::ios()->production()->order()->get() as $v )
+                        {{ $v->version }} () <br />
+                    @endforeach
+                </td>
+                <td>
+                    @foreach ( Ota::android()->production()->order()->get() as $v )
+                        {{ $v->version }} () <br />
+                    @endforeach
+                </td>
+                <td>
+                    @foreach ( Ota::ios()->testing()->order()->get() as $v )
+                        {{ $v->version }} () <br />
+                    @endforeach
+                </td>
+                <td>
+                    @foreach ( Ota::android()->testing()->order()->get() as $v )
+                        {{ $v->version }} () <br />
+                    @endforeach
+                </td>
             </tr>
         </tbody>
     </table>
