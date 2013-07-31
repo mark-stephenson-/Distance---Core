@@ -52,8 +52,6 @@
             @if ($revisionData->status == 'published')
                 <a href="#" class="btn open-retire-node-modal"><i class="icon-level-down"></i> Retire</a>
             @endif
-
-            <a href="" class="btn"><i class="icon-key"></i> Permissions</a>
         @endif
         @if (Sentry::getUser()->hasAccess('nodes.edit'))
             <a href="{{ route('nodes.edit', [$collection->id, $node->id, $revisionData->id]) }}" class="btn"><i class="icon-edit"></i> Edit</a>
@@ -64,6 +62,18 @@
         Revision #{{ $revisionData->id }}: {{ date('j F, Y @ H:i', strtotime($revisionData->updated_at)) }} - 
         <small>{{ $revisionData->user->fullName }} - {{ ucfirst($revisionData->status) }}</small>
     </p>
+
+    @if (count($breadcrumbs))
+        <ul class="breadcrumb">
+
+            <li><a href="{{ route('nodes.hierarchy', [$collection->id]) }}">{{ $collection->name }}</a> <span class="divider">/</span></li>
+
+            @foreach($breadcrumbs as $crumb)
+                <li><a href="{{ route('nodes.view', [$collection->id, $crumb->node->id, 'branch', $crumb->id]) }}">{{ $crumb->node->title }}</a> <span class="divider">/</span></li>
+            @endforeach
+            <li class="active">{{ $node->title }}</li>
+        </ul>
+    @endif
 
     <div class="well node-view">
         @foreach($nodeType->columns as $column)

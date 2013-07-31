@@ -29,8 +29,9 @@ class UsersController extends BaseController
 
         // Check for create permission
         $groups = Sentry::getGroupProvider()->findAll();
+        $permissions = Permission::tree($group, Collection::get());
 
-        return View::make('users.form', compact('user', 'groups'));
+        return View::make('users.form', compact('user', 'groups', 'permissions'));
     }
 
     public function store()
@@ -134,6 +135,12 @@ class UsersController extends BaseController
         if (Input::get('password')) {
             $user->password = Input::get('password');
         }
+
+        // $user->permissions = Input::get('permissions', []);
+
+        // foreach (array_diff_key($user->getPermissions(), Input::get('permissions') ?: array()) as $key => $value) {
+        //     $user->permissions = [$key => 0];
+        // }
 
         try {
             $user->save();
