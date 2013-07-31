@@ -68,7 +68,7 @@ class OtaController extends \BaseController {
 
 		if ( ! $version->save() ) {
 			return Redirect::back()
-				->withErrors(new \MessageBag(array($version->version . ' for ' . $version->platform . ' could not been created.')));
+				->withErrors(new \MessageBag(array('Version ' . $version->version . ' for ' . $version->platform . ' could not been created.')));
 		}
 
 		return Redirect::route('app-distribution.index')
