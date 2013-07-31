@@ -39,7 +39,7 @@ return [
     ],
     [
         'title'     => 'App Distribution',
-        'route'     => 'collections.index',
+        'route'     => 'app-distribution.index',
         'params'    => [],
         'icon'      => 'apple',
         'access'    => null,
