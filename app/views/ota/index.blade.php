@@ -10,10 +10,10 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>iOS Production</th>
-                <th>Android Production</th>
-                <th>iOS Testing</th>
-                <th>Android Testing</th>
+                <th width="25%">iOS Production</th>
+                <th width="25%">Android Production</th>
+                <th width="25%">iOS Testing</th>
+                <th width="25%">Android Testing</th>
             </tr>
         </thead>
         <tbody>
@@ -38,11 +38,17 @@
             <tr>
                 <td colspan="2">
                     <p>Production Password</p>
-                    {{ Form::text('production-password', null, ['class' => 'span10']) }}
+                    {{ Form::text('production-password', null, ['class' => 'span10', 'style' => 'text-align: center']) }}
                 </td>
                 <td colspan="2">
                     <p>Testing Password</p>
-                    {{ Form::text('testing-password', null, ['class' => 'span10']) }}
+                    {{ Form::text('testing-password', null, ['class' => 'span10', 'style' => 'text-align: center']) }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <a href="{{ route('app-distribution.create') }}" class="btn">Upload New Version</a>
+                    {{ Form::submit('Save Passwords', ['class' => 'btn btn-primary']) }}
                 </td>
             </tr>
         </tbody>
