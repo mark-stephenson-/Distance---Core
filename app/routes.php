@@ -74,6 +74,7 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::resource('catalogues', 'CataloguesController');
     Route::resource('resources', 'ResourcesController');
     Route::resource('app-distribution', 'OtaController');
+    Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 
     Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
     Route::resource('node-types', 'NodeTypesController');
