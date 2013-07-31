@@ -8,4 +8,4 @@ node_modules/
 public/css/*.min.css
 public/js/*.min.js
 
-/resources/*
+app/storage
