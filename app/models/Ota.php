@@ -3,28 +3,44 @@
 class Ota extends BaseModel {
     public $table = 'ota_versions';
 
-    public function scopeiOS()
+    public function scopeiOS($query)
     {
-        return $this->wherePlatform('ios');
+        return $query->wherePlatform('ios');
     }
 
-    public function scopeAndroid()
+    public function scopeAndroid($query)
     {
-        return $this->wherePlatform('android');
+        return $query->wherePlatform('android');
     }
 
-    public function scopeProduction()
+    public function scopeProduction($query)
     {
-        return $this->whereEnvironment('production');
+        return $query->whereEnvironment('production');
     }
 
-    public function scopeTesting()
+    public function scopeTesting($query)
     {
-        return $this->whereEnvironment('testing');
+        return $query->whereEnvironment('testing');
     }
 
-    public function scopeOrder()
+    public function scopeOrder($query)
     {
-        return $this->orderBy('version', 'DESC');
+        return $query->orderBy('version', 'DESC');
+    }
+
+    public function scopeCurrent($query)
+    {
+        $query = $query->order()->first();
+
+        if ( ! $query ) {
+            return false;
+        }
+
+        return $query;
+    }
+
+    public function getBuildStringAttribute()
+    {
+        return $this->version . ' (' . date('d/m/Y H:i', strtotime($this->created_at)) . ')';
     }
 }
