@@ -16,6 +16,7 @@ class CreatingOtaVersionsTable extends Migration {
 			$table->increments('id');
 		            $table->enum('platform', array('ios', 'android'));
 		            $table->enum('environment', array('production', 'testing'));
+		            $table->text('release_notes');
 		            $table->string('version');
 		            $table->timestamps();
 		});
