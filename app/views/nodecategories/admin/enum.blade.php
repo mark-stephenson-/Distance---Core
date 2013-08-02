@@ -60,7 +60,7 @@
                     <input type="text" class="span4" id="input_{{ $identifier }}" name="" value="" />
 
                     <button class="btn btn-small js-enum-minus"><i class="icon-trash"></i></button>
-                    <button class="btn btn-small"><i class="icon-fixed-width icon-{{ checkCheckbox($value, @$data->default, false, true) }}"></i> Default</button>
+                    <button class="btn btn-small"><i class="icon-fixed-width"></i> Default</button>
                 </div>
             </div>
         </div>
