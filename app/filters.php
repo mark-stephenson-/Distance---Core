@@ -46,7 +46,7 @@ Route::filter('auth.basic', function()
 
 Route::filter('apiAuthentication', function()
 {
-    if ( Request::header('User-Token') or (Request::header('User-Token') === NULL) ) {
+    if ( Request::header('User-Token') ) {
         $user = User::whereKey( Request::header('User-Token') )->first();
 
         if ( ! $user ) {
@@ -58,7 +58,7 @@ Route::filter('apiAuthentication', function()
         });
     }
 
-    if ( Request::header('Collection-Token') or (Request::header('Collection-Token') === NULL) ) {
+    if ( Request::header('Collection-Token') ) {
         $collection = Collection::whereApiKey( Request::header('Collection-Token'))->first();
 
         if ( ! $collection ) {
@@ -70,7 +70,7 @@ Route::filter('apiAuthentication', function()
         });
     }
 
-    if ( Request::header('Authorization-Token') or (Request::header('Authorization-Token') === NULL) ) {
+    if ( Request::header('Authorization-Token') or ( Request::header('Authorization-Token') === NULL) ) {
         $authorization = Application::whereApiKey( Request::header('Authorization-Token'))->first();
 
         if ( ! $authorization ) {
