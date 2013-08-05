@@ -44,6 +44,46 @@ Route::filter('auth.basic', function()
 	return Auth::basic();
 });
 
+Route::filter('apiAuthentication', function()
+{
+    if ( Request::header('User-Token') or (Request::header('User-Token') === NULL) ) {
+        $user = User::whereKey( Request::header('User-Token') )->first();
+
+        if ( ! $user ) {
+            return Response::make('User Token Invalid.', 403);
+        }
+
+        App::singleton('user', function() use ($user) {
+            return Sentry::getUserProvider()->findById($user->id);
+        });
+    }
+
+    if ( Request::header('Collection-Token') or (Request::header('Collection-Token') === NULL) ) {
+        $collection = Collection::whereApiKey( Request::header('Collection-Token'))->first();
+
+        if ( ! $collection ) {
+            return Response::make('Collection Token Invalid.', 403);
+        }
+
+        App::singleton('collection', function() use ($collection) {
+            return $collection;
+        });
+    }
+
+    if ( Request::header('Authorization-Token') or (Request::header('Authorization-Token') === NULL) ) {
+        $authorization = Application::whereApiKey( Request::header('Authorization-Token'))->first();
+
+        if ( ! $authorization ) {
+            return Response::make('Authorization Token Invalid.', 403);
+        }
+
+        App::singleton('app', function() use ($authorization) {
+            return $authorization;
+        });
+    }
+
+});
+
 Route::filter('checkPermissions', function($request)
 {
     $replacements = [
