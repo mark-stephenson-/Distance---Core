@@ -6,7 +6,7 @@ class Api extends \BaseModel {
         $contentType = Request::header('Content-Type');
 
         if ( $contentType == "text/xml" ) {
-            return 'XML';
+            return 'XML not implemented yet.';
         } else if ( $contentType == "application/json" ) {
             $json = json_encode($content);
 
