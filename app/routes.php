@@ -15,6 +15,10 @@ Route::any('/', array('as' => 'root', function() {
     return Redirect::route('collections.index');
 }));
 
+Route::group( ['prefix' => 'api'], function() {
+    Route::put('authentication', array('uses' => 'Api\AuthenticationController@authenticate'));
+});
+
 // Authentication
 Route::get('login', array('as' => 'login', 'uses' => 'AuthController@showLogin'));
 Route::get('login/{userId}/{token}', array('uses' => 'AuthController@processReviewerLogin'));
