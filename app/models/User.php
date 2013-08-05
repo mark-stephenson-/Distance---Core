@@ -18,4 +18,12 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
         return $this->belongsToMany('Group', 'users_groups');
     }
 
+    public function getKeyAttribute($value) {
+        $this->timestamps = false;
+        $this->last_accessed = date('Y-m-d H:i:s');
+        $this->save();
+
+        return $value;
+    }
+
 }
