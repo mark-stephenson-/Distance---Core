@@ -20,6 +20,7 @@ Route::group( ['prefix' => 'api'], function() {
 
     Route::group( ['before' => 'apiAuthentication' ], function() {
         Route::get('nodes', function() { return ''; });
+        Route::get('collections', 'Api\CollectionController@collections');
     });
 });
 
