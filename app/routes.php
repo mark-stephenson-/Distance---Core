@@ -17,6 +17,10 @@ Route::any('/', array('as' => 'root', function() {
 
 Route::group( ['prefix' => 'api'], function() {
     Route::put('authentication', array('uses' => 'Api\AuthenticationController@authenticate'));
+
+    Route::group( ['before' => 'apiAuthentication' ], function() {
+        Route::get('nodes', function() { return ''; });
+    });
 });
 
 // Authentication
