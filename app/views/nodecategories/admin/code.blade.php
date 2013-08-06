@@ -10,9 +10,9 @@
 
 <input type="hidden" name="columns[{{ $identifier }}][category]" value="{{ $category['name'] }}" />
 
-@if ($data)
-    <input type="hidden" name="columns[{{ $identifier }}][name]" value="{{ $data->name }}" />
-@endif
+{{-- @if ( isset($data) )
+    <input type="hidden" name="columns[{{ $identifier }}][name]" value="{{ @$data->name }}" />
+@endif --}}
 
 <div class="control-group">
     
