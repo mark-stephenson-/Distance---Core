@@ -1,8 +1,9 @@
 <?php
-    if (!isset($data)) {
-        $value = @$column->default;
-    } else {
-        $value = @$data->{$column->name};
+
+    $syntaxes = array();
+
+    foreach (Config::get('core-code-editor') as $code => $d) {
+        $syntaxes[$code] = $d['name'];
     }
 ?>
 
@@ -15,18 +16,15 @@
   @endforeach
 @endif
 
-{{ Form::textarea('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span10', 'id' => 'code']) }}
+{{ Form::textarea('', $data->{$column->name}, ['class' => 'span10', 'id' => 'code']) }}
 
 <script type="text/javascript">
       window.onload = function() {
         var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         lineWrapping: true,
+        readOnly: true,
         mode: "text/html"
       });
       };
     </script>
-
-@if ($column->description)
-    <span class="help-block">{{ $column->description }}</span>
-@endif

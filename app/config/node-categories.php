@@ -75,7 +75,7 @@ return array(
     'code' => array(
         'label' => 'Code',
         'name'  => 'code',
-        'type'  => 'boolean',
+        'type'  => 'MEDIUMTEXT',
         'admin' => 'code',
     ),
 
