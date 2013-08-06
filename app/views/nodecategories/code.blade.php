@@ -1,4 +1,6 @@
 <?php
+    $identifier = uniqid();
+
     if (!isset($data)) {
         $value = @$column->default;
     } else {
@@ -15,16 +17,14 @@
   @endforeach
 @endif
 
-{{ Form::textarea('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span10', 'id' => 'code']) }}
+{{ Form::textarea('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span10', 'id' => 'code-' . $identifier]) }}
 
 <script type="text/javascript">
-      window.onload = function() {
-        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        CodeMirror.fromTextArea(document.getElementById("code-{{ $identifier }}"), {
         lineNumbers: true,
         lineWrapping: true,
-        mode: "text/html"
+        mode: "{{ Config::get('core-code-editor.' . $column->syntax . '.mode') }}"
       });
-      };
     </script>
 
 @if ($column->description)

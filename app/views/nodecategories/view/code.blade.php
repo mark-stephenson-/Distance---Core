@@ -1,5 +1,5 @@
 <?php
-
+    $identifier = uniqid();
     $syntaxes = array();
 
     foreach (Config::get('core-code-editor') as $code => $d) {
@@ -16,15 +16,13 @@
   @endforeach
 @endif
 
-{{ Form::textarea('', $data->{$column->name}, ['class' => 'span10', 'id' => 'code']) }}
+{{ Form::textarea('', $data->{$column->name}, ['class' => 'span10', 'id' => 'code-' . $identifier]) }}
 
 <script type="text/javascript">
-      window.onload = function() {
-        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        CodeMirror.fromTextArea(document.getElementById("code-{{ $identifier }}"), {
         lineNumbers: true,
         lineWrapping: true,
         readOnly: true,
-        mode: "text/html"
+        mode: "{{ Config::get('core-code-editor.' . $column->syntax . '.mode') }}"
       });
-      };
     </script>
