@@ -72,6 +72,13 @@ return array(
         'admin' => 'standard',
     ),
 
+    'code' => array(
+        'label' => 'Code',
+        'name'  => 'code',
+        'type'  => 'boolean',
+        'admin' => 'code',
+    ),
+
     'enum' => array(
         'label' => 'List',
         'name'  => 'enum',
