@@ -1,3 +1,4 @@
+<i class="icon-sort drag_handle"></i>
 <?php
 
     $identifier = uniqid();
@@ -10,42 +11,51 @@
     <input type="hidden" name="columns[{{ $identifier }}][name]" value="{{ $data->name }}" />
 @endif
 
-<i class="icon-sort drag_handle"></i>
-
-<div class="input">
-    <label for="input_{{ $identifier }}">
-        Name <em>{{ $category['label'] }}</em>
-        <a href="#" class="js-remove-category">Remove</a>
-    </label>
-    <input type="text" id="input_{{ $identifier }}" name="columns[{{ $identifier }}][label]" value="{{ @$data->label }}">
+<div class="control-group">
+    
+    <div class="controls">
+        <p><strong>{{ $category['label'] }}</strong> - <a href="#" class="js-remove-category">Remove Field</a></p>
+    </div>
 </div>
 
-<div class="input">
-    Description
-    <label for="input_{{ $identifier }}_description">
-        <input type="text" id="input_{{ $identifier }}_description" name="columns[{{ $identifier }}][description]" value="{{ @$data->description }}">
-    </label>
+<div class="control-group">
+    {{ Form::label('columns[' . $identifier . '][label]', 'Name', ['class' => 'control-label']) }}
+    <div class="controls">
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, ['class' => 'span4']) }}
+    </div>
 </div>
 
-<div class="input">
-    <label for="input_{{ $identifier }}_lookuptype">
-        Node Type
-    </label>
-    {{ Form::select("columns[$identifier][lookuptype]", forSelect('node_types', 'label'), @$data->lookuptype, array('id' => "input_{$identifier}_lookuptype")) }}
+<div class="control-group">
+    {{ Form::label('columns[' . $identifier . '][description]', 'Description', ['class' => 'control-label']) }}
+    <div class="controls">
+        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, ['class' => 'span4']) }}
+    </div>
+</div>
+
+<div class="control-group">
+    {{ Form::label('columns[' . $identifier . '][lookuptype]', 'Description', ['class' => 'control-label']) }}
+    <div class="controls">
+        {{ Form::select("columns[$identifier][lookuptype]", NodeType::all()->lists('label', 'id'), @$data->lookuptype) }}
+    </div>
 </div>
 
 
-<div class="checkbox">
-    Required
-    <label class="inline">
-        {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
-        {{ Form::radio("columns[{$identifier}][required]", 0, popRadio(0, @$data->required, true)) }} No
-    </label>
+<div class="control-group">
+    {{ Form::label("columns[{$identifier}][required]", 'Required', ['class' => 'control-label']) }}
+    <div class="controls">
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
+        </label>
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][required]", 0, popRadio(0, @$data->required, true)) }} No
+        </label>
+    </div>
 </div>
 
-<div class="input">
-    Permission
-    <label for="input_{{ $identifier }}_perms">
+<div class="control-group">
+    {{ Form::label("columns[{$identifier}][perms]", 'Permissions', ['class' => 'control-label']) }}
+
+    <div class="controls">
         <?php
             $possiblePermissions = array(
                 'core' => 'Core Admin',
@@ -65,5 +75,5 @@
             }
         ?>
         {{ Form::select("columns[$identifier][perms]", $possiblePermissions, $selected) }}
-    </label>
+    </div>
 </div>
