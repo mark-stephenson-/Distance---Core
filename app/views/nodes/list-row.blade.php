@@ -2,7 +2,7 @@
     <td>{{ $node->id }}</td>
     <td>{{ $node->title }}</td>
     <td>{{ $node->nodetype->label }}</td>
-    <td>{{ $node->status }}</td>
+    <td>{{ ucfirst($node->status) }}</td>
     <td>{{ @$node->owner->fullName }}</td>
     <td>{{ date('j-m-Y H:i', strtotime($node->created_at)) }}</td>
     <td class="actions">
