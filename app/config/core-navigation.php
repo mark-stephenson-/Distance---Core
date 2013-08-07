@@ -3,6 +3,20 @@
 return [
     
     [
+        'title'     => 'Hierarchy',
+        'route'     => 'nodes.hierarchy',
+        'params'    => ['[collection-id]'],
+        'icon'      => 'sitemap',
+        'access'    => null,
+    ],
+    [
+        'title'     => 'Node List',
+        'route'     => 'nodes.list',
+        'params'    => ['[collection-id]'],
+        'icon'      => 'th-list',
+        'access'    => null,
+    ],
+    [
         'title'     => 'Collections',
         'route'     => 'collections.index',
         'params'    => [],
