@@ -89,6 +89,7 @@ class NodeTypesController extends BaseController
         }
 
         $nodeType->label = Input::get('label');
+        $nodeType->name = Str::slug($nodeType->label);
         
         $enumCols = array();
 
