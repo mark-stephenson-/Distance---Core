@@ -3,16 +3,16 @@
     $identifier = uniqid();
     $syntaxes = array();
 
-    foreach (Config::get('core-code-editor') as $code => $data) {
-        $syntaxes[$code] = $data['name'];
+    foreach (Config::get('core-code-editor') as $code => $d) {
+        $syntaxes[$code] = $d['name'];
     }
 ?>
 
 <input type="hidden" name="columns[{{ $identifier }}][category]" value="{{ $category['name'] }}" />
 
-{{-- @if ( isset($data) )
+@if ($data)
     <input type="hidden" name="columns[{{ $identifier }}][name]" value="{{ @$data->name }}" />
-@endif --}}
+@endif
 
 <div class="control-group">
     
@@ -31,7 +31,7 @@
 <div class="control-group">
     {{ Form::label('columns[' . $identifier . '][syntax]', 'Syntax', ['class' => 'control-label']) }}
     <div class="controls">
-        {{ Form::select('columns[' . $identifier . '][syntax]', $syntaxes, null, ['class' => 'span4']) }}
+        {{ Form::select('columns[' . $identifier . '][syntax]', $syntaxes, @$data->syntax, ['class' => 'span4']) }}
     </div>
 </div>
 
