@@ -24,7 +24,7 @@
     });
 </script>
 
-<div id="{{ $identifier }}" class="input-append span8">
+<div id="{{ $identifier }}" class="input-append span8" style="margin-left: 0px">
     {{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, date('d/m/Y h:i', strtotime($value))), ['class' => 'span8 validate-date datepicker', 'data-format' => 'dd/MM/yyyy hh:mm']) }}
     <span class="add-on">
         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
