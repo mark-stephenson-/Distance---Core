@@ -33,36 +33,24 @@
 </div>
 
 <div class="control-group">
-@if ($category['name'] == 'resource')
-    {{-- Catalogue selection with extension filtering --}}
-@elseif ($category['name'] == 'bit')
+    @if ($category['name'] == 'resource')
+        {{-- Catalogue selection with extension filtering --}}
+    @elseif ($category['name'] == 'bit')
+    @elseif ($category['name'] == 'enum')
+    @elseif ($category['name'] == 'enum-multi')
+    @elseif ($category['name'] == 'nodelookup')
+    @elseif ($category['name'] == 'nodelookup-multi')
+    @elseif ($category['name'] == 'date')
+    @else
+        {{ Form::label('default_value', 'Default Value', ['class' => 'control-label']) }}
+        <div class="controls">
+            {{ Form::text('default_value', null, ['class' => 'span4']) }}
+        </div>
 
-    {{ Form::label("columns[{$identifier}][required]", 'Required', ['class' => 'control-label']) }}
-    <div class="controls">
-        <label class="radio inline">
-            {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
-        </label>
-        <label class="radio inline">
-            {{ Form::radio("columns[{$identifier}][required]", 0, popRadio(0, @$data->required, true)) }} No
-        </label>
-    </div>
-
-@elseif ($category['name'] == 'enum')
-@elseif ($category['name'] == 'enum-multi')
-@elseif ($category['name'] == 'nodelookup')
-@elseif ($category['name'] == 'nodelookup-multi')
-@elseif ($category['name'] == 'date')
-@else
-    {{ Form::label('default_value', 'Default Value', ['class' => 'control-label']) }}
-    <div class="controls">
-        {{ Form::text('default_value', null, ['class' => 'span4']) }}
-    </div>
-
-    @if ($category['name'] == 'date')
-        DATE
+        @if ($category['name'] == 'date')
+            DATE
+        @endif
     @endif
-@endif
-
 </div>
 
 {{-- Radio buttons (aka booleans) are always going to be present anyway --}}
