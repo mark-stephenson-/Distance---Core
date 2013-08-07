@@ -27,10 +27,6 @@ class UsersController extends BaseController
     {
         $user = new User;
 
-        // Check for create permission
-        $groups = Sentry::getGroupProvider()->findAll();
-        $permissions = Permission::tree($group, Collection::get());
-
         return View::make('users.form', compact('user', 'groups', 'permissions'));
     }
 
