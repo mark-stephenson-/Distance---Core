@@ -116,9 +116,9 @@
     </div>
 
     <div class="control-group">
-        {{ Form::label('category', 'Category', ['class' => 'control-label']) }}
+        {{ Form::label('field', 'Field', ['class' => 'control-label']) }}
         <div class="controls">
-            {{ Form::select('category', NodeType::categorySelect(), null, ['id' => 'js-category-select', 'class' => 'span7']) }}
+            {{ Form::select('field', NodeType::categorySelect(), null, ['id' => 'js-category-select', 'class' => 'span7']) }}
             <a href="#" id="js-category-add" class="btn" style="margin-left: 10px">Add</a>
         </div>
     </div>
