@@ -16,14 +16,15 @@ Route::any('/', array('as' => 'root', function() {
 }));
 
 Route::group( ['prefix' => 'api'], function() {
+    Route::get('/', function(){ return Response::make('', 400); });
     Route::put('authentication', array('uses' => 'Api\AuthenticationController@authenticate'));
 
     Route::group( ['before' => 'apiAuthentication' ], function() {
-        Route::get('nodes', function() { return ''; });
         Route::get('collections', 'Api\CollectionController@collections');
         Route::get('hierarchy', 'Api\HierarchyController@hierarchy');
-        Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
         Route::get('node/{id}', 'Api\NodeController@node');
+        Route::get('nodes', 'Api\NodeController@nodes');
+        Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
     });
 });
 
