@@ -82,6 +82,8 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
 
     Route::resource('collections', 'CollectionsController');
     Route::resource('users', 'UsersController');
+    Route::get('users/{id}/add-group/{group_id}', array('as' => 'users.add-group', 'uses' => 'UsersController@doAddGroup'));
+    Route::get('users/{id}/remove-group/{group_id}', array('as' => 'users.remove-group', 'uses' => 'UsersController@doRemoveGroup'));
     Route::resource('groups', 'GroupsController');
     Route::resource('apps', 'AppsController');
     Route::resource('catalogues', 'CataloguesController');

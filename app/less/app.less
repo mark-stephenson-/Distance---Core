@@ -187,3 +187,21 @@ div.content {
         }
     }
 }
+
+ul.groups {
+    li {
+        list-style: none;
+        padding: 20px;
+        .clearfix();
+
+        &:nth-child(even) {
+            background-color: #F5F5F5;
+        } // &:nth-child(even)
+
+        p {
+            &.lead {
+                margin-bottom: 0px;
+            } // &.lead
+        } // p
+    } // li
+} // ul

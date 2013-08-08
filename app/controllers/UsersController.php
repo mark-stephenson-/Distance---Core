@@ -151,4 +151,54 @@ class UsersController extends BaseController
         return Redirect::route('users.index')
                 ->with('successes', new MessageBag(array($user->fullName . ' has been updated.')));
     }
+
+    public function doAddGroup($user_id, $group_id) {
+         try {
+            // Check the user exists
+            $user = Sentry::getUserProvider()->findById($user_id);
+
+            // Check the group exists
+            $group = Sentry::getGroupProvider()->findById($group_id);
+
+            // Add the user to the group
+            $user->addGroup($group);
+
+            return Redirect::back()
+                ->with('successes', new MessageBag(array('This user has been added to the <b>' . $group->name .'</b> group.' )));            
+
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That user could not be found.' )));
+
+        } catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That group could not be found.' )));
+        }
+    }
+
+    public function doRemoveGroup($user_id, $group_id) {
+        try {
+            // Check the user exists
+            $user = Sentry::getUserProvider()->findById($user_id);
+
+            // Check the group exists
+            $group = Sentry::getGroupProvider()->findById($group_id);
+
+            // Add the user to the group
+            $user->removeGroup($group);
+
+            return Redirect::back()
+                ->with('successes', new MessageBag(array('This user has been removed from the <b>' . $group->name .'</b> group.' )));            
+
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That user could not be found.' )));
+
+        } catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That group could not be found.' )));
+        }
+    }
 }
