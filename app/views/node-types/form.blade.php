@@ -126,7 +126,7 @@
     <div class="control-group">
         <div class="controls">
             @if (!$nodeType->exists)
-                {{ Form::submit('Create Collection', ['class' => 'btn']) }}
+                {{ Form::submit('Create Node Type', ['class' => 'btn']) }}
             @else
                 {{ Form::submit('Save Changes', ['class' => 'btn']) }}
             @endif
@@ -143,13 +143,15 @@
         @endif
     </ul>
 
-    @if ($nodeType->exists)
     <div class="control-group">
         <div class="controls">
-            {{ Form::submit('Save Changes', ['class' => 'btn']) }}
+            @if (!$nodeType->exists)
+                {{ Form::submit('Create Node Type', ['class' => 'btn']) }}
+            @else
+                {{ Form::submit('Save Changes', ['class' => 'btn']) }}
+            @endif
         </div>
     </div>
-    @endif
 
     {{ Form::close() }}
 
