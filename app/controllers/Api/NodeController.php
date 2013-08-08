@@ -1,19 +1,33 @@
 <?php namespace Api;
 
-use Node, Response;
+use Node, Response, Request, Input;
 
 class NodeController extends \BaseController {
     
     public function nodes()
     {
+        if ( Request::header('Collection-Token') === NULL ) {
+            return Response::make('Collection-Token must be specified for this call.', 400);
+        }
+
         $collection = \App::make('collection');
-        $nodes = Node::whereCollectionId($collection->id)->get();
+        $nodes = Node::whereCollectionId($collection->id);
+
+        if ( Input::get('nodeType') ) {
+            $nodes = $nodes->whereNodeType(Input::get('nodeType'));
+        }
+
+        $nodes = $nodes->get();
 
         return $nodes;
     }
 
     public function node($id)
     {
+        if ( Request::header('Collection-Token') === NULL ) {
+            return Response::make('Collection-Token must be specified for this call.', 400);
+        }
+
         $collection = \App::make('collection');
         $node = Node::whereId($id)->whereCollectionId($collection->id)->first();
 
