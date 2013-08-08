@@ -10,6 +10,10 @@ class AuthenticationController extends \BaseController {
         if ( json_last_error() ) {
             return Response::make('Error decoding JSON request body', 400);
         }
+
+        if ( ! isset($input->email) and ! isset($input->password) ) {
+            return Response::make('Email and Password must be supplied in the request body.', 400);
+        }
         
         try {
             $user = Sentry::getUserProvider()->findByCredentials(array(
