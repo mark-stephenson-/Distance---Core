@@ -17,6 +17,10 @@ class NodeController extends \BaseController {
             $nodes = $nodes->whereNodeType(Input::get('nodeType'));
         }
 
+        if ( Input::get('modifiedSince') ) {
+            $nodes = $nodes->where('updated_at', '>', date('Y-m-d H:i:s', Input::get('modifiedSince')) );
+        }
+
         $nodes = $nodes->get();
 
         return $nodes;
