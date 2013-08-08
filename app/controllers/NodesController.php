@@ -88,7 +88,11 @@ class NodesController extends BaseController
             // ... and the last as we can hard-code that
             array_pop($breadcrumbPath);
 
-            $breadcrumbs = Hierarchy::with('node')->whereIn('id', $breadcrumbPath)->get();
+            $breadcrumbs = Hierarchy::with('node');
+
+            if ( count($breadcrumbPath) ) {
+                $breadcrumbs = $breadcrumbs->whereIn('id', $breadcrumbPath)->get();
+            }
         } else {
             $breadcrumbs = [];
         }
