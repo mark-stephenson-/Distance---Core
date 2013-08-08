@@ -6,7 +6,10 @@ class NodeController extends \BaseController {
     
     public function nodes()
     {
+        $collection = \App::make('collection');
+        $nodes = Node::whereCollectionId($collection->id)->get();
 
+        return $nodes;
     }
 
     public function node($id)
