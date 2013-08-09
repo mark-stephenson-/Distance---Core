@@ -35,6 +35,10 @@
 <div class="control-group">
     @if ($category['name'] == 'resource')
         {{-- Catalogue selection with extension filtering --}}
+        {{ Form::label('columns[' . $identifier . '][catalogue]', 'Catalogue', ['class' => 'control-label']) }}
+        <div class="controls">
+            {{ Form::select('columns[' . $identifier . '][catalogue]', Catalogue::all()->lists('name', 'id'), @$data->catalogue, ['class' => 'span4']) }}
+        </div>
     @elseif ($category['name'] == 'bit')
     @elseif ($category['name'] == 'enum')
     @elseif ($category['name'] == 'enum-multi')
