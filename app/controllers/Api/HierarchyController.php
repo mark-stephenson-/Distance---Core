@@ -1,11 +1,21 @@
 <?php namespace Api;
 
-use collection;
+use App, Request, Response;
+use Collection;
 
 class HierarchyController extends \BaseController {
 
     public function hierarchy()
     {
-        return Collection::whereId( \App::make('collection')->id )->first()->hierarchy;
+        if ( Request::header('Collection-Token') === NULL ) {
+            return Response::make('Collection-Token must be specified for this call.', 400);
+        }
+
+        $collection = Collection::find(App::make('collection')->id);
+
+        $branches = $collection->hierarchy;
+        $branches->findChildren();
+
+        return $branches;
     }
 }
