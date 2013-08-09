@@ -50,7 +50,7 @@
                                 </a>
                                 <ul class="dropdown-menu pull-right">
                                     @foreach(Collection::all() as $collection)
-                                        <li><a href="{{ route('nodes.' . Config::get('core.prefrences.preferred-node-view'), [$collection->id]) }}">{{ $collection->name }}</a></li>
+                                        <li><a href="/collections/{{ $collection->id }}/{{ Request::segment(3) ?: 'hierarchy' }}">{{ $collection->name }}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
