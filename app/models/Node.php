@@ -136,4 +136,9 @@ class Node extends BaseModel
         return $return;
     }
 
+    public function scopeIsPublished($query)
+    {
+        $query->whereStatus('published');
+    }
+
 }
