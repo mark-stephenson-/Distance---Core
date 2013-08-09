@@ -1,7 +1,7 @@
 <?php namespace Api;
 
 use App, Request, Response;
-use Collection;
+use Api, Collection;
 
 class HierarchyController extends \BaseController {
 
@@ -16,6 +16,6 @@ class HierarchyController extends \BaseController {
         $branches = $collection->hierarchy;
         $branches->findChildren();
 
-        return $branches;
+        return Api::makeResponse($branches, 'hierarchy');
     }
 }

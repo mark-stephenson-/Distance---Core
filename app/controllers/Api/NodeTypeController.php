@@ -1,6 +1,7 @@
 <?php namespace Api;
 
-use Request, Response;
+use App, Request, Response;
+use Api;
 
 class NodeTypeController extends \BaseController {
     
@@ -10,6 +11,8 @@ class NodeTypeController extends \BaseController {
             return Response::make('Collection-Token must be specified for this call.', 400);
         }
 
-        return \App::make('collection')->nodetypes;
+        $nodetypes = App::make('collection')->nodetypes;
+
+        return Api::makeResponse($nodetypes, 'node-types');
     }
 }

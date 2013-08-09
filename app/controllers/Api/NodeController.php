@@ -1,6 +1,7 @@
 <?php namespace Api;
 
-use Node, Response, Request, Input;
+use Api, Node;
+use Response, Request, Input;
 
 class NodeController extends \BaseController {
     
@@ -23,7 +24,7 @@ class NodeController extends \BaseController {
 
         $nodes = $nodes->get();
 
-        return $nodes;
+        return Api::makeResponse($nodes, 'nodes');
     }
 
     public function node($id)
@@ -39,6 +40,6 @@ class NodeController extends \BaseController {
             return Response::make('node not found', 404);
         }
 
-        return $node;
+        return Api::makeResponse($node, 'node');
     }
 }

@@ -13,6 +13,6 @@ class CollectionController extends \BaseController {
             unset($collection['deleted_at'], $collection['created_at'], $collection['updated_at'], $collection['group_id']);
         }
 
-        return $collections;
+        return Api::makeResponse($collections, 'collections');
     }
 }
