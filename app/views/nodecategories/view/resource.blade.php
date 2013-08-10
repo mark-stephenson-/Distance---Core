@@ -1,7 +1,7 @@
 <?php
 
     if (@$data->{$column->name}) {
-        $resource = \Netsells\Ignaz\Models\Resource::find($data->{$column->name});
+        $resource = Resource::find($data->{$column->name});
     } else {
         $resource = null;
     }
