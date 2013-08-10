@@ -12,7 +12,7 @@ class NodeController extends \BaseController {
         }
 
         $collection = \App::make('collection');
-        $nodes = Node::whereCollectionId($collection->id);
+        $nodes = Node::whereCollectionId($collection->id)->isPublished();
 
         if ( Input::get('nodeType') ) {
             $nodes = $nodes->whereNodeType(Input::get('nodeType'));
