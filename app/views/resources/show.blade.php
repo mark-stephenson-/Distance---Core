@@ -33,7 +33,7 @@
             <tr>
                 <td>
                     @if ($resource->isImage())
-                        <img src="{{ $resource->path() }}" width="80" height="50" />
+                        <img src="{{ $resource->path() }}?type=view" width="80" height="50" />
                     @else
                         <i class="icon-file"></i>
                     @endif
