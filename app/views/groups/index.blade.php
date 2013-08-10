@@ -28,7 +28,15 @@
                     {{ $userCount = count($group->users) }}
 
                     @if ($userCount)
-                         - {{ implode(', ', $group->users->slice(0, 5)->lists('fullName')) }}&hellip;
+                    <?php
+                        // Laravel isn't working as expected, so here's a bug fix for User::all()->lists('full_name', 'id')
+                        $user_list = array();
+
+                        foreach ( $group->users->slice(0, 5) as $_user ) {
+                            $user_list[$_user->id] = $_user->full_name;
+                        }
+                    ?>
+                         - {{ implode(', ', $user_list) }}&hellip;
                     @endif
                 </td>
                 <td width="150">
