@@ -10,13 +10,13 @@
 ?>
 
 <div class="resource-{{ $column->name }}-container resource-view">
-    {{ Form::hidden('nodetype['. $column->name .']', null, ['id' => 'nodetype-'. $column->name]) }}
+    {{ Form::hidden('nodetype['. $column->name .']', @$data->{$column->name}, ['id' => 'nodetype-'. $column->name]) }}
 
     @if ( $resource )
         <div class="resource">
             <div class="image">
                 @if ( $resource->isImage() )
-                    <img src="/file/{{ $resource->filename }}" alt="" />
+                    <img src="/file/{{ $resource->filename }}?type=view" alt="" />
                 @else
                     <i class="icon-file"></i>
                 @endif
@@ -26,7 +26,7 @@
             <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a>
         </div>
     @else
-        <div class="no-resource">
+        <div class="resource">
             <p style="padding-top: 5px;">No Resource Selected.</p>
             <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Choose One</a>
         </div>
@@ -57,7 +57,7 @@
                     <tr>
                         <td>
                             @if ( $resource->isImage() )
-                                <img src="/file/{{ $resource->filename }}" alt="" style="max-width: 24px; max-height: 24px;" />
+                                <img src="/file/{{ $resource->filename }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
                             @else
                                 <i class="icon-file"></i>
                             @endif
@@ -72,12 +72,21 @@
                             @endif
                         </td>
                         <td>
-                            <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->filename }}">Use</a>
+                            <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->filename }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="empty-{{ $column->name}}-resource" style="display: none">
+    <div class="resource">
+        <div class="image"></div>
+
+        <p class="filename"></p>
+        <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a>
     </div>
 </div>
 
@@ -87,7 +96,14 @@
             e.preventDefault();
 
             $("#nodetype-{{ $column->name }}").val( $(this).attr('data-id') );
-            $(".resource-{{ $column->name}}-container").find('.no-resource').hide();
+            $(".resource-{{ $column->name}}-container .resource").remove();
+            $(".resource-{{ $column->name }}-container").prepend( $('.empty-{{ $column->name }}-resource').html() );
+
+            $(".resource-{{ $column->name }}-container .resource .filename").html( $(this).attr('data-filename') );
+
+            if ( $(this).attr('data-image') == "true") {
+                $(".resource-{{ $column->name }}-container .resource .image").html( '<img src="/file/' + $(this).attr('data-filename') +'?type=view" />' );
+            }
             $("#{{ $column->name }}-resource_window").modal('hide');
         });
     });
