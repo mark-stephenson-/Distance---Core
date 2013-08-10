@@ -22,7 +22,16 @@
     <div class="control-group">
         {{ Form::label('members', 'Members', ['class' => 'control-label']) }}
         <div class="controls">
-            {{ Form::select('members[]', User::all()->lists('fullName', 'id'), $group->users->lists('id'), ['class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the group members']) }}
+            <?php
+                // Laravel isn't working as expected, so here's a bug fix for User::all()->lists('full_name', 'id')
+                $user_list = array();
+
+                foreach ( User::all() as $_user ) {
+                    $user_list[$_user->id] = $_user->full_name;
+                }
+            ?>
+
+            {{ Form::select('members[]', $user_list, $group->users->lists('id'), ['class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the group members']) }}
         </div>
     </div>
 
