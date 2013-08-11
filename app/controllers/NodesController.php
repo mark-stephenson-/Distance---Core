@@ -25,7 +25,19 @@ class NodesController extends BaseController
 
     public function nodeList($collectionId = 0) {
 
-        $collection = Collection::find($collectionId);
+        if ( Input::get('filter') or Input::get('sort') ) {
+            $collection = Collection::with(array('nodes' => function($query) {
+                if ( Input::get('filter') ) {
+                    $query->where('node_type', '=', Input::get('filter'));
+                }
+
+                if ( Input::get('sort') ) {
+                    $query->orderBy('title', Input::get('sort'));
+                }
+            }))->find($collectionId);
+        } else {
+            $collection = Collection::find($collectionId);
+        }
 
         if (!$collection) {
             return Redirect::back()

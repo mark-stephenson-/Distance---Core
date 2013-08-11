@@ -25,6 +25,12 @@
 
 @section('body')
 
+    <form class="form-inline pull-left">
+        {{ Form::select('filter', array('' => 'No Filter') + $collection->nodetypes->lists('label', 'id'), Input::get('filter') ?: 0) }}
+        {{ Form::select('sort', array('' => 'No Sort') + array('ASC' => 'A-Z', 'DESC' => 'Z-A')) }}
+        <input type="submit" value="Go" class="btn" />
+    </form>
+
     <p class="pull-right">
 
         @if (Route::currentRouteName() == 'nodes.type-list')
