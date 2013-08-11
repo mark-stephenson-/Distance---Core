@@ -36,7 +36,7 @@
 
     <div class="well">
         @foreach($nodeType->columns as $column)
-            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $column->name))
+            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.columns.' . $column->name))
                 <div class="control-group">
                     {{ Form::label($column->name, $column->label, ['class' => 'control-label']) }}
                     <div class="controls">

@@ -74,7 +74,7 @@
         </div>
         <div class="modal-body">
             <p>Please select a node type to add.</p>
-            {{ Form::select('node_type', NodeType::forSelect($collection, false), null, array('id' => 'node_type_select', 'class' => 'select2'))}}
+            {{ Form::select('node_type', NodeType::forSelect($collection, false, 'create'), null, array('id' => 'node_type_select', 'class' => 'select2'))}}
             <div id="addNodeModalExisting" style="display: none;">
                 {{ Form::hidden('existing_node', null, array('id' => 'existing_node_select')) }}
             </div>

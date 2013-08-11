@@ -245,14 +245,26 @@ class NodeType extends BaseModel {
      *
      * @return array                    List of node type labels
      */
-    public static function forSelect(Collection $collection = null, $withExisting = false)
+    public static function forSelect(Collection $collection = null, $withExisting = false, $permission = false)
     {
         $types = ($collection) ? $collection->nodetypes() : self;
 
         $return = $types->select(array('*', 'node_types.id as node_types_id'))
                         ->orderBy('label', 'ASC')
-                        ->lists('label', 'node_types_id');
-        
+                        ->get();
+
+        if ( $permission !== false ) {
+            foreach ($return as &$item) {
+                $permission = 'permission[cms.collections.' . $collection->id . '.' . $item->name . '.' . $permission .']';
+
+                if ( ! Sentry::getUser()->hasAccess($permission) ) {
+                    unset($item);
+                }
+            }
+        }
+
+        $return = $return->lists('label', 'node_types_id');
+
         if ($withExisting) {
             $return['existing'] = "Existing Item";
         }
