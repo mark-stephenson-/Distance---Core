@@ -29,7 +29,11 @@ class NodeController extends \BaseController {
                 $published_revision = $node->fetchRevision( $node->published_revision );
 
                 foreach ($node->nodetype->columns as $item) {
-                    $node->{$item->name} = $published_revision->{$item->name};
+                    if ( $item->category == "code" ) {
+                        $node->{$item->name} = '<![CDATA[' . $published_revision->{$item->name} . ']]>';
+                    } else {
+                        $node->{$item->name} = $published_revision->{$item->name};
+                    }
                 }
             }
         }
@@ -53,7 +57,11 @@ class NodeController extends \BaseController {
         $published_revision = $node->fetchRevision( $node->published_revision );
 
         foreach ($node->nodetype->columns as $item) {
-            $node->{$item->name} = $published_revision->{$item->name};
+             if ( $item->category == "code" ) {
+                $node->{$item->name} = '<![CDATA[' . $published_revision->{$item->name} . ']]>';
+            } else {
+                $node->{$item->name} = $published_revision->{$item->name};
+            }
         }
 
         return Api::makeResponse($node, 'node');
