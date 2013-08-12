@@ -40,7 +40,11 @@ class NodeController extends \BaseController {
             return Response::make('node not found', 404);
         }
 
-        $node->published_revision = $node->fetchRevision( $node->published_revision );
+        $published_revision = $node->fetchRevision( $node->published_revision );
+
+        foreach ($node->nodetype->columns as $item) {
+            $node->{$item->name} = $published_revision->{$item->name};
+        }
 
         return Api::makeResponse($node, 'node');
     }
