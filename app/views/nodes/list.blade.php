@@ -40,7 +40,8 @@
         @if (Config::get('core.features.hierarchy'))
             <a href="{{ route('nodes.hierarchy', [$collection->id]) }}" class="btn"><i class="icon-sitemap"></i> Hierarchy</a>
         @endif
-        @if (Sentry::getUser()->hasAccess('nodes.create'))
+        
+        @if ( count(NodeType::forSelect($collection, false, 'create')) )
             <a href="{{ route('nodes.create', [$collection->id]) }}" class="btn" id="openNodeModal"><i class="icon-plus"></i> New Node</a>
         @endif
     </p>

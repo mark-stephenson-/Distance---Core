@@ -110,7 +110,8 @@
 
     <div class="btn-group pull-right">
         <a href="{{ route('nodes.list', [$collection->id]) }}" class="btn"><i class="icon-list"></i> Node List</a>
-        @if (Sentry::getUser()->hasAccess('nodes.create'))
+
+        @if ( count(NodeType::forSelect($collection, false, 'create')) )
             <a href="#" class="btn" id="openRootNodeModal"><i class="icon-plus"></i> New Root Node</a>
         @endif
     </div>
@@ -157,7 +158,7 @@
         </div>
         <div class="modal-body">
             <p>Please select a node type to place in the hierarchy.</p>
-            {{ Form::select('node_type', NodeType::forSelect($collection, true), null, array('id' => 'node_type_select', 'class' => 'select2'))}}
+            {{ Form::select('node_type', NodeType::forSelect($collection, true, 'create'), null, array('id' => 'node_type_select', 'class' => 'select2'))}}
             <div id="addNodeModalExisting" style="display: none;">
                 {{ Form::hidden('existing_node', null, array('id' => 'existing_node_select')) }}
             </div>
