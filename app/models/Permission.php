@@ -48,7 +48,7 @@ class Permission{
         $html .= "<li><h3>Collections</h3>";
 
         if ($collections) {
-
+            
             $html .= "<ul>";
 
             foreach($collections as $collection) {
@@ -65,8 +65,26 @@ class Permission{
 
                         $html .= "<li><h5>" . $nodetype->label . "</h5></li>";
 
-                        foreach ($nodetype->columns as $column) {
-                                
+                        // CRUD permissions
+                        $html .= "<li style='display: block; margin-bottom: 10px;'>
+                            <label class='checkbox inline'>
+                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.create]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.create')) . " Create
+                            </label>
+
+                            <label class='checkbox inline'>
+                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.read]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.read')) . " Read
+                            </label>
+
+                            <label class='checkbox inline'>
+                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.update]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.update')) . " Update
+                            </label>
+
+                            <label class='checkbox inline'>
+                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.delete]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.delete')) . " Delete
+                            </label>
+                        </li>";
+
+                        foreach ($nodetype->columns as $column) {                                
                             $html .= "<li><label class='checkbox inline'>" . 
                                             Form::checkbox('permissions[cms.collections.' . $collection->id . '.columns.' . $column->name . ']', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $column->name)) . $column->label
                                          . "</label></li>";

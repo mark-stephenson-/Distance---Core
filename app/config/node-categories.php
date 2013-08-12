@@ -51,13 +51,6 @@ return array(
         'admin' => 'standard',
     ),
 
-    'json' => array(
-        'label' => 'JSON',
-        'name'  => 'json',
-        'type'  => 'text',
-        'admin' => 'standard',
-    ),
-
     'geolocation' => array(
         'label' => 'Geographic Location',
         'name'  => 'geolocation',

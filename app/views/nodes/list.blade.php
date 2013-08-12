@@ -25,6 +25,12 @@
 
 @section('body')
 
+    <form class="form-inline pull-left">
+        {{ Form::select('filter', array('' => 'No Filter') + $collection->nodetypes->lists('label', 'id'), Input::get('filter') ?: 0) }}
+        {{ Form::select('sort', array('' => 'No Sort') + array('ASC' => 'A-Z', 'DESC' => 'Z-A')) }}
+        <input type="submit" value="Go" class="btn" />
+    </form>
+
     <p class="pull-right">
 
         @if (Route::currentRouteName() == 'nodes.type-list')
@@ -68,7 +74,7 @@
         </div>
         <div class="modal-body">
             <p>Please select a node type to add.</p>
-            {{ Form::select('node_type', NodeType::forSelect($collection, false), null, array('id' => 'node_type_select', 'class' => 'select2'))}}
+            {{ Form::select('node_type', NodeType::forSelect($collection, false, 'create'), null, array('id' => 'node_type_select', 'class' => 'select2'))}}
             <div id="addNodeModalExisting" style="display: none;">
                 {{ Form::hidden('existing_node', null, array('id' => 'existing_node_select')) }}
             </div>
