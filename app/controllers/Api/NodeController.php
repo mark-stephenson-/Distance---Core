@@ -24,7 +24,7 @@ class NodeController extends \BaseController {
 
         $nodes = $nodes->get();
 
-        if ( Input::get('headersOnly') == "true" ) {
+        if ( Input::get('headersOnly') == NULL or Input::get('headersOnly') == "false" ) {
             foreach ( $nodes as &$node ) {
                 $published_revision = $node->fetchRevision( $node->published_revision );
 
