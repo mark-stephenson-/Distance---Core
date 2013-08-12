@@ -24,6 +24,16 @@ class NodeController extends \BaseController {
 
         $nodes = $nodes->get();
 
+        if ( Input::get('headersOnly') == "true" ) {
+            foreach ( $nodes as &$node ) {
+                $published_revision = $node->fetchRevision( $node->published_revision );
+
+                foreach ($node->nodetype->columns as $item) {
+                    $node->{$item->name} = $published_revision->{$item->name};
+                }
+            }
+        }
+
         return Api::makeResponse($nodes, 'nodes');
     }
 
