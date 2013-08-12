@@ -16,6 +16,9 @@ Route::any('/', array('as' => 'root', function() {
 }));
 
 Route::group( ['prefix' => 'api'], function() {
+    // We need to ensure that the prfiler doesn't pop up here...
+    Config::set('profiler::config.enabled', false);
+    
     Route::get('/', function(){ return Response::make('', 400); });
     Route::put('authentication', array('uses' => 'Api\AuthenticationController@authenticate'));
 

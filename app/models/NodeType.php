@@ -254,11 +254,11 @@ class NodeType extends BaseModel {
                         ->get();
 
         if ( $permission !== false ) {
-            foreach ($return as &$item) {
-                $permission = 'permission[cms.collections.' . $collection->id . '.' . $item->name . '.' . $permission .']';
+            foreach ($return as $key => $item) {
+                $check = 'cms.collections.' . $collection->id . '.' . $item->name . '.' . $permission;
 
-                if ( ! Sentry::getUser()->hasAccess($permission) ) {
-                    unset($item);
+                if ( ! Sentry::getUser()->hasAccess($check) ) {
+                    unset($return[$key]);
                 }
             }
         }
