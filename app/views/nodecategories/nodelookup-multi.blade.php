@@ -4,7 +4,7 @@
     if ($data && $col = $data->{$column->name}) {
         $items = explode(',', $col);
         if (count($items)) {
-            $db_objects = \Netsells\Ignaz\Models\Node::whereIn('id', $items)->get(array('id', 'title'));
+            $db_objects = Node::whereIn('id', $items)->get(array('id', 'title'));
         } else {
             $db_objects = array();
         }

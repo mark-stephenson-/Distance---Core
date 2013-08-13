@@ -2,7 +2,7 @@
 
     // We need to do a bit of formatting on the dropdowns so the enum var is returned, not the array key
     if ($data && $col = $data->{$column->name}) {
-        $db_object = \Netsells\Ignaz\Models\Node::whereId($col)->first(array('id', 'title'));
+        $db_object = Node::whereId($col)->first(array('id', 'title'));
     } else {
         $db_object = null;
     }
