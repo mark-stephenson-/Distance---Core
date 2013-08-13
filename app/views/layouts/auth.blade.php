@@ -11,7 +11,7 @@
         <link rel="stylesheet" type="text/css" href="/css/app.min.css">
     </head>
     <body>
-
+    <div class="gradient"></div>
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="content auth span5 offset3">
