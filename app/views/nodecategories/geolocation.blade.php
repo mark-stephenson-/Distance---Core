@@ -23,7 +23,7 @@
     </div>
 
     <div class="modal-body">
-        <div id="{{ $id }}-canvas" style="height: 350px; width: 525px; display: block"></div>
+        <div id="{{ $id }}-canvas" class="map_canvas" style="height: 350px; width: 525px; display: block"></div>
     </div>
 
     <div class="modal-footer">
@@ -53,18 +53,33 @@
 
             map = new google.maps.Map(document.getElementById('{{ $id }}-canvas'), mapOptions);
 
-            var marker = new google.maps.Marker({
-                position: latlng,
-                map: map,
-                draggable: true
-            });
+            if ( $('#{{ $id }}-latlng').val() ) {
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    draggable: true
+                });
 
-            google.maps.event.addListener(marker, 'dragend', function() {
-                var position = String(marker.getPosition()).replace('(', '').replace(')', '');
-                $('#{{ $id }}-latlng').val( position );
-              });
+                google.maps.event.addListener(marker, 'dragend', function() {
+                    var position = String(marker.getPosition()).replace('(', '').replace(')', '');
+                    $('#{{ $id }}-latlng').val( position );
+                  });
+            } else {
+                google.maps.event.addListener(map, 'dblclick', function(e) {
+                    var marker = new google.maps.Marker({
+                        position: e.latLng,
+                        map: map,
+                        draggable: true
+                    });
+
+                    $('#{{ $id }}-latlng').val( e.latLng.lat() + ', ' + e.latLng.lng() );
+                });
+            }
         });
     </script>
+    <style>
+        .map_canvas img{max-width:none !important}
+    </style>
 
 
 
