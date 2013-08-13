@@ -4,10 +4,24 @@
 @import "fancybox";
 @import "datetimepicker.less";
 
-@backgroundColor: #f8461c;
+@cirrusOrange: #f8461c;
+@backgroundColor: darken(@cirrusOrange, 10%);
+
+html {
+    background: @backgroundColor; /* Old browsers */
+}
 
 body {
-    background: @backgroundColor;
+    background: @backgroundColor; /* Old browsers */
+    background: -moz-linear-gradient(top,  @cirrusOrange 0%, @backgroundColor 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@cirrusOrange), color-stop(100%,@backgroundColor)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  @cirrusOrange 0%,@backgroundColor 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  @cirrusOrange 0%,@backgroundColor 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  @cirrusOrange 0%,@backgroundColor 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  @cirrusOrange 0%,@backgroundColor 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@cirrusOrange', endColorstr='@backgroundColor',GradientType=0 ); /* IE6-9 */
+    background-repeat: no-repeat;
+
     padding: 20px 0;
 }
 
