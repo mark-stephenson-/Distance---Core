@@ -73,6 +73,8 @@
                     });
 
                     $('#{{ $id }}-latlng').val( e.latLng.lat() + ', ' + e.latLng.lng() );
+
+                    google.maps.event.clearListeners(map, 'dblclick');
                 });
             }
         });
