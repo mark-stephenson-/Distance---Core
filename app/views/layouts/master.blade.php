@@ -15,7 +15,7 @@
         <script src="/js/app.min.js"></script>
     </head>
     <body>
-
+        <div class="gradient"></div>
         <div class="container-fluid">
         <div class="row-fluid">
             <div class="span2">
