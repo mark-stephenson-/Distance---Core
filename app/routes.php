@@ -97,6 +97,11 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
     Route::resource('node-types', 'NodeTypesController');
 
-    Route::get('courses', array('as' => 'cirrus.courses', 'uses' => 'CoursesController@index'));
+    Route::group(array('prefix' => 'ajax'), function() {
+        Route::group(array('prefix' => 'resources'), function() {
+            Route::get('toggle_sync', 'Ajax\ResourcesController@toggleSync');
+        });
+    });
 
+    Route::get('courses', array('as' => 'cirrus.courses', 'uses' => 'CoursesController@index'));
 });
