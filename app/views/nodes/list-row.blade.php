@@ -4,7 +4,7 @@
     <td>{{ $node->nodetype->label }}</td>
     <td>{{ ucfirst($node->status) }}</td>
     <td>{{ @$node->owner->fullName }}</td>
-    <td>{{ date('j-m-Y H:i', strtotime($node->created_at)) }}</td>
+    <td>{{ date('d M Y H:i', strtotime($node->created_at)) }}</td>
     <td class="actions">
         @if (isset($node->branch_id) and $node->branch_id)
             @if ( Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $node->nodetype->name . '.read'))
