@@ -13,6 +13,12 @@
 @stop
 
 @section('body')
+
+    <div class="btn-group pull-left">
+        <a href="javascript:history.go(-1)" class="btn"><i class="icon-arrow-left"></i> Back</a>
+    </div>
+
+    <div style="clear: both; padding-top: 15px;"></div>
     
     @if ($node->exists)
         {{ Form::open(['route' => ['nodes.update', $collection->id, $node->id, $revisionData->id, $branchId], 'class' => 'form-horizontal']) }}

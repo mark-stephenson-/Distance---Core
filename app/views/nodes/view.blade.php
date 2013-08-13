@@ -42,6 +42,10 @@
 
 @section('body')
 
+    <div class="btn-group pull-left">
+        <a href="javascript:history.go(-1)" class="btn"><i class="icon-arrow-left"></i> Back</a>
+    </div>
+
     <div class="btn-group pull-right">
         @if (Sentry::getUser()->hasAccess('nodes.edit'))
 
@@ -58,7 +62,7 @@
         @endif
     </div>
 
-    <p class="lead">
+    <p class="lead" style="clear: both; padding-top: 15px;">
         Revision #{{ $revisionData->id }}: {{ date('j F, Y @ H:i', strtotime($revisionData->updated_at)) }} - 
         <small>{{ $revisionData->user->fullName }} - {{ ucfirst($revisionData->status) }}</small>
     </p>

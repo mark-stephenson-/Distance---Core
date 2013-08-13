@@ -28,13 +28,48 @@ class Api extends \BaseModel {
         }
 
         if ( $contentType == "text/xml" ) {
-            $json = $content->toJSON();
             $format = new format;
-            return Response::make($format->factory($json, 'JSON')->to_xml(), 200, array('Content-Type' => 'text/xml'));
+            return Response::make($format->factory($content->toArray())->to_xml(), 200, array('Content-Type' => 'text/xml'));
+            // return Response::make(self::makeXML($content->toArray()), 200, array('Content-Type' => 'text/xml'));
         } else if ( $contentType == "application/json" ) {
             return Response::make($content->toJSON(), 200, array('Content-Type' => 'application/json'));
         } else {
             return Response::make('Content-Type not recognised.', 400);
         }
+    }
+
+    private static function makeXML($content) {
+        // Create a DOMDocument
+        $dom = new DOMDocument('1.0');
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+
+        $root = new DOMElement('xml');
+        $dom->appendChild($root);
+
+        foreach ( $content as $key => $value ) {
+            if (is_numeric($key)) {
+                // make string key...
+                $key = 'item';
+            }
+
+            if ( is_array($value) || is_object($value) ) {
+                $node = new DOMElement($key);
+                $root->appendChild($node);
+
+                $root->appendChild( self::makeXMLChild($value, $node) );
+            }
+        }
+
+        return $dom->saveXML();
+    }
+
+    private static function makeXMLChild($data, $node, $root = 'item') {
+        foreach ($data as $key => $value) {
+            $node->{$key} = $value;
+        }
+
+        var_dump($node);
+        return $node;
     }
 }
