@@ -23,6 +23,7 @@
     </div>
 
     <div class="modal-body">
+        <p style="text-align: center" class="alert alert-info">Double click on the map to drop a pin.</p>
         <div id="{{ $id }}-canvas" class="map_canvas" style="height: 350px; width: 525px; display: block"></div>
     </div>
 
