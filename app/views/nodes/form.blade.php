@@ -15,7 +15,15 @@
 @section('body')
 
     <div class="btn-group pull-left">
-        <a href="javascript:history.go(-1)" class="btn"><i class="icon-arrow-left"></i> Back</a>
+        @if ( $lastView = Session::get('last-view') )
+            @if ( $lastView['collection_id'] == $collection->id)
+                <a href="{{ $lastView['url'] }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
+            @else
+                <a href="{{ route('nodes.list', $collection->id) }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
+            @endif
+        @else
+            <a href="{{ route('nodes.list', $collection->id) }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
+        @endif
     </div>
 
     <div style="clear: both; padding-top: 15px;"></div>
