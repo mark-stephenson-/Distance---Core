@@ -47,9 +47,9 @@
                 </td>
                 <td>
                     @if ($resource->sync)
-                        <i class="icon-ok"></i>
+                        <a href="" class="btn toggle-sync" data-id="{{ $resource->id }}" data-sync="0"><i class="icon-ok"></i></a>
                     @else
-                        <i class="icon-remove"></i>
+                        <a href="" class="btn toggle-sync" data-id="{{ $resource->id }}" data-sync="1"><i class="icon-remove"></i></a>
                     @endif
                 </td>
                 <td width="150">
@@ -83,6 +83,22 @@
                 {title : "Allowed Files", extensions : "{{ implode(',', $catalogue->restrictions) }}"},
             @endif
         ]);
+
+        $(".toggle-sync").click( function(e) {
+            e.preventDefault();
+            var button = $(this);
+            var resourceID = button.attr('data-id');
+            var sync = button.attr('data-sync');
+
+            // Fire off the ajax
+            $.ajax({
+                url: '/ajax/resources/toggle_sync',
+                data: 'resourceID=' + resourceID + '&sync=' + sync,
+                success: function() {
+                    button.find('i').toggleClass('icon-remove').toggleClass('icon-ok');
+                }
+            });
+        });
 
     </script>
 
