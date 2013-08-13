@@ -25,7 +25,14 @@
 </script>
 
 <div id="{{ $identifier }}" class="input-append span8" style="margin-left: 0px">
-    {{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, date('d/m/Y h:i', strtotime($value))), ['class' => 'span8 validate-date datepicker', 'data-format' => 'dd/MM/yyyy hh:mm']) }}
+    <?php
+        $date = '';
+
+        if ( strtotime($value) > 0 ) {
+            $date = date('d/m/Y h:i', strtotime($value));
+        }
+    ?>
+    {{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $date), ['class' => 'span8 validate-date datepicker', 'data-format' => 'dd/MM/yyyy hh:mm']) }}
     <a class="btn add-on">
         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
     </a>
