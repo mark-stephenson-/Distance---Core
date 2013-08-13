@@ -90,13 +90,19 @@
             var resourceID = button.attr('data-id');
             var sync = button.attr('data-sync');
 
+            button.addClass('disabled');
+
             // Fire off the ajax
             $.ajax({
                 url: '/ajax/resources/toggle_sync',
                 data: 'resourceID=' + resourceID + '&sync=' + sync,
                 success: function() {
+                    button.attr('data-sync', (sync == "1") ? 0 : 1);
+
                     button.find('i').toggleClass('icon-remove').toggleClass('icon-ok');
                 }
+            }).done( function() {
+                button.removeClass('disabled');
             });
         });
 
