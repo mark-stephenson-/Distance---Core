@@ -26,10 +26,10 @@ Route::group( ['prefix' => 'api'], function() {
         Route::get('collections', 'Api\CollectionController@collections');
         Route::get('hierarchy', 'Api\HierarchyController@hierarchy');
         Route::get('node/{id}', 'Api\NodeController@node');
-        Route::get('nodes', 'Api\NodeController@nodes');
+        Route::get('node', 'Api\NodeController@nodes');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
-        Route::get('resources/{id}', 'Api\ResourceController@resource');
-        Route::get('resources', 'Api\ResourceController@resources');
+        Route::get('resource/{id}', 'Api\ResourceController@resource');
+        Route::get('resource', 'Api\ResourceController@resources');
     });
 });
 
