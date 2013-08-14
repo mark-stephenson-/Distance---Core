@@ -125,18 +125,11 @@ class Format {
             if (is_numeric($key))
             {
                 // make string key...
-                // if ( isset($basenode[$depth])) {
-                    if ( isset($value['node_type']) ) {
-                        $key = $this->nodeTypes[$value['node_type']];
-                        // $key = $value['node_type'];
-                    } else {
-                        $key = (str_singular($basenode[0]) != $basenode[0]) ? str_singular($basenode[0]) : 'item';
-                        // $key = $value['node_type'];
-                    }
-                // } else {
-                //     // $key = (str_singular($basenode[0]) != $basenode[0]) ? str_singular($basenode[0]) : 'item';
-                //     $key = $depth;
-                // }
+                if ( isset($value['node_type']) ) {
+                    $key = $this->nodeTypes[$value['node_type']];
+                } else {
+                    $key = (str_singular($basenode[0]) != $basenode[0]) ? str_singular($basenode[0]) : 'item';
+                }
             }
 
             // replace anything not alpha numeric
