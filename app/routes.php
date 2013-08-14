@@ -28,6 +28,8 @@ Route::group( ['prefix' => 'api'], function() {
         Route::get('node/{id}', 'Api\NodeController@node');
         Route::get('nodes', 'Api\NodeController@nodes');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
+        Route::get('resources/{id}', 'Api\ResourceController@resource');
+        Route::get('resources', 'Api\ResourceController@resources');
     });
 });
 
