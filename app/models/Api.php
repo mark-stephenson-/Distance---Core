@@ -29,7 +29,7 @@ class Api extends \BaseModel {
 
         if ( $contentType == "text/xml" ) {
             $format = new format;
-            return Response::make($format->factory($content->toArray())->to_xml(), 200, array('Content-Type' => 'text/xml'));
+            return Response::make($format->factory($content->toArray())->to_xml($content->toArray(), null, $root_node), 200, array('Content-Type' => 'text/xml'));
             // return Response::make(self::makeXML($content->toArray()), 200, array('Content-Type' => 'text/xml'));
         } else if ( $contentType == "application/json" ) {
             return Response::make($content->toJSON(), 200, array('Content-Type' => 'application/json'));

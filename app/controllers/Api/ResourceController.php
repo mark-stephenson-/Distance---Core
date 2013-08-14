@@ -22,7 +22,7 @@ class ResourceController extends \BaseController {
         if ( \Input::get('sync') ) {
             $catalogues = $catalogues->with(array('resources' => function($query) {
                 $sync = false;
-                
+
                 if ( \Input::get('sync') == "true") {
                     $sync = 1;
                 }
@@ -40,7 +40,7 @@ class ResourceController extends \BaseController {
             }));
         }
 
-        return Api::makeResponse($catalogues->get());
+        return Api::makeResponse($catalogues->get(), 'catalogues');
     }
 
     public function resource($id)
