@@ -90,6 +90,7 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::resource('groups', 'GroupsController');
     Route::resource('apps', 'AppsController');
     Route::resource('catalogues', 'CataloguesController');
+    Route::get('catalogues/{id}/delete', ['as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy']);
     Route::resource('resources', 'ResourcesController');
     Route::resource('app-distribution', 'OtaController');
     Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));

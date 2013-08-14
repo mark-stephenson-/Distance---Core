@@ -73,4 +73,8 @@ class CataloguesController extends BaseController
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been updated.')));
     }
 
+    public function destroy($catalogueId) {
+        print $catalogueId;
+    }
+
 }
