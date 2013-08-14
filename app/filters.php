@@ -70,8 +70,15 @@ Route::filter('apiAuthentication', function()
         });
     }
 
-    if ( Request::header('Authorization-Token') or ( Request::header('Authorization-Token') === NULL) ) {
-        $authorization = Application::whereApiKey( Request::header('Authorization-Token'))->first();
+    if ( ! isset($_SERVER['PHP_AUTH_USER']) ) {
+        header('WWW-Authenticate: Basic realm="Authorization"');
+        header('HTTP/1.0 401 Unauthorized');
+        echo 'Authorization Invalid.';
+        exit;
+    }
+
+    if ( $_SERVER['PHP_AUTH_USER'] ) {
+        $authorization = Application::whereApiKey( $_SERVER['PHP_AUTH_USER'])->first();
 
         if ( ! $authorization ) {
             return Response::make('Authorization Token Invalid.', 403);
