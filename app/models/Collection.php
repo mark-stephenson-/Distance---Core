@@ -2,7 +2,7 @@
 
 class Collection extends BaseModel {
 
-    protected $fillable = array('name', 'api_key');
+    protected $fillable = array('name', 'api_key', 'application_id');
 
     public static function current()
     {
@@ -27,6 +27,11 @@ class Collection extends BaseModel {
         });
 
         return $collections;
+    }
+
+    public function application()
+    {
+        return $this->belongsTo('Application');
     }
 
     public function hierarchy()

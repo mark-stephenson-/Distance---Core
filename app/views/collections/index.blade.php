@@ -16,6 +16,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Application</th>
                 <th>API Key</th>
                 <th>Actions</th>
             </tr>
@@ -26,6 +27,7 @@
                     <td>
                         {{ $collection->name }}
                     </td>
+                    <td>{{ @$collection->application->name ?: '-' }}</td>
                     <td>
                         {{ $collection->api_key }}
                     </td>
