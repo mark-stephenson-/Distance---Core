@@ -28,6 +28,8 @@ Route::group( ['prefix' => 'api'], function() {
         Route::get('node/{id}', 'Api\NodeController@node');
         Route::get('nodes', 'Api\NodeController@nodes');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
+        Route::get('resources/{id}', 'Api\ResourceController@resource');
+        Route::get('resources', 'Api\ResourceController@resources');
     });
 });
 
@@ -90,6 +92,7 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::resource('groups', 'GroupsController');
     Route::resource('apps', 'AppsController');
     Route::resource('catalogues', 'CataloguesController');
+    Route::get('catalogues/{id}/delete', ['as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy']);
     Route::resource('resources', 'ResourcesController');
     Route::resource('app-distribution', 'OtaController');
     Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));

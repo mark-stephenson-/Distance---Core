@@ -72,20 +72,6 @@
         </div>
     </div>
 
-    <div class="modal fade hide" id="deleteModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Collection Name Goes Here</h3>
-        </div>
-        <div class="modal-body">
-            <p>Are you sure you want to delete this collection? This cannot be undone.</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-            <a href="#" class="btn btn-primary">Yes, Delete it.</a>
-        </div>
-    </div>
-
     @yield('js')
     
     </body>
