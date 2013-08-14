@@ -26,7 +26,11 @@ class Api extends \BaseModel {
             if ( $root_node != "nodes") {
                 return Response::make($format->factory($content->toArray(), null, $nodeTypes)->to_xml($content->toArray(), null, $root_node), 200, array('Content-Type' => 'text/xml'));
             } else {
-                return Response::make($format->factory($content, null, $nodeTypes)->to_xml($content, null, $root_node), 200, array('Content-Type' => 'text/xml'));
+                $xml = $format->factory($content, null, $nodeTypes)->to_xml($content, null, $root_node);
+
+                $xml = str_replace(array('<nodes>', '</nodes>'), '', $xml);
+
+                return Response::make($xml, 200, array('Content-Type' => 'text/xml'));
             }
             // return Response::make(self::makeXML($content->toArray()), 200, array('Content-Type' => 'text/xml'));
         } else if ( $contentType == "application/json" ) {
