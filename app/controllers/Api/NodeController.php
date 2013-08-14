@@ -38,7 +38,7 @@ class NodeController extends \BaseController {
             }
         }
 
-        return Api::makeResponse($nodes, 'nodes');
+        return Api::makeResponse($nodes, array('nodes','node_type_label'));
     }
 
     public function node($id)
@@ -64,6 +64,6 @@ class NodeController extends \BaseController {
             }
         }
 
-        return Api::makeResponse($node, 'node');
+        return Api::makeResponse($node, $node->nodetype->name);
     }
 }
