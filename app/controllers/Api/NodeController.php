@@ -38,7 +38,15 @@ class NodeController extends \BaseController {
             }
         }
 
-        return Api::makeResponse($nodes, array('nodes','node_type_label'));
+        // Need to go through and sort the node types (to make this a bit easier later on)
+        $return = array();
+
+        foreach ($nodes->toArray() as $node) {
+            $return[str_plural($node['nodetype']['name'])][] = $node;
+        }
+
+        // var_dump($return);
+        return Api::makeResponse($return, 'nodes');
     }
 
     public function node($id)
@@ -64,6 +72,6 @@ class NodeController extends \BaseController {
             }
         }
 
-        return Api::makeResponse($node, array($node->nodetype->name));
+        return Api::makeResponse($node, $node->nodetype->name);
     }
 }
