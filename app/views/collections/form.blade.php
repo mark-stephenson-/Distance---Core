@@ -27,6 +27,13 @@
     </div>
 
     <div class="control-group">
+        {{ Form::label('name', 'Application', ['class' => 'control-label']) }}
+        <div class="controls">
+            {{ Form::select('application_id', Application::all()->lists('name', 'id')) }}
+        </div>
+    </div>
+
+    <div class="control-group">
         <div class="controls">
             @if (!$collection->exists)
                 {{ Form::submit('Create Collection', ['class' => 'btn']) }}
