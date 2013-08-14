@@ -6,18 +6,28 @@ use App, Response;
 class ResourceController extends \BaseController {
     public function resources()
     {
-        $collection_catalogues_query = App::make('collection')->catalogues()->get();
-        $catalogues_ids = array();
+        if ( \Input::get('catalogueID')) {
+            $catalogues_ids = array( \Input::get('catalogueID') );
+        } else {
+            $collection_catalogues_query = App::make('collection')->catalogues()->get();
+            $catalogues_ids = array();
 
-        foreach ($collection_catalogues_query as $catalogue) {
-            $catalogues_ids[] = $catalogue->id;
+            foreach ($collection_catalogues_query as $catalogue) {
+                $catalogues_ids[] = $catalogue->id;
+            }
         }
 
         $catalogues = Catalogue::whereIn('id', $catalogues_ids);
 
         if ( \Input::get('sync') ) {
             $catalogues = $catalogues->with(array('resources' => function($query) {
-                $query->whereSync( \Input::get('sync') );
+                $sync = false;
+                
+                if ( \Input::get('sync') == "true") {
+                    $sync = 1;
+                }
+
+                $query->whereSync( $sync );
             }));
         } else {
             $catalogues = $catalogues->with('resources');
