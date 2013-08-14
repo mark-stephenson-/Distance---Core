@@ -13,6 +13,11 @@ class Node extends BaseModel
         return $this->belongsTo('NodeType', 'node_type');
     }
 
+    public function getNodeTypeLabelAttribute()
+    {
+        return $this->nodetype->name;
+    }
+
     public function getStatusBadgeAttribute()
     {
         switch($this->getAttribute('status')) {

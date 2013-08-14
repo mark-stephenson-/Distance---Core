@@ -15,6 +15,8 @@ class Format {
     // View filename
     protected $_from_type = null;
 
+    protected $nodeTypes = array();
+
     /**
      * Returns an instance of the Format object.
      *
@@ -24,17 +26,18 @@ class Format {
      * @param   string  data format the file was provided in
      * @return  Factory
      */
-    public function factory($data, $from_type = null)
+    public function factory($data, $from_type = null, $nodeTypes = null)
     {
+        // $this->nodeTypes = $nodeTypes;
         // Stupid stuff to emulate the "new static()" stuff in this libraries PHP 5.3 equivalent
         $class = __CLASS__;
-        return new $class($data, $from_type);
+        return new $class($data, $from_type, $nodeTypes);
     }
 
     /**
      * Do not use this directly, call factory()
      */
-    public function __construct($data = null, $from_type = null)
+    public function __construct($data = null, $from_type = null, $nodeTypes = null)
     {
         // get_instance()->load->helper('inflector');
 
@@ -53,6 +56,7 @@ class Format {
         }
 
         $this->_data = $data;
+        $this->nodeTypes = $nodeTypes;
     }
 
     // FORMATING OUTPUT ---------------------------------------------------------
@@ -84,7 +88,7 @@ class Format {
     }
 
     // Format XML for output
-    public function to_xml($data = null, $structure = null, $basenode = 'xml')
+    public function to_xml($data = null, $structure = null, $basenode = 'xml', $depth = 0)
     {
         if ($data === null and ! func_num_args())
         {
@@ -99,7 +103,7 @@ class Format {
 
         if ($structure === null)
         {
-            $structure = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$basenode />");
+            $structure = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$basenode[0] />");
         }
 
         // Force it to be something useful
@@ -121,7 +125,18 @@ class Format {
             if (is_numeric($key))
             {
                 // make string key...
-                $key = (str_singular($basenode) != $basenode) ? str_singular($basenode) : 'item';
+                // if ( isset($basenode[$depth])) {
+                    if ( isset($value['node_type']) ) {
+                        $key = $this->nodeTypes[$value['node_type']];
+                        // $key = $value['node_type'];
+                    } else {
+                        $key = (str_singular($basenode[0]) != $basenode[0]) ? str_singular($basenode[0]) : 'item';
+                        // $key = $value['node_type'];
+                    }
+                // } else {
+                //     // $key = (str_singular($basenode[0]) != $basenode[0]) ? str_singular($basenode[0]) : 'item';
+                //     $key = $depth;
+                // }
             }
 
             // replace anything not alpha numeric
@@ -133,7 +148,7 @@ class Format {
                 $node = $structure->addChild($key);
 
                 // recursive call.
-                $this->to_xml($value, $node, $key);
+                $this->to_xml($value, $node, $key, $depth++);
             }
 
             else
