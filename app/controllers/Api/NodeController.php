@@ -64,6 +64,6 @@ class NodeController extends \BaseController {
             }
         }
 
-        return Api::makeResponse($node, 'node');
+        return Api::makeResponse($node, $node->nodetype->name);
     }
 }
