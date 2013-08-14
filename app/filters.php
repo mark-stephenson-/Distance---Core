@@ -73,11 +73,9 @@ Route::filter('apiAuthentication', function()
     if ( ! isset($_SERVER['PHP_AUTH_USER']) ) {
         header('WWW-Authenticate: Basic realm="Authorization"');
         header('HTTP/1.0 401 Unauthorized');
-        echo 'Authorization Invalid.';
+        return Response::make('Authorization Token Invalid.', 403);
         exit;
-    }
-
-    if ( $_SERVER['PHP_AUTH_USER'] ) {
+    } else {
         $authorization = Application::whereApiKey( $_SERVER['PHP_AUTH_USER'])->first();
 
         if ( ! $authorization ) {
