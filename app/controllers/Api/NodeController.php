@@ -82,6 +82,12 @@ class NodeController extends \BaseController {
 
                                 $node->{$item->name} = $resource;
                             }
+                        } else if ( $item->category == "nodelookup-multi" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
+                            $resource = @Node::whereIn('id', explode(',', $published_revision->{$item->name}))->get()->toArray();
+                            $node->{$item->name} = $resource;
+                        } else if ( $item->category == "nodelookup" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
+                            $resource = @Node::whereId( $published_revision->{$item->name})->first()->toArray();
+                            $node->{$item->name} = $resource;
                         } else {
                             $node->{$item->name} = $published_revision->{$item->name};
                         }
