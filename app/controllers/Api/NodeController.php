@@ -1,6 +1,6 @@
 <?php namespace Api;
 
-use Api, Node;
+use Api, Node, Resource;
 use Response, Request, Input;
 
 class NodeController extends \BaseController {
@@ -26,26 +26,22 @@ class NodeController extends \BaseController {
 
         if ( Input::get('headersOnly') == NULL or Input::get('headersOnly') == "false" ) {
             foreach ( $nodes as &$node ) {
-                $published_revision = $node->fetchRevision( $node->published_revision );
 
-                foreach ($node->nodetype->columns as $item) {
-                    if ( $item->category == "code" ) {
-                        $node->{$item->name} = '<![CDATA[' . $published_revision->{$item->name} . ']]>';
-                    } else {
-                        $node->{$item->name} = $published_revision->{$item->name};
-                    }
+                if ( $node->published_revision ) {
+                    $node = $this->doExtended($node);
                 }
             }
+
+            // Need to go through and sort the node types (to make this a bit easier later on)
+            $return = array();
+
+            foreach ($nodes->toArray() as $node) {
+                $return[str_plural($node['nodetype']['name'])][] = $node;
+            }
+        } else {
+            $return = $nodes->toArray();
         }
 
-        // Need to go through and sort the node types (to make this a bit easier later on)
-        $return = array();
-
-        foreach ($nodes->toArray() as $node) {
-            $return[str_plural($node['nodetype']['name'])][] = $node;
-        }
-
-        // var_dump($return);
         return Api::makeResponse($return, 'nodes');
     }
 
@@ -62,16 +58,33 @@ class NodeController extends \BaseController {
             return Response::make('node not found', 404);
         }
 
+        if ( $node->published_revision ) {
+
+            $node = $this->doExtended($node);
+
+            return Api::makeResponse($node, $node->nodetype->name);
+        } else {
+            return Response::make('No published nodes', 404);
+        }
+    }
+
+    private function doExtended($node) {
         $published_revision = $node->fetchRevision( $node->published_revision );
 
-        foreach ($node->nodetype->columns as $item) {
-             if ( $item->category == "code" ) {
-                $node->{$item->name} = '<![CDATA[' . $published_revision->{$item->name} . ']]>';
-            } else {
-                $node->{$item->name} = $published_revision->{$item->name};
-            }
-        }
+            foreach ($node->nodetype->columns as $item) {
 
-        return Api::makeResponse($node, $node->nodetype->name);
+                    if ( $item->category == "resource" and $item->includeWhenExpanded ) {
+                        $resource = Resource::whereId( $published_revision->{$item->name})->first()->toArray();
+
+                        unset($resource['catalogue_id'], $resource['created_at'], $resource['updated_at']);
+
+                        $node->{$item->name} = $resource;
+                    } else {
+                        $node->{$item->name} = $published_revision->{$item->name};
+                    }
+                    
+            }
+
+            return $node;
     }
 }

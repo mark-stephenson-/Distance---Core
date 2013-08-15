@@ -12,7 +12,23 @@ class Api extends \BaseModel {
         }
 
         $remove = function($content) use (&$remove, $unset) {
-            
+
+            if ( is_array($content) ) {
+                foreach( $unset as $_u ) {
+                    unset($content[$_u]);
+                }
+            } else if ( is_object($content) ) {
+                foreach( $unset as $_u ) {
+                    unset($content->$_u);
+                }
+            }
+
+            if ( is_array($content) || is_object($content) ) {
+                foreach ($content as &$value) {
+                    $value = $remove($value);
+                }
+            }
+
             return $content;
         };
 
@@ -32,7 +48,6 @@ class Api extends \BaseModel {
 
                 return Response::make($xml, 200, array('Content-Type' => 'text/xml'));
             }
-            // return Response::make(self::makeXML($content->toArray()), 200, array('Content-Type' => 'text/xml'));
         } else if ( $contentType == "application/json" ) {
             return Response::make($content->toJSON(), 200, array('Content-Type' => 'application/json'));
         } else {
