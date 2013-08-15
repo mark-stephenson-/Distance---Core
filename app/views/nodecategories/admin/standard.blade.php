@@ -39,6 +39,19 @@
         <div class="controls">
             {{ Form::select('columns[' . $identifier . '][catalogue]', Catalogue::all()->lists('name', 'id'), @$data->catalogue, ['class' => 'span4']) }}
         </div>
+    </div>
+
+    <div class="control-group">
+    {{ Form::label("columns[{$identifier}][includeWhenExpanded]", 'Include when expanded', ['class' => 'control-label']) }}
+    <div class="controls">
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][includeWhenExpanded]", 1, popRadio(1, @$data->includeWhenExpanded)) }} Yes
+        </label>
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][includeWhenExpanded]", 0, popRadio(0, @$data->includeWhenExpanded, true)) }} No
+        </label>
+    </div>
+    
     @elseif ($category['name'] == 'bit')
     @elseif ($category['name'] == 'enum')
     @elseif ($category['name'] == 'enum-multi')

@@ -53,6 +53,18 @@
 </div>
 
 <div class="control-group">
+    {{ Form::label("columns[{$identifier}][includeWhenExpanded]", 'Include when expanded', ['class' => 'control-label']) }}
+    <div class="controls">
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][includeWhenExpanded]", 1, popRadio(1, @$data->includeWhenExpanded)) }} Yes
+        </label>
+        <label class="radio inline">
+            {{ Form::radio("columns[{$identifier}][includeWhenExpanded]", 0, popRadio(0, @$data->includeWhenExpanded, true)) }} No
+        </label>
+    </div>
+</div>
+
+<div class="control-group">
     {{ Form::label("columns[{$identifier}][perms]", 'Permissions', ['class' => 'control-label']) }}
 
     <div class="controls">
