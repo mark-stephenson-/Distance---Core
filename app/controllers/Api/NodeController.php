@@ -73,7 +73,7 @@ class NodeController extends \BaseController {
 
             foreach ($node->nodetype->columns as $item) {
 
-                    if ( $item->category == "resource" and $item->includeWhenExpanded ) {
+                    if ( $item->category == "resource" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
                         $resource = Resource::whereId( $published_revision->{$item->name})->first()->toArray();
 
                         unset($resource['catalogue_id'], $resource['created_at'], $resource['updated_at']);
