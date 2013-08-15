@@ -79,6 +79,8 @@ class NodeController extends \BaseController {
                         unset($resource['catalogue_id'], $resource['created_at'], $resource['updated_at']);
 
                         $node->{$item->name} = $resource;
+                    } else {
+                        $node->{$item->name} = $published_revision->{$item->name};
                     }
 
             }
