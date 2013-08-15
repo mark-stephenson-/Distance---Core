@@ -73,12 +73,18 @@ class NodeController extends \BaseController {
 
             foreach ($node->nodetype->columns as $item) {
 
-                    if ( $item->category == "resource" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
-                        $resource = Resource::whereId( $published_revision->{$item->name})->first()->toArray();
+                if ( Input::get('expandChildNodes') ) {
+                        if ( $item->category == "resource" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
+                            if ( $published_revision->{$item->name} ) {
+                                $resource = @Resource::whereId( $published_revision->{$item->name})->first()->toArray();
 
-                        unset($resource['catalogue_id'], $resource['created_at'], $resource['updated_at']);
+                                unset($resource['catalogue_id'], $resource['created_at'], $resource['updated_at']);
 
-                        $node->{$item->name} = $resource;
+                                $node->{$item->name} = $resource;
+                            }
+                        } else {
+                            $node->{$item->name} = $published_revision->{$item->name};
+                        }
                     } else {
                         $node->{$item->name} = $published_revision->{$item->name};
                     }
