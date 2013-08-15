@@ -89,7 +89,7 @@ class NodeController extends \BaseController {
                                 $_node = $this->doExtended($_node);
                             }
 
-                            $node->{$item->name} = $nodes->toArray();
+                            $node->{str_plural($item->name)} = $nodes->toArray();
                         } else if ( $item->category == "nodelookup" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
                             $nodes = @Node::whereId( $published_revision->{$item->name})->first();
                             $node->{$item->name} = $this->doExtended($nodes)->toArray();
