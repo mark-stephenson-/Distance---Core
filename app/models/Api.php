@@ -11,9 +11,6 @@ class Api extends \BaseModel {
             $unset[] = 'retired_at';
         }
 
-        // var_dump($content);
-        // die();
-
         $remove = function($content) use (&$remove, $unset) {
 
             if ( is_array($content) ) {
