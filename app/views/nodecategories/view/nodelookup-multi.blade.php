@@ -4,5 +4,5 @@
 ?>
 
 @foreach ($items as $item)
-    <a href="{{ route('nodes.view', array($item)) }}">{{ @Node::find($item)->title }}</a>
+    <a href="{{ route('nodes.view', array(Request::segment(2), $item)) }}">{{ @Node::find($item)->title }}</a>
 @endforeach
