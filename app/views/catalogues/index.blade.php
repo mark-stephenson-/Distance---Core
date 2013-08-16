@@ -47,7 +47,7 @@
     <div class="modal fade hide" id="deleteModal">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Collection Name Goes Here</h3>
+            <h3></h3>
         </div>
         <div class="modal-body">
             <p>Are you sure you want to delete this catalogue? This cannot be undone.</p>
@@ -65,6 +65,7 @@
                 var data_name = $(this).attr('data-name');
                 var url = '{{ route('catalogues.destroy', 'id') }}'
 
+                $("#deleteModal").find('h3').html( "Delete collection <small>" + data_name + "</small>");
                 $("#deleteModal").find('.yes').attr('href', url.replace('id', data_id));
 
                 $("#deleteModal").modal('show');
