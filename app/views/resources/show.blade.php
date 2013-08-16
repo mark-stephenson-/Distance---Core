@@ -53,6 +53,7 @@
                     @endif
                 </td>
                 <td width="150">
+                    <a href="#" class="btn btn-small uploadNewVersionModal" style="margin-bottom: 5px;" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}"><i class="icon-refresh"></i> Upload new Version</a>
                     <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     <a href="#deleteModal" class="btn btn-small deleteModal" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}"><i class="icon-trash"></i> Delete</a>
                 </td>
@@ -72,6 +73,20 @@
         <div class="modal-footer">
             <a href="#" class="btn" data-dismiss="modal">Cancel</a>
             <a href="#" class="btn btn-primary yes">Yes, Delete it.</a>
+        </div>
+    </div>
+
+    <div class="modal fade hide" id="uploadNewVersionModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Upload a new version</h3>
+        </div>
+        <div class="modal-body">
+            <p>Uploading a new verison of <b id="file-name"></b> will overwrite the previous version.</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+            <a href="#" class="btn btn-primary yes">Upload new version</a>
         </div>
     </div>
 
@@ -124,12 +139,23 @@
             $(".deleteModal").click( function(e) {
                 var data_id = $(this).attr('data-id');
                 var data_name = $(this).attr('data-name');
-                var url = '{{ route('resources.destroy', 'id') }}'
+                var url = '{{ route('resources.destroy', 'id') }}';
 
                 $("#deleteModal").find('h3').html( "Delete resource <small>" + data_name + "</small>");
                 $("#deleteModal").find('.yes').attr('href', url.replace('id', data_id));
 
                 $("#deleteModal").modal('show');
+            });
+
+            $(".uploadNewVersionModal").click( function(e) {
+                var data_id = $(this).attr('data-id');
+                var data_name = $(this).attr('data-name');
+                var url = '{{ route('resources.destroy', 'id') }}';
+
+                $("#uploadNewVersionModal").find('.yes').attr('href', url.replace('id', data_id));
+                $("#uploadNewVersionModal").find('#file-name').html( data_name );
+
+                $("#uploadNewVersionModal").modal('show');
             });
         });
     </script>

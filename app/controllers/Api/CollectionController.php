@@ -13,6 +13,18 @@ class CollectionController extends \BaseController {
             unset($collection['deleted_at'], $collection['created_at'], $collection['updated_at'], $collection['group_id']);
         }
 
-        return Api::makeResponse($collections, 'collections');
+        return Api::makeResponse($this->doExtended($collections), 'collections');
+    }
+
+    private function doExtended($collections)
+    {
+        foreach ( $collections as &$collection) {
+            if ( $collection->logo_id ) {
+                $collection->logo = \Resource::select('id', 'filename', 'mime', 'ext', 'sync', 'description')->find($collection->logo_id)->toArray();
+                unset($collection->logo_id);
+            }
+        }
+
+        return $collections;
     }
 }
