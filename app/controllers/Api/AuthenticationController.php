@@ -23,13 +23,12 @@ class AuthenticationController extends \BaseController {
 
             if ( $user ) {
                 // Need to make a user key and update last_accessed
-                
                 if ( ! $user->key ) {
                     $user->key = sha1($user->email . microtime() . $user->password );
                     $user->save();
                 }
 
-                return Api::makeResponse( array('UserToken' => $user->key), 200);
+                return Api::makeResponse( array('usertoken' => $user->key, 'collections' => $user->collections()->toArray()), 'authentication', 200);
             }
         } catch (\Cartalyst\Sentry\Users\WrongPasswordException $e) {
             return Response::make('', 403);
