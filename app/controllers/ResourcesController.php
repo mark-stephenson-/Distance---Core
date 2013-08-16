@@ -235,6 +235,14 @@ class ResourcesController extends BaseController
                 ->withErrors($response);
         }
 
+        // We need to check the mime types
+        $uploadedMime = $fileUpload->getMimeType();
+
+        if ( $uploadedMime != $resource->mime ) {
+            return Redirect::route('resources.show', $resource->catalogue_id)
+                ->withErrors(array('The updated file you\'re trying to upload is a different format to the current version. <br />', 'Current Version: ' . $resource->mime, 'Uploaded Version: ' . $uploadedMime));
+        }
+
         if ($fileUpload->move($uploadPath, $resource->filename)) {
             // Clear out the cached versions
             @unlink($uploadPath . 'thumb/' . $resource->filename);
