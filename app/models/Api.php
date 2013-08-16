@@ -54,7 +54,7 @@ class Api extends \BaseModel {
                 return Response::make($xml, 200, array('Content-Type' => 'text/xml'));
             }
         } else if ( $contentType == "application/json" ) {
-            return Response::make($content->toJSON(), 200, array('Content-Type' => 'application/json'));
+            return Response::make($content, 200, array('Content-Type' => 'application/json'));
         } else {
             return Response::make('Content-Type not recognised.', 400);
         }
