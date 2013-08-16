@@ -28,12 +28,14 @@ class AuthenticationController extends \BaseController {
                     $user->save();
                 }
 
-                return Api::makeResponse( array('usertoken' => $user->key, 'collections' => $user->collections()->toArray()), 'authentication', 200);
+                $collectionController = new CollectionController;
+
+                return Api::makeResponse( array('usertoken' => $user->key, 'collections' => $collectionController->doExtended($user->collections())->toArray()), 'authentication', 200);
             }
         } catch (\Cartalyst\Sentry\Users\WrongPasswordException $e) {
             return Response::make('', 403);
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
             return Response::make('', 403);
         }
-    }   
+    } 
 }
