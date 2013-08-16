@@ -181,4 +181,28 @@ class ResourcesController extends BaseController
 
     }
 
+    public function destroy($id) {
+        $resource = Resource::whereId($id)->first();
+
+        if ( ! $resource ) {
+            return Redirect::to('resources')
+                ->withErrors( array('That resource could not be found') );
+        }
+
+        if ( ! $resource->delete() ) {
+            return Redirect::route('resources.show', $resource->catalogue_id)
+                ->withErrors( array('That resource could not be deleted.'));
+        }
+
+        // Now we know it's been deleted from the database remove the files
+        $folder = base_path() . '/resources/';
+
+        @unlink($folder . $resource->filename);
+        @unlink($folder . 'thumb/' . $resource->filename);
+        @unlink($folder . 'view/' . $resource->filename);
+
+        return Redirect::route('resources.show', $resource->catalogue_id)
+                ->with('successes', new MessageBag( array('That resource has been deleted.') ));
+    }
+
 }
