@@ -2,7 +2,7 @@
 
 class Collection extends BaseModel {
 
-    protected $fillable = array('name', 'api_key', 'application_id');
+    protected $fillable = array('name', 'api_key', 'application_id', 'logo_id');
 
     public static function current()
     {
