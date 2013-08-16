@@ -16,7 +16,7 @@ class CollectionController extends \BaseController {
         return Api::makeResponse($this->doExtended($collections), 'collections');
     }
 
-    private function doExtended($collections)
+    public function doExtended($collections)
     {
         foreach ( $collections as &$collection) {
             if ( $collection->logo_id ) {
