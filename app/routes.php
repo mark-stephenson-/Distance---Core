@@ -95,6 +95,7 @@ Route::group(array('before' => ['auth', 'checkPermissions']), function() {
     Route::get('catalogues/{id}/delete', ['as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy']);
     Route::resource('resources', 'ResourcesController');
     Route::get('resources/{id}/delete', ['as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy']);
+    Route::post('resources/{id}/update-file', ['as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile']);
     Route::resource('app-distribution', 'OtaController');
     Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 

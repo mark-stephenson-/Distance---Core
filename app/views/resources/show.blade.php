@@ -77,17 +77,22 @@
     </div>
 
     <div class="modal fade hide" id="uploadNewVersionModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Upload a new version</h3>
-        </div>
-        <div class="modal-body">
-            <p>Uploading a new verison of <b id="file-name"></b> will overwrite the previous version.</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-            <a href="#" class="btn btn-primary yes">Upload new version</a>
-        </div>
+        {{ Form::open(['enctype' => 'multipart/form-data', 'url' => route('resources.updateFile', 'id'), 'style' => 'margin-bottom: 0px;']) }}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Upload a new version</h3>
+            </div>
+            <div class="modal-body">
+                <p>Uploading a new verison of <b id="file-name"></b> will overwrite the previous version.</p>
+
+                {{ Form::hidden('resource_id', null, ['id' => 'resource_id']) }}
+                {{ Form::file('file') }}
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+                <input class="btn btn-primary" type="submit" value="Upload new version" />
+            </div>
+        {{ Form::close() }}
     </div>
 
 @stop
@@ -151,9 +156,11 @@
                 var data_id = $(this).attr('data-id');
                 var data_name = $(this).attr('data-name');
                 var url = '{{ route('resources.destroy', 'id') }}';
+                var form = $("#uploadNewVersionModal").find('form').attr('action');
 
-                $("#uploadNewVersionModal").find('.yes').attr('href', url.replace('id', data_id));
                 $("#uploadNewVersionModal").find('#file-name').html( data_name );
+                $("#uploadNewVersionModal").find('#resource_id').val( data_id );
+                $("#uploadNewVersionModal").find('form').attr('action', form.replace('id', data_id));
 
                 $("#uploadNewVersionModal").modal('show');
             });
