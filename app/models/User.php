@@ -26,4 +26,21 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
         return $value;
     }
 
+    public function collections() {
+        if ( $this->hasAccess('superuser') ) {
+            return Collection::get();
+        } else {
+            $collections = Collection::get()->lists('id');
+            $canAccess = array();
+
+            foreach ( $collections as $collection ) {
+                if ( $this->hasAccess('cms.collections.' . $collection .'.*') ) {
+                    $canAccess[] = $collection;
+                }
+            }
+
+            return Collection::whereIn('id', $canAccess)->get();
+        }
+    }
+
 }
