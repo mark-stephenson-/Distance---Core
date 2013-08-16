@@ -205,4 +205,47 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag( array('That resource has been deleted.') ));
     }
 
+    public function updateFile($id) {
+        $resource = Resource::whereId($id)->first();
+
+        if ( ! $resource ) {
+            return Redirect::to('resources')
+                ->withErrors( array('That resource could not be found') );
+        }
+
+        $uploadPath = app_path() . '/../resources/';
+        $fileUpload = Input::file('file');
+
+        if ($fileUpload->getError() > 0) {
+
+            switch($fileUpload->getError()) {
+                case 1:
+                case 2:
+                    $response = 'The file was bigger than the maximum allowed file size.';
+                    break;
+                case 7:
+                    $response = 'The destination folder is not set to writable.';
+                    break;
+                default:
+                    $response = 'An unknown error occured.';
+                    break;
+            }
+
+            return Redirect::route('resources.show', $resource->catalogue_id)
+                ->withErrors($response);
+        }
+
+        if ($fileUpload->move($uploadPath, $resource->filename)) {
+            // Clear out the cached versions
+            @unlink($uploadPath . 'thumb/' . $resource->filename);
+            @unlink($uploadPath . 'view/' . $resource->filename);
+
+            return Redirect::route('resources.show', $resource->catalogue_id)
+                ->with('success', new MessageBag(array('The new version of ' . $resource->filename . ' has been uploaded.')));
+        } else {
+            return Redirect::route('resources.show', $resource->catalogue_id)
+                ->withErrors(array('There was an unexpected issue that has prevented your file being uploaded. Please try again.'));
+        }
+    }
+
 }
