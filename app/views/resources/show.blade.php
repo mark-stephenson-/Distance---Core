@@ -116,7 +116,9 @@
             @if ($catalogue->restrictions)
                 {title : "Allowed Files", extensions : "{{ implode(',', $catalogue->restrictions) }}"},
             @endif
-        ]);
+        ], {
+            fileSize: '{{ Config::get('core.prefrences.file-upload-limit') }}'
+        });
 
         $(".toggle-sync").click( function(e) {
             e.preventDefault();
