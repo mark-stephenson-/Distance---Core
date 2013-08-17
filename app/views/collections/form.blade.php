@@ -84,65 +84,67 @@
 
     {{ Form::close() }}
 
+    @if ( $collection->exists )
     <div class="modal hide fade" id="resource_window">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Resources</h3>
-    </div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Resources</h3>
+        </div>
 
-    <div class="modal-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Filename</th>
-                    <th>Description</th>
-                    <th>Sync</th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <?php
-                    $catalogues = $collection->catalogues;
-                    $resources = Resource::whereIn('catalogue_id', $catalogues->lists('id'))->get();
-                ?>
-                @foreach( $resources as $resource )
+        <div class="modal-body">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @if ( $resource->isImage() )
-                                <img src="/file/{{ $resource->filename }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
-                            @else
-                                <i class="icon-file"></i>
-                            @endif
-                        </td>
-                        <td>{{ $resource->filename }}</td>
-                        <td>{{ $resource->description }}</td>
-                        <td>
-                            @if ( $resource->sync )
-                                <i class="icon-ok"></i>
-                            @else
-                                <i class="icon-remove"></i>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->filename }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
-                        </td>
+                        <th></th>
+                        <th>Filename</th>
+                        <th>Description</th>
+                        <th>Sync</th>
+                        <th></th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</div>
+                </thead>
 
-<div class="empty-resource" style="display: none">
-    <div class="resource">
-        <div class="image"></div>
-
-        <p class="filename"></p>
-        <a href="#resource_window" data-toggle="modal">Change</a>
+                <tbody>
+                    <?php
+                        $catalogues = $collection->catalogues;
+                        $resources = Resource::whereIn('catalogue_id', $catalogues->lists('id'))->get();
+                    ?>
+                    @foreach( $resources as $resource )
+                        <tr>
+                            <td>
+                                @if ( $resource->isImage() )
+                                    <img src="/file/{{ $resource->filename }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
+                                @else
+                                    <i class="icon-file"></i>
+                                @endif
+                            </td>
+                            <td>{{ $resource->filename }}</td>
+                            <td>{{ $resource->description }}</td>
+                            <td>
+                                @if ( $resource->sync )
+                                    <i class="icon-ok"></i>
+                                @else
+                                    <i class="icon-remove"></i>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->filename }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+
+    <div class="empty-resource" style="display: none">
+        <div class="resource">
+            <div class="image"></div>
+
+            <p class="filename"></p>
+            <a href="#resource_window" data-toggle="modal">Change</a>
+        </div>
+    </div>
+    @endif
 
 <script>
     $("#resource_window").on('shown', function() {

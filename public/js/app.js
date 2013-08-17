@@ -11,7 +11,7 @@ $(document).ready(function() {
 });
 
 var resourceUploader;
-function loadResourceUploader(uploadUrl, completeCallback, uploadedCallback, filters) {
+function loadResourceUploader(uploadUrl, completeCallback, uploadedCallback, filters, options) {
 
     if (!resourceUploader) {
 
@@ -22,12 +22,16 @@ function loadResourceUploader(uploadUrl, completeCallback, uploadedCallback, fil
             ];
         }
 
+        if (!options.fileSize) {
+            options.fileSize = '10';
+        }
+
         resourceUploader = new plupload.Uploader({
             runtimes : 'html5, flash',
             flash_swf_url : '/libs/plupload/plupload.flash.swf',
             browse_button : 'dropzone',
             drop_element : 'dropzone',
-            max_file_size : '1.5mb',
+            max_file_size : options.fileSize + 'mb',
             url : uploadUrl,
             filters : filters
         });
