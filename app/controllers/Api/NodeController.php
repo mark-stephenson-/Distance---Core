@@ -24,6 +24,10 @@ class NodeController extends \BaseController {
 
         $nodes = $nodes->get();
 
+        if ( Input::get('modifiedSince') and ( count($nodes) == 0) ) {
+            return Response::make('', 304);
+        }
+
         if ( Input::get('headersOnly') == NULL or Input::get('headersOnly') == "false" ) {
             foreach ( $nodes as &$node ) {
 
