@@ -72,6 +72,13 @@ return [
         'icon'      => 'file',
         'access'    => null,
     ],
+    [
+        'title'     => 'Templates',
+        'route'     => 'nodes.type-list',
+        'params'    => ['[collection-id]', 'template'],
+        'icon'      => 'code',
+        'access'    => null,
+    ],
 
     /*
         Custom Node Type Navigation Item
