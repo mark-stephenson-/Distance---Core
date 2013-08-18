@@ -34,7 +34,7 @@ class GroupsController extends BaseController
             // Create the group
             $group = Sentry::getGroupProvider()->create(array(
                 'name'        => Input::get('name'),
-                'permissions' => Input::get('permissions'),
+                'permissions' => Input::get('permissions', []),
             ));
         }
         catch (Cartalyst\Sentry\Groups\GroupExistsException $e)
@@ -43,6 +43,8 @@ class GroupsController extends BaseController
                 ->withInput()
                 ->withErrors(new MessageBag(array("A group with this name already exists.")));
         }
+
+        $group->users()->sync(Input::get('members', []));
 
         return Redirect::route('groups.index')
                 ->with('successes', new MessageBag(array($group->name . ' has been created.')));
