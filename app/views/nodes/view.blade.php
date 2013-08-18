@@ -101,7 +101,7 @@
         @foreach($revisions as $revision)
             <li>
                 @if ($revision->id != $revisionData->id)
-                    <a href="{{ route('nodes.view', array($node->id, $revision->id, $branch->id)) }}" class="js-confirm_leave">
+                    <a href="{{ route('nodes.view', array($collection->id, $node->id, $revision->id, $branch->id)) }}" class="js-confirm_leave">
                 @endif
 
                 {{ date('j F, Y @ H:i', strtotime($revision->updated_at)) }} -
