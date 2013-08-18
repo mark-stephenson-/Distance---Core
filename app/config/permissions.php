@@ -13,6 +13,9 @@ return [
                     'Create' => [
                         'value' => 'cms.users.create'
                     ],
+                    'Read' => [
+                        'value' => 'cms.users.read'
+                    ],
                     'Update' => [
                         'value' => 'cms.users.update'
                     ],
@@ -30,6 +33,9 @@ return [
                     'Create' => [
                         'value' => 'cms.collections.create'
                     ],
+                    'Read' => [
+                        'value' => 'cms.collections.read'
+                    ],
                     'Update' => [
                         'value' => 'cms.collections.update'
                     ],
@@ -46,6 +52,9 @@ return [
                     
                     'Create' => [
                         'value' => 'cms.catalogues.create'
+                    ],
+                    'Read' => [
+                        'value' => 'cms.catalogues.read'
                     ],
                     'Update' => [
                         'value' => 'cms.catalogues.update'
