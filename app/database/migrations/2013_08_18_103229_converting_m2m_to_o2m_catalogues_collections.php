@@ -27,7 +27,7 @@ class ConvertingM2mToO2mCataloguesCollections extends Migration {
 	 */
 	public function down()
 	{
-		Schema::create('catalogue_collection', function(Blueprint $table) {
+		Schema::create('catalogue_collection', function($table) {
 
             $table->increments('id');
 
