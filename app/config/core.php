@@ -25,7 +25,7 @@ return array(
         'preferred-node-view' => 'hierarchy',
 
         // Value is in MB
-        'file-upload-limit' => '10',
+        'file-upload-limit' => '100',
 
         // Set Values to null to disable
         'password-min-length' => 8,
