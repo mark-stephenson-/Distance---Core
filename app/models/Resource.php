@@ -15,12 +15,12 @@ class Resource extends BaseModel
 
     public function path()
     {
-        return route('resources.load', array($this->getAttribute('filename')));
+        return route('resources.load', array($this->getAttribute('collection_id'), $this->getAttribute('filename')));
     }
 
     public function systemPath()
     {
-        return app_path() . '/../resources/' . $this->getAttribute('filename');
+        return app_path() . '/../resources/' . $this->getAttribute('collection_id') . '/' . $this->getAttribute('filename');
     }
 
     public function isPdf()
@@ -71,7 +71,7 @@ class Resource extends BaseModel
         return false;
     }
 
-    public static function fetch($fileName)
+    public static function fetch($collectionId, $fileName)
     {
 
         if (strpos($fileName, '_id') !== false) {
@@ -93,7 +93,7 @@ class Resource extends BaseModel
 
         $type = Input::get('type') . '/';
 
-        $filePath = app_path() . '/../resources/' . $type . $fileName;
+        $filePath = app_path() . '/../resources/' . $collectionId . '/' . $fileName;
 
         if (!file_exists($filePath)) {
             // Try without the type

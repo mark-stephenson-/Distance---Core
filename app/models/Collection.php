@@ -41,7 +41,7 @@ class Collection extends BaseModel {
 
     public function catalogues()
     {
-        return $this->belongsToMany('Catalogue');
+        return $this->hasMany('Catalogue');
     }
 
     public function nodes()
