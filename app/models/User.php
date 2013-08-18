@@ -3,6 +3,31 @@
 class User extends Cartalyst\Sentry\Users\Eloquent\User
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->hidden[] = 'permissions';
+    }    
+
+    /*
+        Overriding the original implementation so we can login multiple places
+     */
+    public function getPersistCode()
+    {
+        if (!$this->persist_code) {
+            $this->persist_code = $this->getRandomString();
+
+            // Our code got hashed
+            $persistCode = $this->persist_code;
+
+            $this->save();
+
+            return $persistCode;
+        }
+        return $this->persist_code;
+    }
+
     public function getFullNameAttribute()
     {
         // Check for temp users
@@ -41,6 +66,16 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
 
             return Collection::whereIn('id', $canAccess)->get();
         }
+    }
+
+    public static function forLookup($groupId) {
+
+        if ((int) $groupId === 0) {
+            return User::all();
+        }
+
+        $group = Group::findOrFail($groupId);
+        return $group->users;
     }
 
 }

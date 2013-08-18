@@ -5,10 +5,18 @@ use Input, Response, Sentry;
 
 class AuthenticationController extends \BaseController {
     public function authenticate() {
-        $input = json_decode(file_get_contents('php://input'));
+        $contentType = \Request::header('Content-Type');
+
+        if ( $contentType == "text/xml" ) {
+            $input = simplexml_load_string(trim(file_get_contents('php://input')));
+        } else if ( $contentType == "application/json" ) {
+            $input = json_decode(file_get_contents('php://input'));
         
-        if ( json_last_error() ) {
-            return Response::make('Error decoding JSON request body', 400);
+            if ( json_last_error() ) {
+                return Response::make('Error decoding JSON request body', 400);
+            }
+        } else {
+            return Response::make('Content-Type not recognised', 400);
         }
 
         if ( ! isset($input->email) and ! isset($input->password) ) {

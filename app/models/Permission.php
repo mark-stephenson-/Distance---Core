@@ -86,7 +86,7 @@ class Permission{
 
                         foreach ($nodetype->columns as $column) {                                
                             $html .= "<li><label class='checkbox inline'>" . 
-                                            Form::checkbox('permissions[cms.collections.' . $collection->id . '.columns.' . $column->name . ']', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $column->name)) . $column->label
+                                            Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name . ']', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name)) . $column->label
                                          . "</label></li>";
 
                         }

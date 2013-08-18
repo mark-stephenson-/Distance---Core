@@ -201,4 +201,5 @@ class UsersController extends BaseController
                 ->withErrors(new MessageBag(array('That group could not be found.' )));
         }
     }
+
 }

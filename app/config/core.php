@@ -24,6 +24,9 @@ return array(
     'prefrences' => array(
         'preferred-node-view' => 'hierarchy',
 
+        // Value is in MB
+        'file-upload-limit' => '10',
+
         // Set Values to null to disable
         'password-min-length' => 8,
         'password-regex' => '/.*(?=.*\d)(?=.*[a-zA-Z]).*/',
