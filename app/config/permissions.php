@@ -26,6 +26,26 @@ return [
                 ],
             ],
 
+            'Groups' => [
+                'value' => 'cms.groups.*',
+                'children' => [
+                    
+                    'Create' => [
+                        'value' => 'cms.groups.create'
+                    ],
+                    'Read' => [
+                        'value' => 'cms.groups.read'
+                    ],
+                    'Update' => [
+                        'value' => 'cms.groups.update'
+                    ],
+                    'Delete' => [
+                        'value' => 'cms.groups.delete'
+                    ],
+
+                ],
+            ],
+
             'Collections' => [
                 'value' => 'cms.collections.*',
                 'children' => [

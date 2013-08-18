@@ -28,7 +28,7 @@ return [
         'route'     => 'groups.index',
         'params'    => [],
         'icon'      => 'group',
-        'access'    => 'superuser',
+        'access'    => 'cms.groups.*',
     ],
     [
         'title'     => 'Users',

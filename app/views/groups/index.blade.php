@@ -7,7 +7,9 @@
 @section('body')
 
     <p class="pull-right">
-        <a href="{{ route('groups.create') }}" class="btn"><i class="icon-plus"></i> New Group</a>
+        @if (Sentry::getUser()->hasAccess('cms.groups.create'))
+            <a href="{{ route('groups.create') }}" class="btn"><i class="icon-plus"></i> New Group</a>
+        @endif
     </p>
 
     <table class="table table-striped">
@@ -40,8 +42,12 @@
                     @endif
                 </td>
                 <td width="150">
-                    <a href="{{ route('groups.edit', array($group->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                    <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
+                    @if (Sentry::getUser()->hasAccess('cms.groups.update'))
+                        <a href="{{ route('groups.edit', array($group->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                    @endif
+                    @if (Sentry::getUser()->hasAccess('cms.groups.delete'))
+                        <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
+                    @endif
                 </td>
             </tr>
             @endforeach
