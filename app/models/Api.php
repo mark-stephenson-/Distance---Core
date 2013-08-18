@@ -6,7 +6,7 @@ class Api extends \BaseModel {
 
     public static function makeResponse($content, $root_node = null, $status = 200)
     {
-        $contentType = Request::header('Content-Type');
+        $contentType = Request::header('Accept');
 
         $content = Api::cleanContent($content);
 
@@ -15,7 +15,7 @@ class Api extends \BaseModel {
         } else if ( $contentType == "application/json" ) {
             return Api::makeJSON($content, $root_node, $status);
         } else {
-            return Response::make('Content-Type not recognised.', 400);
+            return Response::make('Accept not recognised.', 400);
         }
     }
 
