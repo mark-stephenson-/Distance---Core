@@ -222,6 +222,7 @@ class NodeType extends BaseModel {
                         break;
 
                     case 'enum-multi':
+                    case 'userlookup-multi':
                         if (is_array($val)) {
                             $val = implode(', ', $val);
                         }

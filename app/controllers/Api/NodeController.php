@@ -1,6 +1,6 @@
 <?php namespace Api;
 
-use Api, Node, Resource;
+use Api, Node, Resource, User;
 use Response, Request, Input;
 
 class NodeController extends \BaseController {
@@ -97,6 +97,17 @@ class NodeController extends \BaseController {
                         } else if ( $item->category == "nodelookup" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
                             $nodes = @Node::whereId( $published_revision->{$item->name})->first();
                             $node->{$item->name} = $this->doExtended($nodes)->toArray();
+                        } else if ( $item->category == "userlookup-multi" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
+                            $users = @User::whereIn('id', explode(',', $published_revision->{$item->name}))->get();
+
+                            foreach ($users as &$_user) {
+                                $_user = $_user->toArray();
+                            }
+
+                            $node->{str_plural($item->name)} = $users->toArray();
+                        } else if ( $item->category == "userlookup" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
+                            $user = @User::whereId( $published_revision->{$item->name})->first();
+                            $node->{$item->name} = $user->toArray();
                         } else {
                             $node->{$item->name} = $published_revision->{$item->name};
                         }

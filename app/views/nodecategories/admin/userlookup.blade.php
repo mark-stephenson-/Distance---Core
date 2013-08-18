@@ -35,7 +35,7 @@
 <div class="control-group">
     {{ Form::label('columns[' . $identifier . '][lookuptype]', 'Node Type', ['class' => 'control-label']) }}
     <div class="controls">
-        {{ Form::select("columns[$identifier][lookuptype]", NodeType::all()->lists('label', 'id'), @$data->lookuptype) }}
+        {{ Form::select("columns[$identifier][lookuptype]", [0 => 'All Users'] + Group::all()->lists('name', 'id'), @$data->lookuptype) }}
     </div>
 </div>
 

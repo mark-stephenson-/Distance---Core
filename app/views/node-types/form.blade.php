@@ -56,8 +56,15 @@
         // Grab the first element, empty it and stick it at the bottom
         var ele = enum_container.find('.js-enum-template').clone();
 
-        var first_ele = enum_container.find('div:first input').attr('name');
-        ele.find('input').attr('name', first_ele);
+        var labelEle = $(this).closest('.control-group').find('.js-values-label').attr('for')
+        ele.find('input').attr('name', labelEle);
+
+        if (enum_container.children('.controls').length == 0) {
+            // We have no existing ones, let's set a default
+            ele.find('i').addClass('icon-ok');
+        } else {
+            ele.find('i').addClass('icon-remove');
+        }
 
         enum_container.append(ele.html());
 
@@ -67,15 +74,13 @@
 
         e.preventDefault();
 
-        if (confirm("Are you sure you want to remove this value? All nodes that have the value set to empty.")) {
-
-            var enum_container = $(this).closest('.input').find('.enum_values');
-            if ( enum_container.children().length == 2) {
-                alert('You must have at least one value');
-            } else {
+        var enum_container = $(this).closest('.control-group').find('.enum_values');
+        if ( enum_container.children('.controls').length <= 1) {
+            alert('You must have at least one value');
+        } else {
+            if (confirm("Are you sure you want to remove this value? All nodes that have the value set to empty.")) {
                 $(this).closest('div').remove();
             }
-
         }
 
     });
@@ -90,6 +95,21 @@
         } else {
             $(this).closest('div').remove();
         }
+
+    });
+
+    $(document).on('click', '.js-enum-default', function(e) {
+
+        e.preventDefault();
+
+        var enum_container = $(this).closest('.control-group').find('.enum_values');
+
+        enum_container.find('.js-enum-default i').removeClass('icon-ok').addClass('icon-remove');
+
+        $(this).find('i').removeClass('icon-remove').addClass('icon-ok');
+
+        // Now to set the default hidden value
+        console.log($(this).closest('js-enum-default').val());
 
     });
 

@@ -99,5 +99,19 @@ return array(
         'type'  => 'text',
         'admin' => 'nodelookup',
     ),
+
+    'userlookup' => array(
+        'label' => 'User Lookup',
+        'name'  => 'userlookup',
+        'type'  => 'integer',
+        'admin' => 'userlookup',
+    ),
+
+    'userlookup-multi' => array(
+        'label' => 'User Lookup (Multi-Select)',
+        'name'  => 'userlookup-multi',
+        'type'  => 'text',
+        'admin' => 'userlookup',
+    ),
     
 );

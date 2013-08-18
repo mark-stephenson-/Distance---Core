@@ -3,6 +3,13 @@
 class User extends Cartalyst\Sentry\Users\Eloquent\User
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->hidden[] = 'permissions';
+    }    
+
     /*
         Overriding the original implementation so we can login multiple places
      */
@@ -59,6 +66,16 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
 
             return Collection::whereIn('id', $canAccess)->get();
         }
+    }
+
+    public static function forLookup($groupId) {
+
+        if ((int) $groupId === 0) {
+            return User::all();
+        }
+
+        $group = Group::findOrFail($groupId);
+        return $group->users;
     }
 
 }
