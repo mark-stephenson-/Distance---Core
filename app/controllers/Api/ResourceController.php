@@ -6,6 +6,8 @@ use App, Response;
 class ResourceController extends \BaseController {
     public function resources()
     {
+        $responseCode = 200;
+
         if ( \Input::get('catalogueID')) {
             $catalogues_ids = array( \Input::get('catalogueID') );
         } else {
@@ -17,7 +19,11 @@ class ResourceController extends \BaseController {
             }
         }
 
-        $catalogues = Catalogue::whereIn('id', $catalogues_ids);
+        if (count($catalogues_ids)) {
+            $catalogues = Catalogue::whereIn('id', $catalogues_ids);
+        } else {
+            return Response::make('', 404);
+        }
 
         if ( \Input::get('sync') ) {
             $catalogues = $catalogues->with(array('resources' => function($query) {
@@ -38,9 +44,20 @@ class ResourceController extends \BaseController {
                 $query->withTrashed();
                 $query->where('updated_at', '>', date('Y-m-d H:i:s', \Input::get('modifiedSince')) );
             }));
+
+            $empty = true;
+            foreach($catalogues as $catalogue) {
+                if (count($catalogue->resources) > 0) {
+                    $empty = false;
+                }
+            }
+
+            if ($empty) {
+                $responseCode = 304;
+            }
         }
 
-        return Api::makeResponse($catalogues->get(), 'catalogues');
+        return Api::makeResponse($catalogues->get(), 'catalogues', $responseCode);
     }
 
     public function resource($id)
