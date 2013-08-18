@@ -55,7 +55,7 @@
     </div>
 
     <div class="btn-group pull-right">
-        @if (Sentry::getUser()->hasAccess('nodes.edit'))
+        @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $nodeType->name . '.revision-management'))
 
             @if ($revisionData->status == 'draft')
                 <a href="#" class="btn open-publish-node-modal"><i class="icon-level-up"></i> Publish</a>
@@ -64,8 +64,9 @@
             @if ($revisionData->status == 'published')
                 <a href="#" class="btn open-retire-node-modal"><i class="icon-level-down"></i> Retire</a>
             @endif
+            
         @endif
-        @if (Sentry::getUser()->hasAccess('nodes.edit'))
+        @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $nodeType->name . '.update'))
             <a href="{{ route('nodes.edit', [$collection->id, $node->id, $revisionData->id]) }}" class="btn"><i class="icon-edit"></i> Edit</a>
         @endif
     </div>

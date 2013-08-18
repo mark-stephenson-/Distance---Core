@@ -82,6 +82,10 @@ class Permission{
                             <label class='checkbox inline'>
                                 " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.delete]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.delete')) . " Delete
                             </label>
+
+                            <label class='checkbox inline'>
+                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management')) . " Revision Management
+                            </label>
                         </li>";
 
                         foreach ($nodetype->columns as $column) {                                
