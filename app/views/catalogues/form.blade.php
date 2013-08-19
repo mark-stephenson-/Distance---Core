@@ -26,24 +26,24 @@
     {{ formModel($catalogue, 'catalogues') }}
 
     <div class="control-group">
-        {{ Form::label('name', 'Name', ['class' => 'control-label']) }}
+        {{ Form::label('name', 'Name', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('name', null, ['class' => 'span11']) }}
+            {{ Form::text('name', null, array('class' => 'span11')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('restrictions', 'File Restrictions', ['class' => 'control-label']) }}
+        {{ Form::label('restrictions', 'File Restrictions', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::hidden('restrictions', Input::old('restrictions', implode(',', $catalogue->restrictions)), ['class' => 'span11 select2-restrictions', 'data-placeholder' => 'Enter file extensions that are allowed']) }}
+            {{ Form::hidden('restrictions', Input::old('restrictions', implode(',', $catalogue->restrictions)), array('class' => 'span11 select2-restrictions', 'data-placeholder' => 'Enter file extensions that are allowed')) }}
             <span class="help-block">Leave this blank to allow any files.</span>
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('collections', 'Collections', ['class' => 'control-label']) }}
+        {{ Form::label('collections', 'Collections', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('collections[]', $collections->lists('name', 'id'), $catalogue->collections->lists('id'), ['class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the collections that have access to this catalogue']) }}
+            {{ Form::select('collections[]', $collections->lists('name', 'id'), $catalogue->collections->lists('id'), array('class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the collections that have access to this catalogue')) }}
         </div>
     </div>
 

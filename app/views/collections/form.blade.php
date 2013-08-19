@@ -13,21 +13,21 @@
     {{ formModel($collection, 'collections') }}
 
     <div class="control-group">
-        {{ Form::label('name', 'Name', ['class' => 'control-label']) }}
+        {{ Form::label('name', 'Name', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('name', null, ['class' => 'span8']) }}
+            {{ Form::text('name', null, array('class' => 'span8')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('api_key', 'API Key', ['class' => 'control-label']) }}
+        {{ Form::label('api_key', 'API Key', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('api_key', Input::old('api_key', ($collection->api_key) ?: md5(rand())), ['class' => 'span8']) }}
+            {{ Form::text('api_key', Input::old('api_key', ($collection->api_key) ?: md5(rand())), array('class' => 'span8')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('name', 'Application', ['class' => 'control-label']) }}
+        {{ Form::label('name', 'Application', array('class' => 'control-label')) }}
         <div class="controls">
             {{ Form::select('application_id', Application::all()->lists('name', 'id')) }}
         </div>
@@ -42,11 +42,11 @@
             }
         ?>
         <div class="control-group">
-            {{ Form::label('image', 'Image', ['class' => 'control-label']) }}
+            {{ Form::label('image', 'Image', array('class' => 'control-label')) }}
 
             <div class="controls">
                 <div class="resource-container  resource-view">
-                    {{ Form::hidden('logo_id', @$logo->id, ['id' => 'logo_id']) }}
+                    {{ Form::hidden('logo_id', @$logo->id, array('id' => 'logo_id')) }}
 
                     @if ( $logo )
                         <div class="resource">
@@ -75,9 +75,9 @@
     <div class="control-group">
         <div class="controls">
             @if (!$collection->exists)
-                {{ Form::submit('Create Collection', ['class' => 'btn']) }}
+                {{ Form::submit('Create Collection', array('class' => 'btn')) }}
             @else
-                {{ Form::submit('Save Changes', ['class' => 'btn']) }}
+                {{ Form::submit('Save Changes', array('class' => 'btn')) }}
             @endif
         </div>
     </div>
