@@ -15,7 +15,7 @@
 
             var nodeType = $('#node_type_select').val();
 
-            var url = "{{ route('nodes.create', [$collection->id]) }}/" + nodeType;
+            var url = "{{ route('nodes.create', array($collection->id)) }}/" + nodeType;
 
             window.location = url;
 
@@ -34,15 +34,15 @@
     <p class="pull-right">
 
         @if (Route::currentRouteName() == 'nodes.type-list')
-            <a href="{{ route('nodes.list', [$collection->id]) }}" class="btn"><i class="icon-list"></i> Node List</a>
+            <a href="{{ route('nodes.list', array($collection->id)) }}" class="btn"><i class="icon-list"></i> Node List</a>
         @endif
 
         @if (Config::get('core.features.hierarchy'))
-            <a href="{{ route('nodes.hierarchy', [$collection->id]) }}" class="btn"><i class="icon-sitemap"></i> Hierarchy</a>
+            <a href="{{ route('nodes.hierarchy', array($collection->id)) }}" class="btn"><i class="icon-sitemap"></i> Hierarchy</a>
         @endif
         
         @if ( count(NodeType::forSelect($collection, false, 'create')) )
-            <a href="{{ route('nodes.create', [$collection->id]) }}" class="btn" id="openNodeModal"><i class="icon-plus"></i> New Node</a>
+            <a href="{{ route('nodes.create', array($collection->id)) }}" class="btn" id="openNodeModal"><i class="icon-plus"></i> New Node</a>
         @endif
     </p>
     

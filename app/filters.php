@@ -91,7 +91,7 @@ Route::filter('apiAuthentication', function()
 
 Route::filter('checkPermissions', function($request)
 {
-    $replacements = [
+    $replacements = array(
         'index' => '*',
         'view' => '*',
         'controller' => '',
@@ -100,7 +100,7 @@ Route::filter('checkPermissions', function($request)
 
         'edit' => 'update',
         'store' => 'create',
-    ];
+    );
 
     $property = 'cms.' . str_replace(array_keys($replacements), array_values($replacements), strtolower($request->getAction()));
 

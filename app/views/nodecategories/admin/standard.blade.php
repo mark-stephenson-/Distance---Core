@@ -19,30 +19,30 @@
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][label]', 'Name', ['class' => 'control-label']) }}
+    {{ Form::label('columns[' . $identifier . '][label]', 'Name', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, ['class' => 'span4']) }}
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4')) }}
     </div>
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][description]', 'Description', ['class' => 'control-label']) }}
+    {{ Form::label('columns[' . $identifier . '][description]', 'Description', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, ['class' => 'span4']) }}
+        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, array('class' => 'span4')) }}
     </div>
 </div>
 
 <div class="control-group">
     @if ($category['name'] == 'resource' or $category['name'] == 'html')
         {{-- Catalogue selection with extension filtering --}}
-        {{ Form::label('columns[' . $identifier . '][catalogue]', 'Catalogue', ['class' => 'control-label']) }}
+        {{ Form::label('columns[' . $identifier . '][catalogue]', 'Catalogue', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('columns[' . $identifier . '][catalogue]', Catalogue::all()->lists('name', 'id'), @$data->catalogue, ['class' => 'span4']) }}
+            {{ Form::select('columns[' . $identifier . '][catalogue]', Catalogue::all()->lists('name', 'id'), @$data->catalogue, array('class' => 'span4')) }}
         </div>
     </div>
 
     <div class="control-group">
-    {{ Form::label("columns[{$identifier}][includeWhenExpanded]", 'Include when expanded', ['class' => 'control-label']) }}
+    {{ Form::label("columns[{$identifier}][includeWhenExpanded]", 'Include when expanded', array('class' => 'control-label')) }}
     <div class="controls">
         <label class="radio inline">
             {{ Form::radio("columns[{$identifier}][includeWhenExpanded]", 1, popRadio(1, @$data->includeWhenExpanded)) }} Yes
@@ -59,9 +59,9 @@
     @elseif ($category['name'] == 'nodelookup-multi')
     @elseif ($category['name'] == 'date')
     @else
-        {{ Form::label('default_value', 'Default Value', ['class' => 'control-label']) }}
+        {{ Form::label('default_value', 'Default Value', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('default_value', null, ['class' => 'span4']) }}
+            {{ Form::text('default_value', null, array('class' => 'span4')) }}
         </div>
 
         @if ($category['name'] == 'date')
@@ -73,7 +73,7 @@
 {{-- Radio buttons (aka booleans) are always going to be present anyway --}}
 @if ($category['name'] != 'bit')
     <div class="control-group">
-        {{ Form::label("columns[{$identifier}][required]", 'Required', ['class' => 'control-label']) }}
+        {{ Form::label("columns[{$identifier}][required]", 'Required', array('class' => 'control-label')) }}
         <div class="controls">
             <label class="radio inline">
                 {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes

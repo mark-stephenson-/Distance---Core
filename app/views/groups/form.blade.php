@@ -13,14 +13,14 @@
     {{ formModel($group, 'groups') }}
 
     <div class="control-group">
-        {{ Form::label('name', 'Name', ['class' => 'control-label']) }}
+        {{ Form::label('name', 'Name', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('name', null, ['class' => 'span11']) }}
+            {{ Form::text('name', null, array('class' => 'span11')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('members', 'Members', ['class' => 'control-label']) }}
+        {{ Form::label('members', 'Members', array('class' => 'control-label')) }}
         <div class="controls">
             <?php
                 // Laravel isn't working as expected, so here's a bug fix for User::all()->lists('full_name', 'id')
@@ -31,7 +31,7 @@
                 }
             ?>
 
-            {{ Form::select('members[]', $user_list, $group->users->lists('id'), ['class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the group members']) }}
+            {{ Form::select('members[]', $user_list, $group->users->lists('id'), array('class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the group members')) }}
         </div>
     </div>
 

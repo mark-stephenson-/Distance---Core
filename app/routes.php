@@ -15,7 +15,7 @@ Route::any('/', array('as' => 'root', function() {
     return Redirect::route('collections.index');
 }));
 
-Route::group( ['prefix' => 'api'], function() {
+Route::group( array('prefix' => 'api'), function() {
     // We need to ensure that the prfiler doesn't pop up here...
     Config::set('profiler::config.enabled', false);
     
@@ -55,7 +55,7 @@ App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $except
     }
 });
 
-Route::group(array('before' => ['auth', 'checkPermissions']), function() {
+Route::group(array('before' => array('auth', 'checkPermissions')), function() {
 
     Route::get('me', array('as' => 'me', 'uses' => 'MeController@index'));
     Route::post('me', array('as' => 'me.update', 'uses' => 'MeController@update'));
