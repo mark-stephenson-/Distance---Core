@@ -29,22 +29,22 @@
     <div style="clear: both; padding-top: 15px;"></div>
     
     @if ($node->exists)
-        {{ Form::open(['route' => ['nodes.update', $collection->id, $node->id, $revisionData->id, $branchId], 'class' => 'form-horizontal']) }}
+        {{ Form::open(array('route' => array('nodes.update', $collection->id, $node->id, $revisionData->id, $branchId), 'class' => 'form-horizontal')) }}
     @else
-        {{ Form::open(['route' => ['nodes.store', $collection->id, $nodeType->id, $parentId], 'class' => 'form-horizontal']) }}
+        {{ Form::open(array('route' => array('nodes.store', $collection->id, $nodeType->id, $parentId), 'class' => 'form-horizontal')) }}
     @endif
     
     <div class="control-group">
-        {{ Form::label('title', 'Title', ['class' => 'control-label']) }}
+        {{ Form::label('title', 'Title', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('title', Input::old('title', $node->title), ['class' => 'span8']) }}
+            {{ Form::text('title', Input::old('title', $node->title), array('class' => 'span8')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('owned_by', 'Owner', ['class' => 'control-label']) }}
+        {{ Form::label('owned_by', 'Owner', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('owned_by', $node->potentialOwners(), Input::old('owned_by', $node->owned_by), ['class' => 'span8 select2', 'id' => 'js-owner-select']) }}
+            {{ Form::select('owned_by', $node->potentialOwners(), Input::old('owned_by', $node->owned_by), array('class' => 'span8 select2', 'id' => 'js-owner-select')) }}
         </div>
     </div>
 
@@ -52,7 +52,7 @@
         @foreach($nodeType->columns as $column)
             @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.columns.' . $column->name))
                 <div class="control-group">
-                    {{ Form::label($column->name, $column->label, ['class' => 'control-label']) }}
+                    {{ Form::label($column->name, $column->label, array('class' => 'control-label')) }}
                     <div class="controls">
                         @include('nodecategories.' . $column->category, array('column' => $column, 'node' => $node, 'data' => @$revisionData))
                     </div>

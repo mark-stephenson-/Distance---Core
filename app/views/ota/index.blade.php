@@ -7,7 +7,7 @@
 @section('body')
     <h2>Current Versions</h2>
     
-    {{ Form::open(['url' => route('app-distribution.update')]) }}
+    {{ Form::open(array('url' => route('app-distribution.update'))) }}
     <table class="table table-striped">
         <thead>
             <tr>
@@ -30,26 +30,26 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    {{ Form::text('', URL::to('ota'), ['class' => 'span10', 'style' => 'text-align: center', 'disabled']) }}
+                    {{ Form::text('', URL::to('ota'), array('class' => 'span10', 'style' => 'text-align: center', 'disabled')) }}
                 </td>
                 <td colspan="2">
-                    {{ Form::text('', URL::to('ota/testing'), ['class' => 'span10', 'style' => 'text-align: center', 'disabled']) }}
+                    {{ Form::text('', URL::to('ota/testing'), array('class' => 'span10', 'style' => 'text-align: center', 'disabled')) }}
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <p>Production Password</p>
-                    {{ Form::text('production_password', Setting::getConfig('ota-production_password'), ['class' => 'span10', 'style' => 'text-align: center']) }}
+                    {{ Form::text('production_password', Setting::getConfig('ota-production_password'), array('class' => 'span10', 'style' => 'text-align: center')) }}
                 </td>
                 <td colspan="2">
                     <p>Testing Password</p>
-                    {{ Form::text('testing_password', Setting::getConfig('ota-testing_password'), ['class' => 'span10', 'style' => 'text-align: center']) }}
+                    {{ Form::text('testing_password', Setting::getConfig('ota-testing_password'), array('class' => 'span10', 'style' => 'text-align: center')) }}
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <a href="{{ route('app-distribution.create') }}" class="btn">Upload New Version</a>
-                    {{ Form::submit('Save Passwords', ['class' => 'btn btn-primary']) }}
+                    {{ Form::submit('Save Passwords', array('class' => 'btn btn-primary')) }}
                 </td>
             </tr>
         </tbody>

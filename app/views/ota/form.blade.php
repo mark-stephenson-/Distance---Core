@@ -5,38 +5,38 @@
 @stop
 
 @section('body')
-    {{ formModel($new, 'app-distribution', ['enctype' => 'multipart/form-data']) }}
+    {{ formModel($new, 'app-distribution', array('enctype' => 'multipart/form-data')) }}
     
     <div class="control-group">
-        {{ Form::label('version', 'Version', ['class' => 'control-label']) }}
+        {{ Form::label('version', 'Version', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('version', null, ['class' => 'span11']) }}
+            {{ Form::text('version', null, array('class' => 'span11')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('platform', 'Platform', ['class' => 'control-label']) }}
+        {{ Form::label('platform', 'Platform', array('class' => 'control-label')) }}
         <div class="controls">
             {{ Form::select('platform', ['-', 'android' => 'Android', 'ios' => 'iOS']) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('environment', 'Environment', ['class' => 'control-label']) }}
+        {{ Form::label('environment', 'Environment', array('class' => 'control-label')) }}
         <div class="controls">
             {{ Form::select('environment', ['-', 'testing' => 'Testing', 'production' => 'Production']) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('release_notes', 'Release Notes', ['class' => 'control-label']) }}
+        {{ Form::label('release_notes', 'Release Notes', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::textarea('release_notes', null, ['class' => 'span11', 'rows' => 4]) }}
+            {{ Form::textarea('release_notes', null, array('class' => 'span11', 'rows' => 4)) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('file', 'Application File', ['class' => 'control-label']) }}
+        {{ Form::label('file', 'Application File', array('class' => 'control-label')) }}
         <div class="controls">
             {{ Form::file('file') }}
         </div>

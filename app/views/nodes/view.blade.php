@@ -31,7 +31,7 @@
 
             e.preventDefault();
 
-            var url = "{{ route('nodes.retire', [$collection->id, $node->id, $revisionData->id, $branch->id]) }}";
+            var url = "{{ route('nodes.retire', array($collection->id, $node->id, $revisionData->id, $branch->id)) }}";
             window.location = url;
 
         });
@@ -67,7 +67,7 @@
             
         @endif
         @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $nodeType->name . '.update'))
-            <a href="{{ route('nodes.edit', [$collection->id, $node->id, $revisionData->id]) }}" class="btn"><i class="icon-edit"></i> Edit</a>
+            <a href="{{ route('nodes.edit', array($collection->id, $node->id, $revisionData->id)) }}" class="btn"><i class="icon-edit"></i> Edit</a>
         @endif
     </div>
 
@@ -79,10 +79,10 @@
     @if (count($breadcrumbs))
         <ul class="breadcrumb">
 
-            <li><a href="{{ route('nodes.hierarchy', [$collection->id]) }}">{{ $collection->name }}</a> <span class="divider">/</span></li>
+            <li><a href="{{ route('nodes.hierarchy', array($collection->id)) }}">{{ $collection->name }}</a> <span class="divider">/</span></li>
 
             @foreach($breadcrumbs as $crumb)
-                <li><a href="{{ route('nodes.view', [$collection->id, $crumb->node->id, 'branch', $crumb->id]) }}">{{ $crumb->node->title }}</a> <span class="divider">/</span></li>
+                <li><a href="{{ route('nodes.view', array($collection->id, $crumb->node->id, 'branch', $crumb->id)) }}">{{ $crumb->node->title }}</a> <span class="divider">/</span></li>
             @endforeach
             <li class="active">{{ $node->title }}</li>
         </ul>

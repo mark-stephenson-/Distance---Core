@@ -19,28 +19,28 @@
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][label]', 'Name', ['class' => 'control-label']) }}
+    {{ Form::label('columns[' . $identifier . '][label]', 'Name', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, ['class' => 'span4']) }}
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4')) }}
     </div>
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][description]', 'Description', ['class' => 'control-label']) }}
+    {{ Form::label('columns[' . $identifier . '][description]', 'Description', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, ['class' => 'span4']) }}
+        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, array('class' => 'span4')) }}
     </div>
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][lookuptype]', 'Node Type', ['class' => 'control-label']) }}
+    {{ Form::label('columns[' . $identifier . '][lookuptype]', 'Node Type', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::select("columns[$identifier][lookuptype]", [0 => 'All Users'] + Group::all()->lists('name', 'id'), @$data->lookuptype) }}
+        {{ Form::select("columns[$identifier][lookuptype]", array(0 => 'All Users') + Group::all()->lists('name', 'id'), @$data->lookuptype) }}
     </div>
 </div>
 
 <div class="control-group">
-    {{ Form::label("columns[{$identifier}][required]", 'Required', ['class' => 'control-label']) }}
+    {{ Form::label("columns[{$identifier}][required]", 'Required', array('class' => 'control-label')) }}
     <div class="controls">
         <label class="radio inline">
             {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
@@ -52,7 +52,7 @@
 </div>
 
 <div class="control-group">
-    {{ Form::label("columns[{$identifier}][includeWhenExpanded]", 'Include when expanded', ['class' => 'control-label']) }}
+    {{ Form::label("columns[{$identifier}][includeWhenExpanded]", 'Include when expanded', array('class' => 'control-label')) }}
     <div class="controls">
         <label class="radio inline">
             {{ Form::radio("columns[{$identifier}][includeWhenExpanded]", 1, popRadio(1, @$data->includeWhenExpanded)) }} Yes

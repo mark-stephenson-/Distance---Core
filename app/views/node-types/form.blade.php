@@ -122,23 +122,23 @@
     {{ formModel($nodeType, 'node-types') }}
 
     <div class="control-group">
-        {{ Form::label('label', 'Name', ['class' => 'control-label']) }}
+        {{ Form::label('label', 'Name', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('label', null, ['class' => 'span8']) }}
+            {{ Form::text('label', null, array('class' => 'span8')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('collections', 'Collections', ['class' => 'control-label']) }}
+        {{ Form::label('collections', 'Collections', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('collections[]', Collection::toDropDown(), $nodeCollections, ['class' => 'span8', 'multiple' => 'multiple', 'id' => 'collections']) }}
+            {{ Form::select('collections[]', Collection::toDropDown(), $nodeCollections, array('class' => 'span8', 'multiple' => 'multiple', 'id' => 'collections')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('field', 'Field', ['class' => 'control-label']) }}
+        {{ Form::label('field', 'Field', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('field', NodeType::categorySelect(), null, ['id' => 'js-category-select', 'class' => 'span7']) }}
+            {{ Form::select('field', NodeType::categorySelect(), null, array('id' => 'js-category-select', 'class' => 'span7')) }}
             <a href="#" id="js-category-add" class="btn" style="margin-left: 10px">Add</a>
         </div>
     </div>
@@ -146,9 +146,9 @@
     <div class="control-group">
         <div class="controls">
             @if (!$nodeType->exists)
-                {{ Form::submit('Create Node Type', ['class' => 'btn']) }}
+                {{ Form::submit('Create Node Type', array('class' => 'btn')) }}
             @else
-                {{ Form::submit('Save Changes', ['class' => 'btn']) }}
+                {{ Form::submit('Save Changes', array('class' => 'btn')) }}
             @endif
         </div>
     </div>
@@ -166,9 +166,9 @@
     <div class="control-group">
         <div class="controls">
             @if (!$nodeType->exists)
-                {{ Form::submit('Create Node Type', ['class' => 'btn']) }}
+                {{ Form::submit('Create Node Type', array('class' => 'btn')) }}
             @else
-                {{ Form::submit('Save Changes', ['class' => 'btn']) }}
+                {{ Form::submit('Save Changes', array('class' => 'btn')) }}
             @endif
         </div>
     </div>
