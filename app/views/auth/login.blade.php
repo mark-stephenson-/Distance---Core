@@ -6,17 +6,17 @@
 
 @section('body')
     
-    {{ Form::open(['class' => 'form-horizontal']) }}
+    {{ Form::open(array('class' => 'form-horizontal')) }}
 
         <div class="control-group">
-            {{ Form::label('email', 'Email', ['class' => 'control-label']) }}
+            {{ Form::label('email', 'Email', array('class' => 'control-label')) }}
             <div class="controls">
                 {{ Form::text('email', Input::old('email')) }}
             </div>
         </div>
 
         <div class="control-group">
-            {{ Form::label('password', 'Password', ['class' => 'control-label']) }}
+            {{ Form::label('password', 'Password', array('class' => 'control-label')) }}
             <div class="controls">
                 {{ Form::password('password') }}
             </div>
@@ -27,7 +27,7 @@
                 <label class="checkbox">
                     {{ Form::checkbox('remember') }} Remember me
                 </label>
-                {{ Form::submit('Login', ['class' => 'btn']) }}
+                {{ Form::submit('Login', array('class' => 'btn')) }}
                 <p style="margin-top: 30px"><a href="{{ route('forgot-password') }}">Forgotten your password?</a></p>
             </div>
         </div>

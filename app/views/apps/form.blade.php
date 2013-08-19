@@ -13,23 +13,23 @@
     {{ formModel($app, 'apps') }}
 
     <div class="control-group">
-        {{ Form::label('name', 'Name', ['class' => 'control-label']) }}
+        {{ Form::label('name', 'Name', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('name', null, ['class' => 'span11']) }}
+            {{ Form::text('name', null, array('class' => 'span11')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('api_key', 'API Key', ['class' => 'control-label']) }}
+        {{ Form::label('api_key', 'API Key', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('api_key', Input::old('api_key', ($app->api_key) ?: md5(rand())), ['class' => 'span11']) }}
+            {{ Form::text('api_key', Input::old('api_key', ($app->api_key) ?: md5(rand())), array('class' => 'span11')) }}
         </div>
     </div>
 
     <div class="control-group">
-        {{ Form::label('collections', 'Collections', ['class' => 'control-label']) }}
+        {{ Form::label('collections', 'Collections', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('collections[]', $collections->lists('name', 'id'), $app->collections->lists('id'), ['class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the available collections']) }}
+            {{ Form::select('collections[]', $collections->lists('name', 'id'), $app->collections->lists('id'), array('class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the available collections')) }}
         </div>
     </div>
 
