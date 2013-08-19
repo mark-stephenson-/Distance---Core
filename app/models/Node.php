@@ -39,9 +39,9 @@ class Node extends BaseModel
     {
         $user = Sentry::getUser();
 
-        return [
+        return array(
             $user->id => $user->fullName
-        ];
+        );
     }
 
     public function nodeTypeTableName()

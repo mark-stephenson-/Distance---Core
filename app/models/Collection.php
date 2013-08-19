@@ -56,7 +56,7 @@ class Collection extends BaseModel {
 
     public static function toDropDown()
     {
-        $items = [];
+        $items = array();
 
         foreach(static::all() as $item) {
             $items[$item->id] = $item->name;
