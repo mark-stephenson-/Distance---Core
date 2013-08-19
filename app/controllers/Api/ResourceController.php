@@ -44,9 +44,13 @@ class ResourceController extends \BaseController {
                 $query->withTrashed();
                 $query->where('updated_at', '>', date('Y-m-d H:i:s', \Input::get('modifiedSince')) );
             }));
+        }
 
+        $result = $catalogues->get();
+
+        if (\Input::get('modifiedSince')) {
             $empty = true;
-            foreach($catalogues as $catalogue) {
+            foreach($result as $catalogue) {
                 if (count($catalogue->resources) > 0) {
                     $empty = false;
                 }
@@ -57,7 +61,7 @@ class ResourceController extends \BaseController {
             }
         }
 
-        return Api::makeResponse($catalogues->get(), 'catalogues', $responseCode);
+        return Api::makeResponse($result, 'catalogues', $responseCode);
     }
 
     public function resource($id)
