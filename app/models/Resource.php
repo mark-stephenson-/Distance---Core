@@ -93,6 +93,9 @@ class Resource extends BaseModel
 
         $type = Input::get('type') . '/';
 
+        // We don't need type for now
+        $type = '/';
+
         $filePath = app_path() . '/../resources/' . $type . $fileName;
 
         if (!file_exists($filePath)) {

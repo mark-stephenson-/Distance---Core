@@ -34,7 +34,10 @@
         var resourceFilter = null;
         $(document).ready(function() {
 
-            $('.resource_fancybox').on('click', function() {
+            $('.resource_fancybox').on('click', function(e) {
+
+                e.preventDefault();
+
                 resourceType = $(this).attr('data-dest');
                 resourceDestination = $(this).attr('data-resource');
                 resourceFilter = $(this).attr('data-filter');

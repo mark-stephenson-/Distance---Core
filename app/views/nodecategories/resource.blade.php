@@ -16,7 +16,7 @@
         <div class="resource">
             <div class="image">
                 @if ( $resource->isImage() )
-                    <img src="/file/{{ $resource->filename }}?type=view" alt="" />
+                    <img src="{{ $resource->path() }}?type=view" alt="" />
                 @else
                     <i class="icon-file"></i>
                 @endif

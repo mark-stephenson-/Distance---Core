@@ -18,6 +18,25 @@ class NodeType extends BaseModel {
         return $return;
     }
 
+    public function hasHtml()
+    {
+        return self::has('html');
+    }
+
+    public function hasResource()
+    {
+        return self::has('resource');
+    }
+
+    public function has($type)
+    {
+        foreach ($this->columns as $column) {
+            if ($column->category == $type) return true;
+        }
+
+        return false;
+    }
+
     public function getColumnsAttribute($columns)
     {
         return json_decode($columns);

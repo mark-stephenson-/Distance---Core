@@ -33,7 +33,7 @@
 </div>
 
 <div class="control-group">
-    @if ($category['name'] == 'resource')
+    @if ($category['name'] == 'resource' or $category['name'] == 'html')
         {{-- Catalogue selection with extension filtering --}}
         {{ Form::label('columns[' . $identifier . '][catalogue]', 'Catalogue', ['class' => 'control-label']) }}
         <div class="controls">
