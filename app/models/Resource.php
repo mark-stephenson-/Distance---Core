@@ -3,6 +3,8 @@
 class Resource extends BaseModel
 {
 
+    protected $softDelete = true;
+
     public function catalogue()
     {
         return $this->belongsTo('Catalogue');
