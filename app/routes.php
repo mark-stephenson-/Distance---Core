@@ -22,7 +22,7 @@ Route::group( array('prefix' => 'api'), function() {
     Route::get('/', function(){ return Response::make('', 400); });
     Route::put('authentication', array('uses' => 'Api\AuthenticationController@authenticate'));
 
-    Route::group( ['before' => 'apiAuthentication' ], function() {
+    Route::group( array('before' => 'apiAuthentication'), function() {
         Route::get('collections', 'Api\CollectionController@collections');
         Route::get('hierarchy', 'Api\HierarchyController@hierarchy');
         Route::get('node/{id}', 'Api\NodeController@node');
@@ -92,10 +92,10 @@ Route::group(array('before' => array('auth', 'checkPermissions')), function() {
     Route::resource('groups', 'GroupsController');
     Route::resource('apps', 'AppsController');
     Route::resource('catalogues', 'CataloguesController');
-    Route::get('catalogues/{id}/delete', ['as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy']);
+    Route::get('catalogues/{id}/delete', array('as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy'));
     Route::resource('resources', 'ResourcesController');
-    Route::get('resources/{id}/delete', ['as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy']);
-    Route::post('resources/{id}/update-file', ['as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile']);
+    Route::get('resources/{id}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
+    Route::post('resources/{id}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
     Route::resource('app-distribution', 'OtaController');
     Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 
