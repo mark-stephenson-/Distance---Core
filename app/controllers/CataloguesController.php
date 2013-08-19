@@ -35,7 +35,7 @@ class CataloguesController extends BaseController
 
         $catalogue->save();
 
-        $catalogue->collections()->sync(Input::get('collections', []));
+        $catalogue->collections()->sync(Input::get('collections', array());
 
         return Redirect::route('catalogues.index')
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been created.')));
@@ -64,7 +64,7 @@ class CataloguesController extends BaseController
 
         $catalogue->name = Input::get('name');
         $catalogue->restrictions = array_filter(explode(',', trim(Input::get('restrictions', ''))));
-        $catalogue->collections()->sync(Input::get('collections', []));
+        $catalogue->collections()->sync(Input::get('collections', array());
 
         $catalogue->save();
 

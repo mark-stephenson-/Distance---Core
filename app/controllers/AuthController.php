@@ -104,12 +104,12 @@ class AuthController extends BaseController
             });
 
             return Redirect::back()
-                ->with('successes', new MessageBag(['If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.']) );
+                ->with('successes', new MessageBag(array('If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.')) );
 
         } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
             // That user has not been found, but we don't want to tell them!
             return Redirect::back()
-                ->with('successes', new MessageBag(['If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.']) );
+                ->with('successes', new MessageBag(array('If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.')) );
         }
     }
 

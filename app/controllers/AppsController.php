@@ -34,7 +34,7 @@ class AppsController extends BaseController
 
         $app->save();
 
-        $app->collections()->sync(Input::get('collections', []));
+        $app->collections()->sync(Input::get('collections', array()));
 
         return Redirect::route('apps.index')
                 ->with('successes', new MessageBag(array($app->name . ' has been created.')));
@@ -63,7 +63,7 @@ class AppsController extends BaseController
 
         $app->name = Input::get('name');
         $app->api_key = Input::get('api_key');
-        $app->collections()->sync(Input::get('collections', []));
+        $app->collections()->sync(Input::get('collections', array()));
 
         $app->save();
 
