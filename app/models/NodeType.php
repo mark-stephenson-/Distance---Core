@@ -237,7 +237,7 @@ class NodeType extends BaseModel {
                         break;
 
                     case 'html':
-                        $val = stripslashes($val);
+                        $val = convertSmartQuotes(stripslashes($val));
                         break;
 
                     case 'enum-multi':
