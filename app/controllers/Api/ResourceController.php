@@ -1,6 +1,6 @@
 <?php namespace Api;
 
-use Api, Catalogue, Resource;
+use Api, Catalogue, Resource, Collection;
 use App, Response;
 
 class ResourceController extends \BaseController {
@@ -10,13 +10,15 @@ class ResourceController extends \BaseController {
 
         if ( \Input::get('catalogueID')) {
             $catalogues_ids = array( \Input::get('catalogueID') );
-        } else {
-            $collection_catalogues_query = App::make('collection')->catalogues()->get();
+        } else if ( \Request::header('Collection-Token')) {
+            $collection_catalogues_query = Collection::whereApiKey(\Request::header('Collection-Token'))->first()->catalogues()->get();
             $catalogues_ids = array();
 
             foreach ($collection_catalogues_query as $catalogue) {
                 $catalogues_ids[] = $catalogue->id;
             }
+        } else {
+            return Response::make('', 400);
         }
 
         if (count($catalogues_ids)) {
