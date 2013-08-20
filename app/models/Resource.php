@@ -101,6 +101,9 @@ class Resource extends BaseModel
         $filePath = app_path() . '/../resources/' . $collectionId . '/' . $fileName;
 
         if (!file_exists($filePath)) {
+
+            return Response::make('', 404);
+
             // Try without the type
             $typePath = $filePath;
             $filePath = app_path() . '/../resources/' . $fileName;
