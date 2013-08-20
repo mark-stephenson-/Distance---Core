@@ -50,6 +50,11 @@ class NodeController extends \BaseController {
         return Api::makeResponse($return, 'nodes');
     }
 
+    public function emailNode()
+    {
+        return Response::make('', 200);
+    }
+
     public function node($id)
     {
         if ( Request::header('Collection-Token') === NULL ) {

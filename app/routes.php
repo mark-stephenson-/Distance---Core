@@ -27,9 +27,11 @@ Route::group( array('prefix' => 'api'), function() {
         Route::get('hierarchy', 'Api\HierarchyController@hierarchy');
         Route::get('node/{id}', 'Api\NodeController@node');
         Route::get('node', 'Api\NodeController@nodes');
+        Route::get('emailNode', 'Api\NodeController@emailNode');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
         Route::get('resource/{id}', 'Api\ResourceController@resource');
         Route::get('resource', 'Api\ResourceController@resources');
+        Route::get('modules', 'Api\ModulesController@modules');
     });
 });
 
