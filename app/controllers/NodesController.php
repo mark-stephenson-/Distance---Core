@@ -107,7 +107,7 @@ class NodesController extends BaseController
                 $breadcrumbs = $breadcrumbs->whereIn('id', $breadcrumbPath)->get();
             }
         } else {
-            $breadcrumbs = [];
+            $breadcrumbs = array();
         }
         
         return View::make('nodes.view', compact(
