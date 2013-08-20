@@ -78,7 +78,7 @@ class GroupsController extends BaseController
             $group->permissions = Input::get('permissions', array());
 
             foreach (array_diff_key($group->getPermissions(), Input::get('permissions') ?: array()) as $key => $value) {
-                $group->permissions = [$key => 0];
+                $group->permissions = array($key => 0);
             }
 
             $group->users()->sync(Input::get('members', array()));

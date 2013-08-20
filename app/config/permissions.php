@@ -1,96 +1,96 @@
 <?php
 
-return [
+return array(
     
-    'CMS Access' => [
+    'CMS Access' => array(
         'value' => 'cms.*',
-        'children' => [
+        'children' => array(
 
-            'Users' => [
+            'Users' => array(
                 'value' => 'cms.users.*',
-                'children' => [
+                'children' => array(
                     
-                    'Create' => [
+                    'Create' => array(
                         'value' => 'cms.users.create'
-                    ],
-                    'Read' => [
+                    ),
+                    'Read' => array(
                         'value' => 'cms.users.read'
-                    ],
-                    'Update' => [
+                    ),
+                    'Update' => array(
                         'value' => 'cms.users.update'
-                    ],
-                    'Delete' => [
+                    ),
+                    'Delete' => array(
                         'value' => 'cms.users.delete'
-                    ],
+                    ),
 
-                ],
-            ],
+                ),
+            ),
 
-            'Groups' => [
+            'Groups' => array(
                 'value' => 'cms.groups.*',
-                'children' => [
+                'children' => array(
                     
-                    'Create' => [
+                    'Create' => array(
                         'value' => 'cms.groups.create'
-                    ],
-                    'Read' => [
+                    ),
+                    'Read' => array(
                         'value' => 'cms.groups.read'
-                    ],
-                    'Update' => [
+                    ),
+                    'Update' => array(
                         'value' => 'cms.groups.update'
-                    ],
-                    'Delete' => [
+                    ),
+                    'Delete' => array(
                         'value' => 'cms.groups.delete'
-                    ],
+                    ),
 
-                ],
-            ],
+                ),
+            ),
 
-            'Collections' => [
+            'Collections' => array(
                 'value' => 'cms.collections.*',
-                'children' => [
+                'children' => array(
                     
-                    'Create' => [
+                    'Create' => array(
                         'value' => 'cms.collections.create'
-                    ],
-                    'Read' => [
+                    ),
+                    'Read' => array(
                         'value' => 'cms.collections.read'
-                    ],
-                    'Update' => [
+                    ),
+                    'Update' => array(
                         'value' => 'cms.collections.update'
-                    ],
-                    'Delete' => [
+                    ),
+                    'Delete' => array(
                         'value' => 'cms.collections.delete'
-                    ],
+                    ),
 
-                ],
-            ],
+                ),
+            ),
 
-            'Catalogues' => [
+            'Catalogues' => array(
                 'value' => 'cms.catalogues.*',
-                'children' => [
+                'children' => array(
                     
-                    'Create' => [
+                    'Create' => array(
                         'value' => 'cms.catalogues.create'
-                    ],
-                    'Read' => [
+                    ),
+                    'Read' => array(
                         'value' => 'cms.catalogues.read'
-                    ],
-                    'Update' => [
+                    ),
+                    'Update' => array(
                         'value' => 'cms.catalogues.update'
-                    ],
-                    'Delete' => [
+                    ),
+                    'Delete' => array(
                         'value' => 'cms.catalogues.delete'
-                    ],
+                    ),
 
-                ],
-            ],
+                ),
+            ),
 
-        ],
-    ],
+        ),
+    ),
 
-    'API Access' => [
+    'API Access' => array(
         'value' => 'api.*',
-    ],
+    ),
 
-];
+);

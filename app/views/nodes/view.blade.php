@@ -17,7 +17,7 @@
 
             e.preventDefault();
 
-            var url = "{{ route('nodes.publish', [$collection->id, $node->id, $revisionData->id, $branch->id]) }}";
+            var url = "{{ route('nodes.publish', array($collection->id, $node->id, $revisionData->id, $branch->id)) }}";
             window.location = url;
 
         });

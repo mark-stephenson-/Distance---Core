@@ -9,7 +9,7 @@ class NodesController extends BaseController
 
         if (!$collection) {
             return Redirect::back()
-                ->withErrors(['That collection could not be found.']);
+                ->withErrors(array('That collection could not be found.'));
         }
 
         Session::put('current-collection', $collection);
@@ -41,7 +41,7 @@ class NodesController extends BaseController
 
         if (!$collection) {
             return Redirect::back()
-                ->withErrors(['That collection could not be found.']);
+                ->withErrors(array('That collection could not be found.'));
         }
 
         Session::put('last-view', array('url' => Request::fullUrl(), 'collection_id' => $collectionId));
@@ -61,7 +61,7 @@ class NodesController extends BaseController
 
         if (!$collection) {
             return Redirect::back()
-                ->withErrors(['That collection could not be found.']);
+                ->withErrors(array('That collection could not be found.'));
         }
 
         Session::put('current-collection', $collection);
@@ -107,7 +107,7 @@ class NodesController extends BaseController
                 $breadcrumbs = $breadcrumbs->whereIn('id', $breadcrumbPath)->get();
             }
         } else {
-            $breadcrumbs = [];
+            $breadcrumbs = array();
         }
         
         return View::make('nodes.view', compact(

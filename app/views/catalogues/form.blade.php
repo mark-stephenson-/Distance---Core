@@ -40,13 +40,6 @@
         </div>
     </div>
 
-    <div class="control-group">
-        {{ Form::label('collections', 'Collections', array('class' => 'control-label')) }}
-        <div class="controls">
-            {{ Form::select('collections[]', $collections->lists('name', 'id'), $catalogue->collections->lists('id'), array('class' => 'span11 select2', 'multiple' => 'multiple', 'data-placeholder' => 'Select the collections that have access to this catalogue')) }}
-        </div>
-    </div>
-
     <div class="form-actions">
         @if ($catalogue->exists)
             <input type="submit" class="btn btn-primary" value="Save changes" />

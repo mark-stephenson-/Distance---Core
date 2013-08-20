@@ -90,7 +90,7 @@
             var nodeType = $('#node_type_select').val();
 
             if (nodeType != 'existing') {
-                var url = "{{ route('nodes.create', [$collection->id]) }}/" + nodeType + '/' + currentNodeId;
+                var url = "{{ route('nodes.create', array($collection->id)) }}/" + nodeType + '/' + currentNodeId;
             } else {
                 var nodeId = $('#existing_node_select').val();
 
