@@ -3,9 +3,9 @@
 class ResourcesController extends BaseController
 {
     
-    public function load($fileName)
+    public function load($collectionId, $fileName)
     {
-        return Resource::fetch(urldecode($fileName));
+        return Resource::fetch($collectionId, urldecode($fileName));
     }
 
     public function index() {
@@ -16,8 +16,9 @@ class ResourcesController extends BaseController
 
     public function show($catalogueId) {
         $catalogue = Catalogue::with('resources')->findOrFail($catalogueId);
+        $collection = Collection::current();
 
-        return View::make('resources.show', compact('catalogue'));
+        return View::make('resources.show', compact('catalogue', 'collection'));
     }
 
     public function create() {
@@ -83,9 +84,16 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been updated.')));
     }
 
-    public function process($catalogId) {
+    public function process($collectionId, $catalogId) {
 
         $response = array('success' => false);
+
+        $collection = Collection::find($collectionId);
+
+        if (!$collection) {
+            $response['msg'] = 'Invalid collection.';
+            return json_encode($response);
+        }
 
         $catalogue = Catalogue::find($catalogId);
 
@@ -94,7 +102,7 @@ class ResourcesController extends BaseController
             return json_encode($response);
         }
 
-        $uploadPath = app_path() . '/../resources/';
+        $uploadPath = app_path() . '/../resources/' . $collectionId;
         $fileUpload = Input::file('file');
 
         if ($fileUpload->getError() > 0) {
@@ -138,6 +146,7 @@ class ResourcesController extends BaseController
             $resource = new Resource;
             $resource->filename = $fileName;
             $resource->catalogue_id = $catalogue->id;
+            $resource->collection_id = $collection->id;
             $resource->sync = 1;
             $resource->mime = $fileMime;
 

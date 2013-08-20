@@ -2,8 +2,8 @@
 
 class Catalogue extends BaseModel {
 
-    public function collections() {
-        return $this->belongsToMany('Collection');
+    public function collection() {
+        return $this->belongsTo('Collection');
     }
 
     public function resources() {

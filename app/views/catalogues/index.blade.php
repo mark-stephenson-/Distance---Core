@@ -15,7 +15,6 @@
             <tr>
                 <th>Name</th>
                 <th>Restrictions</th>
-                <th>Collections</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -31,9 +30,6 @@
                     @else
                         No Restrictions
                     @endif
-                </td>
-                <td>
-                    {{ implode('<br />', $catalogue->collections->lists('name')) }}
                 </td>
                 <td width="150">
                     <a href="{{ route('catalogues.edit', array($catalogue->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>

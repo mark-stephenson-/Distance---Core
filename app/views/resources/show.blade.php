@@ -110,7 +110,7 @@
 
         $("#upload_progress").hide();
 
-        loadResourceUploader('{{ route('resources.process', array($catalogue->id)) }}', function() {
+        loadResourceUploader('{{ route('resources.process', array($collection->id, $catalogue->id)) }}', function() {
             document.location.reload(true);
         }, function() {}, [
             @if ($catalogue->restrictions)

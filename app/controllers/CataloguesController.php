@@ -5,16 +5,15 @@ class CataloguesController extends BaseController
     
 
     public function index() {
-        $catalogues = Catalogue::with('collections')->get();
-
+        $catalogues = Catalogue::whereCollectionId(Collection::current()->id)->get();
+        
         return View::make('catalogues.index', compact('catalogues'));
     }
 
     public function create() {
         $catalogue = new Catalogue;
-        $collections = Collection::get();
 
-        return View::make('catalogues.form', compact('catalogue', 'collections'));
+        return View::make('catalogues.form', compact('catalogue'));
     }
 
     public function store() {
@@ -31,21 +30,19 @@ class CataloguesController extends BaseController
         $catalogue = new Catalogue;
 
         $catalogue->name = Input::get('name');
+        $catalogue->collection_id = Collection::current()->id;
         $catalogue->restrictions = array_filter(explode(',', trim(Input::get('restrictions', ''))));
 
         $catalogue->save();
-
-        $catalogue->collections()->sync(Input::get('collections', array());
 
         return Redirect::route('catalogues.index')
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been created.')));
     }
 
     public function edit($catalogueId) {
-        $catalogue = Catalogue::with('collections')->findOrFail($catalogueId);
-        $collections = Collection::get();
+        $catalogue = Catalogue::findOrFail($catalogueId);
 
-        return View::make('catalogues.form', compact('catalogue', 'collections'));
+        return View::make('catalogues.form', compact('catalogue'));
     }
 
     public function update($catalogueId) {
@@ -64,7 +61,6 @@ class CataloguesController extends BaseController
 
         $catalogue->name = Input::get('name');
         $catalogue->restrictions = array_filter(explode(',', trim(Input::get('restrictions', ''))));
-        $catalogue->collections()->sync(Input::get('collections', array());
 
         $catalogue->save();
 

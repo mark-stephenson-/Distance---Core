@@ -34,6 +34,9 @@ class CollectionsController extends BaseController
         $collectionHierarchy = new Hierarchy(array('collection_id' => $collection->id));
         $collectionHierarchy->makeRoot();
 
+        // We'll also make the resources folder
+        mkdir(app_path() . '/../resources/' . $collection->id);
+
         return Redirect::route('collections.index')
                 ->with('successes', new MessageBag(array($collection->name . ' has been created.')));
     }
