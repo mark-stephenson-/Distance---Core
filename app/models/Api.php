@@ -3,6 +3,7 @@
 class Api extends \BaseModel {
 
     protected static $remove = array( 'nodetype', 'owned_by', 'created_by', 'latest_revision', 'published_revision', 'collection_id', 'status');
+    protected static $convertDates = array( 'created_at', 'updated_at', 'published_at', 'retired_at', 'deleted_at');
 
     public static function makeResponse($content, $root_node = null, $status = 200)
     {
@@ -27,13 +28,25 @@ class Api extends \BaseModel {
         }
 
         if ( is_array($content) ) {
-                foreach( Api::$remove as $_u ) {
-                    unset($content[$_u]);
+            foreach( Api::$remove as $_u ) {
+                unset($content[$_u]);
+            }
+
+            foreach( Api::$convertDates as $_u ) {
+                if (isset($content[$_u])) {
+                    $content[$_u] = self::convertDate($content[$_u]);
                 }
+            }
         } else if ( is_object($content) ) {
             foreach( Api::$remove as $_u ) {
-                unset($content->$_u);
-            }
+                    unset($content->$_u);
+            }  
+
+            foreach( Api::$convertDates as $_u ) {
+                if (isset($content->$_u)) {
+                    $content->$_u = self::convertDate($content->$_u);
+                }
+            } 
         }
 
         if ( is_array($content) || is_object($content) ) {
@@ -43,6 +56,22 @@ class Api extends \BaseModel {
         }
 
         return $content;
+    }
+
+    public static function convertDate($date) {
+        /*
+        if ($date instanceof \Carbon\Carbon) {
+            $newDate = $date->format("Y-m-d H:i:s");
+        } else {
+            $newDate = date("Y-m-d H:i:s", strtotime($date));
+        }
+
+        // Not happy doing this, but PHP is refusing to cooperate!
+        $newDate = str_replace(' ', 'T', $newDate) . 'Z';
+
+        return $newDate;
+        */
+        return $date;
     }
 
     protected static function makeJSON($content, $root_node, $status) {
