@@ -222,7 +222,7 @@ class ResourcesController extends BaseController
                 ->withErrors( array('That resource could not be found') );
         }
 
-        $uploadPath = app_path() . '/../resources/';
+        $uploadPath = app_path() . '/../resources/' . $resource->collection_id . '/';
         $fileUpload = Input::file('file');
 
         if ($fileUpload->getError() > 0) {
