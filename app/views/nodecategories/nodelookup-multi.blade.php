@@ -12,6 +12,8 @@
         $db_objects = array();
     }
 
+    // print_r($db_objects);
+
 ?>
 
 {{ Form::hidden('nodetype[' . $column->name . ']', null, array('id' => 'input_' . $column->name)) }}
@@ -19,9 +21,9 @@
 
 <script>
 
-var preload_data = [];
+var {{ $column->name }}_preload_data = [];
 @foreach($db_objects as $obj)
-    preload_data.push({ 'id': {{ $obj->id }}, 'text': "{{ $obj->title }}" });
+    {{ $column->name }}_preload_data.push({ 'id': {{ $obj->id }}, 'text': "{{ $obj->title }}" });
 @endforeach
 
     $(document).ready(function() {
@@ -45,7 +47,7 @@ var preload_data = [];
             }
         });
 
-        $('#input_{{ $column->name }}').select2('data', preload_data);
+        $('#input_{{ $column->name }}').select2('data', {{ $column->name }}_preload_data);
 
     });
 </script>

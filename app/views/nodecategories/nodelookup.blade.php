@@ -14,9 +14,9 @@
 
 <script>
 
-var preload_data = [];
+var {{ $column->name }}_preload_data = [];
 @if ($db_object)
-    preload_data.push({ 'id': {{ $db_object->id }}, 'text': "{{ $db_object->title }}" });
+    {{ $column->name }}_preload_data.push({ 'id': {{ $db_object->id }}, 'text': "{{ $db_object->title }}" });
 @endif
 
     $(document).ready(function() {
@@ -41,7 +41,7 @@ var preload_data = [];
             }
         });
 
-        $('#input_{{ $column->name }}').select2('data', preload_data);
+        $('#input_{{ $column->name }}').select2('data', {{ $column->name }}_preload_data);
 
     });
 </script>
