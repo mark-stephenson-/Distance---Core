@@ -40,9 +40,12 @@ class ResourceController extends \BaseController {
         }
 
         if ( \Input::get('modifiedSince') ) {
-            $catalogues = $catalogues->with( array('resources' => function($query) {
+
+            $carbon = new \Carbon\Carbon(\Input::get('modifiedSince'));
+
+            $catalogues = $catalogues->with( array('resources' => function($query) use($carbon) {
                 $query->withTrashed();
-                $query->where('updated_at', '>', date('Y-m-d H:i:s', \Input::get('modifiedSince')) );
+                $query->where('updated_at', '>', $carbon->toDateTimeString() );
             }));
         }
 
