@@ -59,19 +59,13 @@ class Api extends \BaseModel {
     }
 
     public static function convertDate($date) {
-        /*
         if ($date instanceof \Carbon\Carbon) {
             $newDate = $date->format("Y-m-d H:i:s");
         } else {
-            $newDate = date("Y-m-d H:i:s", strtotime($date));
+            $newDate = date("Y-m-d\TH:i:s\Z", strtotime($date));
         }
 
-        // Not happy doing this, but PHP is refusing to cooperate!
-        $newDate = str_replace(' ', 'T', $newDate) . 'Z';
-
         return $newDate;
-        */
-        return $date;
     }
 
     protected static function makeJSON($content, $root_node, $status) {
