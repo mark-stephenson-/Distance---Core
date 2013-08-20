@@ -8,7 +8,7 @@
     $catalogue = Catalogue::find($column->catalogue);
 ?>
 
-<textarea class="ckeditor" name="nodetype[{{ $column->name }}]" id="input_{{ $column->name }}">{{ Input::old('nodetype.' . $column->name, $value) }}</textarea>
+<textarea class="html-editor" name="nodetype[{{ $column->name }}]" id="input_{{ $column->name }}">{{ Input::old('nodetype.' . $column->name, $value) }}</textarea>
 
 <a href="#{{ $column->name }}-resource_window" data-toggle="modal" style="display: none" data-dest="html" id="input_{{ $column->name }}_resource_link" data-resource="input_{{ $column->name }}" class="resource_fancybox">Choose One</a>
 
@@ -64,6 +64,10 @@
 </div>
 
 <script>
+    
+    var editor = $( '.html-editor' ).ckeditor();
+    editor.ckeditorGet().config.baseHref = "{{ URL::to('file') }}/{{ $collection->id }}/";
+
     $("#{{ $column->name }}-resource_window").on('shown', function() {
         $("#{{ $column->name }}-resource_window a").click( function(e) {
             e.preventDefault();
@@ -71,9 +75,9 @@
             var html = '';
 
             if ( $(this).attr('data-image') == "true") {
-                html = "<img src='/file/" + $(this).attr('data-filename') + "' />";
+                html = "<img src='" + $(this).attr('data-filename') + "' />";
             } else {                
-                html = "<a href='/file/" + $(this).attr('data-filename') + "'>" + $(this).attr('data-filename') + "</a>";
+                html = "<a href='" + $(this).attr('data-filename') + "'>" + $(this).attr('data-filename') + "</a>";
             }
 
             CKEDITOR.instances['input_{{ $column->name }}'].insertHtml(html);
