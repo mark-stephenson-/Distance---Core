@@ -1,97 +1,97 @@
 <?php
 
-return [
+return array(
     
-    [
+    array(
         'title'     => 'Hierarchy',
         'route'     => 'nodes.hierarchy',
-        'params'    => ['[collection-id]'],
+        'params'    => array('[collection-id]'),
         'icon'      => 'sitemap',
         'access'    => null,
-    ],
-    [
+    ),
+    array(
         'title'     => 'Node List',
         'route'     => 'nodes.list',
-        'params'    => ['[collection-id]'],
+        'params'    => array('[collection-id]'),
         'icon'      => 'th-list',
         'access'    => null,
-    ],
-    [
+    ),
+    array(
         'title'     => 'Collections',
         'route'     => 'collections.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'th-large',
         'access'    => null,
-    ],
-    [
+    ),
+    array(
         'title'     => 'Groups',
         'route'     => 'groups.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'group',
         'access'    => 'cms.groups.*',
-    ],
-    [
+    ),
+    array(
         'title'     => 'Users',
         'route'     => 'users.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'user',
         'access'    => 'cms.users.*',
-    ],
-    [
+    ),
+    array(
         'title'     => 'Node Types',
         'route'     => 'node-types.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'briefcase',
         'access'    => 'superuser',
-    ],
-    [
+    ),
+    array(
         'title'     => 'Apps',
         'route'     => 'apps.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'lock',
         'access'    => 'cms.apps.*',
-    ],
-    [
+    ),
+    array(
         'title'     => 'App Distribution',
         'route'     => 'app-distribution.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'apple',
         'access'    => null,
-    ],
-    [
+    ),
+    array(
         'title'     => 'Catalogues',
         'route'     => 'catalogues.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'folder-open',
         'access'    => null,
-    ],
-    [
+    ),
+    array(
         'title'     => 'Resources',
         'route'     => 'resources.index',
-        'params'    => [],
+        'params'    => array(),
         'icon'      => 'file',
         'access'    => null,
-    ],
-    [
+    ),
+    array(
         'title'     => 'Templates',
         'route'     => 'nodes.type-list',
-        'params'    => ['[collection-id]', 'template'],
+        'params'    => array('[collection-id]', 'template'),
         'icon'      => 'code',
         'access'    => null,
-    ],
+    ),
 
     /*
         Custom Node Type Navigation Item
 
         You only need to change the title, second param, icon and optionally access
      */
-    // [
+    // array(
     //     'title'     => 'Pages',
     //     'route'     => 'nodes.type-list',
-    //     'params'    => ['[collection-id]', 'content-page'],
+    //     'params'    => array('[collection-id]', 'content-page'),
     //     'icon'      => 'file',
     //     'access'    => null,
-    // ],
+    // ),
 
 
-];
+);

@@ -32,7 +32,7 @@ return array(
         'password-regex' => '/.*(?=.*\d)(?=.*[a-zA-Z]).*/',
         'password-regex-failure' => 'The password must contain at least one letter and one number',
 
-        'default-catalogue-restrictions' => ['pdf', 'doc', 'docx', 'jpeg', 'jpg', 'png', 'gif'],
+        'default-catalogue-restrictions' => array('pdf', 'doc', 'docx', 'jpeg', 'jpg', 'png', 'gif'),
     ),
 
 );
