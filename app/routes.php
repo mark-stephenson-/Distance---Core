@@ -12,7 +12,7 @@
 */
 
 Route::any('/', array('as' => 'root', function() {
-    return Redirect::route('collections.index');
+    return Redirect::route('apps');
 }));
 
 Route::group( array('prefix' => 'api'), function() {
@@ -57,58 +57,73 @@ App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $except
     }
 });
 
-Route::group(array('before' => array('auth', 'checkPermissions')), function() {
+Route::group(array('before' => array('auth')), function() {
 
     Route::get('me', array('as' => 'me', 'uses' => 'MeController@index'));
     Route::post('me', array('as' => 'me.update', 'uses' => 'MeController@update'));
 
-    // Nodes
-    Route::get('collections/{collectionId}/hierarchy', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
-    Route::get('collections/{collectionId}/list', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
-    Route::get('collections/{collectionId}/type-list/{nodeTypeName}', array('as' => 'nodes.type-list', 'uses' => 'NodesController@nodeTypeList'));
-    Route::any('nodes/update-order/{id?}', 'NodesController@updateOrder');
-    Route::get('nodes/node-lookup', array('as' => 'nodes.lookup', 'uses' => 'NodesController@lookup'));
-    Route::get('nodes/link/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.link', 'uses' => 'NodesController@link'));
-    Route::get('nodes/unlink/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.unlink', 'uses' => 'NodesController@unlink'));
+    Route::group(array('before' => array('auth', 'checkPermissions')), function() {
 
-    Route::any('collections/{collectionId}/nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
-    Route::any('collections/{collectionId}/nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
 
-    // CRUD
-    Route::any('collections/{collectionId}/nodes/view/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.view', 'uses' => 'NodesController@view'));
+        Route::resource('apps', 'AppsController');
 
-    Route::get('collections/{collectionId}/nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.create', 'uses' => 'NodesController@create'));
-    Route::post('collections/{collectionId}/nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.store', 'uses' => 'NodesController@store'));
-    
-    Route::get('collections/{collectionId}/nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.edit', 'uses' => 'NodesController@edit'));
-    Route::post('collections/{collectionId}/nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.update', 'uses' => 'NodesController@update'));
+        Route::group(array('prefix' => 'apps'), function() {
+            Route::get('{appId}/collections', array('as' => 'collections.index', 'uses' => 'CollectionsController@index'));
+            Route::get('{appId}/collections/create', array('as' => 'collections.create', 'uses' => 'CollectionsController@create'));
+            Route::post('{appId}/collections', array('as' => 'collections.store', 'uses' => 'CollectionsController@store'));
+            Route::get('{appId}/collections/{id}/edit', array('as' => 'collections.edit', 'uses' => 'CollectionsController@edit'));
+            Route::put('{appId}/collections/{id}', array('as' => 'collections.update', 'uses' => 'CollectionsController@update'));
 
-    // Restful Resource Addons
-    Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
-    Route::post('resources/process/{collectionId}/{catalogId}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
-
-    Route::resource('collections', 'CollectionsController');
-    Route::resource('users', 'UsersController');
-    Route::get('users/{id}/add-group/{group_id}', array('as' => 'users.add-group', 'uses' => 'UsersController@doAddGroup'));
-    Route::get('users/{id}/remove-group/{group_id}', array('as' => 'users.remove-group', 'uses' => 'UsersController@doRemoveGroup'));
-    Route::resource('groups', 'GroupsController');
-    Route::resource('apps', 'AppsController');
-    Route::resource('catalogues', 'CataloguesController');
-    Route::get('catalogues/{id}/delete', array('as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy'));
-    Route::resource('resources', 'ResourcesController');
-    Route::get('resources/{id}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
-    Route::post('resources/{id}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
-    Route::resource('app-distribution', 'OtaController');
-    Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
-
-    Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
-    Route::resource('node-types', 'NodeTypesController');
-
-    Route::group(array('prefix' => 'ajax'), function() {
-        Route::group(array('prefix' => 'resources'), function() {
-            Route::get('toggle_sync', 'Ajax\ResourcesController@toggleSync');
+            Route::group(array('prefix' => '{appId}/collections/{collectionId}'), function() {
+                Route::get('list', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
+                Route::get('hierarchy', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
+            });
         });
-    });
 
-    Route::get('courses', array('as' => 'cirrus.courses', 'uses' => 'CoursesController@index'));
+        // Nodes
+        Route::get('collections/{collectionId}/type-list/{nodeTypeName}', array('as' => 'nodes.type-list', 'uses' => 'NodesController@nodeTypeList'));
+        Route::any('nodes/update-order/{id?}', 'NodesController@updateOrder');
+        Route::get('nodes/node-lookup', array('as' => 'nodes.lookup', 'uses' => 'NodesController@lookup'));
+        Route::get('nodes/link/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.link', 'uses' => 'NodesController@link'));
+        Route::get('nodes/unlink/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.unlink', 'uses' => 'NodesController@unlink'));
+
+        Route::any('collections/{collectionId}/nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
+        Route::any('collections/{collectionId}/nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
+
+        // CRUD
+        Route::any('collections/{collectionId}/nodes/view/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.view', 'uses' => 'NodesController@view'));
+
+        Route::get('collections/{collectionId}/nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.create', 'uses' => 'NodesController@create'));
+        Route::post('collections/{collectionId}/nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.store', 'uses' => 'NodesController@store'));
+        
+        Route::get('collections/{collectionId}/nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.edit', 'uses' => 'NodesController@edit'));
+        Route::post('collections/{collectionId}/nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.update', 'uses' => 'NodesController@update'));
+
+        // Restful Resource Addons
+        Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
+        Route::post('resources/process/{collectionId}/{catalogId}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
+
+        Route::resource('users', 'UsersController');
+        Route::get('users/{id}/add-group/{group_id}', array('as' => 'users.add-group', 'uses' => 'UsersController@doAddGroup'));
+        Route::get('users/{id}/remove-group/{group_id}', array('as' => 'users.remove-group', 'uses' => 'UsersController@doRemoveGroup'));
+        Route::resource('groups', 'GroupsController');
+        Route::resource('catalogues', 'CataloguesController');
+        Route::get('catalogues/{id}/delete', array('as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy'));
+        Route::resource('resources', 'ResourcesController');
+        Route::get('resources/{id}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
+        Route::post('resources/{id}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
+        Route::resource('app-distribution', 'OtaController');
+        Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
+
+        Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
+        Route::resource('node-types', 'NodeTypesController');
+
+        Route::group(array('prefix' => 'ajax'), function() {
+            Route::group(array('prefix' => 'resources'), function() {
+                Route::get('toggle_sync', 'Ajax\ResourcesController@toggleSync');
+            });
+        });
+
+        Route::get('courses', array('as' => 'cirrus.courses', 'uses' => 'CoursesController@index'));
+    });
 });

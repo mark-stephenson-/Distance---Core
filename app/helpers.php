@@ -1,5 +1,10 @@
 <?php
 
+function switchAppUrl($appId)
+{
+    return '/apps/' . $appId . '/' . Request::segment(3);;
+}
+
 function switchCollectionUrl($collectionId)
 {
     $url = '/collections/' . $collectionId . '/';
@@ -44,9 +49,9 @@ function replaceNavigationParams($params) {
 function formModel($model, $routeName, $atts = array()) {
 
     if ($model->exists) {
-        $customAttributes = array('route' => array($routeName . '.update', $model->id), 'method' => 'PUT');
+        $customAttributes = array('route' => array($routeName . '.update', Request::segment(2), $model->id), 'method' => 'PUT');
     } else {
-        $customAttributes = array('route' => array($routeName . '.store'));
+        $customAttributes = array('route' => array($routeName . '.store', Request::segment(2)));
     }
 
     $atts['class'] = 'form-horizontal';

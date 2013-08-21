@@ -109,7 +109,7 @@
 @section('body')
 
     <div class="btn-group pull-right">
-        <a href="{{ route('nodes.list', array($collection->id)) }}" class="btn"><i class="icon-list"></i> Node List</a>
+        <a href="{{ route('nodes.list', array($collection->application_id, $collection->id)) }}" class="btn"><i class="icon-list"></i> Node List</a>
 
         @if ( count(NodeType::forSelect($collection, false, 'create')) )
             <a href="#" class="btn" id="openRootNodeModal"><i class="icon-plus"></i> New Root Node</a>
