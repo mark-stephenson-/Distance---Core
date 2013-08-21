@@ -8,7 +8,7 @@ function switchCollectionUrl($collectionId)
         return $url . 'type-list/' . Request::segment(4);
     }
 
-    return  $url . (Request::segment(3) ?: Config::get('code.prefrences.preferred-node-view'));
+    return  $url . (Request::segment(3) ?: Config::get('core.prefrences.preferred-node-view'));
 }
 
 function convertSmartQuotes($string) 
