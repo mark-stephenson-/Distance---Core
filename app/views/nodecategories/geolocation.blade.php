@@ -9,7 +9,7 @@
 ?>
 
 <div id="{{ $column->name }}" class="input-append span8" style="margin-left: 0px">
-    {{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span8 validate-geolocation', 'id' => $id . '-latlng']) }}
+    {{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), array('class' => 'span8 validate-geolocation', 'id' => $id . '-latlng')) }}
 
     <a class="btn add-on" href="#{{ $id }}-location-picker" data-toggle="modal">
         <i class="icon-map-marker"></i>

@@ -32,7 +32,7 @@
             $date = date('d/m/Y h:i', strtotime($value));
         }
     ?>
-    {{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $date), ['class' => 'span8 validate-date datepicker', 'data-format' => 'dd/MM/yyyy hh:mm']) }}
+    {{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $date), array('class' => 'span8 validate-date datepicker', 'data-format' => 'dd/MM/yyyy hh:mm')) }}
     <a class="btn add-on">
         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
     </a>

@@ -17,7 +17,7 @@
   @endforeach
 @endif
 
-{{ Form::textarea('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span10', 'id' => 'code-' . $identifier]) }}
+{{ Form::textarea('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), array('class' => 'span10', 'id' => 'code-' . $identifier)) }}
 
 <script type="text/javascript">
         CodeMirror.fromTextArea(document.getElementById("code-{{ $identifier }}"), {

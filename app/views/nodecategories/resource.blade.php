@@ -10,7 +10,7 @@
 ?>
 
 <div class="resource-{{ $column->name }}-container resource-view">
-    {{ Form::hidden('nodetype['. $column->name .']', @$data->{$column->name}, ['id' => 'nodetype-'. $column->name]) }}
+    {{ Form::hidden('nodetype['. $column->name .']', @$data->{$column->name}, array('id' => 'nodetype-'. $column->name)) }}
 
     @if ( $resource )
         <div class="resource">

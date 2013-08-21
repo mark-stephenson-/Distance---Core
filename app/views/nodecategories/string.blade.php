@@ -6,7 +6,7 @@
     }
 ?>
 
-{{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), ['class' => 'span8']) }}
+{{ Form::text('nodetype['. $column->name .']', Input::old('nodetype.' . $column->name, $value), array('class' => 'span8')) }}
 
 @if ($column->description)
     <span class="help-block">{{ $column->description }}</span>
