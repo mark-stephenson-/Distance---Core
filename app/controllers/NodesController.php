@@ -3,7 +3,7 @@
 class NodesController extends BaseController
 {
 
-    public function hierarchy($collectionId = 0) {
+    public function hierarchy($appId, $collectionId = 0) {
 
         $collection = Collection::find($collectionId);
 
@@ -23,8 +23,7 @@ class NodesController extends BaseController
         return View::make('nodes.hierarchy', compact('collection', 'branches', 'nodeTypes'));
     }
 
-    public function nodeList($collectionId = 0) {
-
+    public function nodeList($appId, $collectionId = 0) {
         if ( Input::get('filter') or Input::get('sort') ) {
             $collection = Collection::with(array('nodes' => function($query) {
                 if ( Input::get('filter') ) {
@@ -54,7 +53,7 @@ class NodesController extends BaseController
 
     }
 
-    public function nodeTypeList($collectionId = 0, $nodeTypeName = '')
+    public function nodeTypeList($appId, $collectionId = 0, $nodeTypeName = '')
     {
         $collection = Collection::find($collectionId);
         $type = NodeType::where('name', '=', $nodeTypeName)->firstOrFail();
@@ -72,7 +71,7 @@ class NodesController extends BaseController
         return View::make('nodes.list', compact('collection', 'nodes'));
     }
 
-    public function view($collectionId, $node_id, $revision_id = false, $branch_id = false)
+    public function view($appId, $collectionId, $node_id, $revision_id = false, $branch_id = false)
     {
         $node = Node::find($node_id);
 
@@ -115,7 +114,7 @@ class NodesController extends BaseController
         ));
     }
 
-    public function create($collectionId, $nodeTypeId, $parentId = false) {
+    public function create($appId, $collectionId, $nodeTypeId, $parentId = false) {
         
         $nodeType = NodeType::find($nodeTypeId);
         $node = new Node;
@@ -128,7 +127,7 @@ class NodesController extends BaseController
         return View::make('nodes.form', compact('collection', 'nodeType', 'node', 'parentId'));
     }
 
-    public function store($collectionId, $nodeTypeId, $parentId = false) {
+    public function store($appId, $collectionId, $nodeTypeId, $parentId = false) {
         
         $nodeType = NodeType::find($nodeTypeId);
         $node = new Node;
@@ -215,7 +214,7 @@ class NodesController extends BaseController
 
     }
 
-    public function edit($collectionId, $nodeId, $revisionId, $branchId = false)
+    public function edit($appId, $collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
 
@@ -239,7 +238,7 @@ class NodesController extends BaseController
         ));
     }
 
-    public function update($collectionId, $nodeId, $revisionId, $branchId = false)
+    public function update($appId, $collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
         $bag = new \MessageBag();
@@ -347,7 +346,7 @@ class NodesController extends BaseController
         }
     }
 
-    public function link($collectionId, $nodeId, $parentId = 0)
+    public function link($appId, $collectionId, $nodeId, $parentId = 0)
     {
         // We can just add the link and redirect back...
         $branch = new Hierarchy;
@@ -368,7 +367,7 @@ class NodesController extends BaseController
             ->with('successes', new \MessageBag(array('The node has been linked.')));
     }
 
-    public function unlink($collectionId, $branchId)
+    public function unlink($appId, $collectionId, $branchId)
     {
         $branch = Hierarchy::find($branchId);
 
@@ -382,7 +381,7 @@ class NodesController extends BaseController
         }
     }
 
-    public function markAsPublished($collectionId, $nodeId, $revisionId, $branchId = false)
+    public function markAsPublished($appId, $collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
 
@@ -401,7 +400,7 @@ class NodesController extends BaseController
 
     }
 
-    public function markAsRetired($collectionId, $nodeId, $revisionId, $branchId = false)
+    public function markAsRetired($appId, $collectionId, $nodeId, $revisionId, $branchId = false)
     {
         $node = Node::find($nodeId);
 
@@ -449,7 +448,7 @@ class NodesController extends BaseController
         return json_encode(array('results' => $output));
     }
 
-    public function updateOrder($collectionId) {
+    public function updateOrder($appId, $collectionId) {
         $order = json_decode(urldecode(Input::get('order')));
 
         // We now have a list of all the nodes currently added to this collection ($collection->nodes) 

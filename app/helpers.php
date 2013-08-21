@@ -5,19 +5,19 @@ function switchAppUrl($appId)
     return '/apps/' . $appId . '/' . Request::segment(3);;
 }
 
-function switchCollectionUrl($collectionId)
+function switchCollectionUrl($appId, $collectionId)
 {
-    $url = '/collections/' . $collectionId . '/';
+    $url = '/apps/' . $appId . '/collections/' . $collectionId . '/';
 
-    if (Request::segment(3) == 'type-list') {
-        return $url . 'type-list/' . Request::segment(4);
+    if (Request::segment(5) == 'type-list') {
+        return $url . 'type-list/' . Request::segment(6);
     }
 
-    if (Request::segment(3) == 'nodes') {
+    if (Request::segment(5) == 'nodes') {
         return $url . Config::get('core.prefrences.preferred-node-view');
     }
 
-    return  $url . (Request::segment(3) ?: Config::get('core.prefrences.preferred-node-view'));
+    return  $url . (Request::segment(5) ?: Config::get('core.prefrences.preferred-node-view'));
 }
 
 function convertSmartQuotes($string) 
