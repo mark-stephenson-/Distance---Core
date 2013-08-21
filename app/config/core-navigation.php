@@ -63,14 +63,14 @@ return array(
         'route'     => 'catalogues.index',
         'params'    => array(),
         'icon'      => 'folder-open',
-        'access'    => null,
+        'access'    => 'cms.catalogues.*',
     ),
     array(
         'title'     => 'Resources',
         'route'     => 'resources.index',
         'params'    => array(),
         'icon'      => 'file',
-        'access'    => null,
+        'access'    => 'cms.resources.*',
     ),
     array(
         'title'     => 'Templates',

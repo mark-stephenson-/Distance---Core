@@ -98,6 +98,7 @@ Route::filter('checkPermissions', function($request)
         '\\' => '.',
         '@' => '.',
 
+        'show' => 'read',
         'edit' => 'update',
         'store' => 'create',
     );
@@ -105,6 +106,10 @@ Route::filter('checkPermissions', function($request)
     $property = 'cms.' . str_replace(array_keys($replacements), array_values($replacements), strtolower($request->getAction()));
 
     if (starts_with($property, 'cms.nodes')) {
+        return;
+    }
+
+    if (starts_with($property, 'cms.resources')) {
         return;
     }
 

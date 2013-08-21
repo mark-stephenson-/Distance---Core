@@ -86,6 +86,26 @@ return array(
                 ),
             ),
 
+            'Resources' => array(
+                'value' => 'cms.resources.*',
+                'children' => array(
+                    
+                    'Create' => array(
+                        'value' => 'cms.resources.create'
+                    ),
+                    'Read' => array(
+                        'value' => 'cms.resources.read'
+                    ),
+                    'Update' => array(
+                        'value' => 'cms.resources.update'
+                    ),
+                    'Delete' => array(
+                        'value' => 'cms.resources.delete'
+                    ),
+
+                ),
+            ),
+
         ),
     ),
 
