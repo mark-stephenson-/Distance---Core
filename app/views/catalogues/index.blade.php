@@ -7,7 +7,7 @@
 @section('body')
 
     <p class="pull-right">
-        <a href="{{ route('catalogues.create') }}" class="btn"><i class="icon-plus"></i> New Catalogue</a>
+        <a href="{{ route('catalogues.create', array($appId, $collectionId)) }}" class="btn"><i class="icon-plus"></i> New Catalogue</a>
     </p>
 
     <table class="table table-striped">
@@ -32,7 +32,7 @@
                     @endif
                 </td>
                 <td width="150">
-                    <a href="{{ route('catalogues.edit', array($catalogue->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                    <a href="{{ route('catalogues.edit', array($appId, $collectionId, $catalogue->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     <a href="#deleteModal" class="btn btn-small deleteModal" data-id="{{ $catalogue->id }}" data-name="{{ $catalogue->name }}"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
@@ -59,7 +59,7 @@
             $(".deleteModal").click( function(e) {
                 var data_id = $(this).attr('data-id');
                 var data_name = $(this).attr('data-name');
-                var url = '{{ route('catalogues.destroy', 'id') }}'
+                var url = '{{ route('catalogues.destroy', array($appId, $collectionId, 5)) }}'
 
                 $("#deleteModal").find('h3').html( "Delete collection <small>" + data_name + "</small>");
                 $("#deleteModal").find('.yes').attr('href', url.replace('id', data_id));
