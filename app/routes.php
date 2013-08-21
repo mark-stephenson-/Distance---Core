@@ -59,8 +59,13 @@ App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $except
 
 Route::group(array('before' => array('auth')), function() {
 
+    /*
+        Global - and just checking for login
+     */
     Route::get('me', array('as' => 'me', 'uses' => 'MeController@index'));
     Route::post('me', array('as' => 'me.update', 'uses' => 'MeController@update'));
+
+    Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
 
     Route::group(array('before' => array('auth', 'checkPermissions')), function() {
 
@@ -74,12 +79,19 @@ Route::group(array('before' => array('auth')), function() {
             Route::get('{appId}/collections/{id}/edit', array('as' => 'collections.edit', 'uses' => 'CollectionsController@edit'));
             Route::put('{appId}/collections/{id}', array('as' => 'collections.update', 'uses' => 'CollectionsController@update'));
 
+            /*
+                Over The Air Distribution
+             */
+            Route::resource('app-distribution', 'OtaController');
+            Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
+
             Route::group(array('prefix' => '{appId}/collections/{collectionId}'), function() {
                 /*
                     Nodes View Types
                  */
                 Route::get('list', array('as' => 'nodes.list', 'uses' => 'NodesController@nodeList'));
                 Route::get('hierarchy', array('as' => 'nodes.hierarchy', 'uses' => 'NodesController@hierarchy'));
+                Route::get('type-list/{nodeTypeName}', array('as' => 'nodes.type-list', 'uses' => 'NodesController@nodeTypeList'));
 
                 /*
                     Nodes CRUD
@@ -97,6 +109,14 @@ Route::group(array('before' => array('auth')), function() {
                  */
                 Route::any('nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
                 Route::any('nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
+
+                /*
+                    Hierarchy Actions
+                 */
+                Route::any('nodes/update-order/{id?}', 'NodesController@updateOrder');
+                Route::get('nodes/node-lookup', array('as' => 'nodes.lookup', 'uses' => 'NodesController@lookup'));
+                Route::get('nodes/link/{nodeId?}/{parentId?}', array('as' => 'nodes.link', 'uses' => 'NodesController@link'));
+                Route::get('nodes/unlink/{nodeId?}/{parentId?}', array('as' => 'nodes.unlink', 'uses' => 'NodesController@unlink'));
 
                 /*
                     Catalogues & Resources
@@ -128,21 +148,14 @@ Route::group(array('before' => array('auth')), function() {
         Route::get('users/{id}/add-group/{group_id}', array('as' => 'users.add-group', 'uses' => 'UsersController@doAddGroup'));
         Route::get('users/{id}/remove-group/{group_id}', array('as' => 'users.remove-group', 'uses' => 'UsersController@doRemoveGroup'));
 
-        // Nodes
-        Route::get('collections/{collectionId}/type-list/{nodeTypeName}', array('as' => 'nodes.type-list', 'uses' => 'NodesController@nodeTypeList'));
-        Route::any('nodes/update-order/{id?}', 'NodesController@updateOrder');
-        Route::get('nodes/node-lookup', array('as' => 'nodes.lookup', 'uses' => 'NodesController@lookup'));
-        Route::get('nodes/link/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.link', 'uses' => 'NodesController@link'));
-        Route::get('nodes/unlink/{collectionId?}/{nodeId?}/{parentId?}', array('as' => 'nodes.unlink', 'uses' => 'NodesController@unlink'));
-
-        // Restful Resource Addons
-        Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
-
-        
+        /*
+            Groups
+         */
         Route::resource('groups', 'GroupsController');
-        Route::resource('app-distribution', 'OtaController');
-        Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 
+        /*
+            Node Types
+         */
         Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
         Route::resource('node-types', 'NodeTypesController');
 
