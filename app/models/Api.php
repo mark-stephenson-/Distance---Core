@@ -7,7 +7,9 @@ class Api extends \BaseModel {
 
     public static function makeResponse($content, $root_node = null, $status = 200)
     {
-        $contentType = Request::header('Accept');
+        // We want everything before the ;
+        $contentTypeParts = explode(';', Request::header('Accept'));
+        $contentType = $contentTypeParts[0];
 
         $content = Api::cleanContent($content);
 
