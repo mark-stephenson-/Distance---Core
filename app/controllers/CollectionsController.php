@@ -2,21 +2,28 @@
 
 class CollectionsController extends BaseController
 {
-    public function index()
+    public function __construct()
     {
-        $collections = Collection::allWithPermission();
-
-        return View::make('collections.index', compact('collections'));
+        parent::__construct();
     }
 
-    public function create()
+    public function index($appId)
+    {
+        $app = Application::find($appId);
+        $collections = $app->collectionsWithPermission();
+
+        return View::make('collections.index', compact('collections', 'appId'));
+    }
+
+    public function create($appId)
     {
         $collection = new Collection;
+        $collection->app_id = $appId;
 
         return View::make('collections.form', compact('collection'));
     }
 
-    public function store()
+    public function store($appId)
     {
         // Let's run the validator
         $validator = new Core\Validators\Collection;
@@ -29,6 +36,7 @@ class CollectionsController extends BaseController
         }
 
         $collection = new Collection(Input::all());
+        $collection->application_id = $appId;
         $collection->save();
 
         $collectionHierarchy = new Hierarchy(array('collection_id' => $collection->id));
@@ -37,11 +45,11 @@ class CollectionsController extends BaseController
         // We'll also make the resources folder
         mkdir(app_path() . '/../resources/' . $collection->id);
 
-        return Redirect::route('collections.index')
+        return Redirect::route('collections.index', $appId)
                 ->with('successes', new MessageBag(array($collection->name . ' has been created.')));
     }
 
-    public function edit($collectionId)
+    public function edit($appId, $collectionId)
     {
         $collection = Collection::find($collectionId);
 
@@ -53,7 +61,7 @@ class CollectionsController extends BaseController
         return View::make('collections.form', compact('collection'));
     }
 
-    public function update($collectionId)
+    public function update($appId, $collectionId)
     {
         $collection = Collection::find($collectionId);
 
@@ -75,7 +83,7 @@ class CollectionsController extends BaseController
         $collection->fill(Input::all());
         $collection->save();
 
-        return Redirect::route('collections.index')
+        return Redirect::route('collections.index', $appId)
                 ->with('successes', new MessageBag(array($collection->name . ' has been updated.')));
     }
 }

@@ -8,7 +8,7 @@
 
     <p class="pull-right">
         @if (Sentry::getUser()->hasAccess('cms.collections.create'))
-            <a href="{{ route('collections.create') }}" class="btn"><i class="icon-plus"></i> New Collection</a>
+            <a href="{{ route('collections.create', array($appId)) }}" class="btn"><i class="icon-plus"></i> New Collection</a>
         @endif
     </p>
 
@@ -33,12 +33,12 @@
                     </td>
                     <td width="330">
                         @if (Config::get('core.features.hierarchy'))
-                            <a href="{{ route('nodes.hierarchy', array($collection->id)) }}" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
+                            <a href="{{ route('nodes.hierarchy', array($collection->application_id, $collection->id)) }}" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
                         @endif
-                        <a href="{{ route("nodes.list", array($collection->id)) }}" class="btn btn-small"><i class="icon-list"></i> Node List</a>
+                        <a href="{{ route("nodes.list", array($collection->application_id, $collection->id)) }}" class="btn btn-small"><i class="icon-list"></i> Node List</a>
 
                         @if (Sentry::getUser()->hasAccess('cms.collections.edit'))
-                            <a href="{{ route('collections.edit', array($collection->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                            <a href="{{ route('collections.edit', array($collection->application_id, $collection->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                         @endif
 
                         @if (Sentry::getUser()->hasAccess('cms.collections.delete'))

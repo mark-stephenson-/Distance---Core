@@ -15,7 +15,7 @@
             <tr>
                 <th>Name</th>
                 <th>API Key</th>
-                <th>Collection</th>
+                <th>Collections</th>
                 <th>Actions</th>
             </tr>
         </thead>

@@ -10,9 +10,8 @@
 
         <link rel="stylesheet" type="text/css" href="/css/app.min.css">
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="/js/jquery-1.9.1.js"></script>
         <script> CKEDITOR_BASEPATH = '{{ URL::to('') }}/js/ckeditor/'; </script>
-        <script src="/js/app.min.js"></script>
     </head>
     <body>
         <div class="gradient"></div>
@@ -24,7 +23,7 @@
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
                             @if (Sentry::getUser()->hasAccess($item['access']))
-                                <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
+                                {{--<li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>--}}
                             @endif
                         @endforeach
                     </ul>
@@ -49,8 +48,22 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    @foreach(Collection::all() as $collection)
+                                    @foreach(Application::current()->collectionsWithPermission() as $collection)
                                         <li><a href="{{ switchCollectionUrl($collection->id) }}">{{ $collection->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        @if ( count(Application::all()) )
+                            <div class="btn-group change-app">
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                    {{ Application::current()->name }}
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    @foreach(Application::all() as $app)
+                                        <li><a href="{{ switchAppUrl($app->id) }}">{{ $app->name }}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -73,6 +86,8 @@
     </div>
 
     @yield('js')
+
+    <script src="/js/app.min.js"></script>
     
     </body>
 </html>

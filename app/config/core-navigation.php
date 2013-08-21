@@ -3,6 +3,13 @@
 return array(
     
     array(
+        'title'     => 'Apps',
+        'route'     => 'apps.index',
+        'params'    => array(),
+        'icon'      => 'lock',
+        'access'    => 'cms.apps.*',
+    ),
+    array(
         'title'     => 'Hierarchy',
         'route'     => 'nodes.hierarchy',
         'params'    => array('[collection-id]'),
@@ -43,13 +50,6 @@ return array(
         'params'    => array(),
         'icon'      => 'briefcase',
         'access'    => 'superuser',
-    ),
-    array(
-        'title'     => 'Apps',
-        'route'     => 'apps.index',
-        'params'    => array(),
-        'icon'      => 'lock',
-        'access'    => 'cms.apps.*',
     ),
     array(
         'title'     => 'App Distribution',

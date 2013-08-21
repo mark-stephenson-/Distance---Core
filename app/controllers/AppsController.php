@@ -2,6 +2,10 @@
 
 class AppsController extends BaseController
 {
+
+    public function show($appId) {
+        return Redirect::route('collections.index', array($appId));
+    }
     
     public function index() {
         $apps = Application::with('collections')->get();
