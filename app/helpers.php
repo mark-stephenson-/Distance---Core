@@ -2,7 +2,11 @@
 
 function switchAppUrl($appId)
 {
-    return '/apps/' . $appId . '/' . Request::segment(3);;
+    if (Request::segment(1) !== 'apps') {
+        return '/apps/' . $appId;
+    }
+    
+    return '/apps/' . $appId . '/' . Request::segment(3);
 }
 
 function switchCollectionUrl($appId, $collectionId)
@@ -46,12 +50,22 @@ function replaceNavigationParams($params) {
     return $params;
 }
 
-function formModel($model, $routeName, $atts = array()) {
+function formModel($model, $routeName, $atts = array(), $withApp = true) {
 
     if ($model->exists) {
-        $customAttributes = array('route' => array($routeName . '.update', Request::segment(2), $model->id), 'method' => 'PUT');
+        $customAttributes = array('route' => array($routeName . '.update'), 'method' => 'PUT');
+
+        if ($withApp) {
+            $customAttributes['route'][] = Request::segment(2);
+        }
+
+        $customAttributes['route'][] = $model->id;
     } else {
-        $customAttributes = array('route' => array($routeName . '.store', Request::segment(2)));
+        $customAttributes = array('route' => array($routeName . '.store'));
+
+        if ($withApp) {
+            $customAttributes['route'][] = Request::segment(2);
+        }
     }
 
     $atts['class'] = 'form-horizontal';

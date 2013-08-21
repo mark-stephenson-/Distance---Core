@@ -12,6 +12,7 @@
 
         <script src="/js/jquery-1.9.1.js"></script>
         <script> CKEDITOR_BASEPATH = '{{ URL::to('') }}/js/ckeditor/'; </script>
+        <script src="/js/app.min.js"></script>
     </head>
     <body>
         <div class="gradient"></div>
@@ -86,8 +87,6 @@
     </div>
 
     @yield('js')
-
-    <script src="/js/app.min.js"></script>
     
     </body>
 </html>

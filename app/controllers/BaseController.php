@@ -4,7 +4,7 @@ class BaseController extends Controller {
 
     public function __construct() {
         $appId = Request::segment(2);
-        if ($appId) {
+        if (is_numeric($appId) and Request::segment(1) == 'apps') {
             Session::put('current-app', Application::find($appId));
         }
     }

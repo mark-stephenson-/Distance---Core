@@ -7,7 +7,7 @@ class Permission{
         return Config::get('permissions');
     }
 
-    public static function tree($existing, $collections = null) {
+    public static function tree($existing, $apps = null) {
         // We only go 3 levels deep
         $html = '<ul class="permissions">';
 
@@ -45,57 +45,65 @@ class Permission{
             $html .= "</li>";
         }
 
-        $html .= "<li><h3>Collections</h3>";
+        $html .= "<li><h3>Apps</h3>";
 
-        if ($collections) {
+        if ($apps) {
             
             $html .= "<ul>";
 
-            foreach($collections as $collection) {
+            foreach($apps as $app) {
 
-                $html .= "<li><h4>" . $collection->name . "</h4><ul>";
+                $html .= "<li><h4>" . $app->name . "</h4><ul>";
 
-                    $html .= "<li><h5>Collection Permissions</h5></li>";
+                foreach($app->collections as $collection) {
 
-                    $html .= "<li><label class='checkbox inline'>" . 
-                                            Form::checkbox('permissions[cms.collections.' . $collection->id . '.hierarchy-management]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.hierarchy-management'))
-                                         . "Hierarchy Management</label></li>";
+                    $html .= "<li><h5>" . $collection->name . "</h5><ul>";
 
-                    foreach($collection->nodetypes as $nodetype) {
+                        $html .= "<li><h6>Collection Permissions</h6></li>";
 
-                        $html .= "<li><h5>" . $nodetype->label . "</h5></li>";
+                        $html .= "<li><label class='checkbox inline'>" . 
+                                                Form::checkbox('permissions[cms.apps.' . $app->id . '.collections.' . $collection->id . '.hierarchy-management]', 1, $existing->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.hierarchy-management'))
+                                             . "Hierarchy Management</label></li>";
 
-                        // CRUD permissions
-                        $html .= "<li style='display: block; margin-bottom: 10px;'>
-                            <label class='checkbox inline'>
-                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.create]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.create')) . " Create
-                            </label>
+                        foreach($collection->nodetypes as $nodetype) {
 
-                            <label class='checkbox inline'>
-                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.read]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.read')) . " Read
-                            </label>
+                            $html .= "<li><h6>" . $nodetype->label . "</h6></li>";
 
-                            <label class='checkbox inline'>
-                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.update]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.update')) . " Update
-                            </label>
+                            // CRUD permissions
+                            $html .= "<li style='display: block; margin-bottom: 10px;'>
+                                <label class='checkbox inline'>
+                                    " . Form::checkbox('permissions[cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.create]', 1, $existing->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.create')) . " Create
+                                </label>
 
-                            <label class='checkbox inline'>
-                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.delete]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.delete')) . " Delete
-                            </label>
+                                <label class='checkbox inline'>
+                                    " . Form::checkbox('permissions[cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.read]', 1, $existing->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.read')) . " Read
+                                </label>
 
-                            <label class='checkbox inline'>
-                                " . Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management]', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management')) . " Revision Management
-                            </label>
-                        </li>";
+                                <label class='checkbox inline'>
+                                    " . Form::checkbox('permissions[cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.update]', 1, $existing->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.update')) . " Update
+                                </label>
 
-                        foreach ($nodetype->columns as $column) {                                
-                            $html .= "<li><label class='checkbox inline'>" . 
-                                            Form::checkbox('permissions[cms.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name . ']', 1, $existing->hasAccess('cms.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name)) . $column->label
-                                         . "</label></li>";
+                                <label class='checkbox inline'>
+                                    " . Form::checkbox('permissions[cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.delete]', 1, $existing->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.delete')) . " Delete
+                                </label>
+
+                                <label class='checkbox inline'>
+                                    " . Form::checkbox('permissions[cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management]', 1, $existing->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management')) . " Revision Management
+                                </label>
+                            </li>";
+
+                            foreach ($nodetype->columns as $column) {                                
+                                $html .= "<li><label class='checkbox inline'>" . 
+                                                Form::checkbox('permissions[cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name . ']', 1, $existing->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name)) . $column->label
+                                             . "</label></li>";
+
+                            }
 
                         }
 
-                    }
+                    $html .= "</ul></li>";
+
+                }
 
                 $html .= "</ul></li>";
 

@@ -10,7 +10,7 @@
 
 @section('body')
     
-    {{ formModel($group, 'groups') }}
+    {{ formModel($group, 'groups', null, false) }}
 
     <div class="control-group">
         {{ Form::label('name', 'Name', array('class' => 'control-label')) }}

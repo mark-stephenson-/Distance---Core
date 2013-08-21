@@ -10,7 +10,7 @@
 
 @section('body')
     
-    {{ formModel($user, 'users', array('autocomplete' => 'off')) }}
+    {{ formModel($user, 'users', array('autocomplete' => 'off'), false) }}
 
     <ul class="nav nav-tabs">
         <li class="active"><a href="#info" data-toggle="tab">User Info</a></li>

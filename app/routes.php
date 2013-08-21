@@ -12,12 +12,12 @@
 */
 
 Route::any('/', array('as' => 'root', function() {
-    return Redirect::route('apps');
+    return Redirect::route('apps.index');
 }));
 
 Route::group( array('prefix' => 'api'), function() {
     // We need to ensure that the prfiler doesn't pop up here...
-    Config::set('profiler::config.enabled', false);
+    // Config::set('profiler::config.enabled', false);
     
     Route::get('/', function(){ return Response::make('', 400); });
     Route::put('authentication', array('uses' => 'Api\AuthenticationController@authenticate'));
@@ -91,7 +91,7 @@ Route::group(array('before' => array('auth')), function() {
                 
                 Route::get('nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.edit', 'uses' => 'NodesController@edit'));
                 Route::post('nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.update', 'uses' => 'NodesController@update'));
-                
+
                 /*
                     Node Revisions
                  */
@@ -101,6 +101,17 @@ Route::group(array('before' => array('auth')), function() {
 
             });
         });
+
+        /*
+            Global (with permissions)
+         */
+        
+        /*
+            Users
+         */
+        Route::resource('users', 'UsersController');
+        Route::get('users/{id}/add-group/{group_id}', array('as' => 'users.add-group', 'uses' => 'UsersController@doAddGroup'));
+        Route::get('users/{id}/remove-group/{group_id}', array('as' => 'users.remove-group', 'uses' => 'UsersController@doRemoveGroup'));
 
         // Nodes
         Route::get('collections/{collectionId}/type-list/{nodeTypeName}', array('as' => 'nodes.type-list', 'uses' => 'NodesController@nodeTypeList'));
@@ -113,9 +124,7 @@ Route::group(array('before' => array('auth')), function() {
         Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
         Route::post('resources/process/{collectionId}/{catalogId}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
 
-        Route::resource('users', 'UsersController');
-        Route::get('users/{id}/add-group/{group_id}', array('as' => 'users.add-group', 'uses' => 'UsersController@doAddGroup'));
-        Route::get('users/{id}/remove-group/{group_id}', array('as' => 'users.remove-group', 'uses' => 'UsersController@doRemoveGroup'));
+        
         Route::resource('groups', 'GroupsController');
         Route::resource('catalogues', 'CataloguesController');
         Route::get('catalogues/{id}/delete', array('as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy'));

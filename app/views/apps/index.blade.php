@@ -31,7 +31,8 @@
                 <td>
                     {{ implode('<br />', $app->collections->lists('name')) }}
                 </td>
-                <td width="150">
+                <td width="250">
+                    <a href="{{ route('collections.index', array($app->id)) }}" class="btn btn-small"><i class="icon-th-large"></i> Collections</a>
                     <a href="{{ route('apps.edit', array($app->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     <a href="#deleteModal" data-toggle="modal" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
                 </td>
