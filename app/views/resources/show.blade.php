@@ -85,7 +85,7 @@
             <div class="modal-body">
                 <p>Uploading a new verison of <b id="file-name"></b> will overwrite the previous version.</p>
 
-                {{ Form::hidden('resource_id', null, ['id' => 'resource_id']) }}
+                {{ Form::hidden('resource_id', null, array('id' => 'resource_id')) }}
                 {{ Form::file('file') }}
             </div>
             <div class="modal-footer">
