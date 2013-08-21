@@ -26,7 +26,9 @@
 @section('body')
 
     <form class="form-inline pull-left">
-        {{ Form::select('filter', array('' => 'No Filter') + $collection->nodetypes->lists('label', 'id'), Input::get('filter') ?: 0) }}
+        @if (Route::currentRouteName() !== 'nodes.type-list')
+            {{ Form::select('filter', array('' => 'No Filter') + $collection->nodetypes->lists('label', 'id'), Input::get('filter') ?: 0) }}
+        @endif
         {{ Form::select('sort', array('' => 'No Sort') + array('ASC' => 'A-Z', 'DESC' => 'Z-A')) }}
         <input type="submit" value="Go" class="btn" />
     </form>
