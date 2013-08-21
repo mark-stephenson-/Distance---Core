@@ -106,7 +106,11 @@
                 <tbody>
                     <?php
                         $catalogues = $collection->catalogues;
-                        $resources = Resource::whereIn('catalogue_id', $catalogues->lists('id'))->get();
+                        if (count($catalogues)) {
+                            $resources = Resource::whereIn('catalogue_id', $catalogues->lists('id'))->get();
+                        } else {
+                            $resources = array();
+                        }
                     ?>
                     @foreach( $resources as $resource )
                         <tr>
