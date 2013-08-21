@@ -49,7 +49,7 @@
                                 </a>
                                 <ul class="dropdown-menu pull-right">
                                     @foreach(Application::current()->collectionsWithPermission() as $collection)
-                                        <li><a href="{{ switchCollectionUrl($collection->id) }}">{{ $collection->name }}</a></li>
+                                        <li><a href="{{ switchCollectionUrl($collection->application_id, $collection->id) }}">{{ $collection->name }}</a></li>
                                     @endforeach
                                 </ul>
                             </div>

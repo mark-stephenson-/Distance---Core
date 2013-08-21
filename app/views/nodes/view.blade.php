@@ -17,7 +17,7 @@
 
             e.preventDefault();
 
-            var url = "{{ route('nodes.publish', array($collection->id, $node->id, $revisionData->id, $branch->id)) }}";
+            var url = "{{ route('nodes.publish', array($collection->application_id, $collection->id, $node->id, $revisionData->id, $branch->id)) }}";
             window.location = url;
 
         });
@@ -31,7 +31,7 @@
 
             e.preventDefault();
 
-            var url = "{{ route('nodes.retire', array($collection->id, $node->id, $revisionData->id, $branch->id)) }}";
+            var url = "{{ route('nodes.retire', array($collection->application_id, $collection->id, $node->id, $revisionData->id, $branch->id)) }}";
             window.location = url;
 
         });
@@ -47,10 +47,10 @@
             @if ( $lastView['collection_id'] == $collection->id)
                 <a href="{{ $lastView['url'] }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
             @else
-                <a href="{{ route('nodes.list', $collection->id) }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
+                <a href="{{ route('nodes.list', array($collection->application_id, $collection->id)) }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
             @endif
         @else
-            <a href="{{ route('nodes.list', $collection->id) }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
+            <a href="{{ route('nodes.list', array($collection->application_id, $collection->id)) }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
         @endif
     </div>
 
@@ -67,7 +67,7 @@
             
         @endif
         @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $nodeType->name . '.update'))
-            <a href="{{ route('nodes.edit', array($collection->id, $node->id, $revisionData->id)) }}" class="btn"><i class="icon-edit"></i> Edit</a>
+            <a href="{{ route('nodes.edit', array($collection->application_id, $collection->id, $node->id, $revisionData->id)) }}" class="btn"><i class="icon-edit"></i> Edit</a>
         @endif
     </div>
 
@@ -102,7 +102,7 @@
         @foreach($revisions as $revision)
             <li>
                 @if ($revision->id != $revisionData->id)
-                    <a href="{{ route('nodes.view', array($collection->id, $node->id, $revision->id, $branch->id)) }}" class="js-confirm_leave">
+                    <a href="{{ route('nodes.view', array($collection->application_id, $collection->id, $node->id, $revision->id, $branch->id)) }}" class="js-confirm_leave">
                 @endif
 
                 {{ date('j F, Y @ H:i', strtotime($revision->updated_at)) }} -

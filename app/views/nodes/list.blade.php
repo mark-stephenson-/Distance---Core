@@ -15,7 +15,7 @@
 
             var nodeType = $('#node_type_select').val();
 
-            var url = "{{ route('nodes.create', array($collection->id)) }}/" + nodeType;
+            var url = "{{ route('nodes.create', array($collection->application_id, $collection->id)) }}/" + nodeType;
 
             window.location = url;
 
