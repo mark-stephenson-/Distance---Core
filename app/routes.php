@@ -91,7 +91,7 @@ Route::group(array('before' => array('auth')), function() {
                 
                 Route::get('nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.edit', 'uses' => 'NodesController@edit'));
                 Route::post('nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.update', 'uses' => 'NodesController@update'));
-
+                
                 /*
                     Node Revisions
                  */
