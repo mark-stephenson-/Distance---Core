@@ -5,7 +5,8 @@ use Input, Response, Sentry;
 
 class AuthenticationController extends \BaseController {
     public function authenticate() {
-        $contentType = \Request::header('Content-Type');
+        $contentTypeParts = explode(';', \Request::header('Content-Type'));
+        $contentType = $contentTypeParts[0];
 
         if ( $contentType == "text/xml" ) {
             $input = simplexml_load_string(trim(file_get_contents('php://input')));
