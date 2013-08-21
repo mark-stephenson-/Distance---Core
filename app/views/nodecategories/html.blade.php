@@ -39,7 +39,7 @@
                     <tr>
                         <td>
                             @if ( $resource->isImage() )
-                                <img src="/file/{{ $resource->filename }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
+                                <img src="{{ $resource->path() }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
                             @else
                                 <i class="icon-file"></i>
                             @endif
@@ -54,7 +54,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->filename }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
+                            <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->path() }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
                         </td>
                     </tr>
                 @endforeach
