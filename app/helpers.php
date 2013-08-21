@@ -1,5 +1,16 @@
 <?php
 
+function switchCollectionUrl($collectionId)
+{
+    $url = '/collections/' . $collectionId . '/';
+
+    if (Request::segment(3) == 'type-list') {
+        return $url . 'type-list/' . Request::segment(4);
+    }
+
+    return  $url . (Request::segment(3) ?: Config::get('code.prefrences.preferred-node-view'));
+}
+
 function convertSmartQuotes($string) 
 { 
     $string = str_replace(
