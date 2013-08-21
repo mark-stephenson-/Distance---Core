@@ -8,27 +8,27 @@ class ResourcesController extends BaseController
         return Resource::fetch($collectionId, urldecode($fileName));
     }
 
-    public function index() {
+    public function index($appId, $collectionId) {
         $catalogues = Collection::current()->catalogues()->with('resources')->get();
 
-        return View::make('resources.index', compact('catalogues'));
+        return View::make('resources.index', compact('catalogues', 'appId', 'collectionId'));
     }
 
-    public function show($catalogueId) {
+    public function show($appId, $collectionId, $catalogueId) {
         $catalogue = Catalogue::with('resources')->findOrFail($catalogueId);
         $collection = Collection::current();
 
-        return View::make('resources.show', compact('catalogue', 'collection'));
+        return View::make('resources.show', compact('catalogue', 'collection', 'appId', 'collectionId'));
     }
 
-    public function create() {
+    public function create($appId, $collectionId) {
         $catalogue = new Catalogue;
         $collections = Collection::get();
 
-        return View::make('catalogues.form', compact('catalogue', 'collections'));
+        return View::make('catalogues.form', compact('catalogue', 'collections', 'appId', 'collectionId'));
     }
 
-    public function store() {
+    public function store($appId, $collectionId) {
         // Let's run the validator
         $validator = new Core\Validators\Catalogue;
 
@@ -52,14 +52,14 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been created.')));
     }
 
-    public function edit($catalogueId) {
+    public function edit($appId, $collectionId, $catalogueId) {
         $catalogue = Catalogue::with('collections')->findOrFail($catalogueId);
         $collections = Collection::get();
 
         return View::make('catalogues.form', compact('catalogue', 'collections'));
     }
 
-    public function update($catalogueId) {
+    public function update($appId, $collectionId, $catalogueId) {
 
         $catalogue = Catalogue::findOrFail($catalogueId);
 
@@ -84,7 +84,7 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been updated.')));
     }
 
-    public function process($collectionId, $catalogId) {
+    public function process($appId, $collectionId, $catalogId) {
 
         $response = array('success' => false);
 
@@ -214,7 +214,7 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag( array('That resource has been deleted.') ));
     }
 
-    public function updateFile($id) {
+    public function updateFile($appId, $collectionId, $id) {
         $resource = Resource::whereId($id)->first();
 
         if ( ! $resource ) {
@@ -257,10 +257,10 @@ class ResourcesController extends BaseController
             @unlink($uploadPath . 'thumb/' . $resource->filename);
             @unlink($uploadPath . 'view/' . $resource->filename);
 
-            return Redirect::route('resources.show', $resource->catalogue_id)
+            return Redirect::route('resources.show', array($appId, $collectionId, $resource->catalogue_id))
                 ->with('success', new MessageBag(array('The new version of ' . $resource->filename . ' has been uploaded.')));
         } else {
-            return Redirect::route('resources.show', $resource->catalogue_id)
+            return Redirect::route('resources.show', array($appId, $collectionId, $resource->catalogue_id))
                 ->withErrors(array('There was an unexpected issue that has prevented your file being uploaded. Please try again.'));
         }
     }

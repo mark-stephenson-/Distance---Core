@@ -98,6 +98,21 @@ Route::group(array('before' => array('auth')), function() {
                 Route::any('nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
                 Route::any('nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
 
+                /*
+                    Catalogues & Resources
+                 */
+                Route::get('catalogues', array('as' => 'catalogues.index', 'uses' => 'CataloguesController@index'));
+                Route::get('catalogues/create', array('as' => 'catalogues.create', 'uses' => 'CataloguesController@create'));
+                Route::post('catalogues', array('as' => 'catalogues.store', 'uses' => 'CataloguesController@store'));
+                Route::get('catalogues/{id}/edit', array('as' => 'catalogues.edit', 'uses' => 'CataloguesController@edit'));
+                Route::put('catalogues/{id}', array('as' => 'catalogues.update', 'uses' => 'CataloguesController@update'));
+                Route::get('catalogues/{id}/delete', array('as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy'));
+
+                Route::get('resources', array('as' => 'resources.index', 'uses' => 'ResourcesController@index'));
+                Route::get('resources/{id}', array('as' => 'resources.show', 'uses' => 'ResourcesController@show'));
+                Route::get('resources/{id}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
+                Route::post('resources/{id}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
+                Route::post('resources/process/{catalogId}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
 
             });
         });
@@ -122,15 +137,9 @@ Route::group(array('before' => array('auth')), function() {
 
         // Restful Resource Addons
         Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
-        Route::post('resources/process/{collectionId}/{catalogId}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
 
         
         Route::resource('groups', 'GroupsController');
-        Route::resource('catalogues', 'CataloguesController');
-        Route::get('catalogues/{id}/delete', array('as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy'));
-        Route::resource('resources', 'ResourcesController');
-        Route::get('resources/{id}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
-        Route::post('resources/{id}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
         Route::resource('app-distribution', 'OtaController');
         Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 

@@ -50,7 +50,7 @@ function replaceNavigationParams($params) {
     return $params;
 }
 
-function formModel($model, $routeName, $atts = array(), $withApp = true) {
+function formModel($model, $routeName, $atts = array(), $withApp = true, $collectionId = 0) {
 
     if ($model->exists) {
         $customAttributes = array('route' => array($routeName . '.update'), 'method' => 'PUT');
@@ -59,12 +59,20 @@ function formModel($model, $routeName, $atts = array(), $withApp = true) {
             $customAttributes['route'][] = Request::segment(2);
         }
 
+        if ($collectionId) {
+            $customAttributes['route'][] = $collectionId;
+        }
+
         $customAttributes['route'][] = $model->id;
     } else {
         $customAttributes = array('route' => array($routeName . '.store'));
 
         if ($withApp) {
             $customAttributes['route'][] = Request::segment(2);
+        }
+
+        if ($collectionId) {
+            $customAttributes['route'][] = $collectionId;
         }
     }
 
