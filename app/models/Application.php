@@ -9,6 +9,7 @@ class Application extends BaseModel
         if (Session::get('current-app')) {
             return Session::get('current-app');
         } else {
+            die('resetting');
             $apps = self::allWithPermission();
 
             $current = count($apps) > 0 ? reset($apps) : null;

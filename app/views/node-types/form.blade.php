@@ -119,7 +119,7 @@
 
 @section('body')
     
-    {{ formModel($nodeType, 'node-types') }}
+    {{ formModel($nodeType, 'node-types', null, false) }}
 
     <div class="control-group">
         {{ Form::label('label', 'Name', array('class' => 'control-label')) }}
