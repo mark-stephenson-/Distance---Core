@@ -77,7 +77,7 @@
     </div>
 
     <div class="modal fade hide" id="uploadNewVersionModal">
-        {{ Form::open(['enctype' => 'multipart/form-data', 'url' => route('resources.updateFile', 'id'), 'style' => 'margin-bottom: 0px;']) }}
+        {{ Form::open(array('enctype' => 'multipart/form-data', 'url' => route('resources.updateFile', 'id'), 'style' => 'margin-bottom: 0px;')) }}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3>Upload a new version</h3>
