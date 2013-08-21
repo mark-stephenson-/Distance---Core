@@ -8,6 +8,10 @@ function switchCollectionUrl($collectionId)
         return $url . 'type-list/' . Request::segment(4);
     }
 
+    if (Request::segment(3) == 'nodes') {
+        return $url . Config::get('core.prefrences.preferred-node-view');
+    }
+
     return  $url . (Request::segment(3) ?: Config::get('core.prefrences.preferred-node-view'));
 }
 
