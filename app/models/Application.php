@@ -24,9 +24,11 @@ class Application extends BaseModel
 
         $collections = $this->collections;
 
-        $collections = array_filter($collections->all(), function($collection) {
-            return Sentry::getUser()->hasAccess('cms.apps.' . $this->getAttribute('id') . '.collections.' . $collection->id . '.*');
-        });
+        if (!Sentry::getUser()->hasAccess('cms.apps.' . $this->getAttribute('id') . '.collection-management')) {
+            $collections = array_filter($collections->all(), function($collection) {
+                return Sentry::getUser()->hasAccess('cms.apps.' . $this->getAttribute('id') . '.collections.' . $collection->id . '.*');
+            });
+        }
 
         return $collections;
     }

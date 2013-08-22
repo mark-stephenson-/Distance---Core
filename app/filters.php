@@ -91,7 +91,17 @@ Route::filter('apiAuthentication', function()
 
 Route::filter('checkPermissions', function($request)
 {
+    $replacements = array(
+        '.list' => '',
+        '.hierarchy' => '',
+        '.type-list' => '',
+    );
+
     $property = 'cms.' . implode('.', Request::segments());
+
+    $property = str_replace(array_keys($replacements), array_values($replacements), $property);
+
+    // dd($property);
 
     if (!Sentry::getUser()->hasAnyAccess(array($property, $property . '.*'))) {
         App::abort(403);

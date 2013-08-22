@@ -63,7 +63,7 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    @foreach(Application::all() as $app)
+                                    @foreach(Application::allWithPermission() as $app)
                                         <li><a href="{{ switchAppUrl($app->id) }}">{{ $app->name }}</a></li>
                                     @endforeach
                                 </ul>
