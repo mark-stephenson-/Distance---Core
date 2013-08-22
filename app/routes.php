@@ -11,6 +11,27 @@
 |
 */
 
+$appId = Request::segment(2);
+$collectionId = Request::segment(4);
+
+if (Request::segment(1) == 'apps' and is_numeric($appId)) {
+    define('CORE_APP_ID', $appId);
+} else {
+    define('CORE_APP_ID', @Session::get('current-app')->id);
+}
+
+if (Request::segment(3) == 'collections' and is_numeric($collectionId)) {
+    define('CORE_COLLECTION_ID', $collectionId);
+} else {
+    define('CORE_COLLECTION_ID', @Session::get('current-app')->id);
+}
+
+View::composer('*', function($view)
+{
+    $view->with('appId', CORE_APP_ID);
+    $view->with('collectionId', CORE_COLLECTION_ID);
+});
+
 Route::any('/', array('as' => 'root', function() {
     return Redirect::route('apps.index');
 }));
@@ -82,8 +103,8 @@ Route::group(array('before' => array('auth')), function() {
             /*
                 Over The Air Distribution
              */
-            Route::resource('app-distribution', 'OtaController');
-            Route::post('app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
+            Route::get('{appId}/app-distribution', array('as' => 'app-distribution.index', 'uses' => 'OtaController@index'));
+            Route::post('{appId}/app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 
             Route::group(array('prefix' => '{appId}/collections/{collectionId}'), function() {
                 /*

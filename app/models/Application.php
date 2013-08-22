@@ -6,10 +6,9 @@ class Application extends BaseModel
 
     public static function current()
     {
-        if (Session::get('current-app')) {
+        if (Session::has('current-app')) {
             return Session::get('current-app');
         } else {
-            die('resetting');
             $apps = self::allWithPermission();
 
             $current = count($apps) > 0 ? reset($apps) : null;
@@ -21,10 +20,12 @@ class Application extends BaseModel
 
     public function collectionsWithPermission()
     {
+        if (!Sentry::check()) return null;
+
         $collections = $this->collections;
 
         $collections = array_filter($collections->all(), function($collection) {
-            return Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.*');
+            return Sentry::getUser()->hasAccess('cms.apps.' . $this->getAttribute('id') . '.collections.' . $collection->id . '.*');
         });
 
         return $collections;
@@ -32,6 +33,8 @@ class Application extends BaseModel
 
     public static function allWithPermission()
     {
+        if (!Sentry::check()) return null;
+        
         $apps = self::all();
 
         $apps = array_filter($apps->all(), function($app) {

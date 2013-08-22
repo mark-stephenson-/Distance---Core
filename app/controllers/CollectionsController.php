@@ -12,7 +12,7 @@ class CollectionsController extends BaseController
         $app = Application::find($appId);
         $collections = $app->collectionsWithPermission();
 
-        return View::make('collections.index', compact('collections', 'appId'));
+        return View::make('collections.index', compact('collections'));
     }
 
     public function create($appId)

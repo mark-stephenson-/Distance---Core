@@ -24,7 +24,7 @@
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
                             @if (Sentry::getUser()->hasAccess($item['access']))
-                                {{--<li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>--}}
+                                <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
                             @endif
                         @endforeach
                     </ul>
@@ -45,7 +45,7 @@
                         @if ( count(Collection::all()) )
                             <div class="btn-group change-collection">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                    {{ Collection::current()->name }}
+                                    {{ @Collection::current()->name }}
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu pull-right">

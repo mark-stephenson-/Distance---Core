@@ -42,8 +42,13 @@ function convertSmartQuotes($string)
 
 function replaceNavigationParams($params) {
     foreach($params as &$param) {
+
+        if ($param == '[app-id]') {
+            $param = ($app = Application::current()) ? $app->id : CORE_APP_ID;
+        }
+
         if ($param == '[collection-id]') {
-            $param = ($collection = Collection::current()) ? $collection->id : 0;
+            $param = ($collection = Collection::current()) ? $collection->id : CORE_COLLECTION_ID;
         }
     }
 

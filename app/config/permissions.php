@@ -2,9 +2,29 @@
 
 return array(
     
-    'CMS Access' => array(
+    'CMS Global Permissions' => array(
         'value' => 'cms.*',
         'children' => array(
+
+            'Node Types' => array(
+                'value' => 'cms.node-types.*',
+                'children' => array(
+                    
+                    'Create' => array(
+                        'value' => 'cms.node-types.create'
+                    ),
+                    'Read' => array(
+                        'value' => 'cms.node-types.read'
+                    ),
+                    'Update' => array(
+                        'value' => 'cms.node-types.update'
+                    ),
+                    'Delete' => array(
+                        'value' => 'cms.node-types.delete'
+                    ),
+
+                ),
+            ),
 
             'Users' => array(
                 'value' => 'cms.users.*',
@@ -46,71 +66,11 @@ return array(
                 ),
             ),
 
-            'Collections' => array(
-                'value' => 'cms.collections.*',
-                'children' => array(
-                    
-                    'Create' => array(
-                        'value' => 'cms.collections.create'
-                    ),
-                    'Read' => array(
-                        'value' => 'cms.collections.read'
-                    ),
-                    'Update' => array(
-                        'value' => 'cms.collections.update'
-                    ),
-                    'Delete' => array(
-                        'value' => 'cms.collections.delete'
-                    ),
-
-                ),
-            ),
-
-            'Catalogues' => array(
-                'value' => 'cms.catalogues.*',
-                'children' => array(
-                    
-                    'Create' => array(
-                        'value' => 'cms.catalogues.create'
-                    ),
-                    'Read' => array(
-                        'value' => 'cms.catalogues.read'
-                    ),
-                    'Update' => array(
-                        'value' => 'cms.catalogues.update'
-                    ),
-                    'Delete' => array(
-                        'value' => 'cms.catalogues.delete'
-                    ),
-
-                ),
-            ),
-
-            'Resources' => array(
-                'value' => 'cms.resources.*',
-                'children' => array(
-                    
-                    'Create' => array(
-                        'value' => 'cms.resources.create'
-                    ),
-                    'Read' => array(
-                        'value' => 'cms.resources.read'
-                    ),
-                    'Update' => array(
-                        'value' => 'cms.resources.update'
-                    ),
-                    'Delete' => array(
-                        'value' => 'cms.resources.delete'
-                    ),
-
-                ),
-            ),
-
         ),
     ),
 
-    'API Access' => array(
-        'value' => 'api.*',
-    ),
+    // 'API Access' => array(
+    //     'value' => 'api.*',
+    // ),
 
 );

@@ -8,7 +8,16 @@
     <script>
         $('#openNodeModal').on('click', function(e) {
             e.preventDefault();
-            $('#addNodeModal').modal('show');
+
+            @if (Route::currentRouteName() == 'nodes.type-list')
+                {{-- take them straight there! --}}
+                var url = "{{ route('nodes.create', array($collection->application_id, $collection->id, $nodeType->id)) }}";
+
+                window.location = url;
+
+            @else
+                $('#addNodeModal').modal('show');
+            @endif
         });
 
         $('#addNodeConfirm').on('click', function(e) {
@@ -43,7 +52,7 @@
             <a href="{{ route('nodes.hierarchy', array($collection->application_id, $collection->id)) }}" class="btn"><i class="icon-sitemap"></i> Hierarchy</a>
         @endif
         
-        @if ( count(NodeType::forSelect($collection, false, 'create')) )
+        @if (count(NodeType::forSelect($collection, false, 'create')))
             <a href="{{ route('nodes.create', array($collection->application_id, $collection->id)) }}" class="btn" id="openNodeModal"><i class="icon-plus"></i> New Node</a>
         @endif
     </p>

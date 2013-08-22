@@ -275,7 +275,7 @@ class NodeType extends BaseModel {
 
         if ( $permission !== false ) {
             foreach ($return as $key => $item) {
-                $check = 'cms.collections.' . $collection->id . '.' . $item->name . '.' . $permission;
+                $check = 'cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $item->name . '.' . $permission;
 
                 if ( ! Sentry::getUser()->hasAccess($check) ) {
                     unset($return[$key]);

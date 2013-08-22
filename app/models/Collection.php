@@ -6,7 +6,7 @@ class Collection extends BaseModel {
 
     public static function current()
     {
-        if (Session::get('current-collection')) {
+        if (Session::has('current-collection')) {
             return Session::get('current-collection');
         } else {
             $collections = self::allWithPermission();
@@ -20,6 +20,8 @@ class Collection extends BaseModel {
 
     public static function allWithPermission()
     {
+        if (!Sentry::check()) return null;
+        
         $collections = self::all();
 
         $collections = array_filter($collections->all(), function($collection) {
