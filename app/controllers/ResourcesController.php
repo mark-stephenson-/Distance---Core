@@ -249,6 +249,8 @@ class ResourcesController extends BaseController
             @unlink($uploadPath . 'thumb/' . $resource->filename);
             @unlink($uploadPath . 'view/' . $resource->filename);
 
+            $resource->touch();
+
             return Redirect::route('resources.show', $resource->catalogue_id)
                 ->with('success', new MessageBag(array('The new version of ' . $resource->filename . ' has been uploaded.')));
         } else {
