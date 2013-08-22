@@ -95,13 +95,16 @@ Route::filter('checkPermissions', function($request)
         '.list' => '',
         '.hierarchy' => '',
         '.type-list' => '',
+        'edit' => 'update',
     );
 
     $property = 'cms.' . implode('.', Request::segments());
 
     $property = str_replace(array_keys($replacements), array_values($replacements), $property);
 
-    // dd($property);
+    if (strpos($property, '.nodes')) {
+        $property = substr($property, 0, $nodesPos);
+    }
 
     if (!Sentry::getUser()->hasAnyAccess(array($property, $property . '.*'))) {
         App::abort(403);

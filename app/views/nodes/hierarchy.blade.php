@@ -23,7 +23,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "{{ action('NodesController@updateOrder', array($collection->id)) }}",
+                    url: "{{ action('NodesController@updateOrder', array(CORE_APP_ID, $collection->id)) }}",
                     data: {order: json}
                 });
             });
@@ -44,7 +44,7 @@
             maximumSelectionSize: 1,
             multiple:false,
             ajax: {
-                url: '{{ route('nodes.lookup') }}',
+                url: '{{ route('nodes.lookup', array(CORE_APP_ID, CORE_COLLECTION_ID)) }}',
                 dataType: 'json',
                 data: function (term, page) {
                     return {
@@ -80,7 +80,7 @@
 
             e.preventDefault();
 
-            var url = "{{ route('nodes.unlink') }}/{{ $collection->id }}/" + currentNodeId;
+            var url = "{{ route('nodes.unlink', array(CORE_APP_ID, CORE_COLLECTION_ID)) }}/" + currentNodeId;
             window.location = url;
 
         });
@@ -90,12 +90,12 @@
             var nodeType = $('#node_type_select').val();
 
             if (nodeType != 'existing') {
-                var url = "{{ route('nodes.create', array($collection->id)) }}/" + nodeType + '/' + currentNodeId;
+                var url = "{{ route('nodes.create', array(CORE_APP_ID, CORE_COLLECTION_ID)) }}/" + nodeType + '/' + currentNodeId;
             } else {
                 var nodeId = $('#existing_node_select').val();
 
                 if (nodeId) {
-                    var url = "{{ route('nodes.link') }}/{{ $collection->id }}/" + nodeId + '/' + currentNodeId;
+                    var url = "{{ route('nodes.link', array(CORE_APP_ID, CORE_COLLECTION_ID)) }}/" + nodeId + '/' + currentNodeId;
                 } else {
                     alert('nope');
                 }
