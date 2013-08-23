@@ -14,9 +14,9 @@
 
 <script>
 
-var {{ $column->name }}_preload_data = [];
+var {{ str_replace('-', '_', $column->name) }}_preload_data = [];
 @if ($db_object)
-    {{ $column->name }}_preload_data.push({ 'id': {{ $db_object->id }}, 'text': "{{ $db_object->title }}" });
+    {{ str_replace('-', '_', $column->name) }}_preload_data.push({ 'id': {{ $db_object->id }}, 'text': "{{ $db_object->title }}" });
 @endif
 
     $(document).ready(function() {
@@ -41,7 +41,7 @@ var {{ $column->name }}_preload_data = [];
             }
         });
 
-        $('#input_{{ $column->name }}').select2('data', {{ $column->name }}_preload_data);
+        $('#input_{{ $column->name }}').select2('data', {{ str_replace('-', '_', $column->name) }}_preload_data);
 
     });
 </script>

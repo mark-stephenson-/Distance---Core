@@ -21,9 +21,9 @@
 
 <script>
 
-var {{ $column->name }}_preload_data = [];
+var {{ str_replace('-', '_', $column->name) }}_preload_data = [];
 @foreach($db_objects as $obj)
-    {{ $column->name }}_preload_data.push({ 'id': {{ $obj->id }}, 'text': "{{ $obj->title }}" });
+    {{ str_replace('-', '_', $column->name) }}_preload_data.push({ 'id': {{ $obj->id }}, 'text': "{{ $obj->title }}" });
 @endforeach
 
     $(document).ready(function() {
@@ -47,7 +47,7 @@ var {{ $column->name }}_preload_data = [];
             }
         });
 
-        $('#input_{{ $column->name }}').select2('data', {{ $column->name }}_preload_data);
+        $('#input_{{ $column->name }}').select2('data', {{ str_replace('-', '_', $column->name) }}_preload_data);
 
     });
 </script>
