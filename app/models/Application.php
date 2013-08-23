@@ -6,15 +6,32 @@ class Application extends BaseModel
 
     public static function current()
     {
+        $appId = self::currentId();
+
+        if ($appId) {
+            $app = self::findOrFail($appId);
+            return $app;
+        } else {
+            return $appId;
+        }
+    }
+
+    public static function currentId()
+    {
         if (Session::has('current-app')) {
             return Session::get('current-app');
         } else {
             $apps = self::allWithPermission();
 
             $current = count($apps) > 0 ? reset($apps) : null;
-            Session::put('current-app', $current);
 
-            return $current;
+            if ($current) {
+                Session::put('current-app', $current->id);
+
+                return $current->id;
+            } else {
+                return 0;
+            }
         }
     }
 

@@ -44,11 +44,11 @@ function replaceNavigationParams($params) {
     foreach($params as &$param) {
 
         if ($param == '[app-id]') {
-            $param = ($app = Application::current()) ? $app->id : CORE_APP_ID;
+            $param = (Application::currentId()) ?: CORE_APP_ID;
         }
 
         if ($param == '[collection-id]') {
-            $param = ($collection = Collection::current()) ? $collection->id : CORE_COLLECTION_ID;
+            $param = (Collection::currentId()) ?: CORE_COLLECTION_ID;
         }
     }
 

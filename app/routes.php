@@ -17,13 +17,13 @@ $collectionId = Request::segment(4);
 if (Request::segment(1) == 'apps' and is_numeric($appId)) {
     define('CORE_APP_ID', $appId);
 } else {
-    define('CORE_APP_ID', @Session::get('current-app')->id);
+    define('CORE_APP_ID', Application::currentId());
 }
 
 if (Request::segment(3) == 'collections' and is_numeric($collectionId)) {
     define('CORE_COLLECTION_ID', $collectionId);
 } else {
-    define('CORE_COLLECTION_ID', @Session::get('current-app')->id);
+    define('CORE_COLLECTION_ID', Collection::currentId());
 }
 
 View::composer('*', function($view)
