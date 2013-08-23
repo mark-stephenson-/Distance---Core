@@ -104,6 +104,8 @@ Route::group(array('before' => array('auth')), function() {
                 Over The Air Distribution
              */
             Route::get('{appId}/app-distribution', array('as' => 'app-distribution.index', 'uses' => 'OtaController@index'));
+            Route::get('{appId}/app-distribution/create', array('as' => 'app-distribution.create', 'uses' => 'OtaController@create'));
+            Route::post('{appId}/app-distribution/', array('as' => 'app-distribution.store', 'uses' => 'OtaController@store'));
             Route::post('{appId}/app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 
             Route::group(array('prefix' => '{appId}/collections/{collectionId}'), function() {

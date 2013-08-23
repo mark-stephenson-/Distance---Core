@@ -44,7 +44,7 @@
 
     <div class="form-actions">
         <input type="submit" class="btn btn-primary" value="Upload New Version" />
-        <a href="{{ route('app-distribution.index') }}" class="btn">Back</a>
+        <a href="{{ route('app-distribution.index', array(CORE_APP_ID)) }}" class="btn">Back</a>
     </div>
 
     {{ Form::close() }}
