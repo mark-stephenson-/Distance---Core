@@ -102,7 +102,7 @@ Route::filter('checkPermissions', function($request)
 
     $property = str_replace(array_keys($replacements), array_values($replacements), $property);
 
-    if (strpos($property, '.nodes')) {
+    if ($nodesPos = strpos($property, '.nodes')) {
         $property = substr($property, 0, $nodesPos);
     }
 
