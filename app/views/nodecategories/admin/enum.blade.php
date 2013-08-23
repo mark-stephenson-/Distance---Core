@@ -19,34 +19,34 @@
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][label]', 'Name', array('class' => 'control-label'))) }}
+    {{ Form::label('columns[' . $identifier . '][label]', 'Name', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4'))) }}
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4')) }}
     </div>
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][description]', 'Description', array('class' => 'control-label'))) }}
+    {{ Form::label('columns[' . $identifier . '][description]', 'Description', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, array('class' => 'span4'))) }}
+        {{ Form::text('columns[' . $identifier . '][description]', @$data->description, array('class' => 'span4')) }}
     </div>
 </div>
 
 <div class="control-group">
-    {{ Form::label('columns[' . $identifier . '][values][]', 'Possible Values', array('class' => 'control-label js-values-label'))) }}
+    {{ Form::label('columns[' . $identifier . '][values][]', 'Possible Values', array('class' => 'control-label js-values-label')) }}
 
         <div class="enum_values">
             @if ($data && $data->values)
                 @foreach($data->values as $value)
                 <div class="controls spaced">
-                    {{ Form::text('columns[' . $identifier . '][values][]', $value, array('class' => 'span4'))) }}
+                    {{ Form::text('columns[' . $identifier . '][values][]', $value, array('class' => 'span4')) }}
 
                     <button class="btn btn-small js-enum-existing-minus"><i class="icon-trash"></i></button>
                     <button class="btn btn-small js-enum-default"><i class="icon-fixed-width icon-{{ checkCheckbox($value, @$data->default, false, true) }}"></i> Default</button>
 
                     
                     @if ($category['name'] !== 'enum')
-                        {{ Form::checkbox("columns[$identifier][default][]", $value, checkCheckbox($value, @$data->default, false, true), array('class'))=> 'checkbox']) }}
+                        {{ Form::checkbox("columns[$identifier][default][]", $value, checkCheckbox($value, @$data->default, false, true), array('class' => 'checkbox')) }}
                     @endif
                     
                 </div>
@@ -54,7 +54,7 @@
             @endif
 
             @if ($category['name'] == 'enum')
-                {{ Form::hidden("columns[$identifier][default]", @$data->default, array('class' => 'js-enum-default'))) }}
+                {{ Form::hidden("columns[$identifier][default]", @$data->default, array('class' => 'js-enum-default')) }}
             @endif
 
             <div style="display: none" class="js-enum-template">
@@ -74,7 +74,7 @@
 </div>
 
 <div class="control-group">
-    {{ Form::label("columns[{$identifier}][required]", 'Required', array('class' => 'control-label'))) }}
+    {{ Form::label("columns[{$identifier}][required]", 'Required', array('class' => 'control-label')) }}
     <div class="controls">
         <label class="radio inline">
             {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
