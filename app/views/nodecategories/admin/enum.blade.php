@@ -36,7 +36,7 @@
     {{ Form::label('columns[' . $identifier . '][values][]', 'Possible Values', array('class' => 'control-label js-values-label')) }}
 
         <div class="enum_values">
-            @if ($data && $data->values)
+            @if ($data && isset($data->values))
                 @foreach($data->values as $value)
                 <div class="controls spaced">
                     {{ Form::text('columns[' . $identifier . '][values][]', $value, array('class' => 'span4')) }}
