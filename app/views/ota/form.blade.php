@@ -17,14 +17,14 @@
     <div class="control-group">
         {{ Form::label('platform', 'Platform', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('platform', ['-', 'android' => 'Android', 'ios' => 'iOS']) }}
+            {{ Form::select('platform', array('-', 'android' => 'Android', 'ios' => 'iOS')) }}
         </div>
     </div>
 
     <div class="control-group">
         {{ Form::label('environment', 'Environment', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('environment', ['-', 'testing' => 'Testing', 'production' => 'Production']) }}
+            {{ Form::select('environment', array('-', 'testing' => 'Testing', 'production' => 'Production')) }}
         </div>
     </div>
 
