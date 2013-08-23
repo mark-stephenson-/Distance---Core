@@ -1,18 +1,27 @@
 <?php
 
-function switchCollectionUrl($collectionId)
+function switchAppUrl($appId)
 {
-    $url = '/collections/' . $collectionId . '/';
+    if (Request::segment(1) !== 'apps') {
+        return '/apps/' . $appId;
+    }
+    
+    return '/apps/' . $appId . '/' . Request::segment(3);
+}
 
-    if (Request::segment(3) == 'type-list') {
-        return $url . 'type-list/' . Request::segment(4);
+function switchCollectionUrl($appId, $collectionId)
+{
+    $url = '/apps/' . $appId . '/collections/' . $collectionId . '/';
+
+    if (Request::segment(5) == 'type-list') {
+        return $url . 'type-list/' . Request::segment(6);
     }
 
-    if (Request::segment(3) == 'nodes') {
+    if (Request::segment(5) == 'nodes') {
         return $url . Config::get('core.prefrences.preferred-node-view');
     }
 
-    return  $url . (Request::segment(3) ?: Config::get('core.prefrences.preferred-node-view'));
+    return  $url . (Request::segment(5) ?: Config::get('core.prefrences.preferred-node-view'));
 }
 
 function convertSmartQuotes($string) 
@@ -33,20 +42,43 @@ function convertSmartQuotes($string)
 
 function replaceNavigationParams($params) {
     foreach($params as &$param) {
+
+        if ($param == '[app-id]') {
+            $param = (Application::currentId()) ?: CORE_APP_ID;
+        }
+
         if ($param == '[collection-id]') {
-            $param = ($collection = Collection::current()) ? $collection->id : 0;
+            $param = (Collection::currentId()) ?: CORE_COLLECTION_ID;
         }
     }
 
     return $params;
 }
 
-function formModel($model, $routeName, $atts = array()) {
+function formModel($model, $routeName, $atts = array(), $withApp = true, $collectionId = 0) {
 
     if ($model->exists) {
-        $customAttributes = array('route' => array($routeName . '.update', $model->id), 'method' => 'PUT');
+        $customAttributes = array('route' => array($routeName . '.update'), 'method' => 'PUT');
+
+        if ($withApp) {
+            $customAttributes['route'][] = Request::segment(2);
+        }
+
+        if ($collectionId) {
+            $customAttributes['route'][] = $collectionId;
+        }
+
+        $customAttributes['route'][] = $model->id;
     } else {
         $customAttributes = array('route' => array($routeName . '.store'));
+
+        if ($withApp) {
+            $customAttributes['route'][] = Request::segment(2);
+        }
+
+        if ($collectionId) {
+            $customAttributes['route'][] = $collectionId;
+        }
     }
 
     $atts['class'] = 'form-horizontal';

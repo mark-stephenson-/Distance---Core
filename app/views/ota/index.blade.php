@@ -7,7 +7,7 @@
 @section('body')
     <h2>Current Versions</h2>
     
-    {{ Form::open(array('url' => route('app-distribution.update'))) }}
+    {{ Form::open(array('url' => route('app-distribution.update', array(CORE_APP_ID)))) }}
     <table class="table table-striped">
         <thead>
             <tr>
@@ -48,7 +48,7 @@
             </tr>
             <tr>
                 <td colspan="4">
-                    <a href="{{ route('app-distribution.create') }}" class="btn">Upload New Version</a>
+                    <a href="{{ route('app-distribution.create', array(CORE_APP_ID)) }}" class="btn">Upload New Version</a>
                     {{ Form::submit('Save Passwords', array('class' => 'btn btn-primary')) }}
                 </td>
             </tr>

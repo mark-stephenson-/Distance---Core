@@ -4,19 +4,19 @@ class CataloguesController extends BaseController
 {
     
 
-    public function index() {
-        $catalogues = Catalogue::whereCollectionId(Collection::current()->id)->get();
+    public function index($appId, $collectionId) {
+        $catalogues = Catalogue::whereCollectionId($collectionId)->get();
         
-        return View::make('catalogues.index', compact('catalogues'));
+        return View::make('catalogues.index', compact('catalogues', 'appId', 'collectionId'));
     }
 
-    public function create() {
+    public function create($appId, $collectionId) {
         $catalogue = new Catalogue;
 
-        return View::make('catalogues.form', compact('catalogue'));
+        return View::make('catalogues.form', compact('catalogue', 'collectionId'));
     }
 
-    public function store() {
+    public function store($appId, $collectionId) {
         // Let's run the validator
         $validator = new Core\Validators\Catalogue;
 
@@ -35,17 +35,17 @@ class CataloguesController extends BaseController
 
         $catalogue->save();
 
-        return Redirect::route('catalogues.index')
+        return Redirect::route('catalogues.index', array($appId, $collectionId))
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been created.')));
     }
 
-    public function edit($catalogueId) {
+    public function edit($appId, $collectionId, $catalogueId) {
         $catalogue = Catalogue::findOrFail($catalogueId);
 
-        return View::make('catalogues.form', compact('catalogue'));
+        return View::make('catalogues.form', compact('catalogue', 'collectionId'));
     }
 
-    public function update($catalogueId) {
+    public function update($appId, $collectionId, $catalogueId) {
 
         $catalogue = Catalogue::findOrFail($catalogueId);
 
@@ -65,11 +65,11 @@ class CataloguesController extends BaseController
         $catalogue->save();
 
 
-        return Redirect::route('catalogues.index')
+        return Redirect::route('catalogues.index', array($appId, $collectionId))
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been updated.')));
     }
 
-    public function destroy($catalogueId) {
+    public function destroy($appId, $collectionId, $catalogueId) {
         print $catalogueId;
     }
 

@@ -10,7 +10,7 @@
 
         <link rel="stylesheet" type="text/css" href="/css/app.min.css">
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="/js/jquery-1.9.1.js"></script>
         <script> CKEDITOR_BASEPATH = '{{ URL::to('') }}/js/ckeditor/'; </script>
         <script src="/js/app.min.js"></script>
     </head>
@@ -45,12 +45,26 @@
                         @if ( count(Collection::all()) )
                             <div class="btn-group change-collection">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                    {{ Collection::current()->name }}
+                                    {{ @Collection::current()->name }}
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    @foreach(Collection::all() as $collection)
-                                        <li><a href="{{ switchCollectionUrl($collection->id) }}">{{ $collection->name }}</a></li>
+                                    @foreach(Application::current()->collectionsWithPermission() as $collection)
+                                        <li><a href="{{ switchCollectionUrl($collection->application_id, $collection->id) }}">{{ $collection->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        @if ( count(Application::all()) )
+                            <div class="btn-group change-app">
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                    {{ Application::current()->name }}
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    @foreach(Application::allWithPermission() as $app)
+                                        <li><a href="{{ switchAppUrl($app->id) }}">{{ $app->name }}</a></li>
                                     @endforeach
                                 </ul>
                             </div>

@@ -17,14 +17,14 @@
     <div class="control-group">
         {{ Form::label('platform', 'Platform', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('platform', ['-', 'android' => 'Android', 'ios' => 'iOS']) }}
+            {{ Form::select('platform', array('-', 'android' => 'Android', 'ios' => 'iOS')) }}
         </div>
     </div>
 
     <div class="control-group">
         {{ Form::label('environment', 'Environment', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('environment', ['-', 'testing' => 'Testing', 'production' => 'Production']) }}
+            {{ Form::select('environment', array('-', 'testing' => 'Testing', 'production' => 'Production')) }}
         </div>
     </div>
 
@@ -44,7 +44,7 @@
 
     <div class="form-actions">
         <input type="submit" class="btn btn-primary" value="Upload New Version" />
-        <a href="{{ route('app-distribution.index') }}" class="btn">Back</a>
+        <a href="{{ route('app-distribution.index', array(CORE_APP_ID)) }}" class="btn">Back</a>
     </div>
 
     {{ Form::close() }}

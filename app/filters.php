@@ -92,30 +92,21 @@ Route::filter('apiAuthentication', function()
 Route::filter('checkPermissions', function($request)
 {
     $replacements = array(
-        'index' => '*',
-        'view' => '*',
-        'controller' => '',
-        '\\' => '.',
-        '@' => '.',
-
-        'show' => 'read',
+        '.list' => '',
+        '.hierarchy' => '',
+        '.type-list' => '',
         'edit' => 'update',
-        'store' => 'create',
     );
 
-    $property = 'cms.' . str_replace(array_keys($replacements), array_values($replacements), strtolower($request->getAction()));
+    $property = 'cms.' . implode('.', Request::segments());
 
-    if (starts_with($property, 'cms.nodes')) {
-        return;
+    $property = str_replace(array_keys($replacements), array_values($replacements), $property);
+
+    if ($nodesPos = strpos($property, '.nodes')) {
+        $property = substr($property, 0, $nodesPos);
     }
 
-    if (starts_with($property, 'cms.resources')) {
-        return;
-    }
-
-    Log::debug($property);
-
-    if ( ! Sentry::getUser()->hasAccess( $property ) ) {
+    if (!Sentry::getUser()->hasAnyAccess(array($property, $property . '.*'))) {
         App::abort(403);
     }
 });

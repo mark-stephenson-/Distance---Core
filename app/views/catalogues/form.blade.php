@@ -23,7 +23,7 @@
 
 @section('body')
     
-    {{ formModel($catalogue, 'catalogues') }}
+    {{ formModel($catalogue, 'catalogues', null, true, $collectionId) }}
 
     <div class="control-group">
         {{ Form::label('name', 'Name', array('class' => 'control-label')) }}

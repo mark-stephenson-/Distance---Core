@@ -16,7 +16,7 @@ class UsersController extends BaseController
         if (!Sentry::getUser()->isSuperUser()) {
             $users = array_filter($users, function($user)
             {
-                return $user->isSuperUser();
+                return !$user->isSuperUser();
             });
         }
 

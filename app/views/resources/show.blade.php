@@ -52,9 +52,9 @@
                         <a href="" class="btn toggle-sync" data-id="{{ $resource->id }}" data-sync="1"><i class="icon-remove"></i></a>
                     @endif
                 </td>
-                <td width="150">
+                <td width="350">
                     <a href="#" class="btn btn-small uploadNewVersionModal" style="margin-bottom: 5px;" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}"><i class="icon-refresh"></i> Upload new Version</a>
-                    <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                    <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit Name</a>
                     <a href="#deleteModal" class="btn btn-small deleteModal" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
@@ -77,7 +77,7 @@
     </div>
 
     <div class="modal fade hide" id="uploadNewVersionModal">
-        {{ Form::open(array('enctype' => 'multipart/form-data', 'url' => route('resources.updateFile', 'id'), 'style' => 'margin-bottom: 0px;')) }}
+        {{ Form::open(array('enctype' => 'multipart/form-data', 'url' => route('resources.updateFile', array($appId, $collection->id, 'id')), 'style' => 'margin-bottom: 0px;')) }}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3>Upload a new version</h3>
@@ -110,7 +110,7 @@
 
         $("#upload_progress").hide();
 
-        loadResourceUploader('{{ route('resources.process', array($collection->id, $catalogue->id)) }}', function() {
+        loadResourceUploader('{{ route('resources.process', array($appId, $collection->id, $catalogue->id)) }}', function() {
             document.location.reload(true);
         }, function() {}, [
             @if ($catalogue->restrictions)
@@ -146,7 +146,7 @@
             $(".deleteModal").click( function(e) {
                 var data_id = $(this).attr('data-id');
                 var data_name = $(this).attr('data-name');
-                var url = '{{ route('resources.destroy', 'id') }}';
+                var url = '{{ route('resources.destroy', array($appId, $collectionId, 'id')) }}';
 
                 $("#deleteModal").find('h3').html( "Delete resource <small>" + data_name + "</small>");
                 $("#deleteModal").find('.yes').attr('href', url.replace('id', data_id));
@@ -157,7 +157,7 @@
             $(".uploadNewVersionModal").click( function(e) {
                 var data_id = $(this).attr('data-id');
                 var data_name = $(this).attr('data-name');
-                var url = '{{ route('resources.destroy', 'id') }}';
+                var url = '{{ route('resources.destroy', array($appId, $collectionId, 'id')) }}';
                 var form = $("#uploadNewVersionModal").find('form').attr('action');
 
                 $("#uploadNewVersionModal").find('#file-name').html( data_name );

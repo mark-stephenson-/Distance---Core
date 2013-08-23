@@ -6,24 +6,43 @@ class Collection extends BaseModel {
 
     public static function current()
     {
-        if (Session::get('current-collection')) {
+        $collectionId = self::currentId();
+
+        if ($collectionId) {
+            $collection = self::findOrFail($collectionId);
+            return $collection;
+        } else {
+            return $collectionId;
+        }
+    }
+
+    public static function currentId()
+    {
+        if (Session::has('current-collection')) {
             return Session::get('current-collection');
         } else {
             $collections = self::allWithPermission();
 
             $current = count($collections) > 0 ? reset($collections) : null;
-            Session::put('current-collection', $current);
 
-            return $current;
+            if ($current) {
+                Session::put('current-collection', $current->id);
+
+                return $current->id;
+            } else {
+                return 0;
+            }
         }
     }
 
     public static function allWithPermission()
     {
+        if (!Sentry::check()) return null;
+        
         $collections = self::all();
 
         $collections = array_filter($collections->all(), function($collection) {
-            return Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.*');
+            return Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.*');
         });
 
         return $collections;

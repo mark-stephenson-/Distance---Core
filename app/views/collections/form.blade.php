@@ -26,13 +26,6 @@
         </div>
     </div>
 
-    <div class="control-group">
-        {{ Form::label('name', 'Application', array('class' => 'control-label')) }}
-        <div class="controls">
-            {{ Form::select('application_id', Application::all()->lists('name', 'id')) }}
-        </div>
-    </div>
-
     @if ( $collection->exists )
         <?php
             if ( $collection->logo_id ) {
