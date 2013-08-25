@@ -5,7 +5,7 @@ use Response, Request, Input;
 
 class NodeController extends \BaseController {
     
-    public function nodes()
+    public function nodes($forAPI = true)
     {
         if ( Request::header('Collection-Token') === NULL ) {
             return Response::make('Collection-Token must be specified for this call.', 400);
@@ -47,7 +47,11 @@ class NodeController extends \BaseController {
             $return = $nodes->toArray();
         }
 
-        return Api::makeResponse($return, 'nodes');
+        if ( $forAPI === true ) {
+            return Api::makeResponse($return, 'nodes');
+        } else {
+            return $return;
+        }
     }
 
     public function emailNode()
