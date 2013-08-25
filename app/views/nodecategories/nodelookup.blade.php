@@ -28,7 +28,7 @@ var {{ str_replace('-', '_', $column->name) }}_preload_data = [];
             maximumSelectionSize: 1,
             multiple:true,
             ajax: {
-                url: '{{ route('nodes.lookup') }}?type={{ $column->lookuptype }}',
+                url: '{{ route('nodes.lookup', array(CORE_APP_ID, CORE_COLLECTION_ID)) }}?type={{ $column->lookuptype }}',
                 dataType: 'json',
                 data: function (term, page) {
                     return {

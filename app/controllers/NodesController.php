@@ -419,15 +419,9 @@ class NodesController extends BaseController
 
     }
 
-    public function lookup()
+    public function lookup($appId, $collectionId)
     {
         $search = Input::get('q');
-        $collectionId = Input::get('c');
-
-        if (!$collectionId) {
-            $collection = Session::get('current-collection');
-            $collectionId = $collection->id;
-        }
 
         $nodes = Node::
                     where('title', 'LIKE', '%' . $search . '%')
