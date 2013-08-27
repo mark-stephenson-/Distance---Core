@@ -54,7 +54,7 @@
                 </td>
                 <td width="350">
                     <a href="#" class="btn btn-small uploadNewVersionModal" style="margin-bottom: 5px;" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}"><i class="icon-refresh"></i> Upload new Version</a>
-                    <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit Name</a>
+                    <!-- <a href="#" class="btn btn-small"><i class="icon-edit"></i> Edit Name</a> -->
                     <a href="#deleteModal" class="btn btn-small deleteModal" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
