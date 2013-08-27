@@ -28,6 +28,13 @@ class AuthController extends BaseController
 
             if (Sentry::authenticate($credentials, Input::get('remember'))) {
 
+                if (!Sentry::getUser()->hasAccess('cms.generic.login')) {
+                    $bag->add('login', 'You do not have permission to access this.');
+                    return Redirect::back()
+                            ->withErrors($bag)
+                            ->withInput();
+                }
+
                 $bag->add('login', 'You have successfully logged in');
 
                 if ($session = Session::get('afterLogin')) {
