@@ -61,7 +61,7 @@
     @else
         {{ Form::label('default_value', 'Default Value', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('default_value', null, array('class' => 'span4')) }}
+            {{ Form::text('columns[' . $identifier . '][default]', @$data->default, array('class' => 'span4')) }}
         </div>
 
         @if ($category['name'] == 'date')
