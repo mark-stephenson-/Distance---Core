@@ -48,7 +48,7 @@ class ResourcesController extends BaseController
 
         $catalogue->collections()->sync(Input::get('collections', array()));
 
-        return Redirect::route('catalogues.index')
+        return Redirect::route('catalogues.index', array(CORE_APP_ID, CORE_COLLECTION_ID))
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been created.')));
     }
 
@@ -80,7 +80,7 @@ class ResourcesController extends BaseController
         $catalogue->save();
 
 
-        return Redirect::route('catalogues.index')
+        return Redirect::route('catalogues.index', array(CORE_APP_ID, CORE_COLLECTION_ID))
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been updated.')));
     }
 
@@ -199,7 +199,7 @@ class ResourcesController extends BaseController
         }
 
         if ( ! $resource->delete() ) {
-            return Redirect::route('resources.show', $resource->catalogue_id)
+            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id))
                 ->withErrors( array('That resource could not be deleted.'));
         }
 
@@ -210,7 +210,7 @@ class ResourcesController extends BaseController
         @unlink($folder . 'thumb/' . $resource->filename);
         @unlink($folder . 'view/' . $resource->filename);
 
-        return Redirect::route('resources.show', $resource->catalogue_id)
+        return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id))
                 ->with('successes', new MessageBag( array('That resource has been deleted.') ));
     }
 
@@ -240,7 +240,7 @@ class ResourcesController extends BaseController
                     break;
             }
 
-            return Redirect::route('resources.show', $resource->catalogue_id)
+            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id))
                 ->withErrors($response);
         }
 
@@ -251,10 +251,10 @@ class ResourcesController extends BaseController
 
             $resource->touch();
 
-            return Redirect::route('resources.show', $resource->catalogue_id)
+            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id))
                 ->with('success', new MessageBag(array('The new version of ' . $resource->filename . ' has been uploaded.')));
         } else {
-            return Redirect::route('resources.show', $resource->catalogue_id)
+            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id))
                 ->withErrors(array('There was an unexpected issue that has prevented your file being uploaded. Please try again.'));
         }
     }
