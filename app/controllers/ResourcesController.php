@@ -14,7 +14,7 @@ class ResourcesController extends BaseController
         return View::make('resources.index', compact('catalogues'));
     }
 
-    public function show($catalogueId) {
+    public function show($appId, $collectionId, $catalogueId) {
         $catalogue = Catalogue::with('resources')->findOrFail($catalogueId);
         $collection = Collection::current();
 
@@ -52,14 +52,14 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been created.')));
     }
 
-    public function edit($catalogueId) {
+    public function edit($appId, $collectionId, $catalogueId) {
         $catalogue = Catalogue::with('collections')->findOrFail($catalogueId);
         $collections = Collection::get();
 
         return View::make('catalogues.form', compact('catalogue', 'collections'));
     }
 
-    public function update($catalogueId) {
+    public function update($appId, $collectionId, $catalogueId) {
 
         $catalogue = Catalogue::findOrFail($catalogueId);
 
@@ -84,7 +84,7 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been updated.')));
     }
 
-    public function process($collectionId, $catalogId) {
+    public function process($appId, $collectionId, $catalogId) {
 
         $response = array('success' => false);
 
@@ -190,7 +190,7 @@ class ResourcesController extends BaseController
 
     }
 
-    public function destroy($id) {
+    public function destroy($appId, $collectionId, $id) {
         $resource = Resource::whereId($id)->first();
 
         if ( ! $resource ) {
@@ -214,7 +214,7 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag( array('That resource has been deleted.') ));
     }
 
-    public function updateFile($id) {
+    public function updateFile($appId, $collectionId, $id) {
         $resource = Resource::whereId($id)->first();
 
         if ( ! $resource ) {
