@@ -6,13 +6,17 @@
         $resource = null;
     }
 
+    if (!$resource and Input::old('nodetype.'. $column->name)) {
+        $resource = Resource::find(Input::old('nodetype.'. $column->name));
+    }
+
     $catalogue = Catalogue::find($column->catalogue);
 ?>
 
 <div class="resource-{{ $column->name }}-container resource-view">
     {{ Form::hidden('nodetype['. $column->name .']', @$data->{$column->name}, array('id' => 'nodetype-'. $column->name)) }}
 
-    @if ( $resource )
+    @if ($resource)
         <div class="resource">
             <div class="image">
                 @if ( $resource->isImage() )
