@@ -142,7 +142,7 @@ class Format {
                 $value = htmlspecialchars($value, ENT_QUOTES, "UTF-8");
 
                 // Replace amps
-                $value = str_replace('&amp;', '&amp;amp;', $value);
+                // $value = str_replace('&amp;', '&amp;amp;', $value);
 
                 $structure->addChild($key, $value);
             }
