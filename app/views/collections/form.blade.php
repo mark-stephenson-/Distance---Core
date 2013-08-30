@@ -45,7 +45,7 @@
                         <div class="resource">
                             <div class="image">
                                 @if ( $logo->isImage() )
-                                    <img src="/file/{{ $logo->filename }}?type=view" alt="" />
+                                    <img src="{{ $logo->path() }}?type=view" alt="" />
                                 @else
                                     <i class="icon-file"></i>
                                 @endif
@@ -85,12 +85,11 @@
         </div>
 
         <div class="modal-body">
-            <table class="table">
+            <table class="table" style="table-layout: fixed;">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Filename</th>
-                        <th>Description</th>
+                        <th style="width: 420px !important; max-width: 420px;">Filename</th>
                         <th>Sync</th>
                         <th></th>
                     </tr>
@@ -109,13 +108,17 @@
                         <tr>
                             <td>
                                 @if ( $resource->isImage() )
-                                    <img src="/file/{{ $resource->filename }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
+                                    <img src="{{ $resource->path() }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
                                 @else
                                     <i class="icon-file"></i>
                                 @endif
                             </td>
-                            <td>{{ $resource->filename }}</td>
-                            <td>{{ $resource->description }}</td>
+                            <td>
+                                {{ substr($resource->filename, 0, 50) }}
+                                @if (strlen($resource->filename) >= 50)
+                                    &hellip;
+                                @endif
+                            </td>
                             <td>
                                 @if ( $resource->sync )
                                     <i class="icon-ok"></i>
@@ -124,7 +127,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->filename }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
+                                <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->path() }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
                             </td>
                         </tr>
                     @endforeach
@@ -155,7 +158,7 @@
             $(".resource-container .resource .filename").html( $(this).attr('data-filename') );
 
             if ( $(this).attr('data-image') == "true") {
-                $(".resource-container .resource .image").html( '<img src="/file/' + $(this).attr('data-filename') +'?type=view" />' );
+                $(".resource-container .resource .image").html( '<img src="' + $(this).attr('data-filename') +'?type=view" />' );
             }
             $("#resource_window").modal('hide');
         });

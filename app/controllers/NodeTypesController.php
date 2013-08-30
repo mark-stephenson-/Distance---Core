@@ -91,6 +91,10 @@ class NodeTypesController extends BaseController
         $nodeType->label = Input::get('label');
         $nodeType->name = Str::slug($nodeType->label);
         
+        // We'll cache this so we can remove any columns
+        $removedColumns = $nodeType->columns;
+        $nodeType->columns = Input::get('columns');
+
         $enumCols = array();
 
         foreach($nodeType->columns as $column) {
@@ -100,28 +104,24 @@ class NodeTypesController extends BaseController
         }
 
         // Do a check for enum columns...
-        if (count(Input::get('columns'))) {
-            foreach(Input::get('columns') as $column) {
+        if (count($nodeType->columns)) {
+            foreach($nodeType->columns as $column) {
 
-                if ($column['category'] == 'enum' OR $column['category'] == 'enum-multi') {
+                if ($column->category == 'enum' OR $column->category == 'enum-multi') {
 
                     // Compare the two lists...
-                    $removals = array_diff($enumCols[ $column['name'] ], $column['values']);
+                    $removals = array_diff($enumCols[ $column->name ], $column->values);
 
                     foreach($removals as $removal) {
                         DB::table($nodeType->tableName())
-                            ->where( $column['name'], '=', $removal)
-                            ->update(array( $column['name'] => DB::raw('NULL')));
+                            ->where( $column->name, '=', $removal)
+                            ->update(array( $column->name => DB::raw('NULL')));
                     }
 
                 }
 
             }
         }
-
-        // We'll cache this so we can remove any columns
-        $removedColumns = $nodeType->columns;
-        $nodeType->columns = Input::get('columns');
 
         foreach($removedColumns as $key => $val) {
 

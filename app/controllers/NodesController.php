@@ -207,10 +207,10 @@ class NodesController extends BaseController
             // Assuming the parent exists...
             $branch->makeFirstChildOf($parent);
 
-            return Redirect::route('nodes.hierarchy', array($appId, $node->collection_id))
+            return Redirect::route('nodes.view', array($appId, $node->collection_id, $node->id))
                 ->with('successes', new MessageBag(array("The node {$node->title} has been created.")));
         } else {
-            return Redirect::route('nodes.list', array($appId, $node->collection_id))
+            return Redirect::route('nodes.view', array($appId, $node->collection_id, $node->id))
                 ->with('successes', new MessageBag(array("The node {$node->title} has been created.")));
         }
 

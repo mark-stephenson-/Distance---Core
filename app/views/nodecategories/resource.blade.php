@@ -6,13 +6,17 @@
         $resource = null;
     }
 
+    if (!$resource and Input::old('nodetype.'. $column->name)) {
+        $resource = Resource::find(Input::old('nodetype.'. $column->name));
+    }
+
     $catalogue = Catalogue::find($column->catalogue);
 ?>
 
 <div class="resource-{{ $column->name }}-container resource-view">
     {{ Form::hidden('nodetype['. $column->name .']', @$data->{$column->name}, array('id' => 'nodetype-'. $column->name)) }}
 
-    @if ( $resource )
+    @if ($resource)
         <div class="resource">
             <div class="image">
                 @if ( $resource->isImage() )
@@ -41,12 +45,11 @@
     </div>
 
     <div class="modal-body">
-        <table class="table">
+        <table class="table" style="table-layout: fixed;">
             <thead>
                 <tr>
                     <th></th>
-                    <th>Filename</th>
-                    <th>Description</th>
+                    <th style="width: 420px !important; max-width: 420px;">Filename</th>
                     <th>Sync</th>
                     <th></th>
                 </tr>
@@ -62,8 +65,12 @@
                                 <i class="icon-file"></i>
                             @endif
                         </td>
-                        <td>{{ $resource->filename }}</td>
-                        <td>{{ $resource->description }}</td>
+                        <td>
+                            {{ substr($resource->filename, 0, 50) }}
+                            @if (strlen($resource->filename) >= 50)
+                                &hellip;
+                            @endif
+                        </td>
                         <td>
                             @if ( $resource->sync )
                                 <i class="icon-ok"></i>

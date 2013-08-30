@@ -24,6 +24,15 @@
     <div class="tab-content">
         <div class="tab-pane active" id="info">
 
+            @if (Sentry::getUser()->isSuperUser())
+                <div class="control-group">
+                    {{ Form::label('super_admin', 'Super Admin', array('class' => 'control-label')) }}
+                    <div class="controls">
+                        {{ Form::checkbox('super_admin', true, $user->isSuperUser()) }}
+                    </div>
+                </div>
+            @endif
+
             <div class="control-group">
                 {{ Form::label('first_name', 'First Name', array('class' => 'control-label')) }}
                 <div class="controls">
@@ -155,15 +164,6 @@
         <!-- /#permissions.tab-pane -->
         @endif
 
-        <!-- <div class="tab-pane" id="permissions">
-            @if ($user->exists)
-                <section class="permission-tree">
-                    {{ $permissions }}
-                </section>
-            @else
-                <p>Please create the user before trying to add permission overrides</p>
-            @endif
-        </div> -->
     </div>   
 
     <div class="form-actions">

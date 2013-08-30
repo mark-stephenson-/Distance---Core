@@ -192,7 +192,7 @@ class NodeType extends BaseModel {
         if (count($columns)) {
             foreach($columns as $column) {
 
-                if (empty($post_data[$column->name])) {
+                if (!isset($post_data[$column->name]) or $post_data[$column->name] == '') {
                     $errors[] = $column->label;
                 }
 

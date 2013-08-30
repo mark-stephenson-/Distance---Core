@@ -143,16 +143,6 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div class="controls">
-            @if (!$nodeType->exists)
-                {{ Form::submit('Create Node Type', array('class' => 'btn')) }}
-            @else
-                {{ Form::submit('Save Changes', array('class' => 'btn')) }}
-            @endif
-        </div>
-    </div>
-
     <ul id="js-nodes_container">
         @if ($nodeType->exists)
             @foreach($nodeType->columns as $column)
@@ -163,12 +153,12 @@
         @endif
     </ul>
 
-    <div class="control-group">
+    <div class="control-group pull-right">
         <div class="controls">
             @if (!$nodeType->exists)
-                {{ Form::submit('Create Node Type', array('class' => 'btn')) }}
+                {{ Form::submit('Create Node Type', array('class' => 'btn btn-primary')) }}
             @else
-                {{ Form::submit('Save Changes', array('class' => 'btn')) }}
+                {{ Form::submit('Save Changes', array('class' => 'btn btn-primary')) }}
             @endif
         </div>
     </div>

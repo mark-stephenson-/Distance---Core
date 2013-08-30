@@ -6,6 +6,15 @@ return array(
         'value' => 'cms.*',
         'children' => array(
 
+            'Generic' => array(
+                'value' => 'cms.generic.*',
+                'children' => array(
+                    'Can Login' => array(
+                        'value' => 'cms.generic.login'
+                    ),
+                ),
+            ),
+
             'Node Types' => array(
                 'value' => 'cms.node-types.*',
                 'children' => array(

@@ -27,7 +27,7 @@ class UsersController extends BaseController
     {
         $user = new User;
 
-        return View::make('users.form', compact('user', 'groups', 'permissions'));
+        return View::make('users.form', compact('user', 'groups'));
     }
 
     public function store()
@@ -76,9 +76,8 @@ class UsersController extends BaseController
         }
 
         $groups = Sentry::getGroupProvider()->findAll();
-        $permissions = Permission::tree($user, Collection::get());
 
-        return View::make('users.form', compact('user', 'groups', 'permissions'));
+        return View::make('users.form', compact('user', 'groups'));
     }
 
     public function update($userId)
@@ -130,6 +129,16 @@ class UsersController extends BaseController
 
         if (Input::get('password')) {
             $user->password = Input::get('password');
+        }
+
+        if (Input::get('super_admin') and Sentry::getUser()->isSuperUser()) {
+            $user->permissions = array(
+                'superuser' => true
+            );
+        } else {
+            $user->permissions = array(
+                'superuser' => false
+            );
         }
 
         // $user->permissions = Input::get('permissions', []);

@@ -16,7 +16,7 @@
   @endforeach
 @endif
 
-{{ Form::textarea('', $data->{$column->name}, array('class' => 'span10', 'id' => 'code-' . $identifier)) }}
+{{ Form::textarea('', str_replace('&', '&amp;', $data->{$column->name}), array('class' => 'span10', 'id' => 'code-' . $identifier)) }}
 
 <script type="text/javascript">
         CodeMirror.fromTextArea(document.getElementById("code-{{ $identifier }}"), {
