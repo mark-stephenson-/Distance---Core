@@ -8,6 +8,25 @@
     <style> table thead .cursor{ cursor: pointer; }</style>
     <script type="text/javascript" src="/js/stupidtable.js"></script>
     <script>
+
+        var nodeToPublish = null;
+
+        $('.open-publish-node-modal').on('click', function(e) {
+            e.preventDefault();
+
+            nodeToPublish = $(this);
+
+            $('#nodePublishModal').modal('show');
+        });
+
+        $('#publishNodeConfirm').on('click', function(e) {
+
+            e.preventDefault();
+
+            window.location = nodeToPublish.attr('href');
+
+        });
+
         $("table").stupidtable();
 
         $('#openNodeModal').on('click', function(e) {
@@ -100,6 +119,27 @@
         <div class="modal-footer">
             <a href="#" data-dismiss="modal" class="btn">Close</a>
             <a href="#" class="btn btn-primary" id="addNodeConfirm">Add Node</a>
+        </div>
+    </div>
+
+    <div class="modal hide fade" id="nodePublishModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Are you sure?</h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to publish this revision?</p>
+            <div class="well">
+                <p><strong>This will also&hellip;</strong></p>
+                <ul>
+                    <li>Make the newly published revision immediately available on the application.</li>
+                    <li>Retire the current published revision if there is one.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn">Close</a>
+            <a href="#" class="btn btn-primary" id="publishNodeConfirm">Yes, I'm Sure</a>
         </div>
     </div>
 

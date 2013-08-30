@@ -21,22 +21,33 @@
     </td>
     <td>{{ date('d M Y H:i', strtotime($node->updated_at)) }}</td>
     <td class="actions">
-        @if (isset($node->branch_id) and $node->branch_id)
-            @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.read'))
-                <a href="{{ route('nodes.view', array($collection->application_id, $collection->id, $node->id, 'branch', $node->branch_id)) }}" class="btn btn-small"><i class="icon-search"></i> View</a>
+
+        <div class="btn-group pull-right">
+
+            @if (Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodeType->name . '.revision-management'))
+                @if ($node->latest_revision != $node->published_revision)
+                    <a href="{{ route('nodes.publish', array(CORE_APP_ID, $collection->id, $node->id, $node->latest_revision)) }}" rel="tooltip" title="Publish" class="btn btn-small open-publish-node-modal"><i class="icon-level-up"></i></a>
+                @endif
             @endif
 
-            @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update'))
-                <a href="{{ route('nodes.edit', array($collection->application_id, $collection->id, $node->id, 'branch', $node->branch_id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-            @endif
-        @else
-            @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.read'))
-                <a href="{{ route('nodes.view', array($collection->application_id, $collection->id, $node->id)) }}" class="btn btn-small"><i class="icon-search"></i> View</a>
+            @if (isset($node->branch_id) and $node->branch_id)
+                @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.read'))
+                    <a rel="tooltip" title="View" href="{{ route('nodes.view', array($collection->application_id, $collection->id, $node->id, 'branch', $node->branch_id)) }}" class="btn btn-small"><i class="icon-search"></i></a>
+                @endif
+
+                @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update'))
+                    <a rel="tooltip" title="Edit" href="{{ route('nodes.edit', array($collection->application_id, $collection->id, $node->id, 'branch', $node->branch_id)) }}" class="btn btn-small"><i class="icon-edit"></i></a>
+                @endif
+            @else
+                @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.read'))
+                    <a rel="tooltip" title="View" href="{{ route('nodes.view', array($collection->application_id, $collection->id, $node->id)) }}" class="btn btn-small"><i class="icon-search"></i></a>
+                @endif
+
+                @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update'))
+                    <a rel="tooltip" title="Edit" href="{{ route('nodes.edit', array($collection->application_id, $collection->id, $node->id, $node->latest_revision)) }}" class="btn btn-small"><i class="icon-edit"></i></a>
+                @endif
             @endif
 
-            @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update'))
-                <a href="{{ route('nodes.edit', array($collection->application_id, $collection->id, $node->id, $node->latest_revision)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-            @endif
-        @endif
+        </div>
     </td>
 </tr>
