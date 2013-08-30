@@ -8,6 +8,11 @@ class Node extends BaseModel
         return $this->belongsTo('Collection');
     }
 
+    public function owner()
+    {
+        return $this->belongsTo('User', 'owned_by');
+    }
+
     public function nodetype()
     {
         return $this->belongsTo('NodeType', 'node_type');
