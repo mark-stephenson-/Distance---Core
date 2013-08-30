@@ -5,7 +5,11 @@
 @stop
 
 @section('js')
+    <style> table thead .cursor{ cursor: pointer; }</style>
+    <script type="text/javascript" src="/js/stupidtable.js"></script>
     <script>
+        $("table").stupidtable();
+
         $('#openNodeModal').on('click', function(e) {
             e.preventDefault();
 
@@ -60,12 +64,12 @@
 
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Node Type</th>
-                <th>Status</th>
-                <th>Owner</th>
-                <th>Created</th>
+                <th class="cursor" data-sort="int">ID</th>
+                <th class="cursor" data-sort="string">Title</th>
+                <th class="cursor" data-sort="string">Node Type</th>
+                <th class="cursor" data-sort="string">Status</th>
+                <th class="cursor" data-sort="string">Owner</th>
+                <th class="cursor" data-sort="int">Created</th>
                 <th width="150"></th>
             </tr>
         </thead>
