@@ -24,19 +24,8 @@ class NodesController extends BaseController
     }
 
     public function nodeList($appId, $collectionId = 0) {
-        if ( Input::get('filter') or Input::get('sort') ) {
-            $collection = Collection::with(array('nodes' => function($query) {
-                if ( Input::get('filter') ) {
-                    $query->where('node_type', '=', Input::get('filter'));
-                }
 
-                if ( Input::get('sort') ) {
-                    $query->orderBy('title', Input::get('sort'));
-                }
-            }, 'nodes.owner', 'nodes.nodetype'))->find($collectionId);
-        } else {
-            $collection = Collection::with(array('nodes', 'nodes.owner', 'nodes.nodetype'))->find($collectionId);
-        }
+        $collection = Collection::with(array('nodes', 'nodes.owner', 'nodes.nodetype'))->find($collectionId);
 
         if (!$collection) {
             return Redirect::back()
@@ -47,15 +36,25 @@ class NodesController extends BaseController
         Session::put('current-collection', $collection->id);
         Session::put('collection-node-view', 'list');
 
-        $nodes = $collection->nodes;
+        $nodes = $collection->nodes();
 
+        if ( Input::get('filter') ) {
+            $nodes->where('node_type', '=', Input::get('filter'));
+        }
+
+        if ( Input::get('sort') ) {
+            $nodes->orderBy('title', Input::get('sort'));
+        }
+
+        $nodes = $nodes->paginate(20);
+        
         return View::make('nodes.list', compact('collection', 'nodes'));
 
     }
 
     public function nodeTypeList($appId, $collectionId = 0, $nodeTypeName = '')
     {
-        $collection = Collection::find($collectionId);
+        $collection = Collection::with(array('nodes', 'nodes.owner', 'nodes.nodetype'))->find($collectionId);
         $nodeType = NodeType::where('name', '=', $nodeTypeName)->firstOrFail();
 
         if (!$collection) {
@@ -66,7 +65,9 @@ class NodesController extends BaseController
         Session::put('current-collection', $collection->id);
         Session::put('collection-node-view', 'list');
 
-        $nodes = $collection->nodes()->where('node_type', '=', $nodeType->id)->get();
+        $nodes = $collection->nodes()->where('node_type', '=', $nodeType->id);
+
+        $nodes = $nodes->paginate(20);
 
         return View::make('nodes.list', compact('collection', 'nodes', 'nodeType'));
     }

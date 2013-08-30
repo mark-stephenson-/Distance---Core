@@ -5,7 +5,11 @@
 @stop
 
 @section('js')
+    <style> table thead .cursor{ cursor: pointer; }</style>
+    <script type="text/javascript" src="/js/stupidtable.js"></script>
     <script>
+        $("table").stupidtable();
+
         $('#openNodeModal').on('click', function(e) {
             e.preventDefault();
 
@@ -37,9 +41,8 @@
     <form class="form-inline pull-left">
         @if (Route::currentRouteName() !== 'nodes.type-list')
             {{ Form::select('filter', array('' => 'No Filter') + $collection->nodetypes->lists('label', 'id'), Input::get('filter') ?: 0) }}
+            <input type="submit" value="Go" class="btn" />
         @endif
-        {{ Form::select('sort', array('' => 'No Sort') + array('ASC' => 'A-Z', 'DESC' => 'Z-A')) }}
-        <input type="submit" value="Go" class="btn" />
     </form>
 
     <p class="pull-right">
@@ -61,12 +64,12 @@
 
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Node Type</th>
-                <th>Status</th>
-                <th>Owner</th>
-                <th>Last Updated</th>
+                <th class="cursor" data-sort="int">ID</th>
+                <th class="cursor" data-sort="string">Title</th>
+                <th class="cursor" data-sort="string">Node Type</th>
+                <th class="cursor" data-sort="string">Status</th>
+                <th class="cursor" data-sort="string">Owner</th>
+                <th class="cursor" data-sort="int">Last Updated</th>
                 <th width="150"></th>
             </tr>
         </thead>
@@ -76,8 +79,11 @@
                 @include('nodes.list-row', compact('node', 'nodeTypes'))
             @endforeach
         </tbody>
-
     </table>
+
+    <div style="text-align: center">
+        <?php echo $nodes->links(); ?>
+    </div>
 
     <div class="modal hide fade" id="addNodeModal">
         <div class="modal-header">
