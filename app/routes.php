@@ -74,8 +74,12 @@ Route::filter('auth', 'Core\Filters\Auth@auth');
 App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $exception)
 {
     if ($exception->getStatusCode() == 403) {
-        die('access denied');
+        return View::make('403');
     }
+});
+
+App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+    return View::make('404');
 });
 
 Route::group(array('before' => array('auth')), function() {
