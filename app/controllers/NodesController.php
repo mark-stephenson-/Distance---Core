@@ -45,8 +45,8 @@ class NodesController extends BaseController
             $nodes->where('node_type', '=', Input::get('filter'));
         }
 
-        if ( Input::get('sort') ) {
-            $nodes->orderBy('title', Input::get('sort'));
+        if ( Input::get('sort') and Input::get('column') and in_array( Input::get('column'), array('id', 'title', 'node_type', 'status', 'created_at') ) ) {
+            $nodes->orderBy(Input::get('column'), Input::get('sort'));
         }
 
         $nodes = $nodes->paginate(20);
