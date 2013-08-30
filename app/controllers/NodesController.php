@@ -33,9 +33,9 @@ class NodesController extends BaseController
                 if ( Input::get('sort') ) {
                     $query->orderBy('title', Input::get('sort'));
                 }
-            }))->find($collectionId);
+            }, 'nodes.owner', 'nodes.nodetype'))->find($collectionId);
         } else {
-            $collection = Collection::find($collectionId);
+            $collection = Collection::with(array('nodes', 'nodes.owner', 'nodes.nodetype'))->find($collectionId);
         }
 
         if (!$collection) {
@@ -315,6 +315,8 @@ class NodesController extends BaseController
             $nodeRevision['status'] = 'draft';
 
             $nodeResult = $node->updateDraft($nodeRevision, $revisionId);
+
+            $node->touch();
         } else {
             // Can't be updated! We'll make a new draft
             $nodeAction = 'create';

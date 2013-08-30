@@ -66,7 +66,7 @@
                 <th>Node Type</th>
                 <th>Status</th>
                 <th>Owner</th>
-                <th>Created</th>
+                <th>Last Updated</th>
                 <th width="150"></th>
             </tr>
         </thead>
