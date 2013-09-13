@@ -117,7 +117,7 @@ class NodeController extends \BaseController {
                                     $node->{$item->name} = '';
                                 }
                             } else {
-                                $node->{$item->name} = false;
+                                $node->{$item->name} = '';
                             }
                         } else if ( $item->category == "userlookup-multi" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
                             $users = @User::whereIn('id', explode(',', $published_revision->{$item->name}))->get();
