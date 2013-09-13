@@ -8,6 +8,20 @@
     @endif
 @stop
 
+@section('js')
+
+    <script>
+
+        $('.js-select-all').on('click', function() {
+
+            // $(this).next();
+
+        });
+
+    </script>
+
+@stop
+
 @section('body')
     
     {{ formModel($group, 'groups', null, false) }}

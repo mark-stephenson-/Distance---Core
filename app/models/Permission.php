@@ -1,10 +1,21 @@
 <?php
 
-Form::macro('permissionCheckbox', function($existingPermissions, $permission, $title, $wrapInLi = true)
+Form::macro('permissionCheckbox', function($existingPermissions, $permission, $title, $wrapInLi = true, $attributes = array())
 {
     $ret = "<label class='checkbox inline'>" . 
-                                            Form::checkbox('permissions[' . $permission . ']', 1, $existingPermissions->hasAccess($permission)) . $title
+                                            Form::checkbox('permissions[' . $permission . ']', 1, $existingPermissions->hasAccess($permission), $attributes) . $title
                                          . "</label>";
+    if ($wrapInLi) {
+        $ret = "<li>$ret</li>";
+    }
+
+    return $ret;
+});
+
+Form::macro('selectAllCheckbox', function($connectId, $wrapInLi = true)
+{
+    $ret = "<label class='checkbox inline'>" . Form::checkbox('', 1, 0, array('class' => 'js-select-all', 'data-to-select-id' => $connectId)) . "Select All</label>";
+
     if ($wrapInLi) {
         $ret = "<li>$ret</li>";
     }
@@ -101,8 +112,13 @@ class Permission{
 
                         $html .= "<li><h6>Can Upload to:</h6></li>";
 
+
+                        $selectId = uniqid();
+
+                        $html .= Form::selectAllCheckbox($selectId);
+
                         foreach($collection->catalogues as $catalogue) {
-                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.' . $catalogue->id . '.upload', $catalogue->name);
+                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.' . $catalogue->id . '.upload', $catalogue->name, array('data-select-id' => $selectId));
                         }
 
                         foreach($collection->nodetypes as $nodetype) {
@@ -118,8 +134,11 @@ class Permission{
                             $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management', 'Revision Management', false);
                             $html .= "</li>";
 
+                            $selectId = uniqid();
+                            $html .= Form::selectAllCheckbox($selectId);
+
                             foreach ($nodetype->columns as $column) {                                
-                                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name, $column->label);
+                                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name, $column->label, array('data-select-id' => $selectId));
                             }
 
                         }

@@ -100,14 +100,22 @@ class NodeController extends \BaseController {
                             $nodes = @Node::whereIn('id', explode(',', $published_revision->{$item->name}))->get();
 
                             foreach ($nodes as &$_node) {
-                                $_node = $this->doExtended($_node);
+                                if ($_node) {
+                                    $_node = $this->doExtended($_node);
+                                } else {
+                                    $_node = '';
+                                }
                             }
 
                             $node->{str_plural($item->name)} = $nodes->toArray();
                         } else if ( $item->category == "nodelookup" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
                             if ( $published_revision->{$item->name} ) {
                                 $nodes = @Node::whereId( $published_revision->{$item->name})->first();
-                                $node->{$item->name} = $this->doExtended($nodes)->toArray();
+                                if ($nodes) {
+                                    $node->{$item->name} = $this->doExtended($nodes)->toArray();
+                                } else {
+                                    $node->{$item->name} = '';
+                                }
                             } else {
                                 $node->{$item->name} = false;
                             }
