@@ -11,6 +11,7 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function register()
     {
+        $this->registerEmailInterface();
     }
 
     /**
@@ -21,5 +22,15 @@ class CoreServiceProvider extends ServiceProvider {
     public function boot()
     {
         
+    }
+
+
+    public function registerEmailInterface()
+    {
+
+        $this->app->bind('Core\Repositories\Email\EmailInterface', function($app) {
+            return new \Core\Repositories\Email\LaravelEmail();
+        });
+
     }
 }
