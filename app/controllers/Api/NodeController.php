@@ -130,7 +130,7 @@ class NodeController extends \BaseController {
                     }
 
                     if ($item->category == "date") {
-                        // $node->{$item->name} = Api::convertDate($published_revision->{$item->name});
+                        $node->{$item->name} = Api::convertDate($published_revision->{$item->name});
                     }
                     
             }
