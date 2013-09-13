@@ -105,8 +105,12 @@ class NodeController extends \BaseController {
 
                             $node->{str_plural($item->name)} = $nodes->toArray();
                         } else if ( $item->category == "nodelookup" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
-                            $nodes = @Node::whereId( $published_revision->{$item->name})->first();
-                            $node->{$item->name} = $this->doExtended($nodes)->toArray();
+                            if ( $published_revision->{$item->name} ) {
+                                $nodes = @Node::whereId( $published_revision->{$item->name})->first();
+                                $node->{$item->name} = $this->doExtended($nodes)->toArray();
+                            } else {
+                                $node->{$item->name} = false;
+                            }
                         } else if ( $item->category == "userlookup-multi" and ( isset($item->includeWhenExpanded) and $item->includeWhenExpanded) ) {
                             $users = @User::whereIn('id', explode(',', $published_revision->{$item->name}))->get();
 
@@ -126,7 +130,7 @@ class NodeController extends \BaseController {
                     }
 
                     if ($item->category == "date") {
-                        $node->{$item->name} = Api::convertDate($published_revision->{$item->name});
+                        // $node->{$item->name} = Api::convertDate($published_revision->{$item->name});
                     }
                     
             }
