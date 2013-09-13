@@ -25,6 +25,7 @@
                 <th></th>
                 <th>Name</th>
                 <th>Sync</th>
+                <th>Public</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -50,6 +51,13 @@
                         <a href="" class="btn toggle-sync" data-id="{{ $resource->id }}" data-sync="0"><i class="icon-ok"></i></a>
                     @else
                         <a href="" class="btn toggle-sync" data-id="{{ $resource->id }}" data-sync="1"><i class="icon-remove"></i></a>
+                    @endif
+                </td>
+                <td>
+                    @if ($resource->public)
+                        <a href="" class="btn toggle-pub" data-id="{{ $resource->id }}" data-pub="0"><i class="icon-ok"></i></a>
+                    @else
+                        <a href="" class="btn toggle-pub" data-id="{{ $resource->id }}" data-pub="1"><i class="icon-remove"></i></a>
                     @endif
                 </td>
                 <td width="350">
@@ -134,6 +142,28 @@
                 data: 'resourceID=' + resourceID + '&sync=' + sync,
                 success: function() {
                     button.attr('data-sync', (sync == "1") ? 0 : 1);
+
+                    button.find('i').toggleClass('icon-remove').toggleClass('icon-ok');
+                }
+            }).done( function() {
+                button.removeClass('disabled');
+            });
+        });
+
+        $(".toggle-pub").click( function(e) {
+            e.preventDefault();
+            var button = $(this);
+            var resourceID = button.attr('data-id');
+            var pub = button.attr('data-pub');
+
+            button.addClass('disabled');
+
+            // Fire off the ajax
+            $.ajax({
+                url: '/ajax/resources/toggle_pub',
+                data: 'resourceID=' + resourceID + '&pub=' + pub,
+                success: function() {
+                    button.attr('data-pub', (pub == "1") ? 0 : 1);
 
                     button.find('i').toggleClass('icon-remove').toggleClass('icon-ok');
                 }

@@ -15,4 +15,15 @@ class ResourcesController extends \BaseController
             return Response::make('', 400);
         }
     }
+
+    public function togglePub() {
+        if ( Input::get('resourceID') !== null and Input::get('pub') !== null ) {
+            $resource = Resource::whereId( Input::get('resourceID') )->first();
+
+            $resource->public = Input::get('pub');
+            $resource->save();
+        } else {
+            return Response::make('', 400);
+        }
+    }
 }

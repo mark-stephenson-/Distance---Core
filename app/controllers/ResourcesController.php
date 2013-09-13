@@ -5,6 +5,21 @@ class ResourcesController extends BaseController
     
     public function load($collectionId, $fileName)
     {
+        // Check if it's public
+        if (!Sentry::check()) {
+            $resource = Resource::where('filename', '=', $fileName)
+                                ->where('collection_id', '=', $collectionId)
+                                ->first();
+
+            if (!$resource) {
+                return Response::make('', 404);
+            }
+
+            if (!$resource->public) {
+                return Response::make('', 403);
+            }
+        }
+
         return Resource::fetch($collectionId, urldecode($fileName));
     }
 

@@ -82,6 +82,8 @@ App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException
     return View::make('404');
 });
 
+Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
+
 Route::group(array('before' => array('auth')), function() {
 
     /*
@@ -90,7 +92,6 @@ Route::group(array('before' => array('auth')), function() {
     Route::get('me', array('as' => 'me', 'uses' => 'MeController@index'));
     Route::post('me', array('as' => 'me.update', 'uses' => 'MeController@update'));
 
-    Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
 
     Route::group(array('before' => array('auth', 'checkPermissions')), function() {
 
@@ -189,6 +190,7 @@ Route::group(array('before' => array('auth')), function() {
         Route::group(array('prefix' => 'ajax'), function() {
             Route::group(array('prefix' => 'resources'), function() {
                 Route::get('toggle_sync', 'Ajax\ResourcesController@toggleSync');
+                Route::get('toggle_pub', 'Ajax\ResourcesController@togglePub');
             });
         });
 
