@@ -1,14 +1,32 @@
 @extends('layouts.master')
 
+<?php
+    function orderColumn($columnName) {
+        $currentURL = URL::current();
+        $queryString = array( 'filter' => Input::get('filter'), 'column' => $columnName );
+
+        if ( $columnName == Input::get('column') ) {
+            if ( Input::get('sort') == 'DESC') {
+                $queryString['sort'] = 'ASC';
+            } else {
+                $queryString['sort'] = 'DESC';
+            }
+        } else {
+            $queryString['sort'] = 'DESC';
+        }
+
+        return $currentURL . '?' . http_build_query($queryString);
+    }
+?>
+
 @section('header')
     <h1>{{ $collection->name }}</h1>
 @stop
 
 @section('js')
     <style> table thead .cursor{ cursor: pointer; }</style>
-    <script type="text/javascript" src="/js/stupidtable.js"></script>
     <script>
-
+    
         var nodeToPublish = null;
 
         $('.open-publish-node-modal').on('click', function(e) {
@@ -26,8 +44,6 @@
             window.location = nodeToPublish.attr('href');
 
         });
-
-        $("table").stupidtable();
 
         $('#openNodeModal').on('click', function(e) {
             e.preventDefault();
@@ -83,12 +99,12 @@
 
         <thead>
             <tr>
-                <th class="cursor" data-sort="int">ID</th>
-                <th class="cursor" data-sort="string">Title</th>
-                <th class="cursor" data-sort="string">Node Type</th>
-                <th class="cursor" data-sort="string">Status</th>
-                <th class="cursor" data-sort="string">Owner</th>
-                <th class="cursor" data-sort="int">Last Updated</th>
+                <th class="cursor"><a href="{{ orderColumn('id') }}">ID</a></th>
+                <th class="cursor"><a href="{{ orderColumn('title') }}">Title</a></th>
+                <th class="cursor"><a href="{{ orderColumn('node_type') }}">Node Type</a></th>
+                <th class="cursor"><a href="{{ orderColumn('status') }}">Status</a></th>
+                <th class="cursor">Owner</th>
+                <th class="cursor"><a href="{{ orderColumn('created_at') }}">Created</a></th>
                 <th width="150"></th>
             </tr>
         </thead>
@@ -101,7 +117,7 @@
     </table>
 
     <div style="text-align: center">
-        <?php echo $nodes->links(); ?>
+        <?php echo $nodes->appends( array('filter' => Input::get('filter'), 'column' => Input::get('column'), 'sort' => Input::get('sort')) )->links(); ?>
     </div>
 
     <div class="modal hide fade" id="addNodeModal">
