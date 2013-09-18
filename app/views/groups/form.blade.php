@@ -14,9 +14,32 @@
 
         $('.js-select-all').on('click', function() {
 
-            // $(this).next();
+            var action = false;
+
+            if ($(this).is(':checked')) {
+                action = true;
+            }
+
+            checkNextItem($(this), action);
 
         });
+
+        function checkNextItem(ele, action) {
+
+            var li = ele.closest('li').next('li');
+
+            if (li.length && li.hasClass('title')) {
+                return;
+            }
+
+            var checkbox = li.find('input[type=checkbox]');
+
+            if (checkbox.length) {
+                checkbox.prop('checked', action);
+                checkNextItem(checkbox, action);
+            }
+
+        }
 
     </script>
 

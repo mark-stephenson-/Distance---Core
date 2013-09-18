@@ -36,13 +36,13 @@ class Permission{
 
         // Top level items
         foreach(self::config() as $title => $permission) {
-            $html .= "<li><h3>" . $title . "</h3>";
+            $html .= "<li class='title'><h3>" . $title . "</h3>";
 
             if (isset($permission['children'])) {
                 $html .= "<ul>";
 
                 foreach($permission['children'] as $subTitle => $subPermission) {
-                    $html .= "<li><h4>" . $subTitle . "</h4>";
+                    $html .= "<li class='title'><h4>" . $subTitle . "</h4>";
 
                         if (isset($subPermission['children'])) {
                             $html .= "<ul>";
@@ -66,7 +66,7 @@ class Permission{
             $html .= "</li>";
         }
 
-        $html .= "<li><h3>Apps</h3>";
+        $html .= "<li class='title'><h3>Apps</h3>";
 
         if ($apps) {
             
@@ -96,21 +96,21 @@ class Permission{
 
                 foreach($app->collections as $collection) {
 
-                    $html .= "<li><h5>Collection: " . $collection->name . "</h5><ul>";
+                    $html .= "<li class='title'><h5>Collection: " . $collection->name . "</h5><ul>";
 
-                        $html .= "<li><h6>Collection Permissions</h6></li>";
+                        $html .= "<li class='title'><h6>Collection Permissions</h6></li>";
 
                         $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.update', 'Update');
                         $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.delete', 'Delete');
                         $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.hierarchy-management', 'Hierarchy Management');
 
-                        $html .= "<li><h6>Catalogue Permissions</h6></li>";
+                        $html .= "<li class='title'><h6>Catalogue Permissions</h6></li>";
 
                         $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.create', 'Create');
                         $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.update', 'Update');
                         $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.delete', 'Delete');
 
-                        $html .= "<li><h6>Can Upload to:</h6></li>";
+                        $html .= "<li class='title'><h6>Can Upload to:</h6></li>";
 
 
                         $selectId = uniqid();
@@ -123,7 +123,7 @@ class Permission{
 
                         foreach($collection->nodetypes as $nodetype) {
 
-                            $html .= "<li><h6>Node Type: " . $nodetype->label . "</h6></li>";
+                            $html .= "<li class='title'><h6>Node Type: " . $nodetype->label . "</h6></li>";
 
                             // CRUD permissions
                             $html .= "<li style='display: block; margin-bottom: 10px;'>";
