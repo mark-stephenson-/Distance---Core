@@ -13,6 +13,12 @@ class Auth
             Session::put('afterLogin', URL::current());
         
             return Redirect::route('login');
+        } else {
+            // Check they are still allowed to login
+            if (!Sentry::getUser()->hasAccess('cms.generic.login')) {
+                return Redirect::route('login')
+                        ->withErrors(array('You do not have permission to access this.'));
+            }
         }
     }
 
