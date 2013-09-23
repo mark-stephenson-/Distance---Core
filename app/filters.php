@@ -91,6 +91,8 @@ Route::filter('apiAuthentication', function()
 
 Route::filter('checkPermissions', function($request)
 {
+    $additionalProperties = array();
+
     $replacements = array(
         '.list' => '',
         '.hierarchy' => '',
@@ -100,13 +102,20 @@ Route::filter('checkPermissions', function($request)
 
     $property = 'cms.' . implode('.', Request::segments());
 
+
     $property = str_replace(array_keys($replacements), array_values($replacements), $property);
 
     if ($nodesPos = strpos($property, '.nodes')) {
         $property = substr($property, 0, $nodesPos);
     }
 
-    if (!Sentry::getUser()->hasAnyAccess(array($property, $property . '.*'))) {
+    if ($collectionsPos = strpos($property, '.collections')) {
+        $additionalProperties[] = substr($property, 0, $collectionsPos) . '.collection-management';
+    }
+
+    $properties = array_merge($additionalProperties, array($property, $property . '.*'));
+
+    if (!Sentry::getUser()->hasAnyAccess($properties)) {
         App::abort(403);
     }
 });

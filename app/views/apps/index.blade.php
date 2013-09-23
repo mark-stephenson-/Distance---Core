@@ -25,6 +25,8 @@
             @foreach($apps as $app)
                 <?php
                     $collectionAccess = array();
+                    $collectionAccess[] = 'cms.apps.' . $app->id . '.collection-management';
+                    
                     foreach($app->collections as $collection) {
                         $collectionAccess[] = 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.*';
                     }
@@ -39,7 +41,7 @@
                         </td>
                         <td>
                             @foreach($app->collections as $collection)
-                                @if (Sentry::getUser()->hasAccess('cms.apps.' . $app->id . '.collections.' . $collection->id . '.*'))
+                                @if (Sentry::getUser()->hasAnyAccess(array('cms.apps.' . $app->id . '.collections.' . $collection->id . '.*', 'cms.apps.' . $app->id . '.collection-management')))
                                     {{ $collection->name }}<br />
                                 @endif
                             @endforeach
