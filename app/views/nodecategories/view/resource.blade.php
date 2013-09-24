@@ -21,3 +21,14 @@
 @else
     <p>-</p>
 @endif
+
+<script>
+    $(document).ready( function() {
+        $(".fancybox").fancybox({
+            padding: 0,
+            iframe : {
+                preload: false
+            }
+        });
+    })
+</script>
