@@ -45,7 +45,7 @@
                 </header>
                 <div class="content">
                     <header>
-                        @if (count(Collection::all()) and Application::current())
+                        @if (count(Collection::all()) and Application::current() and Collection::current())
                             <div class="btn-group change-collection">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                                     {{ @Collection::current()->name }}
@@ -62,7 +62,7 @@
                         @if (count(Application::all()) and Application::current())
                             <div class="btn-group change-app">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                    {{ Application::current()->name }}
+                                    {{ @Application::current()->name }}
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
