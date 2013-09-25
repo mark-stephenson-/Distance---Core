@@ -35,14 +35,14 @@
                     <nav>
                         <ul>
                             <li><a href="{{ route('me') }}">{{ Sentry::getUser()->full_name ?: Sentry::getUser()->email }}</a></li>
-                            <li><a href="#"><i class="icon-cog"></i></a></li>
+                            <!-- <li><a href="#"><i class="icon-cog"></i></a></li> -->
                             <li><a href="{{ route('logout') }}"><i class="icon-signout "></i></a></li>
                         </ul>
                     </nav>
                 </header>
                 <div class="content">
                     <header>
-                        @if ( count(Collection::all()) )
+                        @if (count(Collection::all()) and Application::current())
                             <div class="btn-group change-collection">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                                     {{ @Collection::current()->name }}
@@ -56,7 +56,7 @@
                             </div>
                         @endif
 
-                        @if ( count(Application::all()) )
+                        @if (count(Application::all()) and Application::current())
                             <div class="btn-group change-app">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                                     {{ Application::current()->name }}

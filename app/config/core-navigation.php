@@ -14,14 +14,14 @@ return array(
         'route'     => 'nodes.hierarchy',
         'params'    => array('[app-id]', '[collection-id]'),
         'icon'      => 'sitemap',
-        'access'    => null,
+        'access'    => 'cms.apps.[app-id].collections.[collection-id].*',
     ),
     array(
         'title'     => 'Node List',
         'route'     => 'nodes.list',
         'params'    => array('[app-id]', '[collection-id]'),
         'icon'      => 'th-list',
-        'access'    => null,
+        'access'    => 'cms.apps.[app-id].collections.[collection-id].*',
     ),
     array(
         'title'     => 'Collections',
@@ -77,7 +77,7 @@ return array(
         'route'     => 'nodes.type-list',
         'params'    => array('[app-id]', '[collection-id]', 'template'),
         'icon'      => 'code',
-        'access'    => null,
+        'access'    => 'cms.apps.[app-id].collections.[collection-id].*',
     ),
 
     /*
