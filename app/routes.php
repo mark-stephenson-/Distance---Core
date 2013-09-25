@@ -186,6 +186,7 @@ Route::group(array('before' => array('auth')), function() {
          */
         Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
         Route::resource('node-types', 'NodeTypesController');
+        Route::get('node-types/{id}/destroy', ['as' => 'node-types.destroy', 'uses' => 'NodeTypesController@destroy']);
 
         Route::group(array('prefix' => 'ajax'), function() {
             Route::group(array('prefix' => 'resources'), function() {

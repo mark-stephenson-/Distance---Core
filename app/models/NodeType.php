@@ -2,6 +2,8 @@
 
 class NodeType extends BaseModel {
 
+    protected $softDelete = true;
+    
     public function collections()
     {
         return $this->belongsToMany('Collection');

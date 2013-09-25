@@ -148,4 +148,16 @@ class NodeTypesController extends BaseController
         return NodeType::viewForCategory(Input::get('category'));
     }
 
+    public function destroy($id){
+        $nodeType = NodeType::find($id);
+
+        if ( ! $nodeType->delete() ) {
+            return Redirect::back()
+                ->withErrors(['Sorry, that node ' . $nodeType->label . ' couldn\'t be deleted.']);
+        }
+
+        return Redirect::back()
+                ->with('successes', new MessageBag([$nodeType->label . ' has been deleted.']) );
+    }
+
 }
