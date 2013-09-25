@@ -98,6 +98,7 @@ Route::filter('checkPermissions', function($request)
         '.hierarchy' => '',
         '.type-list' => '',
         'edit' => 'update',
+        'resources' => 'catalogues',
     );
 
     $property = 'cms.' . implode('.', Request::segments());
