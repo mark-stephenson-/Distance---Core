@@ -23,6 +23,9 @@
                     <a class="logo" href="/"><img src="/images/logo.png" /></a>
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
+                            <?php
+                                $item['access'] = str_replace($item['params'], replaceNavigationParams($item['params']), $item['access']);
+                            ?>
                             @if (Sentry::getUser()->hasAccess($item['access']))
                                 <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
                             @endif
