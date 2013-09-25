@@ -68,9 +68,9 @@ return array(
     array(
         'title'     => 'Resources',
         'route'     => 'resources.index',
-        'params'    => array('[app-id]', '[collection-id]'),
+        'params'    => array('[app-id]', '[collection-id]', '[catalogue-id]'),
         'icon'      => 'file',
-        'access'    => 'cms.resources.*',
+        'access'    => 'cms.apps.[app-id].collections.[collection-id].catalogues.[catalogue-id].*',
     ),
     array(
         'title'     => 'Templates',
