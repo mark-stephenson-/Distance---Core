@@ -63,7 +63,7 @@ return array(
         'route'     => 'catalogues.index',
         'params'    => array('[app-id]', '[collection-id]'),
         'icon'      => 'folder-open',
-        'access'    => 'cms.catalogues.*',
+        'access'    => 'cms.apps.[app-id].collections.[collection-id].catalogues.*',
     ),
     array(
         'title'     => 'Resources',
