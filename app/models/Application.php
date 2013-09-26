@@ -2,6 +2,7 @@
 
 class Application extends BaseModel
 {
+    protected $softDelete = true;
     protected $table = 'apps';
 
     public static function current()
