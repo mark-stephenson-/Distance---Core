@@ -99,6 +99,7 @@ Route::group(array('before' => array('auth')), function() {
         Route::resource('apps', 'AppsController');
 
         Route::group(array('prefix' => 'apps'), function() {
+            Route::get('{appId}/destroy', array('as' => 'app.destroy', 'uses' => 'AppsController@destroy'));
             Route::get('{appId}/collections', array('as' => 'collections.index', 'uses' => 'CollectionsController@index'));
             Route::get('{appId}/collections/create', array('as' => 'collections.create', 'uses' => 'CollectionsController@create'));
             Route::post('{appId}/collections', array('as' => 'collections.store', 'uses' => 'CollectionsController@store'));
