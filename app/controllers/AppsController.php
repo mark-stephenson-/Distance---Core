@@ -73,8 +73,16 @@ class AppsController extends BaseController
                 ->with('successes', new MessageBag(array($app->name . ' has been updated.')));
     }
 
-    public function delete() {
+    public function destroy($id) {
+        $app = Application::findOrFail($id);
 
+        if ( ! $app->delete() ) {
+            return Redirect::route('apps.index')
+                ->withErrors( ['The application <b>' . $app->name . '</b> has not been deleted.'] );
+        }
+
+        return Redirect::route('apps.index')
+                ->with('successes', new MessageBag(array('The application <b>' . $app->name . '</b> has been deleted.')));
     }
 
 }

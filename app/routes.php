@@ -99,6 +99,7 @@ Route::group(array('before' => array('auth')), function() {
         Route::resource('apps', 'AppsController');
 
         Route::group(array('prefix' => 'apps'), function() {
+            Route::get('{appId}/destroy', array('as' => 'app.destroy', 'uses' => 'AppsController@destroy'));
             Route::get('{appId}/collections', array('as' => 'collections.index', 'uses' => 'CollectionsController@index'));
             Route::get('{appId}/collections/create', array('as' => 'collections.create', 'uses' => 'CollectionsController@create'));
             Route::post('{appId}/collections', array('as' => 'collections.store', 'uses' => 'CollectionsController@store'));
@@ -186,6 +187,7 @@ Route::group(array('before' => array('auth')), function() {
          */
         Route::post('node-types/form-template', array('as' => 'node-types.form-template', 'uses' => 'NodeTypesController@formTemplate'));
         Route::resource('node-types', 'NodeTypesController');
+        Route::get('node-types/{id}/destroy', ['as' => 'node-types.destroy', 'uses' => 'NodeTypesController@destroy']);
 
         Route::group(array('prefix' => 'ajax'), function() {
             Route::group(array('prefix' => 'resources'), function() {

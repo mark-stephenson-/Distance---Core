@@ -15,6 +15,12 @@ class NodeController extends \BaseController {
         $nodes = Node::whereCollectionId($collection->id)->isPublished();
 
         if ( Input::get('nodeType') ) {
+            $nodeType = \NodeType::find(Input::get('nodeType'));
+
+            if ( ! $nodeType ) {
+                return Response::make(null, 404);
+            }
+
             $nodes = $nodes->whereNodeType(Input::get('nodeType'));
         }
 
