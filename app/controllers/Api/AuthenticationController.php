@@ -2,6 +2,7 @@
 
 use Api;
 use Input, Response, Sentry;
+use UserDevice;
 
 class AuthenticationController extends \BaseController {
     public function authenticate() {
@@ -37,9 +38,17 @@ class AuthenticationController extends \BaseController {
                     $user->save();
                 }
 
+                // Let's handle the devices!
+                $this->handleDevice($input, $user->id);
+
+                $devices = UserDevice::whereUserId($user->id)->get(array('device_token', 'device_type'))->toArray();
                 $collectionController = new CollectionController;
 
-                return Api::makeResponse( array('usertoken' => $user->key, 'collections' => $collectionController->doExtended($user->collections())->toArray()), 'authentication', 200);
+                return Api::makeResponse( array(
+                    'usertoken'   => $user->key, 
+                    'devices'     => $devices,
+                    'collections' => $collectionController->doExtended($user->collections())->toArray()
+                ), 'authentication', 200);
             }
         } catch (\Cartalyst\Sentry\Users\WrongPasswordException $e) {
             return Response::make('', 403);
@@ -47,4 +56,29 @@ class AuthenticationController extends \BaseController {
             return Response::make('', 403);
         }
     } 
+
+    protected function handleDevice($input, $userId) {
+        if (isset($input->{'device-token'}) and isset($input->{'device-type'})) {
+
+            $deviceToken = $input->{'device-token'};
+            $deviceType = $input->{'device-type'};
+
+            // Do they already exist?
+            $exists = UserDevice::where('device_token', '=', $deviceToken)
+                                    ->where('user_id', '=', $userId)
+                                    ->count();
+
+            if ($exists == 0) {
+                // Add it!
+                $device = new UserDevice;
+
+                $device->device_token = $deviceToken;
+                $device->device_type = $deviceType;
+                $device->user_id = $userId;
+
+                $device->save();
+            }
+
+        }
+    }
 }
