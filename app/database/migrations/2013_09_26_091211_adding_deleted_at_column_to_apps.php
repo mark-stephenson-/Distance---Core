@@ -23,7 +23,7 @@ class AddingDeletedAtColumnToApps extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('resources', function($table) {
+		Schema::table('apps', function($table) {
 			$table->dropColumn('deleted_at');
 		});
 	}
