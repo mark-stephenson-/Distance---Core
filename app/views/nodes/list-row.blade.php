@@ -38,6 +38,15 @@
                 @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update'))
                     <a rel="tooltip" title="Edit" href="{{ route('nodes.edit', array($collection->application_id, $collection->id, $node->id, 'branch', $node->branch_id)) }}" class="btn btn-small"><i class="icon-edit"></i></a>
                 @endif
+
+                @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.delete'))
+                    <a rel="tooltip" title="Delete" href="#deleteNodeModal"
+                        data-application-id="{{ $collection->application_id }}"
+                        data-collection-id="{{ $collection->id }}"
+                        data-node-id="{{ $node->id }}"
+                        data-branch-id="{{ $node->branch_id }}"
+                        class="btn btn-small modal-toggle"><i class="icon-trash"></i></a>
+                @endif
             @else
                 @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.read'))
                     <a rel="tooltip" title="View" href="{{ route('nodes.view', array($collection->application_id, $collection->id, $node->id)) }}" class="btn btn-small"><i class="icon-search"></i></a>
@@ -45,6 +54,15 @@
 
                 @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update'))
                     <a rel="tooltip" title="Edit" href="{{ route('nodes.edit', array($collection->application_id, $collection->id, $node->id, $node->latest_revision)) }}" class="btn btn-small"><i class="icon-edit"></i></a>
+                @endif
+
+                @if ( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.delete'))
+                    <a rel="tooltip" title="Delete" href="#deleteNodeModal" class="btn btn-small modal-toggle"
+                            data-application-id="{{ $collection->application_id }}"
+                            data-collection-id="{{ $collection->id }}"
+                            data-node-id="{{ $node->id }}"
+                            data-latest-revision="{{ $node->latest_revision }}"
+                        ><i class="icon-trash"></i></a>
                 @endif
             @endif
 

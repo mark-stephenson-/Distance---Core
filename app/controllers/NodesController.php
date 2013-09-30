@@ -454,4 +454,8 @@ class NodesController extends BaseController
         $saveOrder = Hierarchy::updateOrder($order, $collection);
     }
 
+    public function doDelete($appId, $collectionId) {
+        return 'DELETE';
+    }
+
 }
