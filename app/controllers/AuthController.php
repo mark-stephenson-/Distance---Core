@@ -157,12 +157,15 @@ class AuthController extends BaseController
                 }
 
                 if ($user->attemptResetPassword($code, Input::get('password'))) {
-                    Mail::send('emails.password-reset-complete', compact('user', 'resetCode'), function($message) use ($user)
-                    {
-                        $message->to($user->email, $user->full_name)
-                            ->subject(Config::get('core.site_name' . ' - Password Reset Complete'))
-                            ->from(Config::get('core.emails.send_from'));
-                    });
+                    //
+                    // Commented out by Craig on Tuesday, 1 October 2013
+                    // 
+                    // Mail::send('emails.password-reset-complete', compact('user', 'resetCode'), function($message) use ($user)
+                    // {
+                    //     $message->to($user->email, $user->full_name)
+                    //         ->subject(Config::get('core.site_name' . ' - Password Reset Complete'))
+                    //         ->from(Config::get('core.emails.send_from'));
+                    // });
 
                     return Redirect::route('login')
                         ->with('successes', new MessageBag(array('Your password has been reset successfully. You can now use it to login.')));
