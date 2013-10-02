@@ -2,6 +2,7 @@
 
 class Collection extends BaseModel {
 
+    protected $softDelete = true;
     protected $fillable = array('name', 'api_key', 'application_id', 'logo_id');
 
     public static function current()

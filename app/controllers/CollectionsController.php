@@ -86,4 +86,18 @@ class CollectionsController extends BaseController
         return Redirect::route('collections.index', $appId)
                 ->with('successes', new MessageBag(array($collection->name . ' has been updated.')));
     }
+
+    public function destroy($appId, $collectionId) {
+        $collection = Collection::find($collectionId);
+
+        if ( ! $collection ) {
+            return Redirect::back()
+                ->withErrors( new MessageBag( array('That collection could not be found.') ) );
+        }
+
+        $collection->delete();
+
+        return Redirect::route('collections.index', $appId)
+                ->with('successes', new MessageBag(array($collection->name . ' has been deleted.')));
+    }
 }

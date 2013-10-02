@@ -104,6 +104,7 @@ Route::group(array('before' => array('auth')), function() {
             Route::get('{appId}/collections/create', array('as' => 'collections.create', 'uses' => 'CollectionsController@create'));
             Route::post('{appId}/collections', array('as' => 'collections.store', 'uses' => 'CollectionsController@store'));
             Route::get('{appId}/collections/{id}/edit', array('as' => 'collections.edit', 'uses' => 'CollectionsController@edit'));
+            Route::get('{appId}/collections/{id}/destroy', array('as' => 'collections.destroy', 'uses' => 'CollectionsController@destroy'));
             Route::put('{appId}/collections/{id}', array('as' => 'collections.update', 'uses' => 'CollectionsController@update'));
 
             /*
