@@ -81,6 +81,14 @@ class AppsController extends BaseController
                 ->withErrors( ['The application <b>' . $app->name . '</b> has not been deleted.'] );
         }
 
+        Session::forget('current-app');
+        Session::forget('current-collection');
+ 
+        // Now we need to delete (soft) all of the collections that are contained within this app
+        foreach ( $app->collections as $collection ) {
+            $collection->delete();
+        }
+
         return Redirect::route('apps.index')
                 ->with('successes', new MessageBag(array('The application <b>' . $app->name . '</b> has been deleted.')));
     }
