@@ -1,6 +1,6 @@
 <?php
     $column_name = $data->{$column->name};
-    $items = array_filter(explode(', ', $column_name));
+    $items = array_filter(explode(',', $column_name));
 ?>
 
 @foreach ($items as $item)
