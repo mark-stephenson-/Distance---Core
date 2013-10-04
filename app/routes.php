@@ -183,6 +183,7 @@ Route::group(array('before' => array('auth')), function() {
             Groups
          */
         Route::resource('groups', 'GroupsController');
+        Route::get('groups/delete/{id}', array('as' => 'groups.delete', 'uses' => 'GroupsController@delete'));
 
         /*
             Node Types

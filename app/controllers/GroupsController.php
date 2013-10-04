@@ -58,6 +58,14 @@ class GroupsController extends BaseController
         return View::make('groups.form', compact('group', 'permissions'));
     }
 
+    public function delete($groupId)
+    {
+        $group = Sentry::findGroupById($groupId);
+        $group->delete();        
+
+        return Redirect::route('groups.index');
+    }
+
     public function update($groupId)
     {
         $group = Group::find($groupId);

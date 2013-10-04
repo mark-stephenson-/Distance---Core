@@ -106,6 +106,14 @@ Route::filter('checkPermissions', function($request)
 
     $property = str_replace(array_keys($replacements), array_values($replacements), $property);
 
+    // Editing a user gives the user ID, let's detect and avoid that
+    if (
+        (starts_with($property, 'cms.users.') and ends_with($property, '.update')) or 
+        (starts_with($property, 'cms.users.') and is_numeric(substr($property, -1, 1)))
+    ) {
+        $property = 'cms.users.update';
+    }
+
     if ($nodesPos = strpos($property, '.nodes')) {
         $property = substr($property, 0, $nodesPos);
     }
