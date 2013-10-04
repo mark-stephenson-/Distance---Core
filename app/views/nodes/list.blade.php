@@ -204,7 +204,10 @@
                             $.ajax({
                                 type: "POST",
                                 data: 'latest_revision=' + latest_revision,
-                                url: url.replace('appId', application_id).replace('collectionId', collection_id).replace('nodeId', node_id)
+                                url: url.replace('appId', application_id).replace('collectionId', collection_id).replace('nodeId', node_id),
+                                success: function() {
+                                    location.reload(true);
+                                }
                             });
                         });
                     } else {
