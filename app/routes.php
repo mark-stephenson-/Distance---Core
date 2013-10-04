@@ -127,7 +127,7 @@ Route::group(array('before' => array('auth')), function() {
                     Nodes CRUD
                  */
                 Route::any('nodes/view/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.view', 'uses' => 'NodesController@view'));
-                Route::get('nodes/delete/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.delete', 'uses' => 'NodesController@doDelete'));
+                Route::post('nodes/delete/{nodeId}/{revisionId?}/{branchId?}', array('as' => 'nodes.delete', 'uses' => 'NodesController@doDelete'));
 
                 Route::get('nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.create', 'uses' => 'NodesController@create'));
                 Route::post('nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.store', 'uses' => 'NodesController@store'));

@@ -169,32 +169,50 @@
         </div>
         <div class="modal-footer">
             <a href="#" data-dismiss="modal" class="btn">Close</a>
-            <a href="#" class="btn btn-primary" id="#">Yes, I'm Sure</a>
+            <a href="#" class="btn btn-primary" id="do">Yes, I'm Sure</a>
         </div>
     </div>
 
     <script>
         $(document).ready( function() {
+            var application_id;
+            var collection_id;
+            var node_id;
+            var branch_id;
+            var latest_revision;
+
             $('.modal-toggle').click( function(e) {
                 e.preventDefault();
 
                 if ( $(this).attr('href') == "#deleteNodeModal" ) {
-                    var application_id = $(this).attr('data-application-id');
-                    var collection_id = $(this).attr('data-collection-id');
-                    var node_id = $(this).attr('data-node-id');
-                    var branch_id = $(this).attr('data-branch-id');
-                    var latest_revision = $(this).attr('data-latest-revision');
+                    application_id = $(this).attr('data-application-id');
+                    collection_id = $(this).attr('data-collection-id');
+                    node_id = $(this).attr('data-node-id');
+                    branch_id = $(this).attr('data-branch-id');
+                    latest_revision = $(this).attr('data-latest-revision');
 
                     $('#deleteNodeModal').modal('show');
+                }
+            });
 
-                    if ( branch_id === undefined ) {
-                        // There is NO branch ID
-                        console.log('NOH branch ID');
+            $("#deleteNodeModal").on('shown', function() {
+                 if ( branch_id === undefined ) {
+                        var url = "{{ route('nodes.delete', array('appId', 'collectionId', 'nodeId')) }}";
+
+                        $("#do").one('click', function(e) {
+                            e.preventDefault();
+                            $.ajax({
+                                type: "POST",
+                                data: 'latest_revision=' + latest_revision,
+                                url: url.replace('appId', application_id).replace('collectionId', collection_id).replace('nodeId', node_id),
+                                success: function() {
+                                    location.reload(true);
+                                }
+                            });
+                        });
                     } else {
                         // There is a branch ID
-                        console.log('branch ID');
                     }
-                }
             });
         });
     </script>
