@@ -70,7 +70,15 @@ class CataloguesController extends BaseController
     }
 
     public function destroy($appId, $collectionId, $catalogueId) {
-        print $catalogueId;
+        $catalogue = Catalogue::findOrFail($catalogueId);
+
+        if ( ! $catalogue->delete() ) {
+            return Redirect::route('catalogues.index', array($appId, $collectionId))
+                ->withErrors(array($catalogue->name . ' could not be deleted.'));
+        }
+
+        return Redirect::route('catalogues.index', array($appId, $collectionId))
+            ->with('successes', new MessageBag(array($catalogue->name . ' has been deleted.')));
     }
 
 }

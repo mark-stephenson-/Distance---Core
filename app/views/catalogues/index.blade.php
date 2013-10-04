@@ -59,7 +59,7 @@
             $(".deleteModal").click( function(e) {
                 var data_id = $(this).attr('data-id');
                 var data_name = $(this).attr('data-name');
-                var url = '{{ route('catalogues.destroy', array($appId, $collectionId, 5)) }}'
+                var url = '{{ route('catalogues.destroy', array($appId, $collectionId, 'id')) }}'
 
                 $("#deleteModal").find('h3').html( "Delete collection <small>" + data_name + "</small>");
                 $("#deleteModal").find('.yes').attr('href', url.replace('id', data_id));
