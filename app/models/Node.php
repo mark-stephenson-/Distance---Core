@@ -3,6 +3,8 @@
 class Node extends BaseModel
 {
 
+    protected $softDelete = true;
+
     public function collection()
     {
         return $this->belongsTo('Collection');
