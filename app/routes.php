@@ -83,6 +83,7 @@ App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException
 });
 
 Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
+Route::get('cron', array('as' => 'cron', 'uses' => 'CronController@run'));
 
 Route::group(array('before' => array('auth')), function() {
 
