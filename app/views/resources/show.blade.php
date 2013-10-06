@@ -34,7 +34,7 @@
             <tr>
                 <td style="width: 80px !important; padding-right: 30px; height: 50px  !important; overflow: hidden;">
                     @if ($resource->isImage())
-                        <img src="{{ $resource->path() }}?type=view" width="80" height="50" />
+                        <img style="max-width: 80px;" src="{{ $resource->path() }}?type=view" width="80" height="50" />
                     @else
                         <i class="icon-file"></i>
                     @endif
