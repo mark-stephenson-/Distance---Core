@@ -32,6 +32,14 @@ View::composer('*', function($view)
     $view->with('collectionId', CORE_COLLECTION_ID);
 });
 
+App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $e)
+{
+    Session::forget('current-app');
+    Session::forget('current-collection');
+    return Redirect::route('root');
+});
+
+
 Route::any('/', array('as' => 'root', function() {
     return Redirect::route('apps.index');
 }));
