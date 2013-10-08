@@ -151,6 +151,8 @@ class NodeTypesController extends BaseController
     public function destroy($id){
         $nodeType = NodeType::find($id);
 
+        Node::where('node_type', '=', $id)->delete();
+
         if ( ! $nodeType->delete() ) {
             return Redirect::back()
                 ->withErrors(['Sorry, that node ' . $nodeType->label . ' couldn\'t be deleted.']);
