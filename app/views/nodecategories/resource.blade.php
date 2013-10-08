@@ -27,12 +27,17 @@
             </div>
 
             <p class="filename">{{ $resource->filename }}</p>
-            <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a>
+            <p class="links">
+                <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a> | 
+                <a href="#" class="remove-resource">Remove</a>
+            </p>
         </div>
     @else
         <div class="resource">
             <p style="padding-top: 5px;">No Resource Selected.</p>
-            <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Choose One</a>
+            <p class="links">
+                <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Choose One</a>
+            </p>
         </div>
     @endif
 </div>
@@ -101,7 +106,10 @@
         <div class="image"></div>
 
         <p class="filename"></p>
-        <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a>
+        <p class="links">
+            <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a> | 
+            <a href="#" class="remove-resource">Remove</a>
+        </p>
     </div>
 </div>
 
@@ -144,6 +152,12 @@
         ], {
             fileSize: '{{ Config::get('core.prefrences.file-upload-limit') }}'
         });
+
+    $(document).on('click', '.remove-resource', function() {
+        var parent = $(this).closest('.resource');
+        parent.html('<p style="padding-top: 5px;">No Resource Selected.</p><p class="links"><a href="#{{ $column->name }}-resource_window" data-toggle="modal">Choose One</a></p>');
+        $('#nodetype-{{ $column->name }}').val('');
+    });
 
     $("#{{ $column->name }}-resource_window").on('shown', function() {
         $("#{{ $column->name }}-resource_window").on( 'click', 'a', function(e) {
