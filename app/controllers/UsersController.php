@@ -198,7 +198,7 @@ class UsersController extends BaseController
             $user->removeGroup($group);
 
             return Redirect::back()
-                ->with('successes', new MessageBag(array('This user has been removed from the <b>' . $group->name .'</b> group.' )));            
+                ->with('successes', new MessageBag(array('This user has been removed from the <b>' . $group->name .'</b> group.' )));
 
         } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
 
@@ -209,6 +209,24 @@ class UsersController extends BaseController
             return Redirect::back()
                 ->withErrors(new MessageBag(array('That group could not be found.' )));
         }
+    }
+
+    public function delete($userId)
+    {
+        $currentUser = Sentry::getUser();
+
+        $user = Sentry::findUserById($userId);
+
+        $userNodes = Node::whereOwnedBy($userId)->get();
+
+        foreach($userNodes as $node) {
+            $node->owned_by = $node->created_by = $currentUser->id;
+            $node->save();
+        }
+
+        $user->delete();
+
+        return Redirect::route('users.index')->with('successes', new MessageBag(array('This user has been removed.')));
     }
 
 }
