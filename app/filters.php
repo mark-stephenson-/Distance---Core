@@ -113,6 +113,13 @@ Route::filter('checkPermissions', function($request)
     ) {
         $property = 'cms.users.update';
     }
+    if (
+        (str_contains($property, '.catalogues.') and ends_with($property, '.update')) or 
+        (str_contains($property, '.catalogues.') and is_numeric(substr($property, -1, 1)))
+    ) {
+        $nodesPos = strpos($property, '.catalogues.');
+        $property = substr($property, 0, $nodesPos) . '.catalogues.update';
+    }
 
     if ($nodesPos = strpos($property, '.nodes')) {
         $property = substr($property, 0, $nodesPos);
