@@ -4,18 +4,18 @@
 @import "fancybox";
 @import "datetimepicker.less";
 
-@cirrusOrange: #f8461c;
-@backgroundColor: darken(@cirrusOrange, 10%);
+@baseColour: #669CBE;
+@backgroundColor: darken(@baseColour, 10%);
 
 .gradient {
     background: @backgroundColor; /* Old browsers */
-    background: -moz-linear-gradient(top,  @cirrusOrange 0%, @backgroundColor 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@cirrusOrange), color-stop(100%,@backgroundColor)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  @cirrusOrange 0%,@backgroundColor 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  @cirrusOrange 0%,@backgroundColor 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  @cirrusOrange 0%,@backgroundColor 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  @cirrusOrange 0%,@backgroundColor 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@cirrusOrange', endColorstr='@backgroundColor',GradientType=0 ); /* IE6-9 */
+    background: -moz-linear-gradient(top,  @baseColour 0%, @backgroundColor 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@baseColour), color-stop(100%,@backgroundColor)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  @baseColour 0%,@backgroundColor 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  @baseColour 0%,@backgroundColor 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  @baseColour 0%,@backgroundColor 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  @baseColour 0%,@backgroundColor 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@baseColour', endColorstr='@backgroundColor',GradientType=0 ); /* IE6-9 */
     background-repeat: no-repeat;
     height: 200px;
     width: 100%;
@@ -80,6 +80,11 @@ nav.main {
 
         img {
             max-width: 60%
+        }
+
+        i {
+            font-size: 100px;
+            color: #FFF;
         }
 
         &:hover {

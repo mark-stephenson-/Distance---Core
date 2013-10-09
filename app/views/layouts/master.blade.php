@@ -20,7 +20,7 @@
         <div class="row-fluid">
             <div class="span2">
                 <nav class="main">
-                    <a class="logo" href="/"><img src="/images/logo.png" /></a>
+                    <a class="logo" href="/"><i class="icon-bullseye"></i></a>
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
                             <?php
