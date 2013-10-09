@@ -9,8 +9,18 @@
     if (!$resource and Input::old('nodetype.'. $column->name)) {
         $resource = Resource::find(Input::old('nodetype.'. $column->name));
     }
+?>
+
+@if (!isset($column->catalogue))
+    
+    <p>A catalogue has not yet been assigned to this field - please contact an adminstrator</p>
+
+@else
+
+<?php
 
     $catalogue = Catalogue::find($column->catalogue);
+
 ?>
 
 <div class="resource-{{ $column->name }}-container resource-view">
@@ -176,3 +186,5 @@
         });
     });
 </script>
+
+@endif
