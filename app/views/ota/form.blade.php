@@ -10,28 +10,28 @@
     <div class="control-group">
         {{ Form::label('version', 'Version', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('version', null, array('class' => 'span11')) }}
+            {{ Form::text('version', Input::old('version'), array('class' => 'span11')) }}
         </div>
     </div>
 
     <div class="control-group">
         {{ Form::label('platform', 'Platform', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('platform', array('-', 'android' => 'Android', 'ios' => 'iOS')) }}
+            {{ Form::select('platform', array('-', 'android' => 'Android', 'ios' => 'iOS'), Input::old('platform')) }}
         </div>
     </div>
 
     <div class="control-group">
         {{ Form::label('environment', 'Environment', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::select('environment', array('-', 'testing' => 'Testing', 'production' => 'Production')) }}
+            {{ Form::select('environment', array('-', 'testing' => 'Testing', 'production' => 'Production'), Input::old('environment')) }}
         </div>
     </div>
 
     <div class="control-group">
         {{ Form::label('release_notes', 'Release Notes', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::textarea('release_notes', null, array('class' => 'span11', 'rows' => 4)) }}
+            {{ Form::textarea('release_notes', Input::old('release_notes'), array('class' => 'span11', 'rows' => 4)) }}
         </div>
     </div>
 

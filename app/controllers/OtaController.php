@@ -28,7 +28,7 @@ class OtaController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store($appId)
 	{
 		$validator = new Core\Validators\Ota;
 
@@ -71,7 +71,7 @@ class OtaController extends \BaseController {
 				->withErrors(new MessageBag(array('Version ' . $version->version . ' for ' . $version->platform . ' could not been created.')));
 		}
 
-		return Redirect::route('app-distribution.index')
+		return Redirect::route('app-distribution.index', array($appId))
 			->with('successes', new MessageBag(array($version->version . ' for ' . $version->platform . ' has been created.')));
 	}
 
