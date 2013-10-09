@@ -78,7 +78,7 @@ class AppsController extends BaseController
 
         if ( ! $app->delete() ) {
             return Redirect::route('apps.index')
-                ->withErrors( ['The application <b>' . $app->name . '</b> has not been deleted.'] );
+                ->withErrors( array('The application <b>' . $app->name . '</b> has not been deleted.') );
         }
 
         Session::forget('current-app');
