@@ -36,9 +36,19 @@
     @if ($category['name'] == 'resource' or $category['name'] == 'html')
         {{-- Catalogue selection with extension filtering --}}
         {{ Form::label('columns[' . $identifier . '][catalogue]', 'Catalogue', array('class' => 'control-label')) }}
-        <div class="controls">
-            {{ Form::select('columns[' . $identifier . '][catalogue]', Catalogue::all()->lists('name', 'id'), @$data->catalogue, array('class' => 'span4')) }}
-        </div>
+        @if (!$data)
+            <div class="controls">
+                <p>Please save the node type and then come back to choose a catalogue for each collection</p>
+            </div>
+        @else
+            @foreach(Collection::all() as $collection)
+                <div class="controls">
+                        {{ Form::select('columns[' . $identifier . '][catalogue][' . $collection->id . ']', Catalogue::forNodeTypeSelect($collection->id), @$data->catalogue->$collection->id, array('class' => 'span4')) }}
+                        <span class="help-inline">{{ $collection->name }}</span>
+                </div>
+                <br />
+            @endforeach
+        @endif
     </div>
 
     <div class="control-group">

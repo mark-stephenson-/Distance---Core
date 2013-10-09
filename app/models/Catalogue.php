@@ -3,6 +3,23 @@
 class Catalogue extends BaseModel {
 
     protected $softDelete = true;
+
+    public static function forNodeTypeSelect($collectionId = null)
+    {
+        if ($collectionId) {
+            return self::where('collection_id', '=', $collectionId)->lists('name', 'id');
+        }
+ 
+        $collections = Collection::lists('name', 'id');
+        $catalogues = self::get();
+        $return = array();
+ 
+        foreach($catalogues as $catalogue) {
+            $return[$catalogue->id] = "(" . $collections[$catalogue->collection_id] . ") " . $catalogue->name;
+        }
+ 
+        return $return;
+    }
     
     public function collection() {
         return $this->belongsTo('Collection');

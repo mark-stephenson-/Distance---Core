@@ -11,7 +11,7 @@
     }
 ?>
 
-@if (!isset($column->catalogue))
+@if (!isset($column->catalogue) or !isset($column->catalogue->{CORE_COLLECTION_ID}))
     
     <p>A catalogue has not yet been assigned to this field - please contact an adminstrator</p>
 
@@ -19,7 +19,7 @@
 
 <?php
 
-    $catalogue = Catalogue::find($column->catalogue);
+    $catalogue = Catalogue::find($column->catalogue->{CORE_COLLECTION_ID});
 
 ?>
 

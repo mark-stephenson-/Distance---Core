@@ -4,11 +4,21 @@
     } else {
         $value = @$data->{$column->name};
     }
-
-    $catalogue = Catalogue::find($column->catalogue);
 ?>
 
 <textarea class="html-editor" name="nodetype[{{ $column->name }}]" id="input_{{ $column->name }}">{{ Input::old('nodetype.' . $column->name, $value) }}</textarea>
+
+@if (!isset($column->catalogue) or !isset($column->catalogue->{CORE_COLLECTION_ID}))
+    
+    <p>A catalogue has not yet been assigned to this field - please contact an adminstrator</p>
+
+@else
+
+<?php
+
+$catalogue = Catalogue::find($column->catalogue->{CORE_COLLECTION_ID});
+
+?>
 
 <a href="#{{ $column->name }}-resource_window" data-toggle="modal" style="display: none" data-dest="html" id="input_{{ $column->name }}_resource_link" data-resource="input_{{ $column->name }}" class="resource_fancybox">Choose One</a>
 
@@ -23,12 +33,11 @@
     </div>
 
     <div class="modal-body">
-        <table class="table">
+        <table class="table" style="table-layout: fixed;">
             <thead>
                 <tr>
                     <th></th>
-                    <th>Filename</th>
-                    <th>Description</th>
+                    <th style="width: 420px !important; max-width: 420px;">Filename</th>
                     <th>Sync</th>
                     <th></th>
                 </tr>
@@ -44,8 +53,12 @@
                                 <i class="icon-file"></i>
                             @endif
                         </td>
-                        <td>{{ $resource->filename }}</td>
-                        <td>{{ $resource->description }}</td>
+                        <td>
+                            {{ substr($resource->filename, 0, 50) }}
+                            @if (strlen($resource->filename) >= 50)
+                                &hellip;
+                            @endif
+                        </td>
                         <td>
                             @if ( $resource->sync )
                                 <i class="icon-ok"></i>
@@ -64,9 +77,6 @@
 </div>
 
 <script>
-    
-    var editor = $( '.html-editor' ).ckeditor();
-    editor.ckeditorGet().config.baseHref = "{{ URL::to('file') }}/{{ $collection->id }}/";
 
     $("#{{ $column->name }}-resource_window").on('shown', function() {
         $("#{{ $column->name }}-resource_window a").click( function(e) {
@@ -85,4 +95,13 @@
             $("#{{ $column->name }}-resource_window").modal('hide');
         });
     });
+</script>
+
+@endif
+
+<script>
+
+    var editor = $( '.html-editor' ).ckeditor();
+    editor.ckeditorGet().config.baseHref = "{{ URL::to('file') }}/{{ $collection->id }}/";
+
 </script>
