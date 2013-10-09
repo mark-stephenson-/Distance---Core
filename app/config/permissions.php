@@ -51,6 +51,12 @@ return array(
                     'Delete' => array(
                         'value' => 'cms.users.delete'
                     ),
+                    'Add To Group' => array(
+                        'value' => 'cms.users.removegroup'
+                    ),
+                    'Remove From Group' => array(
+                        'value' => 'cms.users.addgroup'
+                    ),
 
                 ),
             ),

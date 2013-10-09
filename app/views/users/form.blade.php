@@ -146,11 +146,11 @@
                                 <p class="lead pull-left">{{ $group->name }}</p>
                                 <div class="pull-right">
                                     @if ( in_array($group->id, $currentGroups) )
-                                        @if ( Sentry::getUser()->hasAccess('admin.users.users.removegroup') )
+                                        @if ( Sentry::getUser()->hasAccess('cms.users.removegroup') )
                                             <a href="{{ route('users.remove-group', array($user->id, $group->id)) }}" class="btn btn-danger">Remove from Group</a>
                                         @endif
                                     @else
-                                        @if ( Sentry::getUser()->hasAccess('admin.users.users.addgroup') )
+                                        @if ( Sentry::getUser()->hasAccess('cms.users.addgroup') )
                                             <a href="{{ route('users.add-group', array($user->id, $group->id)) }}" class="btn btn-success">Add to Group</a>
                                         @endif
                                     @endif
