@@ -21,7 +21,7 @@
 <div class="control-group">
     {{ Form::label('columns[' . $identifier . '][label]', 'Name', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4')) }}
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4 category-name-field')) }}
     </div>
 </div>
 
@@ -69,9 +69,10 @@
     @elseif ($category['name'] == 'nodelookup-multi')
     @elseif ($category['name'] == 'date')
     @else
+
         {{ Form::label('default_value', 'Default Value', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::text('columns[' . $identifier . '][default]', @$data->default, array('class' => 'span4')) }}
+            {{ Form::text('columns[' . $identifier . '][default]', @$data->default, array('class' => 'span4 category-default-field')) }}
         </div>
 
         @if ($category['name'] == 'date')
@@ -81,12 +82,12 @@
 </div>
 
 {{-- Radio buttons (aka booleans) are always going to be present anyway --}}
-@if ($category['name'] != 'bit')
+@if ($category['name'] != 'bit' and $category['name'] != 'resource')
     <div class="control-group">
         {{ Form::label("columns[{$identifier}][required]", 'Required', array('class' => 'control-label')) }}
         <div class="controls">
             <label class="radio inline">
-                {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
+                {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required), array('class' => 'category-required-field')) }} Yes
             </label>
             <label class="radio inline">
                 {{ Form::radio("columns[{$identifier}][required]", 0, popRadio(0, @$data->required, true)) }} No

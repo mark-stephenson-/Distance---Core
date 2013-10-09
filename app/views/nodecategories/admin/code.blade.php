@@ -24,7 +24,7 @@
 <div class="control-group">
     {{ Form::label('columns[' . $identifier . '][label]', 'Name', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4')) }}
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4 category-name-field')) }}
     </div>
 </div>
 
@@ -41,19 +41,3 @@
         {{ Form::text('columns[' . $identifier . '][description]', @$data->description, array('class' => 'span4')) }}
     </div>
 </div>
-
-
-{{-- Radio buttons (aka booleans) are always going to be present anyway --}}
-@if ($category['name'] != 'bit')
-    <div class="control-group">
-        {{ Form::label("columns[{$identifier}][required]", 'Required', array('class' => 'control-label')) }}
-        <div class="controls">
-            <label class="radio inline">
-                {{ Form::radio("columns[{$identifier}][required]", 1, popRadio(1, @$data->required)) }} Yes
-            </label>
-            <label class="radio inline">
-                {{ Form::radio("columns[{$identifier}][required]", 0, popRadio(0, @$data->required, true)) }} No
-            </label>
-        </div>
-    </div>
-@endif

@@ -21,7 +21,7 @@
 <div class="control-group">
     {{ Form::label('columns[' . $identifier . '][label]', 'Name', array('class' => 'control-label')) }}
     <div class="controls">
-        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4')) }}
+        {{ Form::text('columns[' . $identifier . '][label]', @$data->label, array('class' => 'span4 category-name-field')) }}
     </div>
 </div>
 

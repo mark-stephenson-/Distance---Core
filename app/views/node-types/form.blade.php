@@ -18,6 +18,47 @@
         forcePlaceholderSize: true
     });
 
+    $('.form-horizontal').on('submit', function(e) {
+
+        var allNamesPresent = true;
+        var allRequiredDefaultsPresent = true;
+
+        $('#js-nodes_container .well').each(function(index, value) {
+
+            var name = $(value).find('.category-name-field');
+
+            if (name.val().trim() == '') {
+                allNamesPresent = false;
+            }
+
+            var required = $(value).find('.category-required-field:checked');
+
+            if (required.length > 0) {
+                var def = $(value).find('.category-default-field');
+
+                if (def.length > 0) {
+                    if (def.val().trim() == 0) {
+                        allRequiredDefaultsPresent = false;
+                    }
+                }
+            }
+
+        });
+
+        if (!allNamesPresent) {
+            alert('Please make sure all columns have a name');
+            e.preventDefault();
+            return false;
+        }
+
+        if (!allRequiredDefaultsPresent) {
+            alert('Please make sure all required columns have a default value.');
+            e.preventDefault();
+            return false;
+        }
+
+    });
+
     $('#js-category-add').on('click', function(e) {
 
         e.preventDefault();
@@ -119,7 +160,7 @@
 
 @section('body')
     
-    {{ formModel($nodeType, 'node-types', null, false) }}
+    {{ formModel($nodeType, 'node-types', array('class' => 'nodetype-form'), false) }}
 
     <div class="control-group">
         {{ Form::label('label', 'Name', array('class' => 'control-label')) }}
@@ -156,9 +197,9 @@
     <div class="control-group pull-right">
         <div class="controls">
             @if (!$nodeType->exists)
-                {{ Form::submit('Create Node Type', array('class' => 'btn btn-primary')) }}
+                {{ Form::submit('Create Node Type', array('class' => 'btn btn-primary node-type-submit')) }}
             @else
-                {{ Form::submit('Save Changes', array('class' => 'btn btn-primary')) }}
+                {{ Form::submit('Save Changes', array('class' => 'btn btn-primary node-type-submit')) }}
             @endif
         </div>
     </div>
