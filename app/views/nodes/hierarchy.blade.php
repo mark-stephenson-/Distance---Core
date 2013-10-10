@@ -125,11 +125,11 @@
                         <div class="btn-group">
 
                             @if ( Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.read'))
-                                <a href="{{ route('nodes.view', array($collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
+                                <a href="{{ route('nodes.view', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
                             @endif
 
                             @if ( Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.update'))
-                                <a href="{{ route('nodes.edit', array($collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
+                                <a href="{{ route('nodes.edit', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
                             @endif
                                 
                             @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.hierarchy-management'))

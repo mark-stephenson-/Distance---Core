@@ -79,10 +79,10 @@
     @if (count($breadcrumbs))
         <ul class="breadcrumb">
 
-            <li><a href="{{ route('nodes.hierarchy', array($collection->id)) }}">{{ $collection->name }}</a> <span class="divider">/</span></li>
+            <li><a href="{{ route('nodes.hierarchy', array(CORE_APP_ID, $collection->id)) }}">{{ $collection->name }}</a> <span class="divider">/</span></li>
 
             @foreach($breadcrumbs as $crumb)
-                <li><a href="{{ route('nodes.view', array($collection->id, $crumb->node->id, 'branch', $crumb->id)) }}">{{ $crumb->node->title }}</a> <span class="divider">/</span></li>
+                <li><a href="{{ route('nodes.view', array(CORE_APP_ID, $collection->id, $crumb->node->id, 'branch', $crumb->id)) }}">{{ $crumb->node->title }}</a> <span class="divider">/</span></li>
             @endforeach
             <li class="active">{{ $node->title }}</li>
         </ul>

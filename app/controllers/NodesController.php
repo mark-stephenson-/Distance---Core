@@ -20,7 +20,7 @@ class NodesController extends BaseController
 
         $nodeTypes = NodeType::arrayOfTypes();
 
-        return View::make('nodes.hierarchy', compact('collection', 'branches', 'nodeTypes'));
+        return View::make('nodes.hierarchy', compact('appId', 'collection', 'branches', 'nodeTypes'));
     }
 
     public function nodeList($appId, $collectionId = 0) {
