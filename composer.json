@@ -5,7 +5,7 @@
 	"require": {
 		"laravel/framework": "4.0.*",
         "cartalyst/sentry": "2.0.*",
-        "cartalyst/nested-sets": "2.0.*",
+        "cartalyst/nested-sets": "dev-master#251f1e3206663d69aedf4a263c94a1d72210daa6",
         "loic-sharma/profiler": "v1.1.2",
         "imagine/imagine": "v0.5.0",
         "urbanairship/urbanairship": "dev-netsells"
