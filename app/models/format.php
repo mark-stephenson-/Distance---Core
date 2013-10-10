@@ -7,6 +7,15 @@
  * @author      Phil Sturgeon
  * @license     http://philsturgeon.co.uk/code/dbad-license
  */
+
+class SimpleXMLExtended extends SimpleXMLElement {
+    public function addCData($cdata_text) {
+        $node = dom_import_simplexml($this); 
+        $no   = $node->ownerDocument; 
+        $node->appendChild($no->createCDATASection($cdata_text)); 
+    } 
+}
+
 class Format {
 
     // Array to convert
@@ -99,7 +108,7 @@ class Format {
 
         if ($structure === null)
         {
-            $structure = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$basenode />");
+            $structure = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$basenode />", 'SimpleXMLExtended');
         }
 
         // Force it to be something useful
@@ -128,27 +137,43 @@ class Format {
             $key = preg_replace('/[^a-z_\-0-9]/i', '', $key);
 
             // if there is another array found recursively call this function
-            if (is_array($value) || is_object($value))
+            if ( is_array($value) || is_object($value) )
             {
-                $node = $structure->addChild($key);
+                if ($key != 'nodetype') {
+                    $node = $structure->addChild($key);
 
-                // recursive call.
-                $this->to_xml($value, $node, $key);
+                    // recursive call.
+                    $this->to_xml($value, $node, $key);
+                }
             }
 
             else
             {
-                // add single node.
-                $value = htmlspecialchars($value, ENT_QUOTES, "UTF-8");
 
-                // Replace amps
-                // $value = str_replace('&amp;', '&amp;amp;', $value);
+                if ($key != 'node_type') {
+                    if ($this->shouldNotWrapInCdata($value)) {
+                        $structure->addChild($key, $value);
+                    } else {
+                        $structure->$key = null;
+                        $structure->$key->addCData($value);
+                    }
+                }
 
-                $structure->addChild($key, $value);
             }
         }
 
         return $structure->asXML();
+    }
+
+    protected function shouldNotWrapInCdata($value) {
+        if (is_integer($value)) return true;
+
+        // Can we parse it as a date?
+        try {
+            if (new \Carbon\Carbon($value)) return true;
+        } catch(Exception $e) {}
+
+        return false;
     }
 
     // Format HTML for output
