@@ -155,11 +155,11 @@ class NodeTypesController extends BaseController
 
         if ( ! $nodeType->delete() ) {
             return Redirect::back()
-                ->withErrors(['Sorry, that node ' . $nodeType->label . ' couldn\'t be deleted.']);
+                ->withErrors(array('Sorry, that node ' . $nodeType->label . ' couldn\'t be deleted.'));
         }
 
         return Redirect::back()
-                ->with('successes', new MessageBag([$nodeType->label . ' has been deleted.']) );
+                ->with('successes', new MessageBag(array($nodeType->label . ' has been deleted.')) );
     }
 
 }
