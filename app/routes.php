@@ -208,7 +208,5 @@ Route::group(array('before' => array('auth')), function() {
                 Route::get('toggle_pub', 'Ajax\ResourcesController@togglePub');
             });
         });
-
-        Route::get('courses', array('as' => 'cirrus.courses', 'uses' => 'CoursesController@index'));
     });
 });

@@ -72,13 +72,6 @@ return array(
         'icon'      => 'file',
         'access'    => 'cms.apps.[app-id].collections.[collection-id].catalogues.*',
     ),
-    array(
-        'title'     => 'Templates',
-        'route'     => 'nodes.type-list',
-        'params'    => array('[app-id]', '[collection-id]', 'template'),
-        'icon'      => 'code',
-        'access'    => 'cms.apps.[app-id].collections.[collection-id].*',
-    ),
 
     /*
         Custom Node Type Navigation Item
