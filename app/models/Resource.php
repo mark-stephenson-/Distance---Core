@@ -73,7 +73,7 @@ class Resource extends BaseModel
         return false;
     }
 
-    public static function fetch($collectionId, $fileName)
+    public static function fetch($collectionId, $fileName, $downloadFile = false)
     {
 
         if (strpos($fileName, '_id') !== false) {
@@ -135,6 +135,10 @@ class Resource extends BaseModel
                     $filePath = $typePath;
                 }
             }
+        }
+
+        if ($downloadFile) {
+            return Response::download($filePath);
         }
 
         $file = new Symfony\Component\HttpFoundation\File\File($filePath);

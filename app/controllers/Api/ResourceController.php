@@ -77,7 +77,7 @@ class ResourceController extends \BaseController {
             return Response::make('resource not found', 404);
         }
 
-        return Resource::fetch($resource->collection_id, $resource->filename);
+        return Resource::fetch($resource->collection_id, $resource->filename, true);
 
     }
 }
