@@ -24,6 +24,8 @@ class Format {
     // View filename
     protected $_from_type = null;
 
+    protected $_types = array();
+
     /**
      * Returns an instance of the Format object.
      *
@@ -92,9 +94,36 @@ class Format {
         return $array;
     }
 
+    public function makeTypes($data)
+    {
+        $data = (array) $data;
+
+        if ( is_array($data) ) {
+            foreach ( $data as $_key => $_value ) {
+                $_data = (array) $_value;
+
+                if ( isset($_data['nodetype']) ) {
+                    foreach ( $_data['nodetype']['columns'] as $column) {
+                        if ( $column->category == "nodelookup-multi" ) {
+                            $nodeType = NodeType::whereId($column->lookuptype)->first();
+                            $this->_types[$column->name] = $nodeType->name;
+                        }
+                    }
+                }
+
+                if ( ( is_array($_value) or is_object($_value) ) ) {
+                    $this->makeTypes($_value);
+                }
+            }
+        }
+    }
+
     // Format XML for output
     public function to_xml($data = null, $structure = null, $basenode = 'xml')
     {
+
+        $this->makeTypes($data);
+
         if ($data === null and ! func_num_args())
         {
             $data = $this->_data;
@@ -127,10 +156,20 @@ class Format {
             }
 
             // no numeric keys in our xml please!
-            if (is_numeric($key))
-            {
-                // make string key...
-                $key = (str_singular($basenode) != $basenode) ? str_singular($basenode) : 'item';
+            if ( isset($this->_types[$basenode]) ) {
+                if ( is_numeric($key) ) {
+                    $key = $this->_types[$basenode];
+                }
+            } else if (is_numeric($key)) {
+                if ( str_singular($basenode) != $basenode ) {
+                    $key = str_singular($basenode);
+                } else {
+                    if ( $basenode == "hierarchy") {
+                        $key = 'sdf';
+                    } else {
+                        $key = "item";
+                    }
+                }
             }
 
             // replace anything not alpha numeric
@@ -139,7 +178,7 @@ class Format {
             // if there is another array found recursively call this function
             if ( is_array($value) || is_object($value) )
             {
-                if ($key != 'nodetype') {
+                if ( $key != "nodetype") {
                     $node = $structure->addChild($key);
 
                     // recursive call.
@@ -150,12 +189,17 @@ class Format {
             else
             {
 
-                if ($key != 'node_type') {
-                    if ($this->shouldNotWrapInCdata($value)) {
+                if ($key == 'layout') {
+                    $structure->layout = null;
+                    $structure->layout->addCData($value);
+                } else {
+                    // add single node.
+                    $value = htmlspecialchars($value, ENT_QUOTES, "UTF-8");
+
+                    // Replace amps
+                    // $value = str_replace('&amp;', '&amp;amp;', $value);
+                    if ( $key != "node_type" ) {
                         $structure->addChild($key, $value);
-                    } else {
-                        $structure->$key = null;
-                        $structure->$key->addCData($value);
                     }
                 }
 
@@ -163,17 +207,6 @@ class Format {
         }
 
         return $structure->asXML();
-    }
-
-    protected function shouldNotWrapInCdata($value) {
-        if (is_integer($value)) return true;
-
-        // Can we parse it as a date?
-        try {
-            if (new \Carbon\Carbon($value)) return true;
-        } catch(Exception $e) {}
-
-        return false;
     }
 
     // Format HTML for output
@@ -255,7 +288,7 @@ class Format {
     // Format XML for output
     protected function _from_xml($string)
     {
-        return $string ? (array) simplexml_load_string($string, 'SimpleXMLElement', LIBXML_NOCDATA) : array();
+        return $string ? (array) simplexml_load_string($string, 'SimpleXMLExtended', LIBXML_NOCDATA) : array();
     }
 
     // Format CSV for output
