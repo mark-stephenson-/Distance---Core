@@ -111,7 +111,7 @@ class Format {
                         }
                     }
 
-                    $_nodeTypes[$_data['node_type']] = 'hello';
+                    $_nodeTypes[$_data['node_type']] = $_data['nodetype']['name'];
                 } else {
                     if ( isset($_data['node_type']) and ! isset($_nodeTypes[$_data['node_type']]) ) {
                         $nodeType = \NodeType::whereId($_data['node_type'])->first();
