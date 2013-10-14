@@ -25,6 +25,7 @@ class Format {
     protected $_from_type = null;
 
     protected $_types = array();
+    protected $_nodeTypes = array();
 
     /**
      * Returns an instance of the Format object.
@@ -109,6 +110,14 @@ class Format {
                             $this->_types[$column->name] = $nodeType->name;
                         }
                     }
+
+                    $_nodeTypes[$_data['node_type']] = 'hello';
+                } else {
+                    if ( isset($_data['node_type']) and ! isset($_nodeTypes[$_data['node_type']]) ) {
+                        $nodeType = \NodeType::whereId($_data['node_type'])->first();
+
+                        $this->_nodeTypes[ $nodeType->id ] = $nodeType->name;
+                    }
                 }
 
                 if ( ( is_array($_value) or is_object($_value) ) ) {
@@ -161,11 +170,11 @@ class Format {
                     $key = $this->_types[$basenode];
                 }
             } else if (is_numeric($key)) {
-                if ( str_singular($basenode) != $basenode ) {
+                if ( str_singular($basenode) != $basenode and $basenode != "branches") {
                     $key = str_singular($basenode);
                 } else {
-                    if ( $basenode == "hierarchy") {
-                        $key = 'sdf';
+                    if ( ($basenode == "hierarchy" or $basenode == "branches") and (isset($value['node_type']) and isset($this->_nodeTypes[$value['node_type']])) ){
+                        $key = $this->_nodeTypes[ $value['node_type'] ];
                     } else {
                         $key = "item";
                     }
