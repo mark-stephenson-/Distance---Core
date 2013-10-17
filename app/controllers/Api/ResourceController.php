@@ -41,6 +41,26 @@ class ResourceController extends \BaseController {
             $catalogues = $catalogues->with('resources');
         }
 
+        if ($archive = \Input::get('archive')) {
+
+            if ($archive == 'true') {
+
+                $collection = Collection::whereApiKey(\Request::header('Collection-Token'))->first();
+
+                $directory = storage_path() . '/archives/' . $collection->id;
+                $archives = glob($directory . '/*.zip');
+                rsort($archives);
+
+                if (count($archives) > 0 and isset($archives[0])) {
+                    return Response::download($archives[0]);
+                } else {
+                    return Response::make('', 404);
+                }
+
+            }
+
+        }
+
         if ( \Input::get('modifiedSince') ) {
 
             $carbon = new \Carbon\Carbon(\Input::get('modifiedSince'));
