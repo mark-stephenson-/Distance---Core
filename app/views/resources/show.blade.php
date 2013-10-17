@@ -119,7 +119,12 @@
         $("#upload_progress").hide();
 
         loadResourceUploader('{{ route('resources.process', array($appId, $collection->id, $catalogue->id)) }}', function() {
-            document.location.reload(true);
+            $.ajax({
+                url: '{{ route('collections.createResourceArchive', array($appId, $collection->id)) }}',
+                success: function() {
+                    document.location.reload(true);
+                }
+            });
         }, function() {}, [
             @if ($catalogue->restrictions)
                 {title : "Allowed Files", extensions : "{{ implode(',', $catalogue->restrictions) }}"},
@@ -144,6 +149,10 @@
                     button.attr('data-sync', (sync == "1") ? 0 : 1);
 
                     button.find('i').toggleClass('icon-remove').toggleClass('icon-ok');
+
+                    $.ajax({
+                        url: '{{ route('collections.createResourceArchive', array($appId, $collection->id)) }}',
+                    });
                 }
             }).done( function() {
                 button.removeClass('disabled');
