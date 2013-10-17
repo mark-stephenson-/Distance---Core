@@ -100,4 +100,9 @@ class CollectionsController extends BaseController
         return Redirect::route('collections.index', $appId)
                 ->with('successes', new MessageBag(array($collection->name . ' has been deleted.')));
     }
+
+    public function createResourceArchive($appId, $collectionId)
+    {
+        Artisan::call('core:createResourceArchive', array('collection-id' => $collectionId));
+    }
 }

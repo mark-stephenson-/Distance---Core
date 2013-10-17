@@ -115,6 +115,7 @@ Route::group(array('before' => array('auth')), function() {
             Route::get('{appId}/collections/{id}/edit', array('as' => 'collections.edit', 'uses' => 'CollectionsController@edit'));
             Route::get('{appId}/collections/{id}/destroy', array('as' => 'collections.destroy', 'uses' => 'CollectionsController@destroy'));
             Route::put('{appId}/collections/{id}', array('as' => 'collections.update', 'uses' => 'CollectionsController@update'));
+            Route::get('{appId}/collections/{id}/create-resource-archive', array('as' => 'collections.createResourceArchive', 'uses' => 'CollectionsController@createResourceArchive'));
 
             /*
                 Over The Air Distribution
