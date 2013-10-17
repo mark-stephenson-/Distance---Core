@@ -52,7 +52,12 @@ class ResourceController extends \BaseController {
                 rsort($archives);
 
                 if (count($archives) > 0 and isset($archives[0])) {
-                    return Response::download($archives[0]);
+
+                    $timestamp = basename($archives[0], '.zip');
+
+                    return Response::download($archives[0], null, array(
+                        'Last-Modified' => date("Y-m-d\TH:i:s\Z", $timestamp)
+                    ));
                 } else {
                     return Response::make('', 404);
                 }
