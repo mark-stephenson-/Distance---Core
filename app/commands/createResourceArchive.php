@@ -76,9 +76,6 @@ class createResourceArchive extends Command {
             }
         }
 
-        while (1 == 1) {
-            
-        }
 
         // Get all the catalogues (and resources that belong to them) that belong to this collection
         $catalogues = Catalogue::whereCollectionId($collectionId)->with( array('resources' => function($query) {
