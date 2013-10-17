@@ -117,7 +117,7 @@ class createResourceArchive extends Command {
 
             if ( $_pid  != getmypid() ) {
                 posix_kill($_pid, 2);
-                unlink($pidDirectory . '/' . $_pid);
+                unlink($this->pidDirectory . '/' . $_pid);
             }
         }
     }
