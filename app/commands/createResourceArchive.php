@@ -21,6 +21,21 @@ class createResourceArchive extends Command {
     protected $description = 'Create an archive of the specified collections resources.';
 
     /**
+     * The directory where archives are stored
+     */
+    protected $directory;
+
+    /**
+     * The directory where PID files are stored
+     */
+    protected $pidDirectory;
+
+    /**
+     * The collection ID of the archive currently being created
+     */
+    protected $collectionId;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -37,23 +52,20 @@ class createResourceArchive extends Command {
      */
     public function fire()
     {
-        $collectionId = $this->argument('collection-id');
+        $this->collectionId = $this->argument('collection-id');
+        $this->directory = storage_path() . '/archives/' . $this->collectionId;
+        $this->pidDirectory = $this->directory . '/pid';
 
-        // Ensure that the archive directory exists
-        $directory = storage_path() . '/archives/' . $collectionId;
-
-        if ( ! is_dir($directory) ) {
-            mkdir( $directory, 0777, true );
+        if ( ! is_dir($this->directory) ) {
+            mkdir( $this->directory, 0777, true );
         }
 
         // Ensure the PID directory exists
-        $pidDirectory = $directory . '/pid';
-
-        if ( ! is_dir($pidDirectory) ) {
-            mkdir( $pidDirectory, 0777);
+        if ( ! is_dir($this->pidDirectory) ) {
+            mkdir( $this->pidDirectory, 0777);
         }
 
-        $pidFileName = $pidDirectory . '/' . getmypid();
+        $pidFileName = $this->pidDirectory . '/' . getmypid();
 
         $pidFile = fopen( $pidFileName, 'w');
         fclose($pidFile);
@@ -63,8 +75,41 @@ class createResourceArchive extends Command {
             unlink($pidFileName);
         });
 
-        // We need to go through and kill other processes that are running
-        $pidFiles = glob($pidDirectory . '/*');
+        $this->stopOtherArchives();
+
+        // Get all the catalogues (and resources that belong to them) that belong to this collection
+        $catalogues = Catalogue::whereCollectionId($this->collectionId)->with( array('resources' => function($query) {
+            $query->whereSync(1);
+        }) )->get();
+
+        // Make the zip archive
+        $zip = new \ZipArchive;
+        $zip->open( $this->directory . '/' . time() . '.zip', \ZipArchive::CREATE );
+
+        foreach ( $catalogues as $catalogue ) {
+            if ( isset($catalogue->resources) ) {
+                
+                $path = base_path() . '/resources/' . $this->collectionId . '/';
+
+                foreach ( $catalogue->resources as $resource ) {
+                    if ( is_file($path . $resource->filename) ) {
+                        $zip->addFile( $path . $resource->filename, $resource->filename );
+                    }
+                }
+            } 
+        }
+
+        $zip->close();
+
+        $this->cleanUp();
+    }
+
+    /**
+     * Stop any other archive actions that might be occuring for this collection
+     */
+    protected function stopOtherArchives()
+    {
+        $pidFiles = glob($this->pidDirectory . '/*');
 
         foreach ( $pidFiles as $_pidFile ) {
             $explode = explode('/', $_pidFile);
@@ -75,29 +120,22 @@ class createResourceArchive extends Command {
                 unlink($pidDirectory . '/' . $_pid);
             }
         }
+    }
 
+    /**
+     * Clean up the current archives
+     */
+    protected function cleanUp()
+    {
+        $archives = glob($this->directory . '/*.zip');
+        rsort($archives);
+        unset($archives[0], $archives[1]);
 
-        // Get all the catalogues (and resources that belong to them) that belong to this collection
-        $catalogues = Catalogue::whereCollectionId($collectionId)->with( array('resources' => function($query) {
-            $query->whereSync(1);
-        }) )->get();
-
-        // Make the zip archive
-        $zip = new \ZipArchive;
-        $zip->open( $directory . '/' . time() . '.zip', \ZipArchive::CREATE );
-
-        foreach ( $catalogues as $catalogue ) {
-            if ( isset($catalogue->resources) ) {
-                
-                $path = base_path() . '/resources/' . $collectionId . '/';
-
-                foreach ( $catalogue->resources as $resource ) {
-                    $zip->addFile( $path . $resource->filename, $resource->filename );
-                }
-            } 
+        if ( count($archives) ) {
+            foreach ( $archives as $archive ) {
+                unlink($archive);
+            }
         }
-
-        $zip->close();
     }
 
     /**
