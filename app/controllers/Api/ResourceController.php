@@ -55,9 +55,11 @@ class ResourceController extends \BaseController {
 
                     $timestamp = basename($archives[0], '.zip');
 
-                    return Response::download($archives[0], null, array(
+                    $response = new \Symfony\Component\HttpFoundation\BinaryFileResponse($archives[0], 200, array(
                         'Last-Modified' => date("Y-m-d\TH:i:s\Z", $timestamp)
-                    ));
+                    ), true, 'attachment', false, false);
+
+                    return $response;
                 } else {
                     return Response::make('', 404);
                 }
