@@ -266,6 +266,8 @@ class ResourcesController extends BaseController
 
             $resource->touch();
 
+            Artisan::call('core:createResourceArchive', array('collection-id' => CORE_COLLECTION_ID));
+
             return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id))
                 ->with('success', new MessageBag(array('The new version of ' . $resource->filename . ' has been uploaded.')));
         } else {
