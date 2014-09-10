@@ -4,13 +4,7 @@
 * PHP >= 5.4
 * Composer (globally or a local copy in the project) - [Instructions] (http://getcomposer.org/doc/00-intro.md#installation-nix)
 * Homebrew & Grunt (globally or a local copy in the project) - [Instructions] (http://thechangelog.com/install-node-js-with-homebrew-on-os-x/)
-* MCrypt PHP Extension - [Instructions] (run 
-```
-#!shell
-
-brew install mcrypt
-```
- in terminal and update /etc/php.ini libs to reference mcrypt.so')
+* MCrypt PHP Extension - [Instructions] (run 'brew install mcrypt' in terminal and update /etc/php.ini libs to reference mcrypt.so')
 
 ## Setup Guide
 
