@@ -2,13 +2,23 @@
 
 class Resource extends BaseModel
 {
-
+    protected $appends = array('languages');
     protected $softDelete = true;
 
     public function catalogue()
     {
         return $this->belongsTo('Catalogue');
     }
+
+	public function localisations()
+	{
+		return $this->hasMany('I18nResource');
+	}
+
+	public function getLanguagesAttribute()
+	{
+		return $this->localisations()->lists('lang');
+	}
 
     public function getDisplayTextAttribute()
     {
@@ -73,7 +83,7 @@ class Resource extends BaseModel
         return false;
     }
 
-    public static function fetch($collectionId, $fileName, $downloadFile = false)
+    public static function fetch($collectionId, $fileName, $lang, $downloadFile = false)
     {
 
         if (strpos($fileName, '_id') !== false) {
@@ -91,6 +101,9 @@ class Resource extends BaseModel
 
                 $fileName = $resource->filename;
             }
+        }
+        if($lang && $lang != 'en'){
+            $fileName = $lang . '/' . $fileName;
         }
 
         $type = Input::get('type') . '/';

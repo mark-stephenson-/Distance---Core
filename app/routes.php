@@ -59,6 +59,7 @@ Route::group( array('prefix' => 'api'), function() {
         Route::get('emailNode', 'Api\NodeController@emailNode');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
         Route::get('resource/{id}', 'Api\ResourceController@resource');
+        Route::get('resource/{id}/{lang}', 'Api\ResourceController@resource');
         Route::get('resource', 'Api\ResourceController@resources');
         Route::get('modules', 'Api\ModulesController@modules');
     });
@@ -91,6 +92,7 @@ App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException
 });
 
 Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
+Route::get('file/{collectionId}/{filename}/{lang}', array('as' => 'resources.loadWithLang', 'uses' => 'ResourcesController@load'));
 Route::get('cron', array('as' => 'cron', 'uses' => 'CronController@run'));
 
 Route::group(array('before' => array('auth')), function() {

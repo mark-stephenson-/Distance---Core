@@ -3,7 +3,7 @@
 class ResourcesController extends BaseController
 {
     
-    public function load($collectionId, $fileName)
+    public function load($collectionId, $fileName, $lang="en")
     {
         // Check if it's public
         if (!Sentry::check()) {
@@ -20,7 +20,7 @@ class ResourcesController extends BaseController
             }
         }
 
-        return Resource::fetch($collectionId, urldecode($fileName));
+        return Resource::fetch($collectionId, urldecode($fileName), $lang);
     }
 
     public function index() {

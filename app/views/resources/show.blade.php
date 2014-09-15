@@ -24,6 +24,7 @@
             <tr>
                 <th></th>
                 <th>Name</th>
+                <th>Localisations</th>
                 <th>Sync</th>
                 <th>Public</th>
                 <th>Actions</th>
@@ -45,6 +46,16 @@
                             data-fancybox-type="iframe"
                         @endif
                         class="fancybox">{{ $resource->displayText }}</a>
+                </td>
+                <td>
+                	@foreach($resource->localisations as $localisation)
+                	<li>{{ $localisation->lang }}
+						@if ($resource->isImage())
+		                    <img style="max-width: 80px;" src="{{ $localisation->path() }}?type=view" width="80" height="50" />
+		                @else
+		                    <i class="icon-file"></i>
+		                @endif
+                	@endforeach
                 </td>
                 <td>
                     @if ($resource->sync)

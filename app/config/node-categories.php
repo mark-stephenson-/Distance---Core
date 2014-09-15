@@ -8,6 +8,13 @@ return array(
         'type'  => 'string',
         'admin' => 'standard',
     ),
+    
+    'string-i18n' => array(
+        'label' => 'String (internationalised)',
+        'name'  => 'string-i18n',
+        'type'  => 'integer',
+        'admin' => 'standard',
+    ),
 
     'integer' => array(
         'label' => 'Integer',

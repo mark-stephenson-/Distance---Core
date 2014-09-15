@@ -96,7 +96,7 @@ class ResourceController extends \BaseController {
         return Api::makeResponse($result, 'catalogues', $responseCode);
     }
 
-    public function resource($id)
+    public function resource($id, $lang='en')
     {
         $resource = Resource::whereId($id)->first();
 
@@ -104,7 +104,7 @@ class ResourceController extends \BaseController {
             return Response::make('resource not found', 404);
         }
 
-        return Resource::fetch($resource->collection_id, $resource->filename, true);
+        return Resource::fetch($resource->collection_id, $resource->filename, $lang, true);
 
     }
 }
