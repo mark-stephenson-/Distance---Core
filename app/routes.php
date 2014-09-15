@@ -61,6 +61,7 @@ Route::group( array('prefix' => 'api'), function() {
         Route::get('resource/{id}', 'Api\ResourceController@resource');
         Route::get('resource/{id}/{lang}', 'Api\ResourceController@resource');
         Route::get('resource', 'Api\ResourceController@resources');
+        Route::get('localisations', 'Api\LocalisationController@localisations');
         Route::get('modules', 'Api\ModulesController@modules');
     });
 });
