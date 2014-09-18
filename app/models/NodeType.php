@@ -222,7 +222,7 @@ class NodeType extends BaseModel {
         return $ret;
     }
 
-    public function parseColumns($post_data)
+    public function parseColumns($post_data, $translations)
     {
         $columns = $this->getAttribute('columns');
 
@@ -232,6 +232,21 @@ class NodeType extends BaseModel {
                 $column_obj = findObjectInArray($columns, $key, 'name');
 
                 switch ($column_obj->category) {
+                	case 'string-i18n':
+                		// loop through the translation_name array and save the values
+                		Log::debug('possible key', array('trans_key' => $translations));
+                		if(!$val) $val = intval(I18nString::orderBy('key', 'desc')->first()->key) + 1;
+                		foreach($translations[$key] as $lang => $localisation){
+							$i18nString = I18nString::whereKey($val)->whereLang($lang)->first();
+							if(!$i18nString) {
+								$i18nString = new I18nString;
+								$i18nString->key = $val;
+								$i18nString->lang = $lang;
+							}
+							$i18nString->value = $localisation;
+							$i18nString->save();
+                		}
+                		break;
                     case 'date':
                         $d = str_replace('/', '-', $val);
                         $stamp = strtotime($d);

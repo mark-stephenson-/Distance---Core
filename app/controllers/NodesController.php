@@ -140,6 +140,7 @@ class NodesController extends BaseController
 
         // Grab the submitted content and check if any fields are required
         $nodetypeContent = Input::get('nodetype');
+        $translations = Input::get('translation');
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
 
         // Let's run the validator
@@ -168,7 +169,7 @@ class NodesController extends BaseController
         }
 
         // Let's create the first revision
-        $nodetypeContent = $nodeType->parseColumns($nodetypeContent);
+        $nodetypeContent = $nodeType->parseColumns($nodetypeContent, $translations);
         $nodetypeContent['node_id'] = $node->id;
         $nodetypeContent['status'] = "draft";
         $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = Sentry::getUser()->id;
