@@ -262,6 +262,7 @@ class NodesController extends BaseController
         $node->owned_by = Input::get('owned_by');
 
         // Grab the submitted content and check if any fields are required
+        $translations = Input::get('translation');
         $nodetypeContent = Input::get('nodetype');
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
 
@@ -292,7 +293,7 @@ class NodesController extends BaseController
 
         // That's the main title updated... now for the node content...
         $type = $node->nodetype;
-        $nodeRevision = $type->parseColumns($nodetypeContent);
+        $nodeRevision = $type->parseColumns($nodetypeContent, $translations);
 
         // If a user doesn't have permission for a certain column... the POST key will not exist, we'll
         // re-populate that from the old revision (if possible)

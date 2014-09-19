@@ -18,6 +18,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email Address</th>
+                <th>Created</th>
                 <th>Actions</th>
             </tr>
         </thead>

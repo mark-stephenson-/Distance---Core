@@ -227,20 +227,23 @@ class NodeType extends BaseModel {
         $columns = $this->getAttribute('columns');
 
         if (count($columns) > 0) {
-            foreach ($post_data as $key => &$val) {
-
+            foreach ($post_data as $key => &$value) {
+				
                 $column_obj = findObjectInArray($columns, $key, 'name');
-
+				
                 switch ($column_obj->category) {
                 	case 'string-i18n':
-                		// loop through the translation_name array and save the values
-                		Log::debug('possible key', array('trans_key' => $translations));
-                		if(!$val) $val = intval(I18nString::orderBy('key', 'desc')->first()->key) + 1;
-                		foreach($translations[$key] as $lang => $localisation){
-							$i18nString = I18nString::whereKey($val)->whereLang($lang)->first();
+                    
+                		$value = $value ?: I18nString::nextKey();
+                    
+                		foreach($translations[$key] as $lang => $localisation)
+                		{
+                			if (!$localisation) { continue; }
+							$i18nString = I18nString::whereKey($value)->whereLang($lang)->first();
+							
 							if(!$i18nString) {
 								$i18nString = new I18nString;
-								$i18nString->key = $val;
+								$i18nString->key = $value;
 								$i18nString->lang = $lang;
 							}
 							$i18nString->value = $localisation;
@@ -248,23 +251,23 @@ class NodeType extends BaseModel {
                 		}
                 		break;
                     case 'date':
-                        $d = str_replace('/', '-', $val);
+                        $d = str_replace('/', '-', $value);
                         $stamp = strtotime($d);
-                        $val = date('Y-m-d H:i:s', $stamp);
+                        $value = date('Y-m-d H:i:s', $stamp);
                         break;
 
                     case 'html':
-                        $val = convertSmartQuotes(stripslashes($val));
+                        $value = convertSmartQuotes(stripslashes($value));
                         break;
 
                     case 'enum-multi':
                     case 'userlookup-multi':
-                        if (is_array($val)) {
-                            $val = implode(', ', $val);
+                        if (is_array($value)) {
+                            $value = implode(', ', $value);
                         }
                         break;
                     case 'nodelookup':
-                        $val = (int) $val;
+                        $value = (int) $value;
                         break;
                 }
 
