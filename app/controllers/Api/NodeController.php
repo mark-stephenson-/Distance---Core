@@ -22,6 +22,16 @@ class NodeController extends \BaseController {
             }
 
             $nodes = $nodes->whereNodeType(Input::get('nodeType'));
+            
+        } else if ( Input::get('name') ) {
+            
+            $nodeType = \NodeType::where('name', Input::get('name'))->first();
+            
+            if ( ! $nodeType ) {
+                return Response::make(null, 404);
+            }
+            
+            $nodes = $nodes->whereNodeType($nodeType->id);
         }
 
         if ( Input::get('modifiedSince') ) {
