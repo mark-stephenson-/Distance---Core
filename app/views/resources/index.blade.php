@@ -40,7 +40,7 @@
                             {{ $catalogue->resources()->count() }}
                         </td>
                         <td width="150">
-                            <a href="{{ route('resources.show', array($appId, $collectionId, $catalogue->id)) }}" class="btn btn-small"><i class="icon-search"></i> View Resources</a>
+                            <a href="{{ route('resources.show', array($appId, $collectionId, $catalogue->id, 'en')) }}" class="btn btn-small"><i class="icon-search"></i> View Resources</a>
                         </td>
                     </tr>
                 @endif

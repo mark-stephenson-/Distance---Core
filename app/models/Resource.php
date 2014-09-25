@@ -25,24 +25,31 @@ class Resource extends BaseModel
         return ($this->getAttribute('description')) ?: $this->getAttribute('filename');
     }
 
-    public function path()
+    public static function nextId()
     {
-        return route('resources.load', array($this->getAttribute('collection_id'), $this->getAttribute('filename')));
+        $max = Resource::max('id');
+        Log::debug("nextId", array("max" => $max));
+        return $max ? intval($max->id) + 1 : 1;
+    }
+    
+    public function path($language = 'en')
+    {
+        return route('resources.load', array($this->getAttribute('catalogue_id'), $language, $this->getAttribute('filename')));
     }
 
-    public function systemPath()
+    public function systemPath($language = 'en')
     {
-        return app_path() . '/../resources/' . $this->getAttribute('collection_id') . '/' . $this->getAttribute('filename');
+        return app_path() . '/../resources/' . $this->getAttribute('catalogue_id') . '/' . $language . '/' . $this->getAttribute('filename');
     }
 
-    public function isPdf()
+    public function isPdf($language = 'en')
     {
         // The quickest way, check the extensions
         if (in_array($this->ext, array('pdf'))) {
             return true;
         }
 
-        $filePath = $this->systemPath();
+        $filePath = $this->systemPath($language);
 
         // The quick method...
         try {
@@ -59,14 +66,14 @@ class Resource extends BaseModel
         return false;
     }
 
-    public function isImage()
+    public function isImage($language = 'en')
     {
         // The quickest way, check the extensions
         if (in_array($this->ext, array('jpg', 'jpeg', 'png', 'gif'))) {
             return true;
         }
 
-        $filePath = $this->systemPath();
+        $filePath = $this->systemPath($language);
 
         // The quick method...
         try {
@@ -83,7 +90,7 @@ class Resource extends BaseModel
         return false;
     }
 
-    public static function fetch($collectionId, $fileName, $lang, $downloadFile = false)
+    public static function fetch($catalogueId, $language, $fileName, $downloadFile = false)
     {
 
         if (strpos($fileName, '_id') !== false) {
@@ -102,16 +109,13 @@ class Resource extends BaseModel
                 $fileName = $resource->filename;
             }
         }
-        if($lang && $lang != 'en'){
-            $fileName = $lang . '/' . $fileName;
-        }
 
         $type = Input::get('type') . '/';
 
         // We don't need type for now
         $type = '/';
 
-        $filePath = app_path() . '/../resources/' . $collectionId . '/' . $fileName;
+        $filePath = app_path() . '/../resources/' . $catalogueId . '/' . $language . '/' . $fileName;
 
         if (!file_exists($filePath)) {
 

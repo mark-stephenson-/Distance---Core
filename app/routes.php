@@ -58,8 +58,7 @@ Route::group( array('prefix' => 'api'), function() {
         Route::get('node', 'Api\NodeController@nodes');
         Route::get('emailNode', 'Api\NodeController@emailNode');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
-        Route::get('resource/{id}', 'Api\ResourceController@resource');
-        Route::get('resource/{id}/{lang}', 'Api\ResourceController@resource');
+        Route::get('resource/{id}/{language}', 'Api\ResourceController@resource');
         Route::get('resource', 'Api\ResourceController@resources');
         Route::get('localisations', 'Api\LocalisationController@localisations');
         Route::get('modules', 'Api\ModulesController@modules');
@@ -92,8 +91,7 @@ App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException
     return View::make('404');
 });
 
-Route::get('file/{collectionId}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
-Route::get('file/{collectionId}/{filename}/{lang}', array('as' => 'resources.loadWithLang', 'uses' => 'ResourcesController@load'));
+Route::get('file/{catalogueId}/{language}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
 Route::get('cron', array('as' => 'cron', 'uses' => 'CronController@run'));
 
 Route::group(array('before' => array('auth')), function() {
@@ -173,10 +171,12 @@ Route::group(array('before' => array('auth')), function() {
                 Route::get('catalogues/{id}/delete', array('as' => 'catalogues.destroy', 'uses' => 'CataloguesController@destroy'));
 
                 Route::get('resources', array('as' => 'resources.index', 'uses' => 'ResourcesController@index'));
-                Route::get('resources/{id}', array('as' => 'resources.show', 'uses' => 'ResourcesController@show'));
-                Route::get('resources/{id}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
-                Route::post('resources/{id}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
-                Route::post('resources/process/{catalogId}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
+                Route::get('resources/{id}/{language}', array('as' => 'resources.show', 'uses' => 'ResourcesController@show'));
+                Route::get('resources/{id}/{language}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
+                Route::get('resources/{id}/delete/{language}..', array('as' => 'resources.destroyResource', 'uses' => 'ResourcesController@destroyResource'));
+                Route::post('resources/{id}/{language}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
+                Route::post('resources/{id}/{language}/edit-name', array('as' => 'resources.editName', 'uses' => 'ResourcesController@editName'));
+                Route::post('resources/process/{catalogueId}/{language}..', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
 
             });
         });

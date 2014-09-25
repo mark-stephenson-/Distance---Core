@@ -222,7 +222,7 @@ class NodeType extends BaseModel {
         return $ret;
     }
 
-    public function parseColumns($post_data, $translations)
+    public function parseColumns($post_data, $translations, $is_revision)
     {
         $columns = $this->getAttribute('columns');
 
@@ -234,7 +234,10 @@ class NodeType extends BaseModel {
                 switch ($column_obj->category) {
                 	case 'string-i18n':
                     
-                		$value = $value ?: I18nString::nextKey();
+                        // if this is creating a new revision, or if the current value is not set
+                        if($is_revision || !$value){
+                            $value = I18nString::nextKey();
+                        } 
                     
                 		foreach($translations[$key] as $lang => $localisation)
                 		{
