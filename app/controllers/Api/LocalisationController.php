@@ -29,7 +29,7 @@ class LocalisationController extends \BaseController {
 			foreach($node->nodetype->columns as $column) {
 	            if ($column->category == 'string-i18n'
 	                     || $column->category == 'html-i18n') {
-	            	$val = $nodeRevision->name;
+	            	$val = $nodeRevision->{$column->name};
 	            	if($val) $i18nStrings[] = intval($val);
             	}
         	}
