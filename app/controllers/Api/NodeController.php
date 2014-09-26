@@ -69,7 +69,83 @@ class NodeController extends \BaseController {
             return $return;
         }
     }
+    
+    public function add()
+    {
+        if (Request::header('Collection-Token') === NULL) {
+            return Response::make('Collection-Token must be specified for this call.', 400);
+        }
 
+        $collection = \App::make('collection');
+        
+        $request = Request::instance();
+        $content = $request->getContent();
+        
+        if (!$content) {
+            return Response::make('No content recieved', 400);
+        }
+        
+        $nodeType = \NodeType::where('name', 'submission')->get()->first();
+        
+        if ($nodeType)
+        {
+            $nodeType = new \NodeType;
+            $nodeType->name = 'submission';
+            $nodeType->label = 'Submission';
+            $nodeType->columns = array('5424335d11505' => array(
+                'category' => 'code',
+                'label' => 'json',
+                'syntax' => 'json',
+                'description' => 'The JSON of a submission'   
+            ));
+
+            if (!$nodeType->save()) {
+                return Response::make('Node type for a submission could not be created.', 400);
+            }
+            
+            $nodeType->collections()->sync(array($collection->id));
+
+            if (!$nodeType->createTable()) {
+                return Response::make('There was a problem creating the database table for this node type, your data has not been lost.', 400);
+            }
+        }
+        
+        $node = new Node;
+        $node->title = 'Submission'.(Node::where('node_type', $nodeType->id)->count() + 1);
+        $node->owned_by = \Sentry::getUser()->id;
+        $node->created_by = \Sentry::getUser()->id;
+        $node->node_type = $nodeType->id;
+        $node->collection_id = $collection->id;
+
+        if (!$node->save()) {
+            return Response::make('Node for submission could not be created.', 400);
+        }
+        
+        $nodetypeContent = array("json" => Request::instance()->getContent());
+        $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
+        
+        $nodetypeContent = $nodeType->parseColumns($nodetypeContent, null, false);
+        $nodetypeContent['node_id'] = $node->id;
+        $nodetypeContent['status'] = "draft";
+        $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = \Sentry::getUser()->id;
+        $nodetypeContent['created_at'] = $nodetypeContent['updated_at'] = \DB::raw('NOW()');
+
+        $nodeDraft = $node->createDraft($nodetypeContent);
+
+        if (!$nodeDraft) {
+            return Response::make('Draft node for submission could not be created.', 400);
+        }
+        
+        $node->latest_revision = $nodeDraft;
+        $node->status = 'draft';
+        
+        if (!$node->save()) {
+            return Response::make('Node for submission could not be saved.', 400);
+        } else {
+            return Api::makeResponse('Submission has successfully been submitted.', 'result');
+        }
+    }
+    
     public function emailNode()
     {
         return Response::make('', 200);

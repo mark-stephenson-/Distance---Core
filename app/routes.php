@@ -56,6 +56,7 @@ Route::group( array('prefix' => 'api'), function() {
         Route::get('hierarchy', 'Api\HierarchyController@hierarchy');
         Route::get('node/{id}', 'Api\NodeController@node');
         Route::get('node', 'Api\NodeController@nodes');
+        Route::post('submit', 'Api\NodeController@add');
         Route::get('emailNode', 'Api\NodeController@emailNode');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
         Route::get('resource/{id}', 'Api\ResourceController@resource');
