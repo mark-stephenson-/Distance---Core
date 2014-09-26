@@ -84,11 +84,15 @@ class NodeController extends \BaseController {
         if (!$content) {
             return Response::make('No content recieved', 400);
         }
-        
+        if (!\Sentry::getUser()) {
+            return Response::make('Not logged in', 401);
+        }
+
         $nodeType = \NodeType::where('name', 'submission')->get()->first();
         
-        if ($nodeType)
+        if (!$nodeType)
         {
+            // Node type doesn't exist yet, create it
             $nodeType = new \NodeType;
             $nodeType->name = 'submission';
             $nodeType->label = 'Submission';
