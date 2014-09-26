@@ -12,7 +12,7 @@ class AddDeletedAtToResources extends Migration {
 	public function up()
 	{
 		//
-		Schema::table('resources', function($table) {
+		Schema::table('i18n_resources', function($table) {
 
             $table->softDeletes();
 
@@ -27,7 +27,7 @@ class AddDeletedAtToResources extends Migration {
 	public function down()
 	{
 
-		Schema::table('resources', function($table) {
+		Schema::table('i18n_resources', function($table) {
 			$table->dropSoftDeletes();
 		});
 	}
