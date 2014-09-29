@@ -111,12 +111,12 @@ class NodeController extends \BaseController {
             }
         }
         
-        $user = User::where('email', 'hello+prase@thedistance.co.uk');
+        $user = User::where('email', '=', 'hello+prase@thedistance.co.uk')->first();
         
         $node = new Node;
         $node->title = 'Submission'.(Node::where('node_type', $nodeType->id)->count() + 1);
-        $node->owned_by = $user;
-        $node->created_by = $user;
+        $node->owned_by = $user->id;
+        $node->created_by = $user->id;
         $node->node_type = $nodeType->id;
         $node->collection_id = $collection->id;
 
@@ -130,7 +130,7 @@ class NodeController extends \BaseController {
         $nodetypeContent = $nodeType->parseColumns($nodetypeContent, null, false);
         $nodetypeContent['node_id'] = $node->id;
         $nodetypeContent['status'] = "draft";
-        $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = $user;
+        $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = $user->id;
         $nodetypeContent['created_at'] = $nodetypeContent['updated_at'] = \DB::raw('NOW()');
 
         $nodeDraft = $node->createDraft($nodetypeContent);
