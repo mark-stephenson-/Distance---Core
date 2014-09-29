@@ -84,9 +84,6 @@ class NodeController extends \BaseController {
         if (!$content) {
             return Response::make('No content recieved', 400);
         }
-        if (!\Sentry::getUser()) {
-            return Response::make('Not logged in', 401);
-        }
 
         $nodeType = \NodeType::where('name', 'submission')->get()->first();
         
@@ -114,10 +111,12 @@ class NodeController extends \BaseController {
             }
         }
         
+        $user = User::where('email', 'hello+prase@thedistance.co.uk');
+        
         $node = new Node;
         $node->title = 'Submission'.(Node::where('node_type', $nodeType->id)->count() + 1);
-        $node->owned_by = \Sentry::getUser()->id;
-        $node->created_by = \Sentry::getUser()->id;
+        $node->owned_by = $user;
+        $node->created_by = $user;
         $node->node_type = $nodeType->id;
         $node->collection_id = $collection->id;
 
@@ -131,7 +130,7 @@ class NodeController extends \BaseController {
         $nodetypeContent = $nodeType->parseColumns($nodetypeContent, null, false);
         $nodetypeContent['node_id'] = $node->id;
         $nodetypeContent['status'] = "draft";
-        $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = \Sentry::getUser()->id;
+        $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = $user;
         $nodetypeContent['created_at'] = $nodetypeContent['updated_at'] = \DB::raw('NOW()');
 
         $nodeDraft = $node->createDraft($nodetypeContent);
