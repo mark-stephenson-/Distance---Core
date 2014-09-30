@@ -124,7 +124,7 @@
 </div>
 
 <script>
-        loadResourceUploader('{{ route('resources.process', array($appId, $collection->id, $catalogue->id)) }}', function(response) {
+        loadResourceUploader('{{ route('resources.process', array($appId, $collection->id, $catalogue->id, 'en')) }}', function(response) {
                 $.ajax({
                     url: '{{ route('collections.createResourceArchive', array($appId, $collection->id)) }}',
                 });
