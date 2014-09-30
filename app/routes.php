@@ -58,7 +58,7 @@ Route::group( array('prefix' => 'api'), function() {
         Route::get('node', 'Api\NodeController@nodes');
         Route::get('emailNode', 'Api\NodeController@emailNode');
         Route::get('node-types', 'Api\NodeTypeController@nodeTypes');
-        Route::get('resource/{id}/{language}', 'Api\ResourceController@resource');
+        Route::get('resource/{id}/{language?}', 'Api\ResourceController@resource');
         Route::get('resource', 'Api\ResourceController@resources');
         Route::get('localisations', 'Api\LocalisationController@localisations');
         Route::get('modules', 'Api\ModulesController@modules');
