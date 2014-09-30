@@ -142,11 +142,11 @@ class NodeController extends \BaseController {
         $node->latest_revision = $nodeDraft;
         $node->status = 'draft';
         
-        if (!$node->save()) {
-            return Response::make('Node for submission could not be saved.', 400);
-        } else {
-            return Api::makeResponse('Submission has successfully been submitted.', 'result');
+        if ($node->save())
+        {
+            return Response::make(array('success' => true, 'error' => null), 201);
         }
+        return Response::make(array('success' => false, 'error' => 'Node for submission could not be saved.'), 500);
     }
     
     public function emailNode()
