@@ -5,15 +5,18 @@
 @stop
 <?php $language = substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '/') + 1); ?>
 @section('body')
-    <div class="pull-right">
-
+    <div class="btn-group pull-left">
+        <a href="{{ route('resources.index', array($appId, $collectionId)) }}" class="btn"><i class="icon-arrow-left"></i> Back</a>
+    </div>
+    <div class="btn-group pull-right">
         <div class="upload_container">
             <input type="file" multiple="multiple" name="upload" class="file_upload_fallback" id="file_upload_fallback" style="display: none;">
             <button id="dropzone" class="btn"><i class="icon-upload"></i> Upload a New <b>{{ Config::get("languages.list")[$language] }}</b> Resource</button>
         </div>
-
     </div>
-
+    <div class="btn-group pull-right">
+        {{ Form::select("language", Config::get("languages.list"), $language) }}
+    </div>
     <div class="progress" id="upload_progress">
       <div class="bar" style="width: 0%;"></div>
     </div>
@@ -21,7 +24,7 @@
     <table class="table table-striped resource_table">
         <thead>
             <tr>
-                <th>{{ Form::select("language", Config::get("languages.list"), $language) }}</th>
+                <th></th>
                 <th>Name</th>
                 <th>Localisations</th>
                 <th>Sync</th>
@@ -31,9 +34,20 @@
             </tr>
         </thead>
         <tbody>
+            <?php
+                $resources = array_pluck($catalogue->resources, 'localisations');
+
+                $localisations = array_map(function($resource){
+                    return array_map(function($localisation){
+                        return $localisation['lang'];
+                    }, $resource->toArray());
+                }, $resources);
+                
+                $languages = array_intersect_key(Config::get("languages.list"), array_flip(array_unique(array_flatten($localisations))));
+            ?>
             @foreach($catalogue->resources as $resource)
             <tr>
-                <td style="width: 80px !important; padding-right: 30px; height: 50px  !important; overflow: hidden;">
+                <td style="width: 80px !important; padding-right: 30px; height: 50px  !important; overflow: hidden; vertical-align: middle; text-align: center;">
                     @if ($resource->isImage($language))
                         <a href="{{ $resource->path($language) }}" @if ($resource->isPdf($language)) data-fancybox-type="iframe" @endif class="fancybox">
                             <img style="max-width: 80px;" src="{{ $resource->path($language) }}?type=view" width="80" height="50" />
@@ -45,19 +59,19 @@
                     @endif
                 </td>
                 <td class="resource-name">
-                    <a href="{{ $resource->path($language) }}">{{ $resource->displayText }}</a>
+                    <a href="{{ $resource->path($language) }}" target="new">{{ $resource->displayText }}</a>
                     {{ Form::hidden("file-name", $resource->displayText, array('style' => 'width: 90%')) }}
                 </td>
-                <td>
-                	@foreach($resource->localisations as $localisation)
-                        <li>
-                            <a href="{{ $resource->path($localisation->lang) }}"
-                                @if ($resource->isPdf($localisation->lang)) data-fancybox-type="iframe"
-                                @endif class="{{ $localisation->lang == $language ? 'selected' : '' }} fancybox">
-                                {{ Config::get("languages.list")[$localisation->lang] }}
-                            </a>
-                        </li>
-                	@endforeach
+                <td id="{{ $resource->id }}">
+                    {{ Form::select("language", $languages, $language, array("style" => "margin:0 4px 4px")) }} <i class="icon-exclamation-sign" style="display:none"></i>
+                    <script>
+                        $("td#{{ $resource->id }} select[name=language]").children().each(function(){
+                            if (!({{ json_encode(array_pluck($resource->localisations, "lang")) }}.indexOf(this.value) >= 0)) {
+                                $(this).attr("disabled", true);
+                                $("td#{{ $resource->id }} i").show();
+                            }
+                        });
+                    </script>
                 </td>
                 <td>
                     @if ($resource->sync)
@@ -74,11 +88,14 @@
                     @endif
                 </td>
                 <td>
+                    <a href="{{ route('resources.localisations', array($appId, $collectionId, $catalogue->id, $resource->id, $language)) }}" class="btn btn-small">
+                        <i class="icon-search"></i> View Localisations
+                    </a>
                     <a href="javascript:void(0)" class="btn btn-small uploadLocalisationModal" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}">
-                        <i class="icon-refresh"></i> Upload Localisation
+                        <i class="icon-refresh"></i> Upload
                     </a>
                     <a href="javascript:void(0)" class="btn btn-small deleteLocalisationModal" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}">
-                        <i class="icon-trash"></i> Delete Localisation
+                        <i class="icon-trash"></i> Delete
                     </a>
                 </td>
                 <td>
@@ -86,7 +103,7 @@
                         <i class="icon-edit"></i> Edit Name
                     </a>
                     <a href="javascript:void(0)" class="btn btn-small deleteResourceModal" data-id="{{ $resource->id }}" data-name="{{ $resource->filename }}">
-                        <i class="icon-trash"></i> Delete Resource
+                        <i class="icon-trash"></i> Delete
                     </a>
                 </td>
             </tr>
@@ -189,7 +206,7 @@
             fileSize: '{{ Config::get('core.prefrences.file-upload-limit') }}'
         });
         
-        $("th select[name=language]").change(function() {
+        $(".btn-group select[name=language], td select[name=language]").change(function() {
             var href = "{{ route('resources.show', array($appId, $collectionId, $catalogue->id, 'xx')) }}";
             window.location.href = href.substring(0, href.lastIndexOf('/') + 1) + $(this).val();
         });

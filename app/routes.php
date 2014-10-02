@@ -172,11 +172,12 @@ Route::group(array('before' => array('auth')), function() {
 
                 Route::get('resources', array('as' => 'resources.index', 'uses' => 'ResourcesController@index'));
                 Route::get('resources/{id}/{language}', array('as' => 'resources.show', 'uses' => 'ResourcesController@show'));
-                Route::get('resources/{id}/{language}/delete', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
-                Route::get('resources/{id}/delete/{language}..', array('as' => 'resources.destroyResource', 'uses' => 'ResourcesController@destroyResource'));
-                Route::post('resources/{id}/{language}/update-file', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
+                Route::get('resources/{id}/localisations/{rid}/{language}', array('as' => 'resources.localisations', 'uses' => 'ResourcesController@localisations'));
+                Route::get('resources/{id}/{language}/delete/{redirect?}', array('as' => 'resources.destroy', 'uses' => 'ResourcesController@destroy'));
+                Route::get('resources/{id}/delete/{language?}', array('as' => 'resources.destroyResource', 'uses' => 'ResourcesController@destroyResource'));
+                Route::post('resources/{id}/{language}/update-file/{redirect?}', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
                 Route::post('resources/{id}/{language}/edit-name', array('as' => 'resources.editName', 'uses' => 'ResourcesController@editName'));
-                Route::post('resources/process/{catalogueId}/{language}..', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
+                Route::post('resources/process/{catalogueId}/{language?}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
 
             });
         });

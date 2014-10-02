@@ -35,6 +35,14 @@ class ResourcesController extends BaseController
 
         return View::make('resources.show', compact('catalogue', 'collection'));
     }
+    
+    public function localisations($appId, $collectionId, $catalogueId, $resourceId, $language) {
+        $catalogue = Catalogue::with('resources')->findOrFail($catalogueId);
+        $collection = Collection::current();
+        $resource = Resource::where('id', $resourceId)->first();
+
+        return View::make('resources.localisations', compact('catalogue', 'collection', 'resource'));
+    }
 
     public function create() {
         $catalogue = new Catalogue;
@@ -99,7 +107,7 @@ class ResourcesController extends BaseController
                 ->with('successes', new MessageBag(array($catalogue->name . ' has been updated.')));
     }
 
-    public function process($appId, $collectionId, $catalogueId, $language = "en") {
+    public function process($appId, $collectionId, $catalogueId, $language) {
 
         $response = array('success' => false);
 
@@ -139,7 +147,11 @@ class ResourcesController extends BaseController
         }
 
         $fileName = $fileUpload->getClientOriginalName();
-
+        
+        if (Resource::where("filename", $fileName)->count()) {
+            return json_encode(array('msg' => 'A resource with the name '.$fileName.' already exists.'));
+        }
+        
         // Let's replace all spaces with underscores
         $fileName = str_replace(' ', '_', $fileName);
 
@@ -216,7 +228,7 @@ class ResourcesController extends BaseController
 
     }
 
-    public function destroy($appId, $collectionId, $id, $language) {
+    public function destroy($appId, $collectionId, $id, $language, $redirect) {
         $resource = Resource::find($id);
         $isLastI18n = I18nResource::where('resource_id', $id)->where('lang', $language)->count() == 1;
         $i18n_resource = I18nResource::where('resource_id', $id)->where('lang', $language)->first();
@@ -238,8 +250,13 @@ class ResourcesController extends BaseController
         @unlink($folder . 'thumb/' . $resource->filename);
         @unlink($folder . 'view/' . $resource->filename);
 
-        return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
+        if ($redirect) {
+            return Redirect::route('resources.localisations', array($appId, $collectionId, $resource->catalogue_id, $resource->id, $language))
+                ->with('successes', new MessageBag( array('The '.\Config::get("languages.list")[$language].' localisation of '.$resource->filename.' has been deleted.') ));
+        } else {
+            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
                 ->with('successes', new MessageBag( array('That localisation has been deleted.') ));
+        }
     }
     
     public function destroyResource($appId, $collectionId, $id, $language) {
@@ -285,6 +302,11 @@ class ResourcesController extends BaseController
         $oldFileName = $resource->filename;
         $newFileName = Input::get('file-name');
         
+        if (Resource::where("filename", $newFileName)->count()) {
+            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
+                ->withErrors(array('A resource with the name '.$newFileName.' already exists.'));
+        }
+        
         //Rename the resources name in the database
         $resource->filename = $newFileName;
         $resource->save();
@@ -309,7 +331,6 @@ class ResourcesController extends BaseController
                         ->withErrors(array('There was an unexpected issue that has prevented the resource being renamed. Please try again.'));
                 }
             }
-            Log::debug("editName", array("i18n_resources" => $i18n_resources));
             return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
             ->with('success', new MessageBag(array('Resource has been renamed to ' . $resource->filename . '.')));
         } else {
@@ -318,9 +339,9 @@ class ResourcesController extends BaseController
         }
     }   
     
-    public function updateFile($appId, $collectionId, $id, $language) {
+    public function updateFile($appId, $collectionId, $id, $language = "en", $redirect = false) {
         $resource = Resource::whereId($id)->first();
-        $language = Input::get('language');
+        $language = Input::get('language') ?: $language;
         
         if (!$resource) {
             return Redirect::to('resources')
@@ -354,9 +375,14 @@ class ResourcesController extends BaseController
                     $response = 'An unknown error occured.';
                     break;
             }
-
-            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
-                ->withErrors($response);
+            
+            if ($redirect) {
+                return Redirect::route('resources.localisations', array($appId, $collectionId, $resource->catalogue_id, $resource->id))
+                    ->withErrors($response);
+            } else {
+                return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
+                    ->withErrors($response);
+            }
         }
 
         if ($fileUpload->move($uploadPath, $resource->filename)) {
@@ -367,12 +393,22 @@ class ResourcesController extends BaseController
             $resource->touch();
 
             Artisan::call('core:createResourceArchive', array('collection-id' => CORE_COLLECTION_ID));
-
-            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
-                ->with('success', new MessageBag(array('The new version of ' . $resource->filename . ' has been uploaded.')));
+            
+            if ($redirect) {
+                return Redirect::route('resources.localisations', array($appId, $collectionId, $resource->catalogue_id, $resource->id, $language))
+                    ->with('successes', new MessageBag(array('The '.\Config::get("languages.list")[$language].' version of '.$resource->filename.' has been replaced.')));
+            } else {
+                return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
+                    ->with('successes', new MessageBag(array('The new version of ' . $resource->filename . ' has been uploaded.')));
+            }
         } else {
-            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
-                ->withErrors(array('There was an unexpected issue that has prevented your file being uploaded. Please try again.'));
+            if ($redirect) {
+                return Redirect::route('resources.localisations', array($appId, $collectionId, $resource->catalogue_id, $resource->id))
+                    ->withErrors(array('There was an unexpected issue that has prevented your file being uploaded. Please try again.'));
+            } else {
+                return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
+                    ->withErrors(array('There was an unexpected issue that has prevented your file being uploaded. Please try again.'));
+            }
         }
     }
 
