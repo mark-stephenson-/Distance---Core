@@ -4,6 +4,8 @@
     } else {
         $value = @$data->{$column->name};
     }
+
+    $language = "en";
 ?>
 
 <textarea class="html-editor" name="nodetype[{{ $column->name }}]" id="input_{{ $column->name }}">{{ Input::old('nodetype.' . $column->name, $value) }}</textarea>
@@ -67,7 +69,7 @@ $catalogue = Catalogue::find($column->catalogue->{CORE_COLLECTION_ID});
                             @endif
                         </td>
                         <td>
-                            <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->path() }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
+                            <a href="#" data-id="{{ $resource->id }}" data-filename="{{ $resource->filename }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
                         </td>
                     </tr>
                 @endforeach
@@ -77,7 +79,6 @@ $catalogue = Catalogue::find($column->catalogue->{CORE_COLLECTION_ID});
 </div>
 
 <script>
-
     $("#{{ $column->name }}-resource_window").on('shown', function() {
         $("#{{ $column->name }}-resource_window a").click( function(e) {
             e.preventDefault();
@@ -102,6 +103,6 @@ $catalogue = Catalogue::find($column->catalogue->{CORE_COLLECTION_ID});
 <script>
 
     var editor = $( '.html-editor' ).ckeditor();
-    editor.ckeditorGet().config.baseHref = "{{ URL::to('file') }}/{{ $collection->id }}/";
+    editor.ckeditorGet().config.baseHref = "{{ URL::to('file') }}/{{ $collection->id }}/{{ $language }}/";
 
 </script>

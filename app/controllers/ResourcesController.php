@@ -115,14 +115,14 @@ class ResourcesController extends BaseController
 
         if (!$collection) {
             $response['msg'] = 'Invalid collection.';
-            return json_encode($response);
+            return Response::json($response);
         }
 
         $catalogue = Catalogue::find($catalogueId);
 
         if (!$catalogue) {
             $response['msg'] = 'Invalid catalogue.';
-            return json_encode($response);
+            return Response::json($response);
         }
 
         $uploadPath = app_path() . '/../resources/' . $catalogueId . '/' . $language;
@@ -143,13 +143,13 @@ class ResourcesController extends BaseController
                     break;
             }
 
-            return json_encode($response);
+            return Response::json($response);
         }
 
         $fileName = $fileUpload->getClientOriginalName();
         
         if (Resource::where("filename", $fileName)->count()) {
-            return json_encode(array('msg' => 'A resource with the name '.$fileName.' already exists.'));
+            return Response::json(array('msg' => 'A resource with the name '.$fileName.' already exists.'));
         }
         
         // Let's replace all spaces with underscores
@@ -210,20 +210,20 @@ class ResourcesController extends BaseController
                 if ($i18n_resource->save()) {
                     $response['data'] = $resource->toArray();
                     $response['success'] = true;
-                    return json_encode($response);
+                    return Response::json($response);
                 } else {
                     $response['msg'] = 'Failed to save file info to the database.';
-                    return json_encode($response);
+                    return Response::json($response);
                 }
                 
             } else {
                 $response['msg'] = 'Failed to save file info to the database.';
-                return json_encode($response);
+                return Response::json($response);
             }
             
         } else {
             $response['msg'] = 'Failed to move file to final destination.';
-            return json_encode($response);
+            return Response::json($response);
         }
 
     }

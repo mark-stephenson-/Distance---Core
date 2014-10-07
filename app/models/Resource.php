@@ -28,7 +28,6 @@ class Resource extends BaseModel
     public static function nextId()
     {
         $max = Resource::max('id');
-        Log::debug("nextId", array("max" => $max));
         return $max ? intval($max->id) + 1 : 1;
     }
     

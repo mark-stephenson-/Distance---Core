@@ -142,7 +142,7 @@ class NodesController extends BaseController
         $nodetypeContent = Input::get('nodetype');
         $translations = Input::get('translation');
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
-
+        
         // Let's run the validator
         $validator = new Core\Validators\Node;
 
@@ -266,7 +266,7 @@ class NodesController extends BaseController
         $isRevision = $revisionData->status == 'published';
         $nodetypeContent = Input::get('nodetype');
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
-
+        
         // Let's run the validator
         $validator = new Core\Validators\Node;
 
@@ -295,7 +295,7 @@ class NodesController extends BaseController
         // That's the main title updated... now for the node content...
         $type = $node->nodetype;
         $nodeRevision = $type->parseColumns($nodetypeContent, $translations, $isRevision);
-
+        
         // If a user doesn't have permission for a certain column... the POST key will not exist, we'll
         // re-populate that from the old revision (if possible)
         if ($node->latest_revision) {

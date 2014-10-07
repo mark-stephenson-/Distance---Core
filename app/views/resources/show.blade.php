@@ -63,12 +63,14 @@
                     {{ Form::hidden("file-name", $resource->displayText, array('style' => 'width: 90%')) }}
                 </td>
                 <td id="{{ $resource->id }}">
-                    {{ Form::select("language", $languages, $language, array("style" => "margin:0 4px 4px")) }} <i class="icon-exclamation-sign" style="display:none"></i>
+                    {{ Form::select("language", array("" => "") + $languages, $language, array("style" => "margin:0 4px 4px")) }} 
+                    <i class="icon-exclamation-sign" style="display:none" data-toggle="tooltip" title="&#9888; Resource is missing localisations"></i>
                     <script>
+                        $("td#{{ $resource->id }} select[name=language] option").first().attr("disabled", true);
                         $("td#{{ $resource->id }} select[name=language]").children().each(function(){
-                            if (!({{ json_encode(array_pluck($resource->localisations, "lang")) }}.indexOf(this.value) >= 0)) {
-                                $(this).attr("disabled", true);
-                                $("td#{{ $resource->id }} i").show();
+                            if (this.value && !({{ json_encode(array_pluck($resource->localisations, "lang")) }}.indexOf(this.value) >= 0)) {
+                                $(this).html("&#9888; " + $(this).html());
+                                $("td#{{ $resource->id }} i").show();                            
                             }
                         });
                     </script>
@@ -264,6 +266,9 @@
         });
 
         $(document).ready( function() {
+            
+            $(".icon-exclamation-sign").tooltip();
+            
             $(".deleteResourceModal").click( function(e) {
                 var data_id = $(this).attr('data-id');
                 var data_name = $(this).attr('data-name');
