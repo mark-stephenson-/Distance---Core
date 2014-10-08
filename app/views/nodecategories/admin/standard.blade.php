@@ -1,9 +1,5 @@
 <i class="icon-sort drag_handle"></i>
-<?php
-
-    $identifier = uniqid();
-
-?>
+<?php $identifier = uniqid(); ?>
 
 <input type="hidden" name="columns[{{ $identifier }}][category]" value="{{ $category['name'] }}" />
 
@@ -33,7 +29,7 @@
 </div>
 
 <div class="control-group">
-    @if ($category['name'] == 'resource' or $category['name'] == 'html')
+    @if ($category['name'] == 'resource' or $category['name'] == 'html' or $category['name'] == 'html-i18n')
         {{-- Catalogue selection with extension filtering --}}
         {{ Form::label('columns[' . $identifier . '][catalogue]', 'Catalogue', array('class' => 'control-label')) }}
         @if (!$data)

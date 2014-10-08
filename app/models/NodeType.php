@@ -233,7 +233,6 @@ class NodeType extends BaseModel {
 				
                 switch ($column_obj->category) {
                 	case 'string-i18n':
-                    
                         // if this is creating a new revision, or if the current value is not set
                         if($is_revision || !$value){
                             $value = I18nString::nextKey();
@@ -241,14 +240,20 @@ class NodeType extends BaseModel {
                     
                 		foreach($translations[$key] as $lang => $localisation)
                 		{
-                			if (!$localisation) { continue; }
-							$i18nString = I18nString::whereKey($value)->whereLang($lang)->first();
-							
+                            $i18nString = I18nString::whereKey($value)->whereLang($lang)->first();
+                            
+                            if(!$localisation) {
+                                if($i18nString) {
+                                    $i18nString->delete();
+                                }
+                                continue;
+                            }
+                            
 							if(!$i18nString) {
 								$i18nString = new I18nString;
 								$i18nString->key = $value;
 								$i18nString->lang = $lang;
-							}
+                            }
 							$i18nString->value = $localisation;
 							$i18nString->save();
                 		}
@@ -259,6 +264,34 @@ class NodeType extends BaseModel {
                         $value = date('Y-m-d H:i:s', $stamp);
                         break;
 
+                    case 'html-i18n':
+                        // if this is creating a new revision, or if the current value is not set
+                        if($is_revision || !$value){
+                            $value = I18nHtml::nextKey();
+                        } 
+                        $value = convertSmartQuotes(stripslashes($value));
+                    
+                		foreach($translations[$key] as $lang => $localisation)
+                		{
+							$i18nHtml = I18nHtml::whereKey($value)->whereLang($lang)->first();
+                            Log::debug("test", array("localisation" => $value));
+                            if(!$localisation) {
+                                if($i18nHtml) {
+                                    $i18nHtml->delete();
+                                }
+                                continue;
+                            }
+							
+							if(!$i18nHtml) {
+								$i18nHtml = new I18nHtml;
+								$i18nHtml->key = $value;
+								$i18nHtml->lang = $lang;
+							}
+							$i18nHtml->value = $localisation;
+							$i18nHtml->save();
+                		}
+                        break;
+                    
                     case 'html':
                         $value = convertSmartQuotes(stripslashes($value));
                         break;

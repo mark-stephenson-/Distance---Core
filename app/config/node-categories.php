@@ -10,7 +10,7 @@ return array(
     ),
     
     'string-i18n' => array(
-        'label' => 'String (internationalised)',
+        'label' => 'String (Internationalised)',
         'name'  => 'string-i18n',
         'type'  => 'integer',
         'admin' => 'standard',
@@ -55,6 +55,13 @@ return array(
         'label' => 'HTML',
         'name'  => 'html',
         'type'  => 'text',
+        'admin' => 'standard',
+    ),
+    
+    'html-i18n' => array(
+        'label' => 'HTML (Internationalised)',
+        'name'  => 'html-i18n',
+        'type'  => 'integer',
         'admin' => 'standard',
     ),
 

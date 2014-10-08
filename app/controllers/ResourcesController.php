@@ -228,19 +228,27 @@ class ResourcesController extends BaseController
 
     }
 
-    public function destroy($appId, $collectionId, $id, $language, $redirect) {
+    public function destroy($appId, $collectionId, $id, $language, $redirect = false) {
+        
         $resource = Resource::find($id);
         $isLastI18n = I18nResource::where('resource_id', $id)->where('lang', $language)->count() == 1;
         $i18n_resource = I18nResource::where('resource_id', $id)->where('lang', $language)->first();
         
         if (!$resource || !$i18n_resource) {
-            return Redirect::to('resources')
-                ->withErrors( array('That localisation could not be found') );
+            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
+                ->withErrors( array('That localisation could not be found'));
         }
         
         if (!$i18n_resource->delete()) {
             return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
                 ->withErrors( array('That localisation could not be deleted.'));
+        }
+        
+        if ($isLastI18n) {
+            if (!$resource->delete()) {
+                return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
+                ->withErrors( array('That resource could not be deleted.'));
+            }
         }
 
         // Now we know it's been deleted from the database remove the files
@@ -250,13 +258,16 @@ class ResourcesController extends BaseController
         @unlink($folder . 'thumb/' . $resource->filename);
         @unlink($folder . 'view/' . $resource->filename);
 
-        if ($redirect) {
-            return Redirect::route('resources.localisations', array($appId, $collectionId, $resource->catalogue_id, $resource->id, $language))
-                ->with('successes', new MessageBag( array('The '.\Config::get("languages.list")[$language].' localisation of '.$resource->filename.' has been deleted.') ));
-        } else {
-            return Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language))
-                ->with('successes', new MessageBag( array('That localisation has been deleted.') ));
-        }
+        $show = Redirect::route('resources.show', array(CORE_APP_ID, CORE_COLLECTION_ID, $resource->catalogue_id, $language));
+        $localisations = Redirect::route('resources.localisations', array($appId, $collectionId, $resource->catalogue_id, $resource->id, $language));
+        
+        $l_message = 'The '.\Config::get("languages.list")[$language].' localisation of '.$resource->filename.' has been deleted.';
+        $r_message = 'The '.\Config::get("languages.list")[$language].' localisation of '.$resource->filename.' and the entire resource itself has been deleted.';
+        
+        $route = $isLastI18n || !$redirect ? $show : $localisations;
+        $message = $isLastI18n ? $r_message : $l_message;
+        
+        return $route->with('successes', new MessageBag(array($message)));
     }
     
     public function destroyResource($appId, $collectionId, $id, $language) {
