@@ -140,8 +140,9 @@ class NodesController extends BaseController
 
         // Grab the submitted content and check if any fields are required
         $nodetypeContent = Input::get('nodetype');
+        $translations = Input::get('translation');
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
-
+        
         // Let's run the validator
         $validator = new Core\Validators\Node;
 
@@ -168,7 +169,7 @@ class NodesController extends BaseController
         }
 
         // Let's create the first revision
-        $nodetypeContent = $nodeType->parseColumns($nodetypeContent);
+        $nodetypeContent = $nodeType->parseColumns($nodetypeContent, $translations, false);
         $nodetypeContent['node_id'] = $node->id;
         $nodetypeContent['status'] = "draft";
         $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = Sentry::getUser()->id;
@@ -261,9 +262,11 @@ class NodesController extends BaseController
         $node->owned_by = Input::get('owned_by');
 
         // Grab the submitted content and check if any fields are required
+        $translations = Input::get('translation');
+        $isRevision = $revisionData->status == 'published';
         $nodetypeContent = Input::get('nodetype');
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
-
+        
         // Let's run the validator
         $validator = new Core\Validators\Node;
 
@@ -291,8 +294,8 @@ class NodesController extends BaseController
 
         // That's the main title updated... now for the node content...
         $type = $node->nodetype;
-        $nodeRevision = $type->parseColumns($nodetypeContent);
-
+        $nodeRevision = $type->parseColumns($nodetypeContent, $translations, $isRevision);
+        
         // If a user doesn't have permission for a certain column... the POST key will not exist, we'll
         // re-populate that from the old revision (if possible)
         if ($node->latest_revision) {

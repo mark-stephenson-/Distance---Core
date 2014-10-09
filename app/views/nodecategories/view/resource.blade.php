@@ -9,15 +9,22 @@
 ?>
 
 @if ($resource)
-    @if ($resource->isImage())
-        <a href="{{ $resource->path() }}" class="fancybox" title="{{ $resource->caption }}">
-            <img src="{{ $resource->path() }}?type=view" width="100" />
-        </a>
-    @else
-        <a href="{{ $resource->path() }}" class="fancybox" title="{{ $resource->caption }}">
-            <i class="icon-file" style="font-size: 100px"></i>
-        </a>
-    @endif
+    <ul>
+        @foreach($resource->localisations as $localisation)
+            <li>
+                <span>[{{ strtoupper($localisation->lang) }}]</span>
+                @if ($resource->isImage($localisation->lang))
+                    <a href="{{ $resource->path($localisation->lang) }}" class="fancybox" title="{{ $resource->caption }}">
+                        <img src="{{ $resource->path($localisation->lang) }}?type=view" width="100" style="margin: 10px 0;"/>
+                    </a>
+                @else
+                    <a href="{{ $resource->path($localisation->lang) }}" class="fancybox" title="{{ $resource->caption }}">
+                        <i class="icon-file" style="font-size: 100px"></i>
+                    </a>
+                @endif
+            </li>
+        @endforeach
+    </ul>
 @else
     <p>-</p>
 @endif

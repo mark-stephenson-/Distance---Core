@@ -1,5 +1,6 @@
 <?php
-    $language = "en";
+	$identifier = uniqid();
+	$language = 'en';
 
     if (!isset($data)) {
         $value = @$column->default;
@@ -8,7 +9,22 @@
     }
 ?>
 
-{{ Form::textarea('nodetype['.$column->name.']', $value, array('class' => 'html-editor', 'id' => 'input_'.$column->name)) }}
+<div id="{{ $identifier }}" class="span8" style="margin-left: 0px">
+    <!-- Contains i18n_html key -->
+    {{ Form::hidden('nodetype['.$column->name.']', $value) }}
+    {{ Form::select("language", Config::get("languages.list"), 'en', array("class" => "child-select", "style" => "margin:0 4px 4px 0")) }}
+    <i class="icon-globe" data-toggle="tooltip" title="Toggle localisation of this category."></i>
+    {{ Form::textarea(null, $value, array('class' => 'html-editor', 'id' => 'input_'.$column->name, 'lang' => $language, 'style' => 'display:none')) }}
+	@foreach (Config::get("languages.list") as $lang => $language)
+		<?php
+			if (isset($data)) {
+				$i18nHtml = I18nHtml::whereKey($value)->whereLang($lang)->get()->first();
+				$translation = $i18nHtml ? $i18nHtml->value : "";
+			} else { $translation = ""; }
+		?>
+		{{ Form::textarea('translation['.$column->name.']['.$lang.']', $translation, array('style' => 'display:none')) }}
+	@endforeach
+</div>
 
 @if (!isset($column->catalogue) or !isset($column->catalogue->{CORE_COLLECTION_ID}))
     
@@ -87,8 +103,7 @@
                 html = "<a href='" + $(this).attr('data-filename') + "'>" + $(this).attr('data-filename') + "</a>";
             }
 
-            CKEDITOR.instances['input_{{ $column->name }}'].insertHtml(html);
-
+            $("#{{ $identifier }} .html-editor").ckeditor().ckeditorGet().insertHtml(html);
             $("#{{ $column->name }}-resource_window").modal('hide');
         });
     });
@@ -98,7 +113,28 @@
 
 <script>
     $(function() {
-        var editor = $("[name='nodetype[{{ $column->name }}]'].html-editor").ckeditor();
-        editor.ckeditorGet().config.baseHref = "{{ URL::to('file') }}/{{ $collection->id }}/{{ $language }}/";
+        
+        var editor = $("#{{ $identifier }} .html-editor").ckeditor().ckeditorGet();
+        var lang = $("#{{ $identifier }} .html-editor").attr('lang');
+        var html = editor.getData();
+        
+        editor.config.baseHref = "{{ URL::to('file') }}/{{ $collection->id }}/" + lang + "/";
+        editor.setData($("#{{ $identifier }} [name='translation[{{ $column->name }}][" + lang + "]']").text());
+        editor.on('change', function(){
+            $("#{{ $identifier }} [name='translation[{{ $column->name }}][" + $('#{{ $identifier }} select[name=language]').val() + "]']").text(editor.getData());
+        });
+        
+        $('#{{ $identifier }} select[name=language].child-select').change(function() {
+            
+            html = editor.getData();
+            lang = $("#{{ $identifier }} .html-editor").attr('lang');
+            
+            $("#{{ $identifier }} [name='translation[{{ $column->name }}][" + lang + "]']").text(html);
+            $("#{{ $identifier }} .lang").text("[" + $(this).val().toUpperCase() + "]")
+            $("#{{ $identifier }} .html-editor").attr('lang', $(this).val());
+            
+            editor.setData($("#{{ $identifier }} [name='translation[{{ $column->name }}][" + $(this).val() + "]']").text());
+            
+        }).change();
     });
 </script>

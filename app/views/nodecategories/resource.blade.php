@@ -1,4 +1,7 @@
 <?php
+    
+    $identifier = uniqid();
+    $language = "en";
 
     if ($data) {
         $resource = Resource::find(@$data->{$column->name});
@@ -23,41 +26,46 @@
 
 ?>
 
-<div class="resource-{{ $column->name }}-container resource-view">
+<div id="{{ $identifier }}" class="resource-{{ $column->name }}-container resource-view">
     {{ Form::hidden('nodetype['. $column->name .']', @$data->{$column->name}, array('id' => 'nodetype-'. $column->name)) }}
-
+    {{ Form::select("language", Config::get("languages.list"), 'en', array("class" => "child-select", "style" => "margin:0 4px 4px 0")) }}
+    <i class="icon-globe" data-toggle="tooltip" title="Toggle localisation of this category."></i>
     @if ($resource)
-        <div class="resource">
+        <div class="resource" lang="{{ $language }}">
             <div class="image">
                 @if ( $resource->isImage() )
-                    <img src="{{ $resource->path() }}?type=view" alt="" />
+                    <img src="{{ $resource->path($language) }}?type=view" alt="" lang="{{ $language }}"/>
                 @else
                     <i class="icon-file"></i>
                 @endif
             </div>
 
-            <p class="filename">{{ $resource->filename }}</p>
+            <a href="{{ route('resources.localisations', array($appId, $collectionId, $catalogue->id, $resource->id, 'en')) }}" target="new">
+                {{ $resource->filename }}
+            </a>
             <p class="links">
-                <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a> | 
-                <a href="#" class="remove-resource">Remove</a>
+                <a href="javascript:void(0)" class="change-resource">Change</a> | 
+                <a href="javascript:void(0)" class="remove-resource">Remove</a>
             </p>
         </div>
     @else
-        <div class="resource">
+        <div id="{{ $identifier }}" class="resource" lang="{{ $language }}">
             <p style="padding-top: 5px;">No Resource Selected.</p>
             <p class="links">
-                <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Choose One</a>
+                <a href="javascript:void(0)" class="choose-resource">Choose One</a>
             </p>
         </div>
     @endif
 </div>
 <!-- /.resource-container -->
 
-<div class="modal hide fade" id="{{ $column->name }}-resource_window">
+<div class="modal hide fade {{ $identifier }}" id="{{ $column->name }}-resource_window">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Resources <small>Catalogue: {{ $catalogue->name }}</small></h3>
     </div>
+    
+    {{ Form::select("language", Config::get("languages.list"), 'en', array("class" => "child-select", "style" => "margin: 20px 20px 0 20px")) }}
     
     <div class="upload-container">
         <input type="file" multiple="multiple" name="upload" class="file_upload_fallback" id="file_upload_fallback" style="display: block; width: 0px; height: 0px;" />
@@ -83,13 +91,15 @@
                     <tr>
                         <td>
                             @if ( $resource->isImage() )
-                                <img src="{{ $resource->path() }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" />
+                                <img src="{{ $resource->path($language) }}?type=view" alt="" style="max-width: 24px; max-height: 24px;" lang="{{ $language }}" />
                             @else
                                 <i class="icon-file"></i>
                             @endif
                         </td>
                         <td>
-                            {{ substr($resource->filename, 0, 50) }}
+                            <a href="{{ route('resources.localisations', array($appId, $collectionId, $catalogue->id, $resource->id, $language)) }}" target="new">
+                                {{ substr($resource->filename, 0, 50) }}
+                            </a>
                             @if (strlen($resource->filename) >= 50)
                                 &hellip;
                             @endif
@@ -102,7 +112,9 @@
                             @endif
                         </td>
                         <td>
-                            <a href="#" data-id="{{ $resource->id }}" data-path="{{ $resource->path() }}" data-filename="{{ $resource->filename }}" @if ( $resource->isImage() ) data-image="true" @endif>Use</a>
+                            <a href="javascript:void(0)" class="use-resource" data-id="{{ $resource->id }}" data-path="{{ $resource->path($language) }}" data-filename="{{ $resource->filename }}" 
+                               @if ( $resource->isImage() ) data-image="true" @endif> Use
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -111,34 +123,33 @@
     </div>
 </div>
 
-<div class="empty-{{ $column->name}}-resource" style="display: none">
+<div class="empty-{{ $column->name}}-resource" style="display:none">
     <div class="resource">
         <div class="image"></div>
 
-        <p class="filename"></p>
+        <a href="{{ route('resources.localisations', array($appId, $collectionId, $catalogue->id, $resource->id, 'en')) }}" target="new">
+            {{ $resource->filename }}
+        </a>
         <p class="links">
-            <a href="#{{ $column->name }}-resource_window" data-toggle="modal">Change</a> | 
-            <a href="#" class="remove-resource">Remove</a>
+            <a href="javascript:void(0)" class="change-resource">Change</a> | 
+            <a href="javascript:void(0)" class="remove-resource">Remove</a>
         </p>
     </div>
 </div>
 
 <script>
-        loadResourceUploader('{{ route('resources.process', array($appId, $collection->id, $catalogue->id)) }}', function(response) {
-                $.ajax({
-                    url: '{{ route('collections.createResourceArchive', array($appId, $collection->id)) }}',
-                });
+        loadResourceUploader('{{ route('resources.process', array($appId, $collection->id, $catalogue->id, 'en')) }}', function(response) {
+            $.ajax({
+                url: '{{ route('collections.createResourceArchive', array($appId, $collection->id)) }}',
+            });
         }, function(response) {
             response = $.parseJSON(response.response);
-
-            if ( response.success == true ) {
+            if (response.success == true ) {
                 var file = response.data;
-
-                var path = '{{ url() }}/file/' + file.collection_id + '/' + file.filename;
-
+                var path = '{{ url() }}/file/' + file.collection_id + '/en/' + file.filename;
                 var append = '<tr><td>';
 
-                if ( file.mime.substring(0,6) == "image/" ) {
+                if (file.mime.substring(0,6) == "image/") {
                     append += '<img src="' + path + '?type=view" alt="" style="max-width: 24px; max-height: 24px;" />';
                     var image = 'data-image="true"';
                 } else {
@@ -148,13 +159,13 @@
 
                 append += '</td><td>' + file.filename + '</td><td>';
 
-                if ( file.sync ) {
+                if (file.sync) {
                     append += '<i class="icon-ok"></i>';
                 } else {
                     append += '<i class="icon-remove"></i>';
                 }
-
-                append += '</td><td><a href="#" data-id="' + file.id + '" data-path="' + path + '" data-filename="' + file.filename + '"' + image + '>Use</a></td></tr>';
+                append += '</td><td><a href="javascript:void(0)" class="use-resource" data-id="' + file.id + '" data-path="' + path + '" data-filename="' + file.filename + '"' + image + '>';
+                append += 'Use</a></td></tr>';
 
                 $("#{{ $column->name }}-resource_window").find('table tbody').append(append);
             }
@@ -165,29 +176,80 @@
         ], {
             fileSize: '{{ Config::get('core.prefrences.file-upload-limit') }}'
         });
+    
+        function buttonActions() {
+            
+            $(".choose-resource, .change-resource").click(function() {
+                $("#{{ $column->name }}-resource_window").modal('show');
+                buttonActions();
+            });
 
-    $(document).on('click', '.remove-resource', function() {
-        var parent = $(this).closest('.resource');
-        parent.html('<p style="padding-top: 5px;">No Resource Selected.</p><p class="links"><a href="#{{ $column->name }}-resource_window" data-toggle="modal">Choose One</a></p>');
-        $('#nodetype-{{ $column->name }}').val('');
-    });
-
-    $("#{{ $column->name }}-resource_window").on('shown', function() {
-        $("#{{ $column->name }}-resource_window").on( 'click', 'a', function(e) {
-            e.preventDefault();
-
-            $("#nodetype-{{ $column->name }}").val( $(this).attr('data-id') );
+            $(".remove-resource").click(function() {
+                var html = '<p style="padding-top: 5px;">No Resource Selected.</p><p class="links"><a href="javascript:void(0)" class="choose-resource">Choose One</a></p>';
+                $(this).closest('.resource').html(html);
+                $('#nodetype-{{ $column->name }}').val('');
+                buttonActions();
+            });
+        }
+    
+    $(function(){ buttonActions();
+        
+        $("#{{ $column->name }}-resource_window a.use-resource").click(function(e) {
+            $("#nodetype-{{ $column->name }}").val($(this).attr('data-id'));
             $(".resource-{{ $column->name}}-container .resource").remove();
-            $(".resource-{{ $column->name }}-container").prepend( $('.empty-{{ $column->name }}-resource').html() );
-
+            $(".resource-{{ $column->name }}-container").append( $('.empty-{{ $column->name }}-resource').html() );
             $(".resource-{{ $column->name }}-container .resource .filename").html( $(this).attr('data-filename') );
 
-            if ( $(this).attr('data-image') == "true") {
-                $(".resource-{{ $column->name }}-container .resource .image").html( '<img src="' + $(this).attr('data-path') +'?type=view" />' );
+            if ($(this).attr('data-image') == "true") {
+                var lang = $('#{{ $identifier }} select[name=language].child-select').val();
+                var src = "<img src='" + $(this).attr('data-path') + "?type=view' lang='" + lang + "'/>";
+                $(".resource-{{ $column->name }}-container .resource .image").html(src);
             }
-            $("#{{ $column->name }}-resource_window").modal('hide');
+            $("#{{ $column->name }}-resource_window").modal('hide'); buttonActions();
+        });
+        
+        $('#{{ $identifier }} select[name=language].child-select').change(function() {
+            if ($("#{{ $identifier }} .resource .image img").length) {
+                var haystack = $("#{{ $identifier }} .resource .image img").attr('src');
+                var needle = '/' + $("#{{ $identifier }} .resource .image img").attr('lang') + '/';
+                var replacement = '/' + $(this).val() + '/';
+                
+                var src = haystack.replace(needle, replacement);
+
+                $("#{{ $identifier }} .resource .image img").attr('src', src);
+                $("#{{ $identifier }} .resource .image img").attr('lang', $(this).val());
+                
+                $("{{ $column->name }}-resource_window .modal-body img").attr('src', src);
+                $("{{ $column->name }}-resource_window .modal-body img").attr('lang', $(this).val());
+            }
+        });
+                 
+        $("#{{ $column->name }}-resource_window.{{ $identifier }} select[name=language].child-select").change(function(){
+            $("#{{ $identifier }}.resource-{{ $column->name }}-container select[name=language]").val($(this).val());
+            $("#{{ $identifier }}.resource-{{ $column->name }}-container select[name=language]").change();
+            
+            var child_select = $("#{{ $column->name }}-resource_window.{{ $identifier }} select[name=language].child-select");
+            var replace = '/' + child_select.val() + '/';
+            
+            $("#{{ $column->name }}-resource_window.{{ $identifier }} .modal-body .use-resource").each(function(){
+                var haystack = $(this).attr('data-path');
+                var needle = '/' + $("#{{ $column->name }}-resource_window.{{ $identifier }} .modal-body img").attr('lang') + '/';
+                var data_path = haystack.replace(needle, replace);
+                
+                $(this).attr('data-path', data_path);
+            });
+            
+            $("#{{ $column->name }}-resource_window.{{ $identifier }} .modal-body img").each(function(){
+                var haystack = $(this).attr('src');
+                var needle = '/' + $(this).attr('lang') + '/';
+                var src = haystack.replace(needle, replace);
+
+                $(this).attr('src', src);
+                $(this).attr('lang', child_select.val());
+            });
         });
     });
+    
 </script>
 
 @endif
