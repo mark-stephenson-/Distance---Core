@@ -222,34 +222,88 @@ class NodeType extends BaseModel {
         return $ret;
     }
 
-    public function parseColumns($post_data)
+    public function parseColumns($post_data, $translations, $is_revision)
     {
         $columns = $this->getAttribute('columns');
 
         if (count($columns) > 0) {
-            foreach ($post_data as $key => &$val) {
-
+            foreach ($post_data as $key => &$value) {
+				
                 $column_obj = findObjectInArray($columns, $key, 'name');
-
+				
                 switch ($column_obj->category) {
+                	case 'string-i18n':
+                        // if this is creating a new revision, or if the current value is not set
+                        if($is_revision || !$value){
+                            $value = I18nString::nextKey();
+                        } 
+                    
+                		foreach($translations[$key] as $lang => $localisation)
+                		{
+                            $i18nString = I18nString::whereKey($value)->whereLang($lang)->first();
+                            
+                            if(!$localisation) {
+                                if($i18nString) {
+                                    $i18nString->delete();
+                                }
+                                continue;
+                            }
+                            
+							if(!$i18nString) {
+								$i18nString = new I18nString;
+								$i18nString->key = $value;
+								$i18nString->lang = $lang;
+                            }
+							$i18nString->value = $localisation;
+							$i18nString->save();
+                		}
+                		break;
                     case 'date':
-                        $d = str_replace('/', '-', $val);
+                        $d = str_replace('/', '-', $value);
                         $stamp = strtotime($d);
-                        $val = date('Y-m-d H:i:s', $stamp);
+                        $value = date('Y-m-d H:i:s', $stamp);
                         break;
 
+                    case 'html-i18n':
+                        // if this is creating a new revision, or if the current value is not set
+                        if($is_revision || !$value){
+                            $value = I18nHtml::nextKey();
+                        } 
+                        $value = convertSmartQuotes(stripslashes($value));
+                    
+                		foreach($translations[$key] as $lang => $localisation)
+                		{
+							$i18nHtml = I18nHtml::whereKey($value)->whereLang($lang)->first();
+                            Log::debug("test", array("localisation" => $value));
+                            if(!$localisation) {
+                                if($i18nHtml) {
+                                    $i18nHtml->delete();
+                                }
+                                continue;
+                            }
+							
+							if(!$i18nHtml) {
+								$i18nHtml = new I18nHtml;
+								$i18nHtml->key = $value;
+								$i18nHtml->lang = $lang;
+							}
+							$i18nHtml->value = $localisation;
+							$i18nHtml->save();
+                		}
+                        break;
+                    
                     case 'html':
-                        $val = convertSmartQuotes(stripslashes($val));
+                        $value = convertSmartQuotes(stripslashes($value));
                         break;
 
                     case 'enum-multi':
                     case 'userlookup-multi':
-                        if (is_array($val)) {
-                            $val = implode(', ', $val);
+                        if (is_array($value)) {
+                            $value = implode(', ', $value);
                         }
                         break;
                     case 'nodelookup':
-                        $val = (int) $val;
+                        $value = (int) $value;
                         break;
                 }
 

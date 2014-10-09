@@ -1,10 +1,10 @@
 <?php
 
 class Node extends BaseModel
-{
-
+{    
     protected $softDelete = true;
-
+    protected $appends = array('node_type_name');
+    
     public function collection()
     {
         return $this->belongsTo('Collection');
@@ -19,8 +19,8 @@ class Node extends BaseModel
     {
         return $this->belongsTo('NodeType', 'node_type');
     }
-
-    public function getNodeTypeLabelAttribute()
+    
+    public function getNodeTypeNameAttribute()
     {
         return $this->nodetype->name;
     }

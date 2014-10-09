@@ -45,9 +45,18 @@
         {{ Form::label('owned_by', 'Owner', array('class' => 'control-label')) }}
         <div class="controls">
             {{ Form::select('owned_by', $node->potentialOwners(), Input::old('owned_by', $node->owned_by), array('class' => 'span8 select2', 'id' => 'js-owner-select')) }}
+            
+            <?php $categories = array_fetch($nodeType->columns, 'category') ?>
+            
+            @if ((in_array('string-i18n', $categories) || in_array('html-i18n', $categories) || in_array('resource-i18n', $categories)) && count($categories) > 1)
+                <div class="pull-right">
+                    <i class="icon-globe" data-toggle="tooltip" title="Toggle the localisation of all internationalised categories."></i>
+                    {{ Form::select("language", array("" => "") + Config::get("languages.list"), 'en', array("class" => "master-select", "style" => "margin:0 0 4px 4px")) }}
+                </div>
+            @endif
         </div>
     </div>
-
+    
     <div class="well">
         @foreach($nodeType->columns as $column)
             @if (Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $nodeType->name . '.columns.' . $column->name))
@@ -68,5 +77,29 @@
             <input type="submit" class="btn btn-primary" value="Create Node" />
         @endif
     </div>
+
+    <script>
+        $(function(){
+            $(".icon-globe").tooltip();
+            $(".control-group select[name=language] option:first-child").attr("disabled", true);
+            
+            $("select[name=language].master-select").change(function(){
+                $("select[name=language].child-select").val($(this).val());
+                $("select[name=language].child-select").change();
+            });
+            
+            $("select[name=language].child-select").change(function(){
+                var lang = $(this).val();
+                $("select[name=language].child-select").each(function(){
+                    if ($(this).val() != lang) {
+                        $("select[name=language].master-select").val("");
+                        return false;
+                    } else {
+                        $("select[name=language].master-select").val($(this).val());  
+                    }
+                });
+            });
+        });
+    </script>
 
 @stop

@@ -8,6 +8,13 @@ return array(
         'type'  => 'string',
         'admin' => 'standard',
     ),
+    
+    'string-i18n' => array(
+        'label' => 'String (Internationalised)',
+        'name'  => 'string-i18n',
+        'type'  => 'integer',
+        'admin' => 'standard',
+    ),
 
     'integer' => array(
         'label' => 'Integer',
@@ -48,6 +55,13 @@ return array(
         'label' => 'HTML',
         'name'  => 'html',
         'type'  => 'text',
+        'admin' => 'standard',
+    ),
+    
+    'html-i18n' => array(
+        'label' => 'HTML (Internationalised)',
+        'name'  => 'html-i18n',
+        'type'  => 'integer',
         'admin' => 'standard',
     ),
 

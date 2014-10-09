@@ -2,7 +2,7 @@
 
 class Resource extends BaseModel
 {
-
+    protected $appends = array('languages');
     protected $softDelete = true;
 
     public function catalogue()
@@ -10,29 +10,45 @@ class Resource extends BaseModel
         return $this->belongsTo('Catalogue');
     }
 
+	public function localisations()
+	{
+		return $this->hasMany('I18nResource');
+	}
+
+	public function getLanguagesAttribute()
+	{
+		return $this->localisations()->lists('lang');
+	}
+
     public function getDisplayTextAttribute()
     {
         return ($this->getAttribute('description')) ?: $this->getAttribute('filename');
     }
 
-    public function path()
+    public static function nextId()
     {
-        return route('resources.load', array($this->getAttribute('collection_id'), $this->getAttribute('filename')));
+        $max = Resource::max('id');
+        return $max ? intval($max->id) + 1 : 1;
+    }
+    
+    public function path($language = 'en')
+    {
+        return route('resources.load', array($this->getAttribute('catalogue_id'), $language, $this->getAttribute('filename')));
     }
 
-    public function systemPath()
+    public function systemPath($language = 'en')
     {
-        return app_path() . '/../resources/' . $this->getAttribute('collection_id') . '/' . $this->getAttribute('filename');
+        return app_path() . '/../resources/' . $this->getAttribute('catalogue_id') . '/' . $language . '/' . $this->getAttribute('filename');
     }
 
-    public function isPdf()
+    public function isPdf($language = 'en')
     {
         // The quickest way, check the extensions
         if (in_array($this->ext, array('pdf'))) {
             return true;
         }
 
-        $filePath = $this->systemPath();
+        $filePath = $this->systemPath($language);
 
         // The quick method...
         try {
@@ -49,14 +65,14 @@ class Resource extends BaseModel
         return false;
     }
 
-    public function isImage()
+    public function isImage($language = 'en')
     {
         // The quickest way, check the extensions
         if (in_array($this->ext, array('jpg', 'jpeg', 'png', 'gif'))) {
             return true;
         }
 
-        $filePath = $this->systemPath();
+        $filePath = $this->systemPath($language);
 
         // The quick method...
         try {
@@ -73,7 +89,7 @@ class Resource extends BaseModel
         return false;
     }
 
-    public static function fetch($collectionId, $fileName, $downloadFile = false)
+    public static function fetch($catalogueId, $language, $fileName, $downloadFile = false)
     {
 
         if (strpos($fileName, '_id') !== false) {
@@ -98,7 +114,7 @@ class Resource extends BaseModel
         // We don't need type for now
         $type = '/';
 
-        $filePath = app_path() . '/../resources/' . $collectionId . '/' . $fileName;
+        $filePath = app_path() . '/../resources/' . $catalogueId . '/' . $language . '/' . $fileName;
 
         if (!file_exists($filePath)) {
 
