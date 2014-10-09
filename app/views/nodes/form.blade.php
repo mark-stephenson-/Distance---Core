@@ -88,11 +88,10 @@
                 $("select[name=language].child-select").change();
             });
             
-            var lang = $("select[name=language].child-select").val();
-            
             $("select[name=language].child-select").change(function(){
+                var lang = $(this).val();
                 $("select[name=language].child-select").each(function(){
-                    if ($(this).val() != $("select[name=language].child-select").val()) {
+                    if ($(this).val() != lang) {
                         $("select[name=language].master-select").val("");
                         return false;
                     } else {
