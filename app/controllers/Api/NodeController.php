@@ -127,7 +127,7 @@ class NodeController extends \BaseController {
         $nodetypeContent = array("json" => Request::instance()->getContent());
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
         
-        $nodetypeContent = $nodeType->parseColumns($nodetypeContent, null, false);
+        $nodetypeContent = ->parseColumns($nodetypeContent, null, false);
         $nodetypeContent['node_id'] = $node->id;
         $nodetypeContent['status'] = "draft";
         $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = $user->id;
@@ -142,7 +142,7 @@ class NodeController extends \BaseController {
         $node->latest_revision = $nodeDraft;
         $node->status = 'draft';
         
-        /* Create Record Start */
+        /* Create Record */
         
         $data = json_decode(Request::instance()->getContent(), true);
         
@@ -165,13 +165,95 @@ class NodeController extends \BaseController {
         
         $record->save();
         
-        foreach($data['concerns'] as $concernData) { $concern = new PRConcern();$concern->serious_answer = $concernData['seriousAnswer'];$concern->prevent_answer = $concernData['preventAnswer'];if ($noteData = $concernData['whatNote']){$note = new PRNote();$note->text = $noteData['text'];$note->prase_record_id = $record->id;$note->save();$concern->prase_note_id = $note->id;}$concern->prase_record_id = $record->id;$concern->ward_name = $concernData['ward']['name'];$concern->ward_node_id = $concernData['ward']['id'];$concern->hospital_node_id = $concernData['ward']['hospitalId'];$concern->save();}
+        foreach($data['concerns'] as $concernData)
+        {
+            $concern = new PRConcern();
+            
+            $concern->serious_answer = $concernData['seriousAnswer'];
+            $concern->prevent_answer = $concernData['preventAnswer'];
+            
+            if ($noteData = $concernData['whatNote'])
+            {
+                $note = new PRNote();
+                $note->text = $noteData['text'];
+                $note->prase_record_id = $record->id;
+                $note->save();
+                
+                $concern->prase_note_id = $note->id;
+            }
+            $concern->prase_record_id = $record->id;
+            
+            $concern->ward_name = $concernData['ward']['name'];
+            $concern->ward_node_id = $concernData['ward']['id'];
+            $concern->hospital_node_id = $concernData['ward']['hospitalId'];
+            
+            $concern->save();
+        }        
         
-        foreach($data['goodNotes'] as $noteData){$note = new PRNote();$note->text = $noteData['text'];$note->prase_record_id = $record->id;$note->ward_name = $noteData['ward']['name'];$note->ward_node_id = $noteData['ward']['id'];$note->hospital_node_id = $noteData['ward']['hospitalId'];$note->save();}
+        foreach($data['goodNotes'] as $noteData)
+        {
+            $note = new PRNote();
+            $note->text = $noteData['text'];
+            $note->prase_record_id = $record->id;
+            $note->ward_name = $noteData['ward']['name'];
+            $note->ward_node_id = $noteData['ward']['id'];
+            $note->hospital_node_id = $noteData['ward']['hospitalId'];
+            $note->save();
+        }
         
-        foreach($data['pmos'] as $questionData){$question = new PRQuestion();$question->question_node_id = $questionData['questionID'];$question->answer_node_id = $questionData['answerID'];$question->prase_record_id = $record->id;$question->save();if ($noteData = $questionData['somethingGood']){$note = new PRNote();$note->text = $noteData['text'];$note->ward_name = $noteData['ward']['name'];$note->ward_node_id = $noteData['ward']['id'];$note->hospital_node_id = $noteData['ward']['hospitalId'];$question->prase_note_id = $note->id;}if ($concernData = $questionData['concern']){$concern = new PRConcern();$concern->serious_answer = $concernData['seriousAnswer'];$concern->prevent_answer = $concernData['preventAnswer'];if ($noteData = $concernData['whatNote']){$note = new PRNote();$note->text = $noteData['text'];$note->prase_question_id = $question->id;$note->save();$concern->prase_note_id = $note->id;}$concern->prase_question_id = $question->id;$concern->ward_name = $concernData['ward']['name'];$concern->ward_node_id = $concernData['ward']['id'];$concern->hospital_node_id = $concernData['ward']['hospitalId'];$concern->save();$question->prase_concern_id = $concern->id;}$question->save();}
+        /* Create Questions */
         
-        /* Create Record End */
+        foreach($data['pmos'] as $questionData)
+        {
+            $question = new PRQuestion();
+            $question->question_node_id = $questionData['questionID'];
+            $question->answer_node_id = $questionData['answerID'];
+            $question->prase_record_id = $record->id;
+            $question->save();
+            
+            /* Create Questions */
+            
+            if ($noteData = $questionData['somethingGood'])
+            {
+                $note = new PRNote();
+                $note->text = $noteData['text'];
+                $note->ward_name = $noteData['ward']['name'];
+                $note->ward_node_id = $noteData['ward']['id'];
+                $note->hospital_node_id = $noteData['ward']['hospitalId'];
+                
+                $question->prase_note_id = $note->id;
+            }
+            
+            if ($concernData = $questionData['concern'])
+            {
+                $concern = new PRConcern();
+                
+                $concern->serious_answer = $concernData['seriousAnswer'];
+                $concern->prevent_answer = $concernData['preventAnswer'];
+                
+                if ($noteData = $concernData['whatNote'])
+                {
+                    $note = new PRNote();
+                    $note->text = $noteData['text'];
+                    $note->prase_question_id = $question->id;
+                    $note->save();
+                    
+                    $concern->prase_note_id = $note->id;
+                }
+                $concern->prase_question_id = $question->id;
+                
+                $concern->ward_name = $concernData['ward']['name'];
+                $concern->ward_node_id = $concernData['ward']['id'];
+                $concern->hospital_node_id = $concernData['ward']['hospitalId'];
+                
+                $concern->save();
+                
+                $question->prase_concern_id = $concern->id;
+            }
+            $question->save();
+        }
+        
+        /* End Record */
         
         if ($node->save())
         {
