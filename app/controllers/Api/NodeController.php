@@ -155,14 +155,19 @@ class NodeController extends \BaseController {
             try
             {
                 $data = json_decode(Request::instance()->getContent(), true);
-                $this->parseSubmission($data);
-            }
-            catch (\PDOException $error)
-            {
-                $monolog = new Logger('log');
-                $monolog->pushHandler(new StreamHandler(storage_path('logs/submission-log-'.date('Y-m-d').'.txt')), Logger::WARNING);
-                $monolog->debug("parsing submission failed", compact('node', 'error'));
                 
+                if ($this->parseSubmission($data)) {
+                    //remove json submission
+                } else {
+                    // reverse transaction
+                }
+            }
+            catch (\Exception $error)
+            {
+                $node = $node->toArray();
+                $monolog = new Logger('log');
+                $monolog->pushHandler(new StreamHandler(storage_path('logs/log-submission-'.date('Y-m-d').'.txt')), Logger::WARNING);
+                $monolog->debug("parsing submission failed", compact('node', 'error'));
             }
             
             return Response::make(array('success' => true, 'error' => null), 201);
@@ -172,7 +177,7 @@ class NodeController extends \BaseController {
     
     public function parseSubmission($data)
     {
-        \DB::transaction(function($data) use ($data) {
+        return \DB::transaction(function($data) use ($data) {
 
             /* Create Record */            
 
@@ -193,7 +198,7 @@ class NodeController extends \BaseController {
             $record->ward_node_id = $data['ward']['id'];
             $record->hospital_node_id = $data['ward']['hospitalId'];
 
-            $record->save();
+            if(!$record->save()) return false;
 
             foreach($data['concerns'] as $concernData)
             {
@@ -207,7 +212,7 @@ class NodeController extends \BaseController {
                     $note = new PRNote();
                     $note->text = $noteData['text'];
                     $note->prase_record_id = $record->id;
-                    $note->save();
+                    if(!$note->save()) return false;
 
                     $concern->prase_note_id = $note->id;
                 }
@@ -217,7 +222,7 @@ class NodeController extends \BaseController {
                 $concern->ward_node_id = $concernData['ward']['id'];
                 $concern->hospital_node_id = $concernData['ward']['hospitalId'];
 
-                $concern->save();
+                if(!$concern->save()) return false;
             }        
 
             foreach($data['goodNotes'] as $noteData)
@@ -228,7 +233,7 @@ class NodeController extends \BaseController {
                 $note->ward_name = $noteData['ward']['name'];
                 $note->ward_node_id = $noteData['ward']['id'];
                 $note->hospital_node_id = $noteData['ward']['hospitalId'];
-                $note->save();
+                if(!$note->save()) return false;
             }
 
             /* Create Questions */
@@ -239,7 +244,7 @@ class NodeController extends \BaseController {
                 $question->question_node_id = $questionData['questionID'];
                 $question->answer_node_id = $questionData['answerID'];
                 $question->prase_record_id = $record->id;
-                $question->save();
+                if(!$question->save()) return false;
 
                 /* Create Questions */
 
@@ -250,7 +255,8 @@ class NodeController extends \BaseController {
                     $note->ward_name = $noteData['ward']['name'];
                     $note->ward_node_id = $noteData['ward']['id'];
                     $note->hospital_node_id = $noteData['ward']['hospitalId'];
-
+                    if(!$note->save()) return false;
+                    
                     $question->prase_note_id = $note->id;
                 }
 
@@ -266,7 +272,7 @@ class NodeController extends \BaseController {
                         $note = new PRNote();
                         $note->text = $noteData['text'];
                         $note->prase_question_id = $question->id;
-                        $note->save();
+                        if(!$note->save()) return false;
 
                         $concern->prase_note_id = $note->id;
                     }
@@ -276,13 +282,15 @@ class NodeController extends \BaseController {
                     $concern->ward_node_id = $concernData['ward']['id'];
                     $concern->hospital_node_id = $concernData['ward']['hospitalId'];
 
-                    $concern->save();
+                    if(!$concern->save()) return false;
 
                     $question->prase_concern_id = $concern->id;
                 }
-                $question->save();
+                if(!$question->save()) return false;
             }
 
+            return $record->save();
+            
             /* End Record */
         });
     }
