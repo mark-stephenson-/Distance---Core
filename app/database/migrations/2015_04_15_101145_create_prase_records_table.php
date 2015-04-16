@@ -15,17 +15,17 @@ class CreatePraseRecordsTable extends Migration {
             
             $table->increments('id');
 
-            $table->string('ward_name');
+            $table->string('ward_name')->nullable();
             $table->integer('ward_node_id')->nullable();
             $table->integer('hospital_node_id');
             
-            $table->text('basic_data');
+            $table->text('basic_data')->nullable();
             $table->text('incomplete_reason')->nullable();
-            $table->integer('time_tracked');
-            $table->integer('time_additional_patient');
-            $table->integer('time_additional_questionnaire');
-            $table->string('user');
-            $table->string('language');
+            $table->integer('time_tracked')->nullable();
+            $table->integer('time_additional_patient')->nullable();
+            $table->integer('time_additional_questionnaire')->nullable();
+            $table->string('user')->nullable();
+            $table->string('language')->nullable();
             $table->timestamp('start_date');
             
             $table->softDeletes();

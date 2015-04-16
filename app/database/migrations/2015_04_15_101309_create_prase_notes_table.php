@@ -15,12 +15,12 @@ class CreatePraseNotesTable extends Migration {
             
             $table->increments('id');
             
-            $table->text('text');
+            $table->text('text')->nullable();
             
             $table->integer('prase_record_id')->nullable();
             $table->integer('prase_question_id')->nullable();
             
-            $table->string('ward_name');
+            $table->string('ward_name')->nullable();
             $table->integer('ward_node_id')->nullable();
             $table->integer('hospital_node_id');
             

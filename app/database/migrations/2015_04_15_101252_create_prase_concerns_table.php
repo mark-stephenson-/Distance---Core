@@ -15,14 +15,14 @@ class CreatePraseConcernsTable extends Migration {
             
             $table->increments('id');
             
-            $table->integer('serious_answer');
-            $table->integer('prevent_answer');
+            $table->integer('serious_answer')->nullable();
+            $table->integer('prevent_answer')->nullable();
             
             $table->integer('prase_note_id');
             $table->integer('prase_record_id');
             $table->integer('prase_question_id');
             
-            $table->string('ward_name');
+            $table->string('ward_name')->nullable();
             $table->integer('ward_node_id')->nullable();
             $table->integer('hospital_node_id');
             

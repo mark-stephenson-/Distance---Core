@@ -2,6 +2,13 @@
 
 use Api, Node, Resource, User;
 use Response, Request, Input;
+use PRRecord;
+use PRNote;
+use PRQuestion;
+use PRConcern;
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class NodeController extends \BaseController {
     
@@ -127,7 +134,7 @@ class NodeController extends \BaseController {
         $nodetypeContent = array("json" => Request::instance()->getContent());
         $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
         
-        $nodetypeContent = ->parseColumns($nodetypeContent, null, false);
+        $nodetypeContent = $nodeType->parseColumns($nodetypeContent, null, false);
         $nodetypeContent['node_id'] = $node->id;
         $nodetypeContent['status'] = "draft";
         $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = $user->id;
@@ -140,126 +147,144 @@ class NodeController extends \BaseController {
         }
         
         $node->latest_revision = $nodeDraft;
-        $node->status = 'draft';
+        $node->status = 'draft';        
         
-        /* Create Record */
-        
-        $data = json_decode(Request::instance()->getContent(), true);
-        
-        $record = new PRRecord();
-        
-        $record->basic_data = json_encode($data['basicData']);
-        $record->incomplete_reason = $data['incompleteReason'];
-        
-        $record->time_tracked = $data['recordedTime'];
-        $record->time_additional_patient = $data['adjustedTimePatient'];
-        $record->time_additional_questionnaire = $data['adjustedTimeQuestionnaire'];
-        
-        $record->user = $data['user'];
-        $record->language = $data['basicData']['Language'];
-        $record->start_date = $data['startDate'];
-        
-        $record->ward_name = $data['ward']['name'];
-        $record->ward_node_id = $data['ward']['id'];
-        $record->hospital_node_id = $data['ward']['hospitalId'];
-        
-        $record->save();
-        
-        foreach($data['concerns'] as $concernData)
+            
+        if ($node->save())
         {
-            $concern = new PRConcern();
-            
-            $concern->serious_answer = $concernData['seriousAnswer'];
-            $concern->prevent_answer = $concernData['preventAnswer'];
-            
-            if ($noteData = $concernData['whatNote'])
+            try
             {
-                $note = new PRNote();
-                $note->text = $noteData['text'];
-                $note->prase_record_id = $record->id;
-                $note->save();
-                
-                $concern->prase_note_id = $note->id;
+                $data = json_decode(Request::instance()->getContent(), true);
+                $this->parseSubmission($data);
             }
-            $concern->prase_record_id = $record->id;
+            catch (\PDOException $error)
+            {
+                $monolog = new Logger('log');
+                $monolog->pushHandler(new StreamHandler(storage_path('logs/submission-log-'.date('Y-m-d').'.txt')), Logger::WARNING);
+                $monolog->debug("parsing submission failed", compact('node', 'error'));
+                
+            }
             
-            $concern->ward_name = $concernData['ward']['name'];
-            $concern->ward_node_id = $concernData['ward']['id'];
-            $concern->hospital_node_id = $concernData['ward']['hospitalId'];
-            
-            $concern->save();
-        }        
-        
-        foreach($data['goodNotes'] as $noteData)
-        {
-            $note = new PRNote();
-            $note->text = $noteData['text'];
-            $note->prase_record_id = $record->id;
-            $note->ward_name = $noteData['ward']['name'];
-            $note->ward_node_id = $noteData['ward']['id'];
-            $note->hospital_node_id = $noteData['ward']['hospitalId'];
-            $note->save();
+            return Response::make(array('success' => true, 'error' => null), 201);
         }
-        
-        /* Create Questions */
-        
-        foreach($data['pmos'] as $questionData)
-        {
-            $question = new PRQuestion();
-            $question->question_node_id = $questionData['questionID'];
-            $question->answer_node_id = $questionData['answerID'];
-            $question->prase_record_id = $record->id;
-            $question->save();
-            
-            /* Create Questions */
-            
-            if ($noteData = $questionData['somethingGood'])
-            {
-                $note = new PRNote();
-                $note->text = $noteData['text'];
-                $note->ward_name = $noteData['ward']['name'];
-                $note->ward_node_id = $noteData['ward']['id'];
-                $note->hospital_node_id = $noteData['ward']['hospitalId'];
-                
-                $question->prase_note_id = $note->id;
-            }
-            
-            if ($concernData = $questionData['concern'])
+        return Response::make(array('success' => false, 'error' => 'Node for submission could not be saved.'), 500);
+    }
+    
+    public function parseSubmission($data)
+    {
+        \DB::transaction(function($data) use ($data) {
+
+            /* Create Record */            
+
+            $record = new PRRecord();
+
+            $record->basic_data = json_encode($data['basicData']);
+            $record->incomplete_reason = $data['incompleteReason'];
+
+            $record->time_tracked = $data['recordedTime'];
+            $record->time_additional_patient = $data['adjustedTimePatient'];
+            $record->time_additional_questionnaire = $data['adjustedTimeQuestionnaire'];
+
+            $record->user = $data['user'];
+            $record->language = $data['basicData']['Language'];
+            $record->start_date = $data['startDate'];
+
+            $record->ward_name = $data['ward']['name'];
+            $record->ward_node_id = $data['ward']['id'];
+            $record->hospital_node_id = $data['ward']['hospitalId'];
+
+            $record->save();
+
+            foreach($data['concerns'] as $concernData)
             {
                 $concern = new PRConcern();
-                
+
                 $concern->serious_answer = $concernData['seriousAnswer'];
                 $concern->prevent_answer = $concernData['preventAnswer'];
-                
+
                 if ($noteData = $concernData['whatNote'])
                 {
                     $note = new PRNote();
                     $note->text = $noteData['text'];
-                    $note->prase_question_id = $question->id;
+                    $note->prase_record_id = $record->id;
                     $note->save();
-                    
+
                     $concern->prase_note_id = $note->id;
                 }
-                $concern->prase_question_id = $question->id;
-                
+                $concern->prase_record_id = $record->id;
+
                 $concern->ward_name = $concernData['ward']['name'];
                 $concern->ward_node_id = $concernData['ward']['id'];
                 $concern->hospital_node_id = $concernData['ward']['hospitalId'];
-                
+
                 $concern->save();
-                
-                $question->prase_concern_id = $concern->id;
+            }        
+
+            foreach($data['goodNotes'] as $noteData)
+            {
+                $note = new PRNote();
+                $note->text = $noteData['text'];
+                $note->prase_record_id = $record->id;
+                $note->ward_name = $noteData['ward']['name'];
+                $note->ward_node_id = $noteData['ward']['id'];
+                $note->hospital_node_id = $noteData['ward']['hospitalId'];
+                $note->save();
             }
-            $question->save();
-        }
-        
-        /* End Record */
-        
-        if ($node->save())
-        {
-            return Response::make(array('success' => true, 'error' => null), 201);
-        }
-        return Response::make(array('success' => false, 'error' => 'Node for submission could not be saved.'), 500);
+
+            /* Create Questions */
+
+            foreach($data['pmos'] as $questionData)
+            {
+                $question = new PRQuestion();
+                $question->question_node_id = $questionData['questionID'];
+                $question->answer_node_id = $questionData['answerID'];
+                $question->prase_record_id = $record->id;
+                $question->save();
+
+                /* Create Questions */
+
+                if ($noteData = $questionData['somethingGood'])
+                {
+                    $note = new PRNote();
+                    $note->text = $noteData['text'];
+                    $note->ward_name = $noteData['ward']['name'];
+                    $note->ward_node_id = $noteData['ward']['id'];
+                    $note->hospital_node_id = $noteData['ward']['hospitalId'];
+
+                    $question->prase_note_id = $note->id;
+                }
+
+                if ($concernData = $questionData['concern'])
+                {
+                    $concern = new PRConcern();
+
+                    $concern->serious_answer = $concernData['seriousAnswer'];
+                    $concern->prevent_answer = $concernData['preventAnswer'];
+
+                    if ($noteData = $concernData['whatNote'])
+                    {
+                        $note = new PRNote();
+                        $note->text = $noteData['text'];
+                        $note->prase_question_id = $question->id;
+                        $note->save();
+
+                        $concern->prase_note_id = $note->id;
+                    }
+                    $concern->prase_question_id = $question->id;
+
+                    $concern->ward_name = $concernData['ward']['name'];
+                    $concern->ward_node_id = $concernData['ward']['id'];
+                    $concern->hospital_node_id = $concernData['ward']['hospitalId'];
+
+                    $concern->save();
+
+                    $question->prase_concern_id = $concern->id;
+                }
+                $question->save();
+            }
+
+            /* End Record */
+        });
     }
     
     public function emailNode()

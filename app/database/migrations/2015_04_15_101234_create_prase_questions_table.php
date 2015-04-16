@@ -15,7 +15,7 @@ class CreatePraseQuestionsTable extends Migration {
             
             $table->increments('id');
             
-            $table->integer('question_node_id');
+            $table->integer('question_node_id')->nullable();
             $table->integer('answer_node_id')->nullable();
             
             $table->integer('prase_record_id');
