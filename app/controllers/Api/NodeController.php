@@ -2,6 +2,13 @@
 
 use Api, Node, Resource, User;
 use Response, Request, Input;
+use PRRecord;
+use PRNote;
+use PRQuestion;
+use PRConcern;
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class NodeController extends \BaseController {
     
@@ -70,12 +77,197 @@ class NodeController extends \BaseController {
         }
     }
     
+    public function newWards()
+    {
+        $errors = null;
+        
+        if (Request::header('Collection-Token') === NULL) {
+            return Response::make('Collection-Token must be specified for this call.', 400);
+        }
+
+        $collection = \App::make('collection');
+        
+        $request = Request::instance();
+        $content = $request->getContent();
+        
+        if (!$content) {
+            return Response::make('No content recieved', 400);
+        }
+
+        $nodeType = \NodeType::where('name', 'ward')->get()->first();
+        
+        $requestUser = User::where('email', '=', 'core.admin@thedistance.co.uk')->first();
+        $data = json_decode($content, true);
+        
+        foreach($data['wards'] as $ward) {
+            $hospital = \Node::find($data['hospital']);
+            $node = new Node;
+            $middle = '';
+            
+            if (strpos($ward, 'Ward') > 0) {
+                $ex = explode(' ', $ward)[0];
+                if (strpos($ward, ':') > -1) {
+                    $middle = explode(':', $ward)[0];
+                    $middle = explode(' ', $middle);
+                    if (count($middle) > 1) {
+                        $_middle = '';
+                        foreach($middle as $word) {
+                            $_middle .= ucfirst($word[0]);
+                        }
+                        $middle = $_middle;
+                    } else {
+                        $middle = $middle[0];
+                    }
+                } else {
+                    $_middle = '';
+                    foreach(explode(' ', $ward) as $word) {
+                        $middle .= ucfirst($word[0]);
+                    }
+                }
+            } else if (strpos($ward, 'Ward') === 0) {
+                $num = explode(' ', $ward)[1];
+                $middle = explode(':', $num)[0];
+            } else {
+                $middle = '';
+                foreach(explode(' ', $ward) as $word) {
+                    $middle .= ucfirst($word[0]);
+                }
+            }
+            $hosname = $hospital->title;
+            
+            $node->title = 'ward_'.$middle.'_'.$hosname;
+            $node->owned_by = $requestUser->id;
+            $node->created_by = $requestUser->id;
+            $node->node_type = $nodeType->id;
+            $node->collection_id = $collection->id;
+
+            if (!$node->save()) {
+                return Response::make('Node for submission could not be created.', 400);
+            }
+
+            $name = $ward;
+            $hospital = $hospital->id;
+            
+            $nodetypeContent = compact('name', 'hospital');
+            $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
+            
+            $nodetypeContent = $nodeType->parseColumns($nodetypeContent, null, false);
+            $nodetypeContent['node_id'] = $node->id;
+            $nodetypeContent['status'] = "draft";
+            $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = $requestUser->id;
+            $nodetypeContent['created_at'] = $nodetypeContent['updated_at'] = \DB::raw('NOW()');
+
+            $nodeDraft = $node->createDraft($nodetypeContent);
+
+            if (!$nodeDraft) {
+                return Response::make('Draft node for submission could not be created.', 400);
+            }
+
+            $node->latest_revision = $nodeDraft;
+            $node->status = 'draft';        
+            if(!$node->save()) {
+                $errors[] = json_encode($ward).' failed';
+            } else {
+                $node->markAsPublished($node->fetchRevision()->id);
+            }
+        }
+            
+        if ($node->save())
+        {
+            return Response::make(array('success' => true, 'error' => $errors), 201);
+        }
+        return Response::make(array('success' => false, 'error' => 'Node for submission could not be saved.'), 500);
+    }
+
+    // MARK: temporary script to add new users
+    public function newUsers()
+    {
+        $errors = null;
+        
+        if (Request::header('Collection-Token') === NULL) {
+            return Response::make('Collection-Token must be specified for this call.', 400);
+        }
+
+        $collection = \App::make('collection');
+        
+        $request = Request::instance();
+        $content = $request->getContent();
+        
+        if (!$content) {
+            return Response::make('No content recieved', 400);
+        }
+
+        $nodeType = \NodeType::where('name', 'user')->get()->first();
+        
+        $requestUser = User::where('email', '=', 'core.admin@thedistance.co.uk')->first();
+        $data = json_decode($content, true);
+        
+        foreach($data as $user) {
+
+            $node = new Node;
+            $node->title = $user[0].' '.$user[1];
+            $node->owned_by = $requestUser->id;
+            $node->created_by = $requestUser->id;
+            $node->node_type = $nodeType->id;
+            $node->collection_id = $collection->id;
+
+            if (!$node->save()) {
+                return Response::make('Node for submission could not be created.', 400);
+            }
+
+            $first = strtolower($user[0]);
+            $last = strtolower($user[1]);
+
+            $firstName = $user[0];
+            $lastName = $user[1];
+            $username = $first.$last;
+            $password = 'prase'.$last;
+            $ward = null;
+            
+            $nodetypeContent = compact('username', 'password', 'firstName', 'lastName', 'ward');
+            $nodeColumnErrors = $node->nodetype->checkRequiredColumns($nodetypeContent);
+            
+            $nodetypeContent = $nodeType->parseColumns($nodetypeContent, null, false);
+            $nodetypeContent['node_id'] = $node->id;
+            $nodetypeContent['status'] = "draft";
+            $nodetypeContent['created_by'] = $nodetypeContent['updated_by'] = $requestUser->id;
+            $nodetypeContent['created_at'] = $nodetypeContent['updated_at'] = \DB::raw('NOW()');
+
+            $nodeDraft = $node->createDraft($nodetypeContent);
+
+            if (!$nodeDraft) {
+                return Response::make('Draft node for submission could not be created.', 400);
+            }
+
+            $node->latest_revision = $nodeDraft;
+            $node->status = 'draft';        
+            if(!$node->save()) {
+                $errors[] = json_encode($user).' failed';
+            } else {
+                $node->markAsPublished($node->fetchRevision()->id);
+            }
+        }
+            
+        if ($node->save())
+        {
+            return Response::make(array('success' => true, 'error' => $errors), 201);
+        }
+        return Response::make(array('success' => false, 'error' => 'Node for submission could not be saved.'), 500);
+    }
+    
     public function add()
     {
         if (Request::header('Collection-Token') === NULL) {
             return Response::make('Collection-Token must be specified for this call.', 400);
         }
 
+        // MARK: temporary check for header value to add new users
+        if (Request::header('Add-Type') == 'User') {
+            return $this->newUsers();
+        } else if (Request::header('Add-Type') == 'Ward') {
+            return $this->newWards();
+        }
+        
         $collection = \App::make('collection');
         
         $request = Request::instance();
@@ -119,7 +311,7 @@ class NodeController extends \BaseController {
         $node->created_by = $user->id;
         $node->node_type = $nodeType->id;
         $node->collection_id = $collection->id;
-
+        
         if (!$node->save()) {
             return Response::make('Node for submission could not be created.', 400);
         }
@@ -140,13 +332,147 @@ class NodeController extends \BaseController {
         }
         
         $node->latest_revision = $nodeDraft;
-        $node->status = 'draft';
+        $node->status = 'draft';        
         
+            
         if ($node->save())
         {
+            try
+            {
+                $data = json_decode(Request::instance()->getContent(), true);
+                $this->parseSubmission($data);
+            }
+            catch (\Exception $error)
+            {
+                $node = $node->toArray();
+                $monolog = new Logger('log');
+                $monolog->pushHandler(new StreamHandler(storage_path('logs/log-submission-'.date('Y-m-d').'.txt')), Logger::WARNING);
+                $monolog->debug("parsing submission failed", compact('node', 'error'));
+            }
+            
             return Response::make(array('success' => true, 'error' => null), 201);
         }
         return Response::make(array('success' => false, 'error' => 'Node for submission could not be saved.'), 500);
+    }
+    
+    public function parseSubmission($data)
+    {
+        return \DB::transaction(function($data) use ($data) {
+
+            /* Create Record */            
+
+            $record = new PRRecord();
+
+            $record->basic_data = json_encode($data['basicData']);
+            $record->incomplete_reason = $data['incompleteReason'];
+
+            $record->time_tracked = $data['recordedTime'];
+            $record->time_additional_patient = $data['adjustedTimePatient'];
+            $record->time_additional_questionnaire = $data['adjustedTimeQuestionnaire'];
+
+            $record->user = $data['user'];
+            $record->language = $data['basicData']['Language'];
+            $record->start_date = $data['startDate'];
+
+            $record->ward_name = $data['ward']['name'];
+            $record->ward_node_id = $data['ward']['id'];
+            $record->hospital_node_id = $data['ward']['hospitalId'];
+            
+            $record->save();
+            
+            foreach($data['concerns'] as $concernData)
+            {
+                $concern = new PRConcern();
+
+                $concern->serious_answer = $concernData['seriousAnswer'];
+                $concern->prevent_answer = $concernData['preventAnswer'];
+
+                if ($noteData = $concernData['whatNote'])
+                {
+                    $note = new PRNote();
+                    $note->text = $noteData['text'];
+                    $note->prase_record_id = $record->id;
+                    $note->save();
+
+                    $concern->prase_note_id = $note->id;
+                }
+                $concern->prase_record_id = $record->id;
+
+                $concern->ward_name = $concernData['ward']['name'];
+                $concern->ward_node_id = $concernData['ward']['id'];
+                $concern->hospital_node_id = $concernData['ward']['hospitalId'];
+
+                $concern->save();
+            }        
+
+            foreach($data['goodNotes'] as $noteData)
+            {
+                $note = new PRNote();
+                $note->text = $noteData['text'];
+                $note->prase_record_id = $record->id;
+                $note->ward_name = $noteData['ward']['name'];
+                $note->ward_node_id = $noteData['ward']['id'];
+                $note->hospital_node_id = $noteData['ward']['hospitalId'];
+                $note->save();
+            }
+
+            /* Create Questions */
+
+            foreach($data['pmos'] as $questionData)
+            {
+                $question = new PRQuestion();
+                $question->question_node_id = $questionData['questionID'];
+                $question->answer_node_id = $questionData['answerID'];
+                $question->prase_record_id = $record->id;
+                $question->save();
+
+                /* Create Questions */
+
+                if ($noteData = $questionData['somethingGood'])
+                {
+                    $note = new PRNote();
+                    $note->text = $noteData['text'];
+                    $note->ward_name = $noteData['ward']['name'];
+                    $note->ward_node_id = $noteData['ward']['id'];
+                    $note->hospital_node_id = $noteData['ward']['hospitalId'];
+                    $note->save();
+                    
+                    $question->prase_note_id = $note->id;
+                }
+
+                if ($concernData = $questionData['concern'])
+                {
+                    $concern = new PRConcern();
+
+                    $concern->serious_answer = $concernData['seriousAnswer'];
+                    $concern->prevent_answer = $concernData['preventAnswer'];
+
+                    if ($noteData = $concernData['whatNote'])
+                    {
+                        $note = new PRNote();
+                        $note->text = $noteData['text'];
+                        $note->prase_question_id = $question->id;
+                        $note->save();
+
+                        $concern->prase_note_id = $note->id;
+                    }
+                    $concern->prase_question_id = $question->id;
+
+                    $concern->ward_name = $concernData['ward']['name'];
+                    $concern->ward_node_id = $concernData['ward']['id'];
+                    $concern->hospital_node_id = $concernData['ward']['hospitalId'];
+
+                    $concern->save();
+
+                    $question->prase_concern_id = $concern->id;
+                }
+                $question->save();
+            }
+
+            return $record->save();
+            
+            /* End Record */
+        });
     }
     
     public function emailNode()
