@@ -48,7 +48,7 @@ return array(
 
         'mysql' => array(
             'driver'    => 'mysql',
-            'host'      => '172.27.30.174',
+            'host'      => '46.37.182.74',
 			'database'  => 'prase',
 			'username'  => 'praseuser',
 			'password'  => '8quoksUxwas',
