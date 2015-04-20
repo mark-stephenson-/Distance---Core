@@ -4,6 +4,8 @@ return array(
 
     'site_name' => 'The Core',
 
+    'version' => '1.0.0',
+
     'emails' => array(
         'send_from' => 'core@thedistance.co.uk',
         'site_signature' => 'Regards, <br /> The Core',
