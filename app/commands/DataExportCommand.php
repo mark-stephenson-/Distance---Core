@@ -122,7 +122,7 @@ class DataExportCommand extends Command {
         $filename = $zip->filename;
         $zip->addFromString('QuestionnaireView.csv', $this->createCSV($qv));
         $zip->addFromString('EnrolmentLogGood.csv', $this->createCSV($elg));
-        $zip->addFromString('EnrolmentLogConcern.csv', $this->createCSV($elg));
+        $zip->addFromString('EnrolmentLogConcern.csv', $this->createCSV($elc));
         $zip->addFromString('Key.csv', $this->createCSV($key));
         
         $zip->close();
@@ -194,16 +194,16 @@ class DataExportCommand extends Command {
         
         $reversed = [];
         
-        foreach(PRRecord::first()->questions as $i => $question)
+        foreach(PRRecord::first()->questions->sortBy(function($record){ return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question)
         {
-            $records[0][] = 'Q'.($i + 1);
+            $records[0][] = 'Q'.explode(' ', $question->node->title)[1];
             
             if ($question->node->fetchRevision()->reversescore) $reversed[] = $question;
         }
         
         foreach($reversed as $i => $question)
         {
-            $records[0][] = 'RQ'.($i + 1);
+            $records[0][] = 'RQ'.explode(' ', $question->node->title)[1];
         }
         
         $nodeType = NodeType::where('name', 'question-domain')->first();
@@ -213,14 +213,14 @@ class DataExportCommand extends Command {
         }
         ksort($domains);
         
-        foreach($domains as $i => $domain)
+        foreach($domains as $j => $domain)
         {
-            $records[0][] = 'nd_'.$i;
+            $records[0][] = 'nd_'.$j;
         }
 
         foreach($domains as $j => $domain)
         {
-            $records[0][] = 'pd_'.$i;
+            $records[0][] = 'pd_'.$j;
         }
         
         /*
@@ -256,8 +256,8 @@ class DataExportCommand extends Command {
                 $firstLanguage = $basicData['OtherLanguage'];
             
             $timeRecorded = $record->time_tracked;
-            $timeSpentQuestionnaire = $record->time_additional_questionnaire;
-            $timeSpentPatient = $record->time_additional_patient;
+            $timeSpentQuestionnaire = $record->time_spent_questionnaire;
+            $timeSpentPatient = $record->time_spent_patient;
             
             $incompleteReason = $record->incomplete_reason;
             
@@ -269,11 +269,10 @@ class DataExportCommand extends Command {
             $negative = [];
             $positive = [];
             
-            foreach($record->questions as $j => $question)
+            foreach($record->questions->sortBy(function($record){ return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $j => $question)
             {
-                if ($question->answer_node_id) {
-                    $records[$i + 1][] = $this->keys['answer'][$question->answer_node_id];
-                }
+                $records[$i + 1][] = $question->answer_node_id ? $this->keys['answer'][$question->answer_node_id] : '';
+                
                 $questionNode = Node::find($question->question_node_id);
                 
                 if ($questionNode->fetchRevision()->reversescore) $reversed[] = $question;
@@ -303,7 +302,9 @@ class DataExportCommand extends Command {
 
                     if ($answer > 0) $answer = 5 - ($answer - 1);
 
-                    $records[$i + 1][] = $answer;
+                    $records[$i + 1][] = "$answer";
+                } else {
+                    $records[$i + 1][] = '';
                 }
             }
             
@@ -317,12 +318,12 @@ class DataExportCommand extends Command {
             
             foreach($domains as $j => $domain)
             {
-                $records[$i + 1][] = isset($negative[$domain->id]) ? count($negative[$domain->id]) : 0;
+                $records[$i + 1][] = isset($negative[$domain->id]) ? count($negative[$domain->id]) : '0';
             }
             
             foreach($domains as $j => $domain)
             {
-                $records[$i + 1][] = isset($positive[$domain->id]) ? count($positive[$domain->id]) : 0;
+                $records[$i + 1][] = isset($positive[$domain->id]) ? count($positive[$domain->id]) : '0';
             }
         }
         
@@ -342,8 +343,8 @@ class DataExportCommand extends Command {
                 'IncidentReportDescription'
             ]
         ];
-        
-        foreach(PRNote::all() as $i => $note)
+                
+        foreach(PRNote::has('concern', '<', 1)->get() as $i => $note)
         {
             $date = date('dmy\-His', strtotime($note->record->start_date));
             $user = strtoupper($note->record->user);
@@ -464,14 +465,21 @@ class DataExportCommand extends Command {
             ]
         ];
         
-        foreach(PRRecord::first()->questions as $i => $question)
+        foreach(PRRecord::first()->questions->sortBy(function($record){ return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question)
         {
-            $questionId = explode(' ', $question->node->title)[1];
-            $questionText = I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
-            $optionId = $question->answer_node_id ? $this->keys['answer'][$question->answer_node_id] : '';
-            $optionText = $question->answer ? I18nString::whereKey($question->answer->fetchRevision()->text)->whereLang('en')->first()->value : '';
-            
-            $key[] = [$questionId, $questionText, $optionId, $optionText];
+            foreach(explode(',', $question->node->fetchRevision()->answertypes) as $answerTypeId)
+            {
+                foreach(explode(',', Node::find($answerTypeId)->fetchRevision()->options) as $_optionId)
+                {
+                    $questionId = explode(' ', $question->node->title)[1];
+                    $questionText = I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
+                    
+                    $optionId = $this->keys['answer'][$_optionId];
+                    $optionText = I18nString::whereKey(Node::find($_optionId)->fetchRevision()->text)->whereLang('en')->first()->value;
+                    
+                    $key[] = [$questionId, $questionText, $optionId, $optionText];
+                }
+            }
         }
         
         return $key;

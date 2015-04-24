@@ -368,8 +368,8 @@ class NodeController extends \BaseController {
             $record->incomplete_reason = $data['incompleteReason'];
 
             $record->time_tracked = $data['recordedTime'];
-            $record->time_additional_patient = $data['adjustedTimePatient'];
-            $record->time_additional_questionnaire = $data['adjustedTimeQuestionnaire'];
+            $record->time_spent_patient = $data['totalTimePatient'];
+            $record->time_spent_questionnaire = $data['totalTimeQuestionnaire'];
 
             $record->user = $data['user'];
             $record->language = $data['basicData']['Language'];

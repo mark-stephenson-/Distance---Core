@@ -24,4 +24,9 @@ class PRNote extends BaseModel {
         return $this->belongsTo('PRQuestion', 'prase_question_id');
     }
     
+    public function concern()
+    {
+        return $this->hasOne('PRConcern', 'prase_note_id');
+    }
+    
 }
