@@ -271,8 +271,9 @@ class DataExportCommand extends Command {
             
             foreach($record->questions as $j => $question)
             {
-                $records[$i + 1][] = $this->keys['answer'][$question->answer_node_id];
-                
+                if ($question->answer_node_id) {
+                    $records[$i + 1][] = $this->keys['answer'][$question->answer_node_id];
+                }
                 $questionNode = Node::find($question->question_node_id);
                 
                 if ($questionNode->fetchRevision()->reversescore) $reversed[] = $question;
@@ -296,12 +297,14 @@ class DataExportCommand extends Command {
             }
             
             foreach($reversed as $j => $question)
-            {                
-                $answer = $this->keys['answer'][$question->answer_node_id];
-                
-                if ($answer > 0) $answer = 5 - ($answer - 1);
-                
-                $records[$i + 1][] = $answer;
+            {
+                if ($question->answer_node_id) {
+                    $answer = $this->keys['answer'][$question->answer_node_id];
+
+                    if ($answer > 0) $answer = 5 - ($answer - 1);
+
+                    $records[$i + 1][] = $answer;
+                }
             }
             
             $nodeType = NodeType::where('name', 'question-domain')->first();
@@ -314,12 +317,12 @@ class DataExportCommand extends Command {
             
             foreach($domains as $j => $domain)
             {
-                $records[$i + 1][] = count($negative[$domain->id]);
+                $records[$i + 1][] = isset($negative[$domain->id]) ? count($negative[$domain->id]) : 0;
             }
             
             foreach($domains as $j => $domain)
             {
-                $records[$i + 1][] = count($positive[$domain->id]);
+                $records[$i + 1][] = isset($positive[$domain->id]) ? count($positive[$domain->id]) : 0;
             }
         }
         
@@ -465,8 +468,8 @@ class DataExportCommand extends Command {
         {
             $questionId = explode(' ', $question->node->title)[1];
             $questionText = I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
-            $optionId = $this->keys['answer'][$question->answer_node_id];
-            $optionText = I18nString::whereKey($question->answer->fetchRevision()->text)->whereLang('en')->first()->value;
+            $optionId = $question->answer_node_id ? $this->keys['answer'][$question->answer_node_id] : '';
+            $optionText = $question->answer ? I18nString::whereKey($question->answer->fetchRevision()->text)->whereLang('en')->first()->value : '';
             
             $key[] = [$questionId, $questionText, $optionId, $optionText];
         }
