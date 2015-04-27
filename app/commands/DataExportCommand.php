@@ -20,7 +20,7 @@ class DataExportCommand extends Command {
      *
      * @var string
      */
-    protected $description = 'Export .csv file of Prase submissions.';
+    protected $description = 'Export all prase submission data.';
     
     /**
      * The directory where archives are stored
@@ -41,33 +41,6 @@ class DataExportCommand extends Command {
      * The data export file
      */
     protected $export;
-    
-    /**
-     * The slugs of the question domains and their internal IDs
-     */
-    protected $keys = [
-        'answer' => [
-            29 => -1,
-            28 => 0,
-            31 => 1,
-            32 => 2,
-            33 => 3,
-            34 => 4,
-            35 => 5
-        ],
-        'domain' => [
-            'dignity-and-respect' => 0,
-            'communication-and-teamworking' => 1,
-            'organisation-and-care-planning' => 2,
-            'access-to-resources' => 3,
-            'ward-type-and-layout' => 4,
-            'information-flow' => 5,
-            'staff-roles-and-responsibilities' => 6,
-            'staff-training' => 7,
-            'equipment-(design-and-functioning)' => 8,
-            'delays' => 9
-        ]
-    ];
     
     /**
      * Create a new command instance.
@@ -113,9 +86,7 @@ class DataExportCommand extends Command {
         register_shutdown_function(function() use ($pidFileName) {
             unlink($pidFileName);
         });
-
-        $this->stopOtherExports();
-
+        
         // Make the zip archive
         $zip = new \ZipArchive;
         $zip->open( $this->directory . '/' . time() . '.zip', \ZipArchive::CREATE );
@@ -129,24 +100,6 @@ class DataExportCommand extends Command {
         $this->cleanUp();
         
         return $filename;
-    }
-
-    /**
-     * Stop any other archive actions that might be occuring for this collection
-     */
-    protected function stopOtherExports()
-    {
-        $pidFiles = glob($this->pidDirectory . '/*');
-
-        foreach ( $pidFiles as $_pidFile ) {
-            $explode = explode('/', $_pidFile);
-            $_pid = $explode[ count($explode) - 1];
-
-            if ( $_pid  != getmypid() ) {
-                posix_kill($_pid, 2);
-                unlink($this->pidDirectory . '/' . $_pid);
-            }
-        }
     }
 
     /**
@@ -209,7 +162,7 @@ class DataExportCommand extends Command {
         $nodeType = NodeType::where('name', 'question-domain')->first();
         $domains = [];
         foreach(Node::where('node_type', $nodeType->id)->get() as $domain) {
-            $domains[$this->keys['domain'][$domain->title]] = $domain;
+            $domains[Config::get('prase.submissions')['domains'][$domain->title]] = $domain;
         }
         ksort($domains);
         
@@ -271,7 +224,7 @@ class DataExportCommand extends Command {
             
             foreach($record->questions->sortBy(function($record){ return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $j => $question)
             {
-                $records[$i + 1][] = $question->answer_node_id ? $this->keys['answer'][$question->answer_node_id] : '';
+                $records[$i + 1][] = $question->answer_node_id ? Config::get('prase.submissions')['answers'][$question->answer->title] : '';
                 
                 $questionNode = Node::find($question->question_node_id);
                 
@@ -297,13 +250,14 @@ class DataExportCommand extends Command {
             
             foreach($reversed as $j => $question)
             {
-                if ($question->answer_node_id) {
-                    $answer = $this->keys['answer'][$question->answer_node_id];
+                if ($question->answer_node_id)
+                {
+                    $answer = Config::get('prase.submissions')['answers'][$question->answer->title];
 
                     if ($answer > 0) $answer = 5 - ($answer - 1);
 
                     $records[$i + 1][] = "$answer";
-                } else {
+                }else {
                     $records[$i + 1][] = '';
                 }
             }
@@ -311,9 +265,12 @@ class DataExportCommand extends Command {
             $nodeType = NodeType::where('name', 'question-domain')->first();
             
             $domains = [];
-            foreach(Node::where('node_type', $nodeType->id)->get() as $domain) {
-                $domains[$this->keys['domain'][$domain->title]] = $domain;
+            
+            foreach(Node::where('node_type', $nodeType->id)->get() as $domain)
+            {
+                $domains[Config::get('prase.submissions')['domains'][$domain->title]] = $domain;
             }
+            
             ksort($domains);
             
             foreach($domains as $j => $domain)
@@ -348,7 +305,7 @@ class DataExportCommand extends Command {
         {
             $date = date('dmy\-His', strtotime($note->record->start_date));
             $user = strtoupper($note->record->user);
-            $offlineId = 'T'.$date.substr($user,0 ,6);
+            $offlineId = 'T'.$date.$user;
 
             // check if note is linked to hospital else grab hospital from record
             $hospital = $note->hospital ?: Node::find($note->record->hospital_node_id);
@@ -467,17 +424,22 @@ class DataExportCommand extends Command {
         
         foreach(PRRecord::first()->questions->sortBy(function($record){ return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question)
         {
-            foreach(explode(',', $question->node->fetchRevision()->answertypes) as $answerTypeId)
+            foreach(explode(',', $question->node->fetchRevision()->answertypes) as $a => $answerTypeId)
             {
-                foreach(explode(',', Node::find($answerTypeId)->fetchRevision()->options) as $_optionId)
+                foreach(explode(',', Node::find($answerTypeId)->fetchRevision()->options) as $b => $_optionId)
                 {
                     $questionId = explode(' ', $question->node->title)[1];
                     $questionText = I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
                     
-                    $optionId = $this->keys['answer'][$_optionId];
+                    $optionId = Config::get('prase.submissions')['answers'][Node::find($_optionId)->title];
                     $optionText = I18nString::whereKey(Node::find($_optionId)->fetchRevision()->text)->whereLang('en')->first()->value;
                     
-                    $key[] = [$questionId, $questionText, $optionId, $optionText];
+                    $key[] = [
+                        $questionId,//$a == 0 & $b == 0 ? $questionId : '',
+                        $questionText,//$a == 0 & $b == 0 ? $questionText : '',
+                        $optionId,
+                        $optionText
+                    ];
                 }
             }
         }
