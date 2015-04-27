@@ -77,7 +77,7 @@ return array(
         'route'     => 'data.export',
         'params'    => array('[app-id]', '[collection-id]'),
         'icon'      => 'download',
-        'access'    => 'cms.apps.[app-id].collections.[collection-id].data.*',
+        'access'    => 'cms.apps.[app-id].collections.[collection-id].data.export',
     ),
 
     /*
