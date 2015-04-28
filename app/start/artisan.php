@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new createResourceArchive);
+Artisan::add(new DataExportCommand);

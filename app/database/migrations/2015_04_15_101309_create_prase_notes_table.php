@@ -17,7 +17,7 @@ class CreatePraseNotesTable extends Migration {
             
             $table->text('text')->nullable();
             
-            $table->integer('prase_record_id')->nullable();
+            $table->integer('prase_record_id');
             $table->integer('prase_question_id')->nullable();
             
             $table->string('ward_name')->nullable();

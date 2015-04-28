@@ -20,7 +20,7 @@ class CreatePraseConcernsTable extends Migration {
             
             $table->integer('prase_note_id');
             $table->integer('prase_record_id');
-            $table->integer('prase_question_id');
+            $table->integer('prase_question_id')->nullable();
             
             $table->string('ward_name')->nullable();
             $table->integer('ward_node_id')->nullable();

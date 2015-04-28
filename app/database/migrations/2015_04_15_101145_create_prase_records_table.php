@@ -22,8 +22,8 @@ class CreatePraseRecordsTable extends Migration {
             $table->text('basic_data')->nullable();
             $table->text('incomplete_reason')->nullable();
             $table->integer('time_tracked')->nullable();
-            $table->integer('time_additional_patient')->nullable();
-            $table->integer('time_additional_questionnaire')->nullable();
+            $table->integer('time_spent_questionnaire')->nullable();
+            $table->integer('time_spent_patient')->nullable();
             $table->string('user')->nullable();
             $table->string('language')->nullable();
             $table->timestamp('start_date');

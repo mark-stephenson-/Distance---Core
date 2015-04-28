@@ -27,7 +27,7 @@ class NodeController extends \BaseController {
             if ( ! $nodeType ) {
                 return Response::make(null, 404);
             }
-
+            
             $nodes = $nodes->whereNodeType(Input::get('nodeType'));
             
         } else if ( Input::get('name') ) {
@@ -327,7 +327,8 @@ class NodeController extends \BaseController {
 
         $nodeDraft = $node->createDraft($nodetypeContent);
 
-        if (!$nodeDraft) {
+        if (!$nodeDraft)
+        {
             return Response::make('Draft node for submission could not be created.', 400);
         }
         
@@ -367,8 +368,8 @@ class NodeController extends \BaseController {
             $record->incomplete_reason = $data['incompleteReason'];
 
             $record->time_tracked = $data['recordedTime'];
-            $record->time_additional_patient = $data['adjustedTimePatient'];
-            $record->time_additional_questionnaire = $data['adjustedTimeQuestionnaire'];
+            $record->time_spent_patient = $data['totalTimePatient'];
+            $record->time_spent_questionnaire = $data['totalTimeQuestionnaire'];
 
             $record->user = $data['user'];
             $record->language = $data['basicData']['Language'];
@@ -392,15 +393,18 @@ class NodeController extends \BaseController {
                     $note = new PRNote();
                     $note->text = $noteData['text'];
                     $note->prase_record_id = $record->id;
+                    $note->ward_name = $concernData['ward']['name'];
+                    $note->ward_node_id = $concernData['ward']['id'];
+                    $note->hospital_node_id = $concernData['ward']['hospitalId'];
                     $note->save();
 
                     $concern->prase_note_id = $note->id;
                 }
                 $concern->prase_record_id = $record->id;
 
-                $concern->ward_name = $concernData['ward']['name'];
-                $concern->ward_node_id = $concernData['ward']['id'];
-                $concern->hospital_node_id = $concernData['ward']['hospitalId'];
+                $concern->ward_name = $concernData['ward']['name'] ?: $record->ward_name;
+                $concern->ward_node_id = $concernData['ward']['id'] ?: ($record->ward_name ? '' : $record->ward_node_id);
+                $concern->hospital_node_id = $concernData['ward']['hospitalId'] ?: $record->hospital_node_id;
 
                 $concern->save();
             }        
@@ -432,9 +436,11 @@ class NodeController extends \BaseController {
                 {
                     $note = new PRNote();
                     $note->text = $noteData['text'];
-                    $note->ward_name = $noteData['ward']['name'];
-                    $note->ward_node_id = $noteData['ward']['id'];
-                    $note->hospital_node_id = $noteData['ward']['hospitalId'];
+                    $note->ward_name = $noteData['ward']['name'] ?: $record->ward_name;
+                    $note->ward_node_id = $noteData['ward']['id'] ?: ($record->ward_name ? '' : $record->ward_node_id);
+                    $note->hospital_node_id = $noteData['ward']['hospitalId'] ?: $record->hospital_node_id;
+                    $note->prase_record_id = $record->id;
+                    $note->prase_question_id = $question->id;
                     $note->save();
                     
                     $question->prase_note_id = $note->id;
@@ -451,13 +457,17 @@ class NodeController extends \BaseController {
                     {
                         $note = new PRNote();
                         $note->text = $noteData['text'];
+                        $note->prase_record_id = $record->id;
                         $note->prase_question_id = $question->id;
+                        $note->ward_name = $concernData['ward']['name'];
+                        $note->ward_node_id = $concernData['ward']['id'];
+                        $note->hospital_node_id = $concernData['ward']['hospitalId'];
                         $note->save();
 
                         $concern->prase_note_id = $note->id;
                     }
                     $concern->prase_question_id = $question->id;
-
+                    $concern->prase_record_id = $record->id;
                     $concern->ward_name = $concernData['ward']['name'];
                     $concern->ward_node_id = $concernData['ward']['id'];
                     $concern->hospital_node_id = $concernData['ward']['hospitalId'];

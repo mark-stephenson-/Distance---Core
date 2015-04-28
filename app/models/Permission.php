@@ -142,6 +142,10 @@ class Permission{
                             }
 
                         }
+                    
+                        $html .= "<li class='title'><h6>Data Permissions</h6></li>";
+
+                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.data.export', 'Export');
 
                     $html .= "</ul></li>";
 

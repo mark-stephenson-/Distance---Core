@@ -72,6 +72,13 @@ return array(
         'icon'      => 'file',
         'access'    => 'cms.apps.[app-id].collections.[collection-id].catalogues.*',
     ),
+    array(
+        'title'     => 'Data Export',
+        'route'     => 'data.export',
+        'params'    => array('[app-id]', '[collection-id]'),
+        'icon'      => 'download',
+        'access'    => 'cms.apps.[app-id].collections.[collection-id].data.export',
+    ),
 
     /*
         Custom Node Type Navigation Item
