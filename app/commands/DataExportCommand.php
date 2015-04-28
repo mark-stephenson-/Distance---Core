@@ -160,10 +160,14 @@ class DataExportCommand extends Command {
         }
         
         $nodeType = NodeType::where('name', 'question-domain')->first();
+        
         $domains = [];
-        foreach(Node::where('node_type', $nodeType->id)->get() as $domain) {
-            $domains[Config::get('prase.submissions')['domains'][$domain->title]] = $domain;
+        
+        foreach(Node::where('node_type', $nodeType->id)->get() as $domain)
+        {
+            $domains[$domain->fetchRevision()->domainvalue] = $domain;
         }
+        
         ksort($domains);
         
         foreach($domains as $j => $domain)
@@ -184,7 +188,7 @@ class DataExportCommand extends Command {
         {            
             $date = date('dmy\-His', strtotime($record->start_date));
             $user = strtoupper($record->user);
-            $offlineId = 'T'.$date.substr($user,0 ,6);
+            $offlineId = 'T'.$date.$user;
 
             $researcher = $record->user;
             $hospital = Node::find($record->hospital_node_id)->fetchRevision();
@@ -224,37 +228,40 @@ class DataExportCommand extends Command {
             
             foreach($record->questions->sortBy(function($record){ return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $j => $question)
             {
-                $records[$i + 1][] = $question->answer_node_id ? Config::get('prase.submissions')['answers'][$question->answer->title] : '';
+                $records[$i + 1][] = $question->answer ? $question->answer->fetchRevision()->answervalue : '';
                 
-                $questionNode = Node::find($question->question_node_id);
+                if ($question->node->fetchRevision()->reversescore) $reversed[] = $question;
                 
-                if ($questionNode->fetchRevision()->reversescore) $reversed[] = $question;
+                $domainId = $question->node->fetchRevision()->domain;
                 
-                $domainId = $questionNode->fetchRevision()->domain;
+                if (empty($negative[$domainId])) $negative[$domainId] = [];
+                if (empty($positive[$domainId])) $positive[$domainId] = [];
                 
-                if (empty($negative[$domainId])) {
-                    $negative[$domainId] = [];
-                }
-                
-                if (empty($positive[$domainId])) {
-                    $positive[$domainId] = [];
-                }
-                
-                if ($question->concern) {
-                    $negative[$domainId][] = $question->concern;
-                }
-                if ($question->note) {
-                    $positive[$domainId][] = $question->note;
-                }
+                if ($question->concern) $negative[$domainId][] = $question->concern;
+                if ($question->note) $positive[$domainId][] = $question->note;
             }
             
             foreach($reversed as $j => $question)
             {
-                if ($question->answer_node_id)
+                if ($question->answer)
                 {
-                    $answer = Config::get('prase.submissions')['answers'][$question->answer->title];
-
-                    if ($answer > 0) $answer = 5 - ($answer - 1);
+                    $count = 0;
+                    $answer = $question->answer->fetchRevision()->answervalue;
+                    $answerTypes = explode(',', $question->node->fetchRevision()->answertypes);
+                    
+                    foreach($answerTypes as $answerTypeId)
+                    {
+                        $options = explode(',', Node::find($answerTypeId)->fetchRevision()->options);
+                        
+                        foreach($options as $optionId)
+                        {
+                            $answerValue = Node::find($optionId)->fetchRevision()->answervalue;
+                            
+                            if ($answerValue > 0) $count++;
+                        }
+                    }
+                    
+                    if ($answer > 0) $answer = $count - ($answer - 1);
 
                     $records[$i + 1][] = "$answer";
                 }else {
@@ -268,7 +275,7 @@ class DataExportCommand extends Command {
             
             foreach(Node::where('node_type', $nodeType->id)->get() as $domain)
             {
-                $domains[Config::get('prase.submissions')['domains'][$domain->title]] = $domain;
+                $domains[$domain->fetchRevision()->domainvalue] = $domain;
             }
             
             ksort($domains);
@@ -368,7 +375,7 @@ class DataExportCommand extends Command {
         {
             $date = date('dmy\-His', strtotime($concern->record->start_date));
             $user = strtoupper($concern->record->user);
-            $offlineId = 'T'.$date.substr($user,0 ,6);
+            $offlineId = 'T'.$date.$user;
 
             // check if note is linked to hospital else grab hospital from record
             $hospital = $concern->hospital ?: Node::find($concern->record->hospital_node_id);
@@ -431,7 +438,12 @@ class DataExportCommand extends Command {
                     $questionId = explode(' ', $question->node->title)[1];
                     $questionText = I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
                     
-                    $optionId = Config::get('prase.submissions')['answers'][Node::find($_optionId)->title];
+                    $optionId = Node::find($_optionId)->fetchRevision()->answervalue;
+                    /*$text = Node::find($_optionId)->fetchRevision()->text;
+                    if (!I18nString::whereKey(Node::find($_optionId)->fetchRevision()->text)->whereLang('en')->first())
+                    {
+                        dd(compact('_optionId', 'optionId', 'text'));
+                    }*/
                     $optionText = I18nString::whereKey(Node::find($_optionId)->fetchRevision()->text)->whereLang('en')->first()->value;
                     
                     $key[] = [

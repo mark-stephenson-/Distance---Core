@@ -191,9 +191,13 @@ Route::group(array('before' => array('auth')), function() {
                 Route::post('resources/process/{catalogueId}/{language?}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
                 
                 Route::get('data/export', ['as' => 'data.export', function($appId, $collectionId) {
-                    Artisan::call('core:data-export', ['collection-id' => $collectionId]);
-                    $filename = scandir(storage_path().'/exports/'.$collectionId, 1)[1];
-                    return Response::download(storage_path().'/exports/'.$collectionId.'/'.$filename);
+                    if (PRRecord::first() == null) {
+                        return View::make('data-export.empty');
+                    } else {
+                        Artisan::call('core:data-export', ['collection-id' => $collectionId]);
+                        $filename = scandir(storage_path().'/exports/'.$collectionId, 1)[1];
+                        return Response::download(storage_path().'/exports/'.$collectionId.'/'.$filename);
+                    }
                 }]);
             });
         });
