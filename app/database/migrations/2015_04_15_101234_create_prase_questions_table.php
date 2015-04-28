@@ -24,7 +24,6 @@ class CreatePraseQuestionsTable extends Migration {
 
             $table->softDeletes();
             $table->timestamps();
-            
         });
 	}
 

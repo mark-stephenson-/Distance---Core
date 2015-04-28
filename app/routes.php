@@ -79,6 +79,16 @@ Route::post('forgot-password/{user_id}/{code}', array('uses' => 'AuthController@
 
 Route::get('logout', array('as' => 'logout', 'uses' => 'AuthController@processLogout'));
 
+Route::post('ota/download', array('uses' => 'OtaController@postDownload'));
+Route::post('ota/download/{testing?}', array('uses' => 'OtaController@postDownload'));
+
+Route::get('ota/download', array('as' => 'ota.download', 'uses' => 'OtaController@download'));
+Route::get('ota/download', array('as' => 'ota.download.production', 'uses' => 'OtaController@download'));
+Route::get('ota/download/{testing?}', array('uses' => 'OtaController@download'));
+Route::get('ota/download/testing', array('as' => 'ota.download.testing', 'uses' => 'OtaController@download'));
+
+Route::get('ota/download/deliver/{platform}/{environment}/{version}/{type}', array('as' => 'ota.download.deliver', 'uses' => 'OtaController@deliver'));
+
 Route::filter('auth', 'Core\Filters\Auth@auth');
 
 App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $exception)
@@ -179,7 +189,12 @@ Route::group(array('before' => array('auth')), function() {
                 Route::post('resources/{id}/{language}/update-file/{redirect?}', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
                 Route::post('resources/{id}/{language}/edit-name', array('as' => 'resources.editName', 'uses' => 'ResourcesController@editName'));
                 Route::post('resources/process/{catalogueId}/{language?}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
-
+                
+                Route::get('data/export', ['as' => 'data.export', function($appId, $collectionId) {
+                    Artisan::call('core:data-export', ['collection-id' => $collectionId]);
+                    $filename = scandir(storage_path().'/exports/'.$collectionId, 1)[1];
+                    return Response::download(storage_path().'/exports/'.$collectionId.'/'.$filename);
+                }]);
             });
         });
 

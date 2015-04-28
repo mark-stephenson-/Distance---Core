@@ -16,7 +16,7 @@ class PRRecord extends BaseModel {
     
     public function questions()
     {
-        return $this->hasMany('PRQuestion', 'prase_question_id');
+        return $this->hasMany('PRQuestion', 'prase_record_id');
     }
     
     public function ward()
@@ -25,5 +25,3 @@ class PRRecord extends BaseModel {
     }
     
 }
-
-//array('Definitely not', 'Probably not', 'Probably yes', 'Definitely yes', 'Don\'t know')

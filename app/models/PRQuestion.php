@@ -14,4 +14,14 @@ class PRQuestion extends BaseModel {
         return $this->hasOne('PRConcern', 'prase_question_id');
     }
     
+    public function node()
+    {
+        return $this->belongsTo('Node', 'question_node_id');
+    }
+    
+    public function answer()
+    {
+        return $this->belongsTo('Node', 'answer_node_id');
+    }
+    
 }

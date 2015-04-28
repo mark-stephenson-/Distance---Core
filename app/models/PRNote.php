@@ -6,7 +6,27 @@ class PRNote extends BaseModel {
     
     public function record()
     {
-        $this->belongsTo('PRRecord', 'prase_record_id');
+        return $this->belongsTo('PRRecord', 'prase_record_id');
+    }
+    
+    public function hospital()
+    {
+        return $this->belongsTo('Node', 'hospital_node_id');
+    }
+    
+    public function ward()
+    {
+        return $this->belongsTo('Node', 'ward_node_id');
+    }
+    
+    public function question()
+    {
+        return $this->belongsTo('PRQuestion', 'prase_question_id');
+    }
+    
+    public function concern()
+    {
+        return $this->hasOne('PRConcern', 'prase_note_id');
     }
     
 }
