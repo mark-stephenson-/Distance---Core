@@ -55,7 +55,7 @@ return array(
         'mysql' => array(
             'driver'    => 'mysql',
             'host'      => 'localhost',
-            'database'  => 'thecore_prase',
+            'database'  => 'prase',
             'username'  => 'prase',
             'password'  => 'bag4mebEth',
             'charset'   => 'utf8',

@@ -30,7 +30,7 @@ $env = $app->detectEnvironment(array(
 
 	'local' => array('localhost', 'homestead'),
     'development' => array('*.dev'),
-    'staging' => array('staging.thedistance.co.uk'),
+    'staging' => array('staging.thedistance.co.uk','staging'),
     'production' => array('*'),
 
 ));
