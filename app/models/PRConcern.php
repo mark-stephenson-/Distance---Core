@@ -41,14 +41,7 @@ class PRConcern extends BaseModel {
      */
     public function ward()
     {
-        if ($this->ward_node_id == null) {
-            return [
-                'name' => $this->ward_name,
-                'hospital' => $this->hospital
-            ];
-        } else {
-            return $this->belongsTo('Node', 'ward_node_id');
-        }
+        return $this->belongsTo('Node', 'ward_node_id');
     }
     
     /**

@@ -390,7 +390,7 @@ class DataExportCommand extends Command {
                 $ward = $ward->fetchRevision()->name;
             } else {
                 if ($concern->ward_name) {
-                    $ward = $note->ward_name;
+                    $ward = $concern->ward_name;
                 } else {
                     if ($ward = $concern->record->ward) {
                         $ward = $ward->fetchRevision()->name;
