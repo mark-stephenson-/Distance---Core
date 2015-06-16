@@ -175,10 +175,10 @@ class DataExportCommand extends Command
          */
 
         foreach (PRRecord::all() as $i => $record) {
-            $researcher = $record->user;
             $date = date('dmy\-His', strtotime($record->start_date));
-            $user = strtoupper($researcher);
+            $user = strtoupper($record->user);
             $offlineId = 'T'.$date.$user;
+            $researcher = $record->user;
 
             $hospitalNode = Node::find($record->hospital_node_id);
             $trustNode = $hospitalNode ? $hospitalNode->trust : null;
@@ -190,10 +190,9 @@ class DataExportCommand extends Command
             $hospital = $hospital ? $hospital->name : null;
             $trust = $trust ? $trust->name : null;
             $ward = $ward ? $ward->name : null;
+
             $dateEnrol = date('d/m/Y H:i:s', strtotime($record->start_date));
-
             $basicData = json_decode($record->basic_data, true);
-
             $stayLength = $basicData['StayLength'];
             $age = $basicData['Age'];
             $gender = $basicData['Gender'];
@@ -317,14 +316,21 @@ class DataExportCommand extends Command
             $offlineId = 'T'.$date.$user;
 
             // check if note is linked to hospital else grab hospital from record
+
+            /*
+             *  Get hospital revision from note
+             */
             $hospital = $note->hospital ?: Node::find($note->record->hospital_node_id);
             $hospital = $hospital ? $hospital->fetchRevision() : null;
 
-            $trust = $hospital ? $hospital->trust : null;
+            /*
+             *  Get trust revision from hospital revision
+             */
+            $trust = $hospital ? Node::find($hospital->trust) : null;
             $trust = $trust ? $trust->fetchRevision() : null;
-            $trust = $trust ? $trust->name : null;
 
             $hospital = $hospital ? $hospital->name : null;
+            $trust = $trust ? $trust->name : null;
             $ward = $note->ward;
 
             // check if the note is about a custom ward or an existing ward
