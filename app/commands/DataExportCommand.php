@@ -32,7 +32,10 @@ class DataExportCommand extends Command
     /**
      * The collection ID of the archive currently being created.
      */
+    protected $appId;
     protected $collectionId;
+
+    protected $records;
 
     /**
      * The data export file.
@@ -45,54 +48,91 @@ class DataExportCommand extends Command
     public function __construct()
     {
         parent::__construct();
+
+        $this->records = PRRecord::all();
     }
 
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function fire($job = null, $data = null)
     {
-        $qv = $this->questionnaireView();
-        $elg = $this->enrolmentLogGood();
-        $elc = $this->enrolmentLogConcern();
-        $key = $this->key();
+        Log::debug('data-export', ['message' => 'Data export has been started.', 'job' => $job]);
+        Log::debug('data-export', compact('data'));
 
-        $this->collectionId = $this->argument('collection-id') ?: $collectionId;
-        $this->directory = storage_path().'/exports/'.$this->collectionId;
-        $this->pidDirectory = $this->directory.'/pid';
+        try {
+            $qv = $this->questionnaireView();
+            $elg = $this->enrolmentLogGood();
+            $elc = $this->enrolmentLogConcern();
+            $key = $this->key();
 
-        if (!is_dir($this->directory)) {
-            mkdir($this->directory, 0777, true);
+            Log::debug('data-export', ['message' => 'Data has been parsed into arrays.', 'job' => $job]);
+
+            $this->appId = !empty($data['app-id']) ? $data['app-id'] : $this->arguments('app-id');
+            $this->collectionId = !empty($data['collection-id']) ? $data['collection-id'] : $this->arguments('collection-id');
+            $this->directory = storage_path().'/exports/'.$this->collectionId;
+            $this->pidDirectory = $this->directory.'/pid';
+
+            if (!is_dir($this->directory)) {
+                mkdir($this->directory, 0777, true);
+            }
+
+            // Ensure the PID directory exists
+            if (!is_dir($this->pidDirectory)) {
+                mkdir($this->pidDirectory, 0777);
+            }
+
+            $pidFileName = $this->pidDirectory.'/'.getmypid();
+
+            $pidFile = fopen($pidFileName, 'w');
+            fclose($pidFile);
+
+            // Clean up PID files when we exit/are complete
+            register_shutdown_function(function () use ($pidFileName) {
+                unlink($pidFileName);
+            });
+
+            // Make the zip archive
+            $zip = new \ZipArchive();
+            $filename = $data['user'].time();
+            $zip->open($this->directory.'/'.$filename.'.zip', \ZipArchive::CREATE);
+            $zip->addFromString('QuestionnaireView.csv', $this->createCSV($qv));
+            $zip->addFromString('EnrolmentLogGood.csv', $this->createCSV($elg));
+            $zip->addFromString('EnrolmentLogConcern.csv', $this->createCSV($elc));
+            $zip->addFromString('Key.csv', $this->createCSV($key));
+            $zip->close();
+            $this->cleanUp();
+
+            Log::debug('data-export', ['message' => 'Data export has been zipped.', 'job' => $job]);
+
+            $file = explode('.', $filename)[0];
+            $user = User::find($data['user']);
+            $name = $user->first_name;
+            $link = route('data.export', [$this->appId, $this->collectionId, $file]);
+
+            Mail::queue('emails.data-export.complete', compact('name', 'link'), function ($message) use ($user) {
+                $name = $user->first_name.' '.$user->last_name;
+                $subject = 'Your data export is complete!';
+                $message->to($user->email, $name)->subject($subject);
+            });
+        } catch (Exception $e) {
+            Log::debug('exception', compact('e'));
+            $user = User::find($data['user']);
+            $name = $user->first_name;
+
+            Mail::queue('emails.data-export.unsuccessful', compact('name'), function ($message) use ($user, $name) {
+                $message->to($user->email, $name.' '.$user->last_name)->subject('Your data export was unsuccessful!');
+            });
+
+            $admin = User::where('first_name', 'Core')->where('last_name', 'Admin')->first();
+
+            Mail::queue('emails.data-export.error', ['user' => serialize($user)], function ($message) use ($admin) {
+                $email = $admin ? $admin->email : 'core.admin+prase@thedistance.co.uk';
+                $message->to($email, 'Core Admin')->subject('NHS Prase Data Export Failed');
+            });
         }
 
-        // Ensure the PID directory exists
-        if (!is_dir($this->pidDirectory)) {
-            mkdir($this->pidDirectory, 0777);
-        }
-
-        $pidFileName = $this->pidDirectory.'/'.getmypid();
-
-        $pidFile = fopen($pidFileName, 'w');
-        fclose($pidFile);
-
-        // Clean up PID files when we exit/are complete
-        register_shutdown_function(function () use ($pidFileName) {
-            unlink($pidFileName);
-        });
-
-        // Make the zip archive
-        $zip = new \ZipArchive();
-        $zip->open($this->directory.'/'.time().'.zip', \ZipArchive::CREATE);
-        $filename = $zip->filename;
-        $zip->addFromString('QuestionnaireView.csv', $this->createCSV($qv));
-        $zip->addFromString('EnrolmentLogGood.csv', $this->createCSV($elg));
-        $zip->addFromString('EnrolmentLogConcern.csv', $this->createCSV($elc));
-        $zip->addFromString('Key.csv', $this->createCSV($key));
-
-        $zip->close();
-        $this->cleanUp();
-
-        return $filename;
+        return $job->delete();
     }
 
     /**
@@ -116,7 +156,7 @@ class DataExportCommand extends Command
         /*
          * Add field names
          */
-
+        Log::debug('data-export', ['message' => 'Add field names to records array.']);
         $records = [
             [
                 'OfflineId',
@@ -139,7 +179,7 @@ class DataExportCommand extends Command
         ];
 
         $reversed = [];
-
+        Log::debug('data-export', ['message' => 'Get question field names.']);
         foreach (PRRecord::first()->questions->sortBy(function ($record) { return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question) {
             $records[0][] = 'Q'.explode(' ', $question->node->title)[1];
 
@@ -152,20 +192,19 @@ class DataExportCommand extends Command
             $records[0][] = 'RQ'.explode(' ', $question->node->title)[1];
         }
 
+        Log::debug('data-export', ['message' => 'Get domain field names.']);
+
         $nodeType = NodeType::where('name', 'question-domain')->first();
-
         $domains = [];
-
-        foreach (Node::where('node_type', $nodeType->id)->get() as $domain) {
-            $domains[$domain->fetchRevision()->domainvalue] = $domain;
+        foreach (Node::where('node_type', $nodeType->id)->get() as $node) {
+            if ($domain = $node->fetchRevision()) {
+                $domains[$domain->domainvalue] = $node;
+            }
         }
-
         ksort($domains);
-
         foreach ($domains as $j => $domain) {
             $records[0][] = 'nd_'.$j;
         }
-
         foreach ($domains as $j => $domain) {
             $records[0][] = 'pd_'.$j;
         }
@@ -173,11 +212,12 @@ class DataExportCommand extends Command
         /*
          * Add row content
          */
-
-        foreach (PRRecord::all() as $i => $record) {
+        Log::debug('data-export', ['message' => 'Add row content from records']);
+        foreach ($this->records as $i => $record) {
             $date = date('dmy\-His', strtotime($record->start_date));
             $user = strtoupper($record->user);
-            $offlineId = 'T'.$date.$user;
+
+            $offlineId = "T{$date}{$user}";
             $researcher = $record->user;
 
             $hospitalNode = Node::find($record->hospital_node_id);
@@ -223,13 +263,20 @@ class DataExportCommand extends Command
             $positive = [];
 
             foreach ($record->questions->sortBy(function ($record) { return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $j => $question) {
-                $records[$i + 1][] = $question->answer ? $question->answer->fetchRevision()->answervalue : '';
+                $answerNode = $question->answer;
+                $answerRevision = $node ? $node->fetchRevision() : null;
+                $answerValue = $answerRevision ? $answerRevision->answervalue : null;
+                $records[$i + 1][] = $answerValue;
 
-                if ($question->node->fetchRevision()->reversescore) {
+                $questionNode = $question->node;
+                $questionRevision = $questionNode ? $questionNode->fetchRevision() : null;
+                $reverseScore = $questionRevision ? $questionRevision->reversescore : null;
+
+                if ($reverseScore) {
                     $reversed[] = $question;
                 }
 
-                $domainId = $question->node->fetchRevision()->domain;
+                $domainId = $questionRevision ? $questionRevision->domain : null;
 
                 if (empty($negative[$domainId])) {
                     $negative[$domainId] = [];
@@ -246,29 +293,42 @@ class DataExportCommand extends Command
                 }
             }
 
+            Log::debug('data-export', ['message' => 'Parse reverse score questions']);
+
             foreach ($reversed as $j => $question) {
                 if ($question->answer) {
                     $count = 0;
-                    $answer = $question->answer->fetchRevision()->answervalue;
-                    $answerTypes = explode(',', $question->node->fetchRevision()->answertypes);
+
+                    $answerRevision = $question->answer ? $question->answer->fetchRevision() : null;
+                    $answerValue = $answerRevision ? $answerRevision->answervalue : null;
+
+                    $questionRevision = $question->node ? $question->node->fetchRevision() : null;
+                    $answerTypes = $questionRevision ? $questionRevision->answertypes : null;
+                    $answerTypes = $answerTypes ? explode(',', $answerTypes) : [];
 
                     foreach ($answerTypes as $answerTypeId) {
-                        $options = explode(',', Node::find($answerTypeId)->fetchRevision()->options);
+                        $answerTypeNode = Node::find($answerTypeId);
+                        $answerTypeRevision = $answerTypeNode ? $answerTypeNode->fetchRevision() : null;
+
+                        $options = $answerTypeRevision ? $answerTypeRevision->options : null;
+                        $options = $options ? explode(',', $options) : [];
 
                         foreach ($options as $optionId) {
-                            $answerValue = Node::find($optionId)->fetchRevision()->answervalue;
+                            $optionNode = Node::find($optionId);
+                            $optionRevision = $optionNode ? $optionNode->fetchRevision() : null;
+                            $_answerValue = $optionRevision ? $optionRevision->answervalue : null;
 
-                            if ($answerValue > 0) {
+                            if ($_answerValue > 0) {
                                 $count++;
                             }
                         }
                     }
 
-                    if ($answer > 0) {
-                        $answer = $count - ($answer - 1);
+                    if ($answerValue > 0) {
+                        $answerValue = $count - ($answerValue - 1);
                     }
 
-                    $records[$i + 1][] = "$answer";
+                    $records[$i + 1][] = "$answerValue";
                 } else {
                     $records[$i + 1][] = '';
                 }
@@ -279,7 +339,9 @@ class DataExportCommand extends Command
             $domains = [];
 
             foreach (Node::where('node_type', $nodeType->id)->get() as $domain) {
-                $domains[$domain->fetchRevision()->domainvalue] = $domain;
+                $domainRevision = $domain->fetchRevision();
+                $domainValue = $domainRevision ? $domainRevision->domainvalue : null;
+                $domains[$domainValue] = $domain;
             }
 
             ksort($domains);
@@ -311,6 +373,10 @@ class DataExportCommand extends Command
         ];
 
         foreach (PRNote::has('concern', '<', 1)->get() as $i => $note) {
+            if ($note->record == null) {
+                continue;
+            }
+
             $date = date('dmy\-His', strtotime($note->record->start_date));
             $user = strtoupper($note->record->user);
             $offlineId = 'T'.$date.$user;
@@ -382,6 +448,10 @@ class DataExportCommand extends Command
         ];
 
         foreach (PRConcern::all() as $i => $concern) {
+            if ($concern->record == null) {
+                continue;
+            }
+
             $date = date('dmy\-His', strtotime($concern->record->start_date));
             $user = strtoupper($concern->record->user);
             $offlineId = 'T'.$date.$user;
@@ -449,7 +519,11 @@ class DataExportCommand extends Command
                     {
                         dd(compact('_optionId', 'optionId', 'text'));
                     }*/
-                    $optionText = I18nString::whereKey(Node::find($_optionId)->fetchRevision()->text)->whereLang('en')->first()->value;
+                    $node = Node::find($_optionId);
+                    $option = $node ? $node->fetchRevision() : null;
+                    $textKey = $option ? $option->text : null;
+                    $i18nstring = $textKey ? I18nString::whereKey($textKey)->whereLang('en')->first() : null;
+                    $optionText = $i18nstring ? $i18nstring->value : null;
 
                     $key[] = [
                         $questionId,//$a == 0 & $b == 0 ? $questionId : '',
@@ -487,6 +561,7 @@ class DataExportCommand extends Command
     protected function getArguments()
     {
         return array(
+            array('app-id', InputArgument::REQUIRED, 'The app id.'),
             array('collection-id', InputArgument::REQUIRED, 'The collection id.'),
         );
     }

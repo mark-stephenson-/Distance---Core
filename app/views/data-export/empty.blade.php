@@ -5,7 +5,5 @@
 @stop
 
 @section('body')
-
     <p class="lead">There is no submission data to export.</p>
-
 @stop

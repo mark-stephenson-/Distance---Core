@@ -11,6 +11,10 @@
 |
 */
 
+Route::post('queue/receive', function () {
+    return Queue::marshal();
+});
+
 $appId = Request::segment(2);
 $collectionId = Request::segment(4);
 
@@ -26,32 +30,30 @@ if (Request::segment(3) == 'collections' and is_numeric($collectionId)) {
     define('CORE_COLLECTION_ID', Collection::currentId());
 }
 
-View::composer('*', function($view)
-{
+View::composer('*', function ($view) {
     $view->with('appId', CORE_APP_ID);
     $view->with('collectionId', CORE_COLLECTION_ID);
 });
 
-App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $e)
-{
+App::error(function (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
     Session::forget('current-app');
     Session::forget('current-collection');
+
     return Redirect::route('root');
 });
 
-
-Route::any('/', array('as' => 'root', function() {
+Route::any('/', array('as' => 'root', function () {
     return Redirect::route('apps.index');
 }));
 
-Route::group( array('prefix' => 'api'), function() {
+Route::group(array('prefix' => 'api'), function () {
     // We need to ensure that the prfiler doesn't pop up here...
     // Config::set('profiler::config.enabled', false);
-    
-    Route::get('/', function(){ return Response::make('', 400); });
+
+    Route::get('/', function () { return Response::make('', 400); });
     Route::put('authentication', array('uses' => 'Api\AuthenticationController@authenticate'));
 
-    Route::group( array('before' => 'apiAuthentication'), function() {
+    Route::group(array('before' => 'apiAuthentication'), function () {
         Route::get('collections', 'Api\CollectionController@collections');
         Route::get('hierarchy', 'Api\HierarchyController@hierarchy');
         Route::get('node/{id}', 'Api\NodeController@node');
@@ -91,21 +93,20 @@ Route::get('ota/download/deliver/{platform}/{environment}/{version}/{type}', arr
 
 Route::filter('auth', 'Core\Filters\Auth@auth');
 
-App::error(function(Symfony\Component\HttpKernel\Exception\HttpException $exception)
-{
+App::error(function (Symfony\Component\HttpKernel\Exception\HttpException $exception) {
     if ($exception->getStatusCode() == 403) {
         return View::make('403');
     }
 });
 
-App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+App::error(function (Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
     return View::make('404');
 });
 
 Route::get('file/{catalogueId}/{language}/{filename}', array('as' => 'resources.load', 'uses' => 'ResourcesController@load'));
 Route::get('cron', array('as' => 'cron', 'uses' => 'CronController@run'));
 
-Route::group(array('before' => array('auth')), function() {
+Route::group(array('before' => array('auth')), function () {
 
     /*
         Global - and just checking for login
@@ -113,13 +114,11 @@ Route::group(array('before' => array('auth')), function() {
     Route::get('me', array('as' => 'me', 'uses' => 'MeController@index'));
     Route::post('me', array('as' => 'me.update', 'uses' => 'MeController@update'));
 
-
-    Route::group(array('before' => array('auth', 'checkPermissions')), function() {
-
+    Route::group(array('before' => array('auth', 'checkPermissions')), function () {
 
         Route::resource('apps', 'AppsController');
 
-        Route::group(array('prefix' => 'apps'), function() {
+        Route::group(array('prefix' => 'apps'), function () {
             Route::get('{appId}/destroy', array('as' => 'app.destroy', 'uses' => 'AppsController@destroy'));
             Route::get('{appId}/collections', array('as' => 'collections.index', 'uses' => 'CollectionsController@index'));
             Route::get('{appId}/collections/create', array('as' => 'collections.create', 'uses' => 'CollectionsController@create'));
@@ -137,7 +136,7 @@ Route::group(array('before' => array('auth')), function() {
             Route::post('{appId}/app-distribution/', array('as' => 'app-distribution.store', 'uses' => 'OtaController@store'));
             Route::post('{appId}/app-distribution/update', array('as' => 'app-distribution.update', 'uses' => 'OtaController@update'));
 
-            Route::group(array('prefix' => '{appId}/collections/{collectionId}'), function() {
+            Route::group(array('prefix' => '{appId}/collections/{collectionId}'), function () {
                 /*
                     Nodes View Types
                  */
@@ -153,7 +152,7 @@ Route::group(array('before' => array('auth')), function() {
 
                 Route::get('nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.create', 'uses' => 'NodesController@create'));
                 Route::post('nodes/create/{nodeTypeId?}/{parentId?}', array('as' => 'nodes.store', 'uses' => 'NodesController@store'));
-                
+
                 Route::get('nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.edit', 'uses' => 'NodesController@edit'));
                 Route::post('nodes/edit/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.update', 'uses' => 'NodesController@update'));
 
@@ -189,15 +188,28 @@ Route::group(array('before' => array('auth')), function() {
                 Route::post('resources/{id}/{language}/update-file/{redirect?}', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
                 Route::post('resources/{id}/{language}/edit-name', array('as' => 'resources.editName', 'uses' => 'ResourcesController@editName'));
                 Route::post('resources/process/{catalogueId}/{language?}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
-                
-                Route::get('data/export', ['as' => 'data.export', function($appId, $collectionId) {
+
+                Route::get('data/export/{filename?}', ['as' => 'data.export', function ($appId, $collectionId, $filename = null) {
+                    if ($filename) {
+                        $path = '/exports/'.$collectionId.'/'.$filename.'.zip';
+                        if (file_exists(storage_path().$path)) {
+                            return Response::download(storage_path().$path);
+                        } else {
+                            return View::make('data-export.404');
+                        }
+                    }
+
                     if (PRRecord::first() == null) {
                         return View::make('data-export.empty');
-                    } else {
-                        Artisan::call('core:data-export', ['collection-id' => $collectionId]);
-                        $filename = scandir(storage_path().'/exports/'.$collectionId, 1)[1];
-                        return Response::download(storage_path().'/exports/'.$collectionId.'/'.$filename);
                     }
+
+                    Queue::push('DataExportCommand', [
+                        'app-id' => $appId,
+                        'collection-id' => $collectionId,
+                        'user' => Sentry::getUser()->id,
+                    ]);
+
+                    return View::make('data-export.queued');
                 }]);
             });
         });
@@ -205,7 +217,7 @@ Route::group(array('before' => array('auth')), function() {
         /*
             Global (with permissions)
          */
-        
+
         /*
             Users
          */
@@ -227,8 +239,8 @@ Route::group(array('before' => array('auth')), function() {
         Route::resource('node-types', 'NodeTypesController');
         Route::get('node-types/{id}/destroy', array('as' => 'node-types.destroy', 'uses' => 'NodeTypesController@destroy'));
 
-        Route::group(array('prefix' => 'ajax'), function() {
-            Route::group(array('prefix' => 'resources'), function() {
+        Route::group(array('prefix' => 'ajax'), function () {
+            Route::group(array('prefix' => 'resources'), function () {
                 Route::get('toggle_sync', 'Ajax\ResourcesController@toggleSync');
                 Route::get('toggle_pub', 'Ajax\ResourcesController@togglePub');
             });
