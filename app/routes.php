@@ -11,9 +11,10 @@
 |
 */
 
-Route::post('queue/receive', function () {
-    return Queue::marshal();
-});
+// Required if using iron as queue driver
+// Route::post('queue/receive', function () {
+//     return Queue::marshal();
+// });
 
 $appId = Request::segment(2);
 $collectionId = Request::segment(4);

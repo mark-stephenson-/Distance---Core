@@ -67,7 +67,8 @@ App::down(function () {
     return Response::make('Be right back!', 503);
 });
 
-Queue::connection()->getIron()->ssl_verifypeer = false;
+// Required if using iron.io as queue driver
+//Queue::connection()->getIron()->ssl_verifypeer = false;
 
 /*
 |--------------------------------------------------------------------------

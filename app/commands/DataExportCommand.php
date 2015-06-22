@@ -264,7 +264,7 @@ class DataExportCommand extends Command
 
             foreach ($record->questions->sortBy(function ($record) { return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $j => $question) {
                 $answerNode = $question->answer;
-                $answerRevision = $node ? $node->fetchRevision() : null;
+                $answerRevision = $answerNode ? $answerNode->fetchRevision() : null;
                 $answerValue = $answerRevision ? $answerRevision->answervalue : null;
                 $records[$i + 1][] = $answerValue;
 
