@@ -15,7 +15,7 @@ return array(
     |
     */
 
-    'default' => 'sync',
+    'default' => 'async',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,6 +34,10 @@ return array(
             'driver' => 'sync',
         ),
 
+        'async' => array(
+            'driver' => 'async',
+        ),
+
         'beanstalkd' => array(
             'driver' => 'beanstalkd',
             'host' => 'localhost',
@@ -50,9 +54,9 @@ return array(
 
         'iron' => array(
             'driver' => 'iron',
-            'project' => '5581a39d059c2c0006000067',
-            'token' => '4mkmFUsecmFuhhQQ70HCpXGSSJY',
-            'queue' => 'data_export',
+            'project' => 'your-project-id',
+            'token' => 'your-token-key',
+            'queue' => 'your-queue-name',
         ),
 
     ),

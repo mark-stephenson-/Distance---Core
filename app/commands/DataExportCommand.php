@@ -48,8 +48,6 @@ class DataExportCommand extends Command
     public function __construct()
     {
         parent::__construct();
-
-        $this->records = PRRecord::all();
     }
 
     /**
@@ -57,8 +55,17 @@ class DataExportCommand extends Command
      */
     public function fire($job = null, $data = null)
     {
+        set_time_limit(360);
+
+        $skip = isset($data['skip']) ? ($data['skip'] ?: 0) : 0;
+        $take = isset($data['take']) ? ($data['take'] ?: PRRecord::count()) : PRRecord::count();
+
+        $this->records = PRRecord::orderBy('created_at', 'desc')->skip($skip)->take($take)->get();
+
         Log::debug('data-export', ['message' => 'Data export has been started.', 'job' => $job]);
         Log::debug('data-export', compact('data'));
+
+        $job->delete();
 
         try {
             $qv = $this->questionnaireView();
@@ -66,7 +73,7 @@ class DataExportCommand extends Command
             $elc = $this->enrolmentLogConcern();
             $key = $this->key();
 
-            Log::debug('data-export', ['message' => 'Data has been parsed into arrays.', 'job' => $job]);
+            Log::debug('data-export', ['message' => 'Data has been parsed into arrays.']);
 
             $this->appId = !empty($data['app-id']) ? $data['app-id'] : $this->arguments('app-id');
             $this->collectionId = !empty($data['collection-id']) ? $data['collection-id'] : $this->arguments('collection-id');
@@ -103,36 +110,49 @@ class DataExportCommand extends Command
             $zip->close();
             $this->cleanUp();
 
-            Log::debug('data-export', ['message' => 'Data export has been zipped.', 'job' => $job]);
+            Log::debug('data-export', ['message' => 'Data export has been zipped.']);
 
             $file = explode('.', $filename)[0];
             $user = User::find($data['user']);
             $name = $user->first_name;
             $link = route('data.export', [$this->appId, $this->collectionId, $file]);
 
-            Mail::queue('emails.data-export.complete', compact('name', 'link'), function ($message) use ($user) {
-                $name = $user->first_name.' '.$user->last_name;
+            $userData = [
+                'email' => $user->email,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+            ];
+
+            Mail::send('emails.data-export.complete', compact('name', 'link'), function ($message) use ($userData) {
+                $name = $userData['first_name'].' '.$userData['last_name'];
                 $subject = 'Your data export is complete!';
-                $message->to($user->email, $name)->subject($subject);
+                $message->to($userData['email'], $name)->subject($subject);
             });
         } catch (Exception $e) {
             Log::debug('exception', compact('e'));
             $user = User::find($data['user']);
             $name = $user->first_name;
 
-            Mail::queue('emails.data-export.unsuccessful', compact('name'), function ($message) use ($user, $name) {
-                $message->to($user->email, $name.' '.$user->last_name)->subject('Your data export was unsuccessful!');
+            $userData = [
+                'email' => $user->email,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+            ];
+
+            Mail::send('emails.data-export.unsuccessful', compact('name'), function ($message) use ($userData) {
+                $name = $userData['first_name'].' '.$userData['last_name'];
+                $message->to($userData['email'], $name)->subject('Your data export was unsuccessful!');
             });
 
             $admin = User::where('first_name', 'Core')->where('last_name', 'Admin')->first();
 
-            Mail::queue('emails.data-export.error', ['user' => serialize($user)], function ($message) use ($admin) {
+            Mail::send('emails.data-export.error', ['user' => serialize($user)], function ($message) use ($admin) {
                 $email = $admin ? $admin->email : 'core.admin+prase@thedistance.co.uk';
                 $message->to($email, 'Core Admin')->subject('NHS Prase Data Export Failed');
             });
         }
 
-        return $job->delete();
+        return true;
     }
 
     /**
@@ -214,6 +234,7 @@ class DataExportCommand extends Command
          */
         Log::debug('data-export', ['message' => 'Add row content from records']);
         foreach ($this->records as $i => $record) {
+            Log::debug('data-export', ['recordId' => $record->id]);
             $date = date('dmy\-His', strtotime($record->start_date));
             $user = strtoupper($record->user);
 
@@ -293,8 +314,6 @@ class DataExportCommand extends Command
                 }
             }
 
-            Log::debug('data-export', ['message' => 'Parse reverse score questions']);
-
             foreach ($reversed as $j => $question) {
                 if ($question->answer) {
                     $count = 0;
@@ -346,14 +365,22 @@ class DataExportCommand extends Command
 
             ksort($domains);
 
+            Log::debug('data-export', ['message' => 'count negative domains']);
             foreach ($domains as $j => $domain) {
+                $domainId = $domain->id;
+                Log::debug('data-export', compact('domainId'));
                 $records[$i + 1][] = isset($negative[$domain->id]) ? count($negative[$domain->id]) : '0';
             }
 
+            Log::debug('data-export', ['message' => 'count positive domains']);
             foreach ($domains as $j => $domain) {
+                $domainId = $domain->id;
+                Log::debug('data-export', compact('domainId'));
                 $records[$i + 1][] = isset($positive[$domain->id]) ? count($positive[$domain->id]) : '0';
             }
         }
+
+        Log::debug('data-export', ['message' => 'Return all records']);
 
         return $records;
     }

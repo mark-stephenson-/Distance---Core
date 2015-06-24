@@ -11,11 +11,6 @@
 |
 */
 
-// Required if using iron as queue driver
-// Route::post('queue/receive', function () {
-//     return Queue::marshal();
-// });
-
 $appId = Request::segment(2);
 $collectionId = Request::segment(4);
 
@@ -208,6 +203,8 @@ Route::group(array('before' => array('auth')), function () {
                         'app-id' => $appId,
                         'collection-id' => $collectionId,
                         'user' => Sentry::getUser()->id,
+                        'take' => Input::get('take'),
+                        'skip' => Input::get('skip'),
                     ]);
 
                     return View::make('data-export.queued');
