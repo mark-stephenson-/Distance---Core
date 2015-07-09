@@ -11,6 +11,20 @@
 |
 */
 
+Route::group(array('before' => array('auth', 'super')), function () {
+
+    Route::get('artisan/{command}', function ($command) {
+        $params = Input::all();
+
+        if (count($params) > 0) {
+            return Artisan::call($command, $params);
+        } else {
+            return Artisan::call($command);
+        }
+    });
+
+});
+
 $appId = Request::segment(2);
 $collectionId = Request::segment(4);
 
@@ -80,7 +94,6 @@ Route::get('logout', array('as' => 'logout', 'uses' => 'AuthController@processLo
 Route::post('ota/download', array('uses' => 'OtaController@postDownload'));
 Route::post('ota/download/{testing?}', array('uses' => 'OtaController@postDownload'));
 
-Route::get('ota/download', array('as' => 'ota.download', 'uses' => 'OtaController@download'));
 Route::get('ota/download', array('as' => 'ota.download.production', 'uses' => 'OtaController@download'));
 Route::get('ota/download/{testing?}', array('uses' => 'OtaController@download'));
 Route::get('ota/download/testing', array('as' => 'ota.download.testing', 'uses' => 'OtaController@download'));

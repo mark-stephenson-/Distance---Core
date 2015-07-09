@@ -91,4 +91,98 @@ class OtaController extends \BaseController {
 		return Redirect::back()
 			->with('successes', new MessageBag(array('The distribution passwords have been updated successfully.')));
 	}
+
+	public function download($environment = 'production')
+    {
+        $version = Ota::current();
+
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'IEMobile') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'Windows Phone')) {
+            $version = $version->windows();
+        } else if (strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false) {
+            $version = $version->android();
+        } else if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== false or strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false) {
+            $version = $version->iOS();
+        } else {
+            return \View::make('downloads.desktop');
+        }
+
+        $version = $version->whereEnvironment($environment)->first();
+
+        if (!$version) {
+            return \View::make('downloads.404', ['message' => "A $environment version of this app does not exist."]);
+        }
+
+        $password = Setting::getConfig("ota-{$environment}_password");
+
+        if (\Input::get('password')) {
+
+            if (md5($password) == \Input::get('password')) {
+                // We're good!\
+                return \View::make('downloads.index')->with('version', $version);
+            } else {
+                return \View::make('downloads.password')->with('version', $version)->with('error', 'Invalid password entered.');
+            }
+        } else {
+            return \View::make('downloads.password')->with('version', $version);
+        }
+    }
+
+    public function postDownload($environment = 'production')
+    {
+        $url = route('ota.download.' . $environment) . '?password=' . md5(\Input::get('password'));
+        return \Redirect::to($url);
+    }
+
+    public function deliver($platform, $environment, $version, $type)
+    {
+        // Find the version
+        $version = Ota::wherePlatform($platform)->whereEnvironment($environment)->whereVersion($version)->first();
+
+        if (!$version) {
+            return \App::abort(404);
+        }
+
+        $filePath = $version->filePath($type);
+
+        // Work out the mime type
+        switch($type) {
+            case 'app':
+                $mime = 'application/octet-stream';
+                break;
+            case 'profile':
+            case 'certificate':
+                $mime = 'application/c-x509-ca-cert';
+                break;
+            case 'manifest':
+                $mime = 'text/xml';
+                break;
+            default:
+                return \App::abort(500);
+                break;
+        }
+
+        $responseHeaders = array(
+            'Content-Type' => $mime,
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Description'       => 'File Transfer',
+        );
+
+        if ($platform == 'android') {
+            $responseHeaders['Content-Disposition'] = 'attachment; filename="ignaz.apk"';
+            $responseHeaders['Content-Type'] = 'application/vnd.android.package-archive';
+        }
+
+        if ($platform == 'windows') {
+            if ($type == 'manifest') {
+                $responseHeaders['Content-Disposition'] = 'attachment; filename="ignaz.xap"';
+                $responseHeaders['Content-Type'] = 'application/x-silverlight-app';
+            } else {
+                $responseHeaders['Content-Disposition'] = 'attachment; filename="ignaz.aetx"';
+            }
+        }
+
+        return \Response::make(
+            \File::get($filePath), 200, $responseHeaders
+        );
+    }
 }
