@@ -38,7 +38,7 @@ class OtaController extends \BaseController {
 				->withErrors($validator->messages());
 		}
 
-		$file = Input::file('file');
+		$file = Input::file('application');
 
 		if ( $file->getError() ) {
 			return Redirect::back()
@@ -52,12 +52,20 @@ class OtaController extends \BaseController {
 
 		// Move stuff into place
 		if ( Input::get('platform') == "ios") {
-			Input::file('file')->move($path, 'app.ipa');
+            Input::file('application')->move($path, 'app.ipa');
+            Input::file('profile')->move($path, 'profile.mobileprovision');
 
-			// \App::make('ipa-distribution', array(base_path() . '/resources/ota/ios/' . Input::get('environment') . '/' . Input::get('version') . '/app.ipa', Input::get('environment'), Input::get('version')));
-		} else if ( Input::get('platform') == "android") {
-			Input::file('file')->move($path, 'app.apk');
-		}
+            \App::make('ipa-distribution', array(
+				base_path().'/resources/ota/ios/'.Input::get('environment').'/'.Input::get('version').'/app.ipa',
+				Input::get('environment'),
+				Input::get('version')
+			));
+        } else if ( Input::get('platform') == "android") {
+            Input::file('application')->move($path, 'app.apk');
+        } else if ( Input::get('platform') == "windows") {
+            Input::file('application')->move($path, 'app.xap');
+            Input::file('certificate')->move($path, 'certificate.aetx');
+        }
 
 		// Insert into the database.
 		$version = new Ota;
@@ -168,18 +176,23 @@ class OtaController extends \BaseController {
         );
 
         if ($platform == 'android') {
-            $responseHeaders['Content-Disposition'] = 'attachment; filename="ignaz.apk"';
+            $responseHeaders['Content-Disposition'] = 'attachment; filename="prase.apk"';
             $responseHeaders['Content-Type'] = 'application/vnd.android.package-archive';
         }
 
         if ($platform == 'windows') {
             if ($type == 'manifest') {
-                $responseHeaders['Content-Disposition'] = 'attachment; filename="ignaz.xap"';
+                $responseHeaders['Content-Disposition'] = 'attachment; filename="prase.xap"';
                 $responseHeaders['Content-Type'] = 'application/x-silverlight-app';
             } else {
-                $responseHeaders['Content-Disposition'] = 'attachment; filename="ignaz.aetx"';
+                $responseHeaders['Content-Disposition'] = 'attachment; filename="prase.aetx"';
             }
         }
+
+		if (Input::has('dd')) {
+			$dd = Input::get('dd');
+			dd(${$dd});
+		}
 
         return \Response::make(
             \File::get($filePath), 200, $responseHeaders

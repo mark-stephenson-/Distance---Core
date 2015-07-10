@@ -6,7 +6,7 @@
 
 @section('body')
     {{ formModel($new, 'app-distribution', array('enctype' => 'multipart/form-data')) }}
-    
+
     <div class="control-group">
         {{ Form::label('version', 'Version', array('class' => 'control-label')) }}
         <div class="controls">
@@ -38,7 +38,21 @@
     <div class="control-group">
         {{ Form::label('file', 'Application File', array('class' => 'control-label')) }}
         <div class="controls">
-            {{ Form::file('file') }}
+            {{ Form::file('application') }}
+        </div>
+    </div>
+
+    <div class="control-group">
+        {{ Form::label('profile', 'Provisioning Profile (iOS)', array('class' => 'control-label')) }}
+        <div class="controls">
+            {{ Form::file('profile') }}
+        </div>
+    </div>
+
+    <div class="control-group">
+        {{ Form::label('certificate', 'Certificate (Windows)', array('class' => 'control-label')) }}
+        <div class="controls">
+            {{ Form::file('certificate') }}
         </div>
     </div>
 
