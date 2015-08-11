@@ -11,8 +11,7 @@
       "loic-sharma/profiler":"v1.1.2",
       "imagine/imagine":"v0.5.0",
       "urbanairship/urbanairship":"dev-netsells",
-      "barryvdh/laravel-async-queue":"^0.3.0@dev",
-      "composer/composer": "^1.0@dev"
+      "barryvdh/laravel-async-queue":"0.4.x"
    },
    "repositories":[
       {

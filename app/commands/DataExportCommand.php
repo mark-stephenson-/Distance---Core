@@ -36,6 +36,7 @@ class DataExportCommand extends Command
     protected $collectionId;
 
     protected $records;
+    protected $nodes = [];
 
     /**
      * The data export file.
@@ -55,17 +56,21 @@ class DataExportCommand extends Command
      */
     public function fire($job = null, $data = null)
     {
-        set_time_limit(360);
+        Log::debug('data-export', ['message' => 'Time limit: '.ini_get('max_execution_time')]);
+        set_time_limit(0);
+        Log::debug('data-export', ['message' => 'Time limit: '.ini_get('max_execution_time')]);
 
         $skip = isset($data['skip']) ? ($data['skip'] ?: 0) : 0;
         $take = isset($data['take']) ? ($data['take'] ?: PRRecord::count()) : PRRecord::count();
 
         $this->records = PRRecord::orderBy('created_at', 'desc')->skip($skip)->take($take)->get();
 
+        foreach (Node::get() as $node) {
+            $this->nodes[$node->id] = $node;
+        }
+
         Log::debug('data-export', ['message' => 'Data export has been started.', 'job' => $job]);
         Log::debug('data-export', compact('data'));
-
-        $job->delete();
 
         try {
             $qv = $this->questionnaireView();
@@ -101,7 +106,7 @@ class DataExportCommand extends Command
 
             // Make the zip archive
             $zip = new \ZipArchive();
-            $filename = $data['user'].time();
+            $filename = $data['user-id'].time();
             $zip->open($this->directory.'/'.$filename.'.zip', \ZipArchive::CREATE);
             $zip->addFromString('QuestionnaireView.csv', $this->createCSV($qv));
             $zip->addFromString('EnrolmentLogGood.csv', $this->createCSV($elg));
@@ -113,7 +118,7 @@ class DataExportCommand extends Command
             Log::debug('data-export', ['message' => 'Data export has been zipped.']);
 
             $file = explode('.', $filename)[0];
-            $user = User::find($data['user']);
+            $user = User::find($data['user-id']);
             $name = $user->first_name;
             $link = route('data.export', [$this->appId, $this->collectionId, $file]);
 
@@ -126,11 +131,11 @@ class DataExportCommand extends Command
             Mail::send('emails.data-export.complete', compact('name', 'link'), function ($message) use ($userData) {
                 $name = $userData['first_name'].' '.$userData['last_name'];
                 $subject = 'Your data export is complete!';
-                $message->to($userData['email'], $name)->subject($subject);
+                $message->to('sam@netsells.co.uk', $name)->subject($subject);
             });
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::debug('exception', compact('e'));
-            $user = User::find($data['user']);
+            $user = User::find($data['user-id']);
             $name = $user->first_name;
 
             $userData = [
@@ -141,14 +146,14 @@ class DataExportCommand extends Command
 
             Mail::send('emails.data-export.unsuccessful', compact('name'), function ($message) use ($userData) {
                 $name = $userData['first_name'].' '.$userData['last_name'];
-                $message->to($userData['email'], $name)->subject('Your data export was unsuccessful!');
+                $message->to('sam@netsells.co.uk', $name)->subject('Your data export was unsuccessful!');
             });
 
             $admin = User::where('first_name', 'Core')->where('last_name', 'Admin')->first();
 
             Mail::send('emails.data-export.error', ['user' => serialize($user)], function ($message) use ($admin) {
                 $email = $admin ? $admin->email : 'core.admin+prase@thedistance.co.uk';
-                $message->to($email, 'Core Admin')->subject('NHS Prase Data Export Failed');
+                $message->to('sam@netsells.co.uk', 'Core Admin')->subject('NHS Prase Data Export Failed');
             });
         }
 
@@ -241,7 +246,7 @@ class DataExportCommand extends Command
             $offlineId = "T{$date}{$user}";
             $researcher = $record->user;
 
-            $hospitalNode = Node::find($record->hospital_node_id);
+            $hospitalNode = $this->nodes[$record->hospital_node_id];
             $trustNode = $hospitalNode ? $hospitalNode->trust : null;
 
             $hospital = $hospitalNode ? $hospitalNode->fetchRevision() : null;
@@ -326,14 +331,14 @@ class DataExportCommand extends Command
                     $answerTypes = $answerTypes ? explode(',', $answerTypes) : [];
 
                     foreach ($answerTypes as $answerTypeId) {
-                        $answerTypeNode = Node::find($answerTypeId);
+                        $answerTypeNode = $this->nodes[$answerTypeId];
                         $answerTypeRevision = $answerTypeNode ? $answerTypeNode->fetchRevision() : null;
 
                         $options = $answerTypeRevision ? $answerTypeRevision->options : null;
                         $options = $options ? explode(',', $options) : [];
 
                         foreach ($options as $optionId) {
-                            $optionNode = Node::find($optionId);
+                            $optionNode = $this->nodes[$optionId];
                             $optionRevision = $optionNode ? $optionNode->fetchRevision() : null;
                             $_answerValue = $optionRevision ? $optionRevision->answervalue : null;
 
@@ -400,6 +405,7 @@ class DataExportCommand extends Command
         ];
 
         foreach (PRNote::has('concern', '<', 1)->get() as $i => $note) {
+            Log::debug('data-export', ['message' => 'Concern: '.$i]);
             if ($note->record == null) {
                 continue;
             }
@@ -413,14 +419,18 @@ class DataExportCommand extends Command
             /*
              *  Get hospital revision from note
              */
-            $hospital = $note->hospital ?: Node::find($note->record->hospital_node_id);
+            Log::debug('data-export', compact('note'));
+            $hospital = $note->hospital ?: $this->nodes[$note->record->hospital_node_id];
             $hospital = $hospital ? $hospital->fetchRevision() : null;
+            Log::debug('data-export', ['message' => 'Concern (got hospital revision): '.$i]);
 
             /*
              *  Get trust revision from hospital revision
              */
-            $trust = $hospital ? Node::find($hospital->trust) : null;
+            $trust = $hospital ? $this->nodes[$hospital->trust] : null;
             $trust = $trust ? $trust->fetchRevision() : null;
+
+            Log::debug('data-export', ['message' => 'Concern (got trust revision): '.$i]);
 
             $hospital = $hospital ? $hospital->name : null;
             $trust = $trust ? $trust->name : null;
@@ -440,6 +450,7 @@ class DataExportCommand extends Command
                     }
                 }
             }
+            Log::debug('data-export', ['message' => 'Concern (got ward): '.$i]);
 
             $questionNumber = '';
             $questionText = '';
@@ -447,13 +458,18 @@ class DataExportCommand extends Command
 
             if ($question = $note->question) {
                 $questionNumber = explode(' ', $question->node->title)[1];
-                $questionText = I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
+                $questionText = @I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
             }
+            Log::debug('data-export', ['message' => 'Concern (got question): '.$i]);
 
             $notes[] = [
                 $offlineId, $trust, $hospital, $ward, $questionNumber, $questionText, $incidentReport,
             ];
+
+            Log::debug('data-export', ['message' => 'Finished Concern: '.$i]);
         }
+
+        Log::debug('data-export', ['message' => 'Returning Concerns']);
 
         return $notes;
     }
@@ -475,6 +491,7 @@ class DataExportCommand extends Command
         ];
 
         foreach (PRConcern::all() as $i => $concern) {
+            Log::debug('data-export', ['message' => 'Enroll Concern: '.$i]);
             if ($concern->record == null) {
                 continue;
             }
@@ -484,10 +501,10 @@ class DataExportCommand extends Command
             $offlineId = 'T'.$date.$user;
 
             // check if note is linked to hospital else grab hospital from record
-            $hospital = $concern->hospital ?: Node::find($concern->record->hospital_node_id);
+            $hospital = $concern->hospital ?: $this->nodes[$concern->record->hospital_node_id];
             $hospital = $hospital->fetchRevision();
 
-            $trust = Node::find($hospital->trust)->fetchRevision()->name;
+            $trust = $this->nodes[$hospital->trust]->fetchRevision()->name;
             $hospital = $hospital->name;
             $ward = $concern->ward;
 
@@ -536,17 +553,18 @@ class DataExportCommand extends Command
 
         foreach (PRRecord::first()->questions->sortBy(function ($record) { return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question) {
             foreach (explode(',', $question->node->fetchRevision()->answertypes) as $a => $answerTypeId) {
-                foreach (explode(',', Node::find($answerTypeId)->fetchRevision()->options) as $b => $_optionId) {
+                foreach (explode(',', $this->nodes[$answerTypeId]->fetchRevision()->options) as $b => $_optionId) {
+                    Log::debug('data-export', ['message' => "Key: {$i} {$a} {$b}"]);
                     $questionId = explode(' ', $question->node->title)[1];
                     $questionText = I18nString::whereKey($question->node->fetchRevision()->question)->whereLang('en')->first()->value;
 
-                    $optionId = Node::find($_optionId)->fetchRevision()->answervalue;
-                    /*$text = Node::find($_optionId)->fetchRevision()->text;
-                    if (!I18nString::whereKey(Node::find($_optionId)->fetchRevision()->text)->whereLang('en')->first())
+                    $optionId = $this->nodes[$_optionId]->fetchRevision()->answervalue;
+                    /*$text = $this->nodes[$_optionId]->fetchRevision()->text;
+                    if (!I18nString::whereKey($this->nodes[$_optionId]->fetchRevision()->text)->whereLang('en')->first())
                     {
                         dd(compact('_optionId', 'optionId', 'text'));
                     }*/
-                    $node = Node::find($_optionId);
+                    $node = $this->nodes[$_optionId];
                     $option = $node ? $node->fetchRevision() : null;
                     $textKey = $option ? $option->text : null;
                     $i18nstring = $textKey ? I18nString::whereKey($textKey)->whereLang('en')->first() : null;
@@ -590,6 +608,7 @@ class DataExportCommand extends Command
         return array(
             array('app-id', InputArgument::REQUIRED, 'The app id.'),
             array('collection-id', InputArgument::REQUIRED, 'The collection id.'),
+            array('user-id', InputArgument::REQUIRED, 'The user id.'),
         );
     }
 
