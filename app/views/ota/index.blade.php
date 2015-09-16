@@ -6,7 +6,7 @@
 
 @section('body')
     <h2>Current Versions</h2>
-    
+
     {{ Form::open(array('url' => route('app-distribution.update', array(CORE_APP_ID)))) }}
     <table class="table table-striped">
         <thead>
@@ -19,10 +19,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ @Ota::ios()->production()->current()->first()->build_string ?: '-' }}</td>
-                <td>{{ @Ota::android()->production()->current()->first()->build_string ?: '-' }}</td>
-                <td>{{ @Ota::ios()->testing()->current()->first()->build_string ?: '-' }}</td>
-                <td>{{ @Ota::android()->testing()->current()->first()->build_string ?: '-' }}</td>
+                <td>{{ @Ota::ios()->production()->current()->build_string ?: '-' }}</td>
+                <td>{{ @Ota::android()->production()->current()->build_string ?: '-' }}</td>
+                <td>{{ @Ota::ios()->testing()->current()->build_string ?: '-' }}</td>
+                <td>{{ @Ota::android()->testing()->current()->build_string ?: '-' }}</td>
             </tr>
 
             <tr>
@@ -30,10 +30,10 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    {{ Form::text('', URL::to('ota'), array('class' => 'span10', 'style' => 'text-align: center', 'disabled')) }}
+                    {{ Form::text('', URL::to('ota/download'), array('class' => 'span10', 'style' => 'text-align: center', 'disabled')) }}
                 </td>
                 <td colspan="2">
-                    {{ Form::text('', URL::to('ota/testing'), array('class' => 'span10', 'style' => 'text-align: center', 'disabled')) }}
+                    {{ Form::text('', URL::to('ota/download/testing'), array('class' => 'span10', 'style' => 'text-align: center', 'disabled')) }}
                 </td>
             </tr>
             <tr>
