@@ -35,6 +35,24 @@ return array(
                 ),
             ),
 
+            'Volunteers' => array(
+                'value' => 'cms.volunteers.*',
+                'children' => array(
+                    'Create' => array(
+                        'value' => 'cms.volunteers.create'
+                    ),
+                    'Read' => array(
+                        'value' => 'cms.volunteers.read'
+                    ),
+                    'Update' => array(
+                        'value' => 'cms.volunteers.update'
+                    ),
+                    'Delete' => array(
+                        'value' => 'cms.volunteers.delete'
+                    ),
+                ),
+            ),
+
             'Users' => array(
                 'value' => 'cms.users.*',
                 'children' => array(

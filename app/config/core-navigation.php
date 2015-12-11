@@ -79,6 +79,13 @@ return array(
         'icon'      => 'download',
         'access'    => 'cms.apps.[app-id].collections.[collection-id].data.export',
     ),
+    array(
+        'title'     => 'Manage Volunteers',
+        'route'     => 'volunteers.index',
+        'params'    => array(),
+        'icon'      => 'group',
+        'access'    => 'cms.volunteers.*',
+    ),
 
     /*
         Custom Node Type Navigation Item

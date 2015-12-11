@@ -238,6 +238,41 @@ Route::group(array('before' => array('auth')), function () {
         Route::get('users/delete/{id}', array('as' => 'users.delete', 'uses' => 'UsersController@delete'));
 
         /*
+            Volunteers
+        */
+        Route::group(array('prefix' => 'volunteers'), function() {
+            Route::get('/', array(
+                'as'   => 'volunteers.index',
+                'uses' => 'VolunteersController@index',
+            ));
+
+            Route::get('create', array(
+                'as'   => 'volunteers.create',
+                'uses' => 'VolunteersController@create',
+            ));
+
+            Route::post('create', array(
+                'as'   => 'volunteers.store',
+                'uses' => 'VolunteersController@store',
+            ));
+
+            Route::get('edit/{id}', array(
+                'as'   => 'volunteers.edit',
+                'uses' => 'VolunteersController@edit',
+            ));
+
+            Route::post('edit/{id}', array(
+                'as'   => 'volunteers.update',
+                'uses' => 'VolunteersController@update',
+            ));
+
+            Route::get('delete/{id}', array(
+                'as'   => 'volunteers.delete',
+                'uses' => 'VolunteersController@delete',
+            ));
+        });
+
+        /*
             Groups
          */
         Route::resource('groups', 'GroupsController');

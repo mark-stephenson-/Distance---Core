@@ -4,6 +4,8 @@ class Node extends BaseModel
 {    
     protected $softDelete = true;
     protected $appends = array('node_type_name');
+
+    protected $latestRevision;
     
     public function collection()
     {
@@ -112,6 +114,14 @@ class Node extends BaseModel
     public function revisions($amount = 10)
     {
         return $this->fetchRevision(null, $amount);
+    }
+
+    public function latestRevision() {
+        if (!$this->latestRevision) {
+            $this->latestRevision = $this->fetchRevision();
+        }
+
+        return $this->latestRevision;
     }
 
     public function fetchRevision($revision_id = null, $amount = 1)

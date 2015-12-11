@@ -118,6 +118,15 @@ Route::filter('checkPermissions', function($request)
     ) {
         $property = 'cms.users.update';
     }
+
+    // Same with volunteers
+    if (
+        (starts_with($property, 'cms.volunteers.') and ends_with($property, '.update')) or 
+        (starts_with($property, 'cms.volunteers.') and is_numeric(substr($property, -1, 1)))
+    ) {
+        $property = 'cms.volunteers.update';
+    }
+
     if (
         (str_contains($property, '.catalogues.') and ends_with($property, '.update')) or 
         (str_contains($property, '.catalogues.') and is_numeric(substr($property, -1, 1)))
