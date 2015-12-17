@@ -86,6 +86,13 @@ return array(
         'icon'      => 'group',
         'access'    => 'cms.volunteers.*',
     ),
+    array(
+        'title'     => 'Trusts, Hospitals & Wards',
+        'route'     => 'manage.index',
+        'params'    => array(),
+        'icon'      => 'hospital',
+        'access'    => 'cms.volunteers.*',
+    ),
 
     /*
         Custom Node Type Navigation Item

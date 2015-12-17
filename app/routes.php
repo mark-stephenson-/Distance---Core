@@ -273,6 +273,77 @@ Route::group(array('before' => array('auth')), function () {
         });
 
         /*
+            Manage Trusts, Hospitals & Wards
+        */
+        Route::group(array('prefix' => 'manage'), function() {
+            Route::get('/', array(
+                'as'   => 'manage.index',
+                'uses' => 'ManageController@index',
+            ));
+
+            Route::group(array('prefix' => 'trust'), function() {
+                Route::get('{id}', array(
+                    'as'   => 'manage.trust.index',
+                    'uses' => 'ManageController@trust',
+                ))->where('id', '[0-9]+');
+
+                Route::get('create', array(
+                    'as'   => 'manage.trust.create',
+                    'uses' => 'ManageController@createTrust',
+                ));
+
+                Route::post('create', array(
+                    'as'   => 'manage.trust.store',
+                    'uses' => 'ManageController@storeTrust',
+                ));
+
+                Route::get('{id}/delete', array(
+                    'as'   => 'manage.trust.delete',
+                    'uses' => 'ManageController@deleteTrust',
+                ));
+
+                Route::group(array('prefix' => '{trustId}/hospital'), function() {
+                    Route::get('{hospitalId}', array(
+                        'as'   => 'manage.hospital.index',
+                        'uses' => 'ManageController@hospital',
+                    ))->where('hospitalId', '[0-9]+');
+
+                    Route::get('create', array(
+                        'as'   => 'manage.hospital.create',
+                        'uses' => 'ManageController@createHospital',
+                    ));
+
+                    Route::post('create', array(
+                        'as'   => 'manage.hospital.store',
+                        'uses' => 'ManageController@storeHospital',
+                    ));
+
+                    Route::get('{hospitalId}/delete', array(
+                        'as'   => 'manage.hospital.delete',
+                        'uses' => 'ManageController@deleteHospital',
+                    ));
+
+                    Route::group(array('prefix' => '{hospitalId}/ward'), function() {
+                        Route::get('create', array(
+                            'as'   => 'manage.ward.create',
+                            'uses' => 'ManageController@createWard',
+                        ));
+
+                        Route::post('create', array(
+                            'as'   => 'manage.ward.store',
+                            'uses' => 'ManageController@storeWard',
+                        ));
+
+                        Route::get('{wardId}/delete', array(
+                            'as'   => 'manage.ward.delete',
+                            'uses' => 'ManageController@deleteWard',
+                        ));
+                    });
+                });
+            });
+        });
+
+        /*
             Groups
          */
         Route::resource('groups', 'GroupsController');
