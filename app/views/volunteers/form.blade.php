@@ -5,15 +5,20 @@
         $ward = Node::find($wardId);
     }
 
+    if ($volunteer->exists and $trustId = $volunteer->latestRevision()->trust) {
+        $trust = Node::find($trustId);
+    }
+
     if ($volunteer->exists) {
         $volunteerData = $volunteer->latestRevision();
     } else {
-        $volunteerData = new \stdClass;
+        $volunteerData = new \stdClass();
         $volunteerData->username = null;
         $volunteerData->password = null;
         $volunteerData->firstname = null;
         $volunteerData->lastname = null;
         $volunteerData->ward = null;
+        $volunteerData->trust = null;
     }
 ?>
 
@@ -72,6 +77,13 @@
                     {{ Form::hidden('ward', null, array('id' => 'input_ward')) }}
                 </div>
             </div>
+
+            <div class="control-group">
+                {{ Form::label('trust', 'Trust', array('class' => 'control-label')) }}
+                <div class="controls">
+                    {{ Form::hidden('trust', null, array('id' => 'input_trust')) }}
+                </div>
+            </div>
             
 
         </div>
@@ -118,6 +130,37 @@ var ward_preload_data = [];
         });
 
         $('#input_ward').select2('data', ward_preload_data);
+
+    });
+
+    var trust_preload_data = [];
+@if ($volunteerData->trust)
+    trust_preload_data.push({ 'id': {{ $volunteer->latestRevision()->trust }}, 'text': "{{ $trust->title }}" });
+@endif
+
+    $(document).ready(function() {
+
+        $('#input_trust').select2({
+
+            placeholder: "Start Typing To Search",
+            minimumInputLength: 2,
+            maximumSelectionSize: 1,
+            multiple:true,
+            ajax: {
+                url: '{{ route('nodes.lookup', array(CORE_APP_ID, CORE_COLLECTION_ID)) }}?type=2',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        q: term
+                    }
+                },
+                results: function (data, page) {
+                    return data;
+                }
+            }
+        });
+
+        $('#input_trust').select2('data', trust_preload_data);
 
     });
 </script>
