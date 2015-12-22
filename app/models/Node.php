@@ -1,12 +1,12 @@
 <?php
 
 class Node extends BaseModel
-{    
+{
     protected $softDelete = true;
     protected $appends = array('node_type_name');
 
     protected $latestRevision;
-    
+
     public function collection()
     {
         return $this->belongsTo('Collection');
@@ -21,7 +21,7 @@ class Node extends BaseModel
     {
         return $this->belongsTo('NodeType', 'node_type');
     }
-    
+
     public function getNodeTypeNameAttribute()
     {
         return $this->nodetype->name;
@@ -29,7 +29,7 @@ class Node extends BaseModel
 
     public function getStatusBadgeAttribute()
     {
-        switch($this->getAttribute('status')) {
+        switch ($this->getAttribute('status')) {
             case 'published':
                 $badge = 'success';
                 break;
@@ -41,7 +41,7 @@ class Node extends BaseModel
                 break;
         }
 
-        return '<span class="label label-' . $badge . '">' . ucfirst($this->getAttribute('status')) . '</span>';
+        return '<span class="label label-'.$badge.'">'.ucfirst($this->getAttribute('status')).'</span>';
     }
 
     public function potentialOwners()
@@ -49,7 +49,7 @@ class Node extends BaseModel
         $user = Sentry::getUser();
 
         return array(
-            $user->id => $user->fullName
+            $user->id => $user->fullName,
         );
     }
 
@@ -60,12 +60,12 @@ class Node extends BaseModel
 
     public function createDraft($data)
     {
-        return DB::table( $this->nodeTypeTableName() )->insertGetId($data);
+        return DB::table($this->nodeTypeTableName())->insertGetId($data);
     }
 
     public function updateDraft($data, $revisionId)
     {
-        return DB::table( $this->nodeTypeTableName() )->whereId($revisionId)->update($data);
+        return DB::table($this->nodeTypeTableName())->whereId($revisionId)->update($data);
     }
 
     public function markAsPublished($revisionId)
@@ -73,13 +73,13 @@ class Node extends BaseModel
         // There will only a maximum of one published node, set it as retired
         // we don't check the success of this, as it could return 0 which would
         // end up as false
-        DB::table( $this->nodeTypeTableName() )
+        DB::table($this->nodeTypeTableName())
             ->where('status', '=', 'published')
             ->where('node_id', '=', $this->getAttribute('id'))
             ->update(array('status' => 'retired'));
 
         // And mark the new one as published
-        $publishUpdate = DB::table( $this->nodeTypeTableName() )
+        $publishUpdate = DB::table($this->nodeTypeTableName())
                             ->where('id', '=', $revisionId)
                             ->where('node_id', '=', $this->getAttribute('id'))
                             ->update(array('status' => 'published'));
@@ -92,7 +92,7 @@ class Node extends BaseModel
 
         $nodeUpdate = $this->save();
 
-        return ($publishUpdate and $nodeUpdate);
+        return $publishUpdate and $nodeUpdate;
     }
 
     public function markAsRetired($revisionId)
@@ -108,7 +108,7 @@ class Node extends BaseModel
 
         $nodeUpdate = $this->save();
 
-        return ($retireUpdate and $nodeUpdate);
+        return $retireUpdate and $nodeUpdate;
     }
 
     public function revisions($amount = 10)
@@ -116,7 +116,8 @@ class Node extends BaseModel
         return $this->fetchRevision(null, $amount);
     }
 
-    public function latestRevision() {
+    public function latestRevision()
+    {
         if (!$this->latestRevision) {
             $this->latestRevision = $this->fetchRevision();
         }
@@ -126,13 +127,13 @@ class Node extends BaseModel
 
     public function fetchRevision($revision_id = null, $amount = 1)
     {
-        $revision = DB::table( $this->nodeTypeTableName() )
+        $revision = DB::table($this->nodeTypeTableName())
                         ->orderBy('updated_at', 'desc')
                         ->where('node_id', '=', $this->getAttribute('id'))
-                        ->select(array($this->nodeTypeTableName() . '.*'));
+                        ->select(array($this->nodeTypeTableName().'.*'));
 
         if (is_numeric($revision_id)) {
-            $revision->where($this->nodeTypeTableName() . '.id', '=', $revision_id);
+            $revision->where($this->nodeTypeTableName().'.id', '=', $revision_id);
         }
 
         if (is_int($amount)) {
@@ -148,11 +149,15 @@ class Node extends BaseModel
         }
 
         if (is_array($return)) {
-            foreach($return as &$ret) {
+            foreach ($return as &$ret) {
                 $ret->user = Sentry::getUserProvider()->findById($ret->updated_by);
             }
         } else {
-            $return->user = Sentry::getUserProvider()->findById($return->updated_by);
+            try {
+                $return->user = Sentry::getUserProvider()->findById($return->updated_by);
+            } catch (\Exception $e) {
+                dd($this->id);
+            }
         }
 
         return $return;
@@ -162,5 +167,4 @@ class Node extends BaseModel
     {
         $query->whereStatus('published');
     }
-
 }

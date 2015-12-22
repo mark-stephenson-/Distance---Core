@@ -171,6 +171,9 @@ Route::group(array('before' => array('auth')), function () {
                 Route::any('nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
                 Route::any('nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
 
+                Route::get('questions/create-revision/{nodeId}/{revisionId}/{branchId?}', array('as' => 'questions.create-revision', 'uses' => 'QuestionsController@createRevision'));
+                Route::get('questions/publish-revision/{nodeId}/{revisionId}/{branchId?}', array('as' => 'questions.publish-revision', 'uses' => 'QuestionsController@publishRevision'));
+
                 /*
                     Hierarchy Actions
                  */
@@ -240,34 +243,34 @@ Route::group(array('before' => array('auth')), function () {
         /*
             Volunteers
         */
-        Route::group(array('prefix' => 'volunteers'), function() {
+        Route::group(array('prefix' => 'volunteers'), function () {
             Route::get('/', array(
-                'as'   => 'volunteers.index',
+                'as' => 'volunteers.index',
                 'uses' => 'VolunteersController@index',
             ));
 
             Route::get('create', array(
-                'as'   => 'volunteers.create',
+                'as' => 'volunteers.create',
                 'uses' => 'VolunteersController@create',
             ));
 
             Route::post('create', array(
-                'as'   => 'volunteers.store',
+                'as' => 'volunteers.store',
                 'uses' => 'VolunteersController@store',
             ));
 
             Route::get('edit/{id}', array(
-                'as'   => 'volunteers.edit',
+                'as' => 'volunteers.edit',
                 'uses' => 'VolunteersController@edit',
             ));
 
             Route::post('edit/{id}', array(
-                'as'   => 'volunteers.update',
+                'as' => 'volunteers.update',
                 'uses' => 'VolunteersController@update',
             ));
 
             Route::get('delete/{id}', array(
-                'as'   => 'volunteers.delete',
+                'as' => 'volunteers.delete',
                 'uses' => 'VolunteersController@delete',
             ));
         });
@@ -275,67 +278,67 @@ Route::group(array('before' => array('auth')), function () {
         /*
             Manage Trusts, Hospitals & Wards
         */
-        Route::group(array('prefix' => 'manage'), function() {
+        Route::group(array('prefix' => 'manage'), function () {
             Route::get('/', array(
-                'as'   => 'manage.index',
+                'as' => 'manage.index',
                 'uses' => 'ManageController@index',
             ));
 
-            Route::group(array('prefix' => 'trust'), function() {
+            Route::group(array('prefix' => 'trust'), function () {
                 Route::get('{id}', array(
-                    'as'   => 'manage.trust.index',
+                    'as' => 'manage.trust.index',
                     'uses' => 'ManageController@trust',
                 ))->where('id', '[0-9]+');
 
                 Route::get('create', array(
-                    'as'   => 'manage.trust.create',
+                    'as' => 'manage.trust.create',
                     'uses' => 'ManageController@createTrust',
                 ));
 
                 Route::post('create', array(
-                    'as'   => 'manage.trust.store',
+                    'as' => 'manage.trust.store',
                     'uses' => 'ManageController@storeTrust',
                 ));
 
                 Route::get('{id}/delete', array(
-                    'as'   => 'manage.trust.delete',
+                    'as' => 'manage.trust.delete',
                     'uses' => 'ManageController@deleteTrust',
                 ));
 
-                Route::group(array('prefix' => '{trustId}/hospital'), function() {
+                Route::group(array('prefix' => '{trustId}/hospital'), function () {
                     Route::get('{hospitalId}', array(
-                        'as'   => 'manage.hospital.index',
+                        'as' => 'manage.hospital.index',
                         'uses' => 'ManageController@hospital',
                     ))->where('hospitalId', '[0-9]+');
 
                     Route::get('create', array(
-                        'as'   => 'manage.hospital.create',
+                        'as' => 'manage.hospital.create',
                         'uses' => 'ManageController@createHospital',
                     ));
 
                     Route::post('create', array(
-                        'as'   => 'manage.hospital.store',
+                        'as' => 'manage.hospital.store',
                         'uses' => 'ManageController@storeHospital',
                     ));
 
                     Route::get('{hospitalId}/delete', array(
-                        'as'   => 'manage.hospital.delete',
+                        'as' => 'manage.hospital.delete',
                         'uses' => 'ManageController@deleteHospital',
                     ));
 
-                    Route::group(array('prefix' => '{hospitalId}/ward'), function() {
+                    Route::group(array('prefix' => '{hospitalId}/ward'), function () {
                         Route::get('create', array(
-                            'as'   => 'manage.ward.create',
+                            'as' => 'manage.ward.create',
                             'uses' => 'ManageController@createWard',
                         ));
 
                         Route::post('create', array(
-                            'as'   => 'manage.ward.store',
+                            'as' => 'manage.ward.store',
                             'uses' => 'ManageController@storeWard',
                         ));
 
                         Route::get('{wardId}/delete', array(
-                            'as'   => 'manage.ward.delete',
+                            'as' => 'manage.ward.delete',
                             'uses' => 'ManageController@deleteWard',
                         ));
                     });

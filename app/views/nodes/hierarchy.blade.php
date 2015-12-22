@@ -103,10 +103,49 @@
             window.location = url;
 
         });
+
+        var publishQuestionSetConfirmUrl = '';
+
+        $('.open-publish-question-set-modal').on('click', function(e) {
+            e.preventDefault();
+
+            publishQuestionSetConfirmUrl = $(e.currentTarget).attr('href');
+
+            $('#publishQuestionSetModal').modal('show');
+        });
+
+        $('#publishQuestionSetConfirm').on('click', function(e) {
+
+            e.preventDefault();
+
+            window.location = publishQuestionSetConfirmUrl;
+
+        });
     </script>
 @stop
 
 @section('body')
+
+     <div class="modal hide fade" id="publishQuestionSetModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Are you sure?</h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to publish this question set?</p>
+            <div class="well">
+                <p><strong>This will also&hellip;</strong></p>
+                <ul>
+                    <li>Retire the current published question set and all of it's questions.</li>
+                    <li>Prevent users from answering the old question set on the app.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn">Close</a>
+            <a href="#" class="btn btn-primary" id="publishQuestionSetConfirm">Yes, I'm Sure</a>
+        </div>
+    </div>
 
     <div class="btn-group pull-right">
         <a href="{{ route('nodes.list', array($collection->application_id, $collection->id)) }}" class="btn"><i class="icon-list"></i> Node List</a>
@@ -129,12 +168,13 @@
                             @endif
 
                             @if ( Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.update'))
-                                <a href="{{ route('nodes.edit', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
-                            @endif
-                                
-                            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.hierarchy-management'))
-                                <a href="#" rel="tooltip" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
-                                <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini open-remove-link-modal"><i class="icon-unlink"></i></a>
+                                @if ($branch->node->status != 'published')
+                                    <a href="{{ route('nodes.edit', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
+                                    <a href="{{ route('questions.publish-revision', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini open-publish-question-set-modal">Publish Revision</a>
+                                @else
+                                    <a href="{{ route('questions.create-revision', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini">Create Revision</a>
+                                @endif
+
                             @endif
                         </div>
                     </div>
