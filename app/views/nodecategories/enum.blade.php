@@ -2,7 +2,7 @@
 
     // We need to do a bit of formatting on the dropdowns so the enum var is returned, not the array key
     $enum_values = array();
-    foreach($column->values as $key => $value) {
+    foreach ($column->values as $key => $value) {
         $enum_values[$value] = $value;
     }
 

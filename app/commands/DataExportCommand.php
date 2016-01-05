@@ -342,7 +342,7 @@ class DataExportCommand extends Command
                             $_answerValue = $optionRevision ? $optionRevision->answervalue : null;
 
                             if ($_answerValue > 0) {
-                                $count++;
+                                ++$count;
                             }
                         }
                     }
@@ -570,8 +570,8 @@ class DataExportCommand extends Command
                     $optionText = $i18nstring ? $i18nstring->value : null;
 
                     $key[] = [
-                        $questionId,//$a == 0 & $b == 0 ? $questionId : '',
-                        $questionText,//$a == 0 & $b == 0 ? $questionText : '',
+                        $questionId, //$a == 0 & $b == 0 ? $questionId : '',
+                        $questionText, //$a == 0 & $b == 0 ? $questionText : '',
                         $optionId,
                         $optionText,
                     ];

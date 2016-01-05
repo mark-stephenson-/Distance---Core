@@ -117,7 +117,6 @@ return array(
         'Cartalyst\Sentry\SentryServiceProvider',
         'Cartalyst\NestedSets\NestedSetsServiceProvider',
         'Profiler\ProfilerServiceProvider',
-        'Barryvdh\Queue\AsyncServiceProvider',
 
         'Core\Providers\CoreServiceProvider',
 
