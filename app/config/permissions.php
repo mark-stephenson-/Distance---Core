@@ -53,20 +53,11 @@ return array(
                 ),
             ),
 
-            'Manage Trusts' => array(
+            'Manage Trusts, Hospitals and Wards' => array(
                 'value' => 'cms.manage-trust.*',
                 'children' => array(
-                    'Create' => array(
-                        'value' => 'cms.volunteers.create',
-                    ),
-                    'Read' => array(
-                        'value' => 'cms.volunteers.read',
-                    ),
-                    'Update' => array(
-                        'value' => 'cms.volunteers.update',
-                    ),
-                    'Delete' => array(
-                        'value' => 'cms.volunteers.delete',
+                    'Manage' => array(
+                        'value' => 'cms.manage-trust.manage',
                     ),
                 ),
             ),

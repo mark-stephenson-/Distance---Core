@@ -289,7 +289,7 @@ Route::group(array('before' => array('auth')), function () {
         /*
             Manage Trusts, Hospitals & Wards
         */
-        Route::group(array('prefix' => 'manage'), function () {
+        Route::group(array('prefix' => 'manage-trust'), function () {
             Route::get('/', array(
                 'as' => 'manage.index',
                 'uses' => 'ManageController@index',

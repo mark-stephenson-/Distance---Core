@@ -11,20 +11,16 @@
 |
 */
 
-App::before(function($request)
-{
-    if (App::environment('production'))
-    {
+App::before(function ($request) {
+    if (App::environment('production')) {
         Request::setTrustedProxies([
-            '172.27.30.240'
+            '172.27.30.240',
         ]);
     }
 });
 
-
-App::after(function($request, $response)
-{
-	//
+App::after(function ($request, $response) {
+    //
 });
 
 /*
@@ -38,64 +34,62 @@ App::after(function($request, $response)
 |
 */
 
-Route::filter('auth', function()
-{
-	if (Auth::guest()) return Redirect::guest('login');
+Route::filter('auth', function () {
+    if (Auth::guest()) {
+        return Redirect::guest('login');
+    }
 });
 
-
-Route::filter('auth.basic', function()
-{
-	return Auth::basic();
+Route::filter('auth.basic', function () {
+    return Auth::basic();
 });
 
-Route::filter('apiAuthentication', function()
-{
-    if ( Request::header('User-Token') ) {
-        $user = User::whereKey( Request::header('User-Token') )->first();
+Route::filter('apiAuthentication', function () {
+    if (Request::header('User-Token')) {
+        $user = User::whereKey(Request::header('User-Token'))->first();
 
-        if ( ! $user ) {
+        if (!$user) {
             return Response::make('User Token Invalid.', 403);
         }
 
-        App::singleton('user', function() use ($user) {
+        App::singleton('user', function () use ($user) {
             return Sentry::getUserProvider()->findById($user->id);
         });
     }
 
-    if ( Request::header('Collection-Token') ) {
-        $collection = Collection::whereApiKey( Request::header('Collection-Token'))->first();
+    if (Request::header('Collection-Token')) {
+        $collection = Collection::whereApiKey(Request::header('Collection-Token'))->first();
 
-        if ( ! $collection ) {
+        if (!$collection) {
             return Response::make('Collection Token Invalid.', 403);
         }
 
-        App::singleton('collection', function() use ($collection) {
+        App::singleton('collection', function () use ($collection) {
             return $collection;
         });
     }
 
-    if ( ! isset($_SERVER['PHP_AUTH_USER']) ) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
         header('WWW-Authenticate: Basic realm="Authorization"');
         header('HTTP/1.0 401 Unauthorized');
+
         return Response::make('Authorization Token Invalid.', 403);
         exit;
     } else {
-        $authorization = Application::whereApiKey( $_SERVER['PHP_AUTH_USER'])->first();
+        $authorization = Application::whereApiKey($_SERVER['PHP_AUTH_USER'])->first();
 
-        if ( ! $authorization ) {
+        if (!$authorization) {
             return Response::make('Authorization Token Invalid.', 403);
         }
 
-        App::singleton('app', function() use ($authorization) {
+        App::singleton('app', function () use ($authorization) {
             return $authorization;
         });
     }
 
 });
 
-Route::filter('checkPermissions', function($request)
-{
+Route::filter('checkPermissions', function ($request) {
     $additionalProperties = array();
 
     $replacements = array(
@@ -106,14 +100,13 @@ Route::filter('checkPermissions', function($request)
         'resources' => 'catalogues',
     );
 
-    $property = 'cms.' . implode('.', Request::segments());
-
+    $property = 'cms.'.implode('.', Request::segments());
 
     $property = str_replace(array_keys($replacements), array_values($replacements), $property);
 
     // Editing a user gives the user ID, let's detect and avoid that
     if (
-        (starts_with($property, 'cms.users.') and ends_with($property, '.update')) or 
+        (starts_with($property, 'cms.users.') and ends_with($property, '.update')) or
         (starts_with($property, 'cms.users.') and is_numeric(substr($property, -1, 1)))
     ) {
         $property = 'cms.users.update';
@@ -121,18 +114,24 @@ Route::filter('checkPermissions', function($request)
 
     // Same with volunteers
     if (
-        (starts_with($property, 'cms.volunteers.') and ends_with($property, '.update')) or 
+        (starts_with($property, 'cms.volunteers.') and ends_with($property, '.update')) or
         (starts_with($property, 'cms.volunteers.') and is_numeric(substr($property, -1, 1)))
     ) {
         $property = 'cms.volunteers.update';
     }
 
     if (
-        (str_contains($property, '.catalogues.') and ends_with($property, '.update')) or 
+        (starts_with($property, 'cms.manage-trust'))
+    ) {
+        $property = 'cms.manage-trust.manage';
+    }
+
+    if (
+        (str_contains($property, '.catalogues.') and ends_with($property, '.update')) or
         (str_contains($property, '.catalogues.') and is_numeric(substr($property, -1, 1)))
     ) {
         $nodesPos = strpos($property, '.catalogues.');
-        $property = substr($property, 0, $nodesPos) . '.catalogues.update';
+        $property = substr($property, 0, $nodesPos).'.catalogues.update';
     }
 
     if ($nodesPos = strpos($property, '.nodes')) {
@@ -140,10 +139,10 @@ Route::filter('checkPermissions', function($request)
     }
 
     if ($collectionsPos = strpos($property, '.collections')) {
-        $additionalProperties[] = substr($property, 0, $collectionsPos) . '.collection-management';
+        $additionalProperties[] = substr($property, 0, $collectionsPos).'.collection-management';
     }
 
-    $properties = array_merge($additionalProperties, array($property, $property . '.*'));
+    $properties = array_merge($additionalProperties, array($property, $property.'.*'));
 
     if (!Sentry::getUser()->hasAnyAccess($properties)) {
         App::abort(403);
@@ -161,9 +160,10 @@ Route::filter('checkPermissions', function($request)
 |
 */
 
-Route::filter('guest', function()
-{
-	if (Auth::check()) return Redirect::to('/');
+Route::filter('guest', function () {
+    if (Auth::check()) {
+        return Redirect::to('/');
+    }
 });
 
 /*
@@ -177,10 +177,8 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
-{
-	if (Session::token() != Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
+Route::filter('csrf', function () {
+    if (Session::token() != Input::get('_token')) {
+        throw new Illuminate\Session\TokenMismatchException();
+    }
 });
