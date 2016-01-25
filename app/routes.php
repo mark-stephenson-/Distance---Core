@@ -202,6 +202,16 @@ Route::group(array('before' => array('auth')), function () {
                 Route::post('resources/process/{catalogueId}/{language?}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
 
                 Route::get('data/export/{filename?}', ['as' => 'data.export', function ($appId, $collectionId, $filename = null) {
+
+                    $questionSets = Node::where('node_type', 7)
+                        ->orderBy('status')
+                        ->orderBy('published_at')
+                        ->get();
+
+                    return View::make('data-export.choose', compact('questionSets'));
+                }]);
+
+                Route::post('data/export/{filename?}', ['as' => 'data.export.work', function ($appId, $collectionId, $filename = null) {
                     if ($filename) {
                         $path = '/exports/'.$collectionId.'/'.$filename.'.zip';
                         if (file_exists(storage_path().$path)) {
@@ -215,10 +225,11 @@ Route::group(array('before' => array('auth')), function () {
                         return View::make('data-export.empty');
                     }
 
-                    Queue::push('DataExportCommand', [
+                    Artisan::call('core:data-export', [
                         'app-id' => $appId,
                         'collection-id' => $collectionId,
                         'user' => Sentry::getUser()->id,
+                        'question_set' => Input::get('question_set'),
                         'take' => Input::get('take'),
                         'skip' => Input::get('skip'),
                     ]);

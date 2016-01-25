@@ -11,7 +11,7 @@
 |
 */
 
-$app = new Illuminate\Foundation\Application;
+$app = new Illuminate\Foundation\Application();
 
 $app->redirectIfTrailingSlash();
 
@@ -26,14 +26,21 @@ $app->redirectIfTrailingSlash();
 |
 */
 
-$env = $app->detectEnvironment(array(
+$dotenv = new Dotenv\Dotenv(__DIR__.'/../');
+$dotenv->load();
 
-	'local' => array('localhost', 'homestead'),
-    'development' => array('*.dev'),
-    'staging' => array('staging.thedistance.co.uk','staging'),
-    'production' => array('*'),
+function env($key, $fallback = null)
+{
+    if (is_null(getenv($key))) {
+        return $fallback;
+    }
 
-));
+    return getenv($key);
+}
+
+$env = $app->detectEnvironment(function () {
+    return getenv('APP_ENV');
+});
 
 /*
 |--------------------------------------------------------------------------

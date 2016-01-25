@@ -73,13 +73,6 @@ return array(
         'access' => 'cms.apps.[app-id].collections.[collection-id].catalogues.*',
     ),
     array(
-        'title' => 'Data Export',
-        'route' => 'data.export',
-        'params' => array('[app-id]', '[collection-id]'),
-        'icon' => 'download',
-        'access' => 'cms.apps.[app-id].collections.[collection-id].data.export',
-    ),
-    array(
         'title' => 'Manage Volunteers',
         'route' => 'volunteers.index',
         'params' => array(),
@@ -91,7 +84,14 @@ return array(
         'route' => 'manage.index',
         'params' => array(),
         'icon' => 'hospital',
-        'access' => 'cms.volunteers.*',
+        'access' => 'cms.manage-trust.*',
+    ),
+    array(
+        'title' => 'Data Export',
+        'route' => 'data.export',
+        'params' => array('[app-id]', '[collection-id]'),
+        'icon' => 'download',
+        'access' => 'cms.apps.[app-id].collections.[collection-id].data.export',
     ),
 
     /*

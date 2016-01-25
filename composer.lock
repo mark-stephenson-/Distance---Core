@@ -4,9 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3740be4a007ceb6f89e79704a1d58855",
-    "content-hash": "c67325a9238dc27da1532d0bfa2260aa",
+    "hash": "33b05b4d35367e53fac09764f30b105b",
+    "content-hash": "305c442e0f13941179d3090a52df75a5",
     "packages": [
+        {
+            "name": "barryvdh/laravel-async-queue",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/laravel-async-queue.git",
+                "reference": "a1d7ed9cd2a00caf3099e8e6e5e327b36782ed2d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/laravel-async-queue/zipball/b790f17262734fcb9a648c3c18284e25a3460ca7",
+                "reference": "a1d7ed9cd2a00caf3099e8e6e5e327b36782ed2d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "4.x",
+                "illuminate/support": "4.x",
+                "php": ">=5.3.0",
+                "symfony/process": "~2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/migrations"
+                ],
+                "psr-4": {
+                    "Barryvdh\\Queue\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Async Queue Driver for Laravel (Push to background)",
+            "keywords": [
+                "async",
+                "background",
+                "laravel",
+                "queue"
+            ],
+            "time": "2015-02-18 13:14:48"
+        },
         {
             "name": "cartalyst/nested-sets",
             "version": "dev-master",
@@ -301,26 +354,26 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "dev-master",
+            "version": "1.6.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "fb8eaa0b612b543d10f09df8eb16b47dd976e97a"
+                "reference": "9422bfd2ca11dc1ba60981ed4529488a757f7111"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/fb8eaa0b612b543d10f09df8eb16b47dd976e97a",
-                "reference": "fb8eaa0b612b543d10f09df8eb16b47dd976e97a",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/9422bfd2ca11dc1ba60981ed4529488a757f7111",
+                "reference": "9422bfd2ca11dc1ba60981ed4529488a757f7111",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "~5.5|~7.0"
             },
             "conflict": {
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=3.7",
+                "phpunit/phpunit": "~4.8|~5.0",
                 "predis/predis": "~1.0",
                 "satooshi/php-coveralls": "~0.6"
             },
@@ -367,7 +420,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-12-10 07:11:12"
+            "time": "2015-12-31 16:38:15"
         },
         {
             "name": "doctrine/collections",
@@ -441,12 +494,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "6065c0756da7dc286b8221107ade4c70298b1eba"
+                "reference": "773c56e51fc26ae07a47146fae31b320dd6cada3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/6065c0756da7dc286b8221107ade4c70298b1eba",
-                "reference": "6065c0756da7dc286b8221107ade4c70298b1eba",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/773c56e51fc26ae07a47146fae31b320dd6cada3",
+                "reference": "773c56e51fc26ae07a47146fae31b320dd6cada3",
                 "shasum": ""
             },
             "require": {
@@ -506,7 +559,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2015-12-04 13:08:02"
+            "time": "2015-12-26 08:54:38"
         },
         {
             "name": "doctrine/dbal",
@@ -518,7 +571,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/4845507add849eea92e88f38882d826301e22cfb",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/f5b85d182799c539d1a56aa145977aa2c43dfe1a",
                 "reference": "4845507add849eea92e88f38882d826301e22cfb",
                 "shasum": ""
             },
@@ -1354,7 +1407,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/9e45edca52cc9c954680072c93e621f8b71fab26",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d8e60a5619fff77f9669da8997697443ef1a1d7e",
                 "reference": "9e45edca52cc9c954680072c93e621f8b71fab26",
                 "shasum": ""
             },
@@ -1452,7 +1505,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/65576a393a8372e68ffe57706c1c9eb93e2aac98",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/f165792613c463993c82fd3f1370e1849117eea8",
                 "reference": "65576a393a8372e68ffe57706c1c9eb93e2aac98",
                 "shasum": ""
             },
@@ -1510,7 +1563,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/5e1d07e22db52d2e7c655f107d2de8c42a766ab1",
+                "url": "https://api.github.com/repos/symfony/console/zipball/9a51db67180f37586553f204f85436761921d7ca",
                 "reference": "5e1d07e22db52d2e7c655f107d2de8c42a766ab1",
                 "shasum": ""
             },
@@ -1566,7 +1619,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/21e27bd0cddcc99e4e5faebe92a0befce958d1e8",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/1c05c09deda6ab4d3b0bbac35061102e3b828651",
                 "reference": "21e27bd0cddcc99e4e5faebe92a0befce958d1e8",
                 "shasum": ""
             },
@@ -1620,7 +1673,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/c0f543d3c40f5b885a68bc87ef1f2f8aec8e0424",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/7cca5bb1b10a6302f9f424631f841f7fa19c4798",
                 "reference": "c0f543d3c40f5b885a68bc87ef1f2f8aec8e0424",
                 "shasum": ""
             },
@@ -1682,7 +1735,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/be39e9bc2a3ae45a876174e8a2c49e263541a754",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/ef08dfdb72b6360ccebafa6cc82954fb37640abb",
                 "reference": "be39e9bc2a3ae45a876174e8a2c49e263541a754",
                 "shasum": ""
             },
@@ -1738,7 +1791,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/08564581a8444035d0874efc35a6366be8c0af9e",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/03bb35f85a3eafa91cbce7350fa581c6b49c77f9",
                 "reference": "08564581a8444035d0874efc35a6366be8c0af9e",
                 "shasum": ""
             },
@@ -1794,7 +1847,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/40ce10a959a67ec1db818ee3947ec474036eeb43",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/6f97e4907cf03a9dac5475bf3426d5ffbb4069d7",
                 "reference": "40ce10a959a67ec1db818ee3947ec474036eeb43",
                 "shasum": ""
             },
@@ -1844,7 +1897,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/7fc286d733c3efbd71ed02e984554f2a25c3ea44",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/c2a53402e6afba33e4f77e7814b04e4e9ff748d3",
                 "reference": "7fc286d733c3efbd71ed02e984554f2a25c3ea44",
                 "shasum": ""
             },
@@ -1894,7 +1947,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/f1fee730fa99840c883333b783854942c1474d5a",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/4f2847843978a72a86f3c830c55ca9f0dfcb6d0c",
                 "reference": "f1fee730fa99840c883333b783854942c1474d5a",
                 "shasum": ""
             },
@@ -1947,7 +2000,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/4921ae1e0f6564d74cf686500b488fafeedda524",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/17ba0afa16b840992eef981e668a6db41bb3c243",
                 "reference": "4921ae1e0f6564d74cf686500b488fafeedda524",
                 "shasum": ""
             },
@@ -2023,7 +2076,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/03c103b452881e75e7cf2cb2373729207cedd77e",
+                "url": "https://api.github.com/repos/symfony/process/zipball/e38c659e579aa58c3529f7aad33c226b2984d581",
                 "reference": "03c103b452881e75e7cf2cb2373729207cedd77e",
                 "shasum": ""
             },
@@ -2073,7 +2126,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/4ccb4fc5b93187cdac5cdb3a2cd4425933802593",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/f166ba88d1f31daa47750b5d14d94443e2094c17",
                 "reference": "4ccb4fc5b93187cdac5cdb3a2cd4425933802593",
                 "shasum": ""
             },
@@ -2135,7 +2188,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/08cb7fb6f879ec26898e6563d43186155d2a0afc",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/ec10189bd9968b29bac9acb819f0d9cc3f753e03",
                 "reference": "08cb7fb6f879ec26898e6563d43186155d2a0afc",
                 "shasum": ""
             },
@@ -2232,6 +2285,57 @@
                 "source": "https://github.com/netsells/php-library2/tree/netsells"
             },
             "time": "2013-10-03 11:19:38"
+        },
+        {
+            "name": "vlucas/phpdotenv",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/phpdotenv.git",
+                "reference": "827febb0f15fd781cba52662700eef244d903f1f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/827febb0f15fd781cba52662700eef244d903f1f",
+                "reference": "827febb0f15fd781cba52662700eef244d903f1f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dotenv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "http://www.vancelucas.com"
+                }
+            ],
+            "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+            "homepage": "http://github.com/vlucas/phpdotenv",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2016-01-17 17:25:37"
         }
     ],
     "packages-dev": [],

@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    
+
     'CMS Global Permissions' => array(
         'value' => 'cms.*',
         'children' => array(
@@ -10,7 +10,7 @@ return array(
                 'value' => 'cms.generic.*',
                 'children' => array(
                     'Can Login' => array(
-                        'value' => 'cms.generic.login'
+                        'value' => 'cms.generic.login',
                     ),
                 ),
             ),
@@ -18,18 +18,18 @@ return array(
             'Node Types' => array(
                 'value' => 'cms.node-types.*',
                 'children' => array(
-                    
+
                     'Create' => array(
-                        'value' => 'cms.node-types.create'
+                        'value' => 'cms.node-types.create',
                     ),
                     'Read' => array(
-                        'value' => 'cms.node-types.read'
+                        'value' => 'cms.node-types.read',
                     ),
                     'Update' => array(
-                        'value' => 'cms.node-types.update'
+                        'value' => 'cms.node-types.update',
                     ),
                     'Delete' => array(
-                        'value' => 'cms.node-types.delete'
+                        'value' => 'cms.node-types.delete',
                     ),
 
                 ),
@@ -39,16 +39,34 @@ return array(
                 'value' => 'cms.volunteers.*',
                 'children' => array(
                     'Create' => array(
-                        'value' => 'cms.volunteers.create'
+                        'value' => 'cms.volunteers.create',
                     ),
                     'Read' => array(
-                        'value' => 'cms.volunteers.read'
+                        'value' => 'cms.volunteers.read',
                     ),
                     'Update' => array(
-                        'value' => 'cms.volunteers.update'
+                        'value' => 'cms.volunteers.update',
                     ),
                     'Delete' => array(
-                        'value' => 'cms.volunteers.delete'
+                        'value' => 'cms.volunteers.delete',
+                    ),
+                ),
+            ),
+
+            'Manage Trusts' => array(
+                'value' => 'cms.manage-trust.*',
+                'children' => array(
+                    'Create' => array(
+                        'value' => 'cms.volunteers.create',
+                    ),
+                    'Read' => array(
+                        'value' => 'cms.volunteers.read',
+                    ),
+                    'Update' => array(
+                        'value' => 'cms.volunteers.update',
+                    ),
+                    'Delete' => array(
+                        'value' => 'cms.volunteers.delete',
                     ),
                 ),
             ),
@@ -56,24 +74,24 @@ return array(
             'Users' => array(
                 'value' => 'cms.users.*',
                 'children' => array(
-                    
+
                     'Create' => array(
-                        'value' => 'cms.users.create'
+                        'value' => 'cms.users.create',
                     ),
                     'Read' => array(
-                        'value' => 'cms.users.read'
+                        'value' => 'cms.users.read',
                     ),
                     'Update' => array(
-                        'value' => 'cms.users.update'
+                        'value' => 'cms.users.update',
                     ),
                     'Delete' => array(
-                        'value' => 'cms.users.delete'
+                        'value' => 'cms.users.delete',
                     ),
                     'Add To Group' => array(
-                        'value' => 'cms.users.removegroup'
+                        'value' => 'cms.users.removegroup',
                     ),
                     'Remove From Group' => array(
-                        'value' => 'cms.users.addgroup'
+                        'value' => 'cms.users.addgroup',
                     ),
 
                 ),
@@ -82,18 +100,18 @@ return array(
             'Groups' => array(
                 'value' => 'cms.groups.*',
                 'children' => array(
-                    
+
                     'Create' => array(
-                        'value' => 'cms.groups.create'
+                        'value' => 'cms.groups.create',
                     ),
                     'Read' => array(
-                        'value' => 'cms.groups.read'
+                        'value' => 'cms.groups.read',
                     ),
                     'Update' => array(
-                        'value' => 'cms.groups.update'
+                        'value' => 'cms.groups.update',
                     ),
                     'Delete' => array(
-                        'value' => 'cms.groups.delete'
+                        'value' => 'cms.groups.delete',
                     ),
 
                 ),

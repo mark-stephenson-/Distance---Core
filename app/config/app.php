@@ -13,7 +13,7 @@ return array(
     |
     */
 
-    'debug' => true,
+    'debug' => env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return array(
     |
     */
 
-    'key' => 'YourSecretKey!!!',
+    'key' => env('APP_KEY', 'ARandomThirty-TwoCharacterString'),
 
     /*
     |--------------------------------------------------------------------------
