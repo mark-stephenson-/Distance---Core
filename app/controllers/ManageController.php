@@ -53,6 +53,37 @@ class ManageController extends BaseController
                 ->with('successes', new MessageBag(array('The trust '.Input::get('name').' has been created.')));
     }
 
+    public function editTrust($trustId)
+    {
+        $trust = Node::find($trustId);
+
+        return View::make('manage.trusts-form', compact('trust'));
+    }
+
+    public function updateTrust($trustId)
+    {
+        $trust = Node::find($trustId);
+        $validator = new Core\Validators\ManageTrust();
+
+        $trustNameValidation = $this->nodeService->checkForUniquenessInType($this->trustNodeType, 'name', Input::get('name'));
+
+        // If the validator or the required column check fails
+        if ($validator->fails() or $trustNameValidation) {
+            if ($trustNameValidation) {
+                $validator->messages()->add('trust-name', $trustNameValidation);
+            }
+
+            return Redirect::refresh()
+                ->withInput()
+                ->withErrors($validator->messages());
+        }
+
+        $this->nodeService->updatePublishedNodeWithData($trust, Input::only(array('name')));
+
+        return Redirect::route('manage.index')
+                ->with('successes', new MessageBag(array('The trust '.Input::get('name').' has been created.')));
+    }
+
     public function trust($trustId)
     {
         $trust = Node::find($trustId);

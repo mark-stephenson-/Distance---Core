@@ -311,6 +311,15 @@ Route::group(array('before' => array('auth')), function () {
                     'uses' => 'ManageController@storeTrust',
                 ));
 
+                Route::get('{id}/edit', array(
+                    'as' => 'manage.trust.edit',
+                    'uses' => 'ManageController@editTrust',
+                ));
+
+                Route::post('{id}/edit', array(
+                    'uses' => 'ManageController@updateTrust',
+                ));
+
                 Route::get('{id}/delete', array(
                     'as' => 'manage.trust.delete',
                     'uses' => 'ManageController@deleteTrust',

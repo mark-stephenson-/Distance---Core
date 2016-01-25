@@ -29,7 +29,7 @@
                 <td width="250">
                     <a href="{{ route('manage.trust.index', array($trust->id)) }}" class="btn btn-small"><i class="icon-hospital"></i> View Hospitals</a>
 
-                    {{-- <a href="{{ route('manage.trust.delete', array($trust->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a> --}}
+                    <a href="{{ route('manage.trust.edit', array($trust->id)) }}" data-toggle="modal" class="btn btn-small"><i class="icon-pencil"></i> Edit Trust</a>
                 </td>
             </tr>
             @endforeach

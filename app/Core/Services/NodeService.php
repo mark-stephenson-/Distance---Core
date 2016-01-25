@@ -38,6 +38,20 @@ class NodeService
         return $node;
     }
 
+    public function updatePublishedNodeWithData(Node $node, $data = [], $title = null)
+    {
+        if ($title) {
+            $node->title = $title;
+            $node->save();
+        }
+
+        $latestRevision = $node->latestRevision();
+
+        $node->updateDraft($data, $latestRevision->id);
+
+        return $node;
+    }
+
     public function checkForUniquenessInType($type, $key, $value, $currentId = null)
     {
         $uniqueCheck = \DB::table("node_type_{$type}")
