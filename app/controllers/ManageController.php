@@ -81,7 +81,7 @@ class ManageController extends BaseController
         $this->nodeService->updatePublishedNodeWithData($trust, Input::only(array('name')));
 
         return Redirect::route('manage.index')
-                ->with('successes', new MessageBag(array('The trust '.Input::get('name').' has been created.')));
+                ->with('successes', new MessageBag(array('The trust '.Input::get('name').' has been updated.')));
     }
 
     public function trust($trustId)
@@ -124,6 +124,37 @@ class ManageController extends BaseController
 
         return Redirect::route('manage.trust.index', array($trustId))
                 ->with('successes', new MessageBag(array('The hospital '.Input::get('name').' has been created.')));
+    }
+
+    public function editHospital($trustId, $hospitalId)
+    {
+        $hospital = Node::find($hospitalId);
+
+        return View::make('manage.hospitals-form', compact('hospital'));
+    }
+
+    public function updateHospital($trustId, $hospitalId)
+    {
+        $hospital = Node::find($hospitalId);
+        $validator = new Core\Validators\ManageHospital();
+
+        $trustNameValidation = $this->nodeService->checkForUniquenessInType($this->hospitalNodeType, 'name', Input::get('name'));
+
+        // If the validator or the required column check fails
+        if ($validator->fails() or $trustNameValidation) {
+            if ($trustNameValidation) {
+                $validator->messages()->add('hospital-name', $trustNameValidation);
+            }
+
+            return Redirect::refresh()
+                ->withInput()
+                ->withErrors($validator->messages());
+        }
+
+        $this->nodeService->updatePublishedNodeWithData($hospital, Input::only(array('name')));
+
+        return Redirect::route('manage.trust.index', array($trustId))
+                ->with('successes', new MessageBag(array('The hospital '.Input::get('name').' has been updated.')));
     }
 
     public function hospital($trustId, $hospitalId)

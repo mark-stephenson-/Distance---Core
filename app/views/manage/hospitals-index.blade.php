@@ -31,7 +31,7 @@
                 <td width="250">
                     <a href="{{ route('manage.hospital.index', array($trust->id, $hospital->id)) }}" class="btn btn-small"><i class="icon-hospital"></i> View Wards</a>
 
-                    {{-- <a href="{{ route('manage.trust.delete', array($hospital->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a> --}}
+                    <a href="{{ route('manage.hospital.edit', array($trust->id, $hospital->id)) }}" data-toggle="modal" class="btn btn-small"><i class="icon-pencil"></i> Edit Hospital</a>
                 </td>
             </tr>
             @endforeach

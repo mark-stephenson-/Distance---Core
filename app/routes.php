@@ -341,6 +341,15 @@ Route::group(array('before' => array('auth')), function () {
                         'uses' => 'ManageController@storeHospital',
                     ));
 
+                    Route::get('{hospitalId}/edit', array(
+                        'as' => 'manage.hospital.edit',
+                        'uses' => 'ManageController@editHospital',
+                    ));
+
+                    Route::post('{hospitalId}/edit', array(
+                        'uses' => 'ManageController@updateHospital',
+                    ));
+
                     Route::get('{hospitalId}/delete', array(
                         'as' => 'manage.hospital.delete',
                         'uses' => 'ManageController@deleteHospital',
