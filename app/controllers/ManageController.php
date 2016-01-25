@@ -25,22 +25,21 @@ class ManageController extends BaseController
 
     public function createTrust()
     {
-        $trust = new Node;
+        $trust = new Node();
 
         return View::make('manage.trusts-form', compact('trust'));
     }
 
     public function storeTrust()
     {
-        $validator = new Core\Validators\ManageTrust;
+        $validator = new Core\Validators\ManageTrust();
 
         $trustNameValidation = $this->nodeService->checkForUniquenessInType($this->trustNodeType, 'name', Input::get('name'));
 
         // If the validator or the required column check fails
         if ($validator->fails() or $trustNameValidation) {
-
             if ($trustNameValidation) {
-                $validator->messages()->add("trust-name", $trustNameValidation);
+                $validator->messages()->add('trust-name', $trustNameValidation);
             }
 
             return Redirect::refresh()
@@ -48,14 +47,14 @@ class ManageController extends BaseController
                 ->withErrors($validator->messages());
         }
 
-        $this->nodeService->createNodeOfTypeWithData($this->trustNodeType, Str::slug(Input::get('name')), Input::only(array('name')));
+        $this->nodeService->createPublishedNodeOfTypeWithData($this->trustNodeType, Str::slug(Input::get('name')), Input::only(array('name')));
 
         return Redirect::route('manage.index')
-                ->with('successes', new MessageBag(array('The trust ' . Input::get('name') . ' has been created.')));
+                ->with('successes', new MessageBag(array('The trust '.Input::get('name').' has been created.')));
     }
 
-    public function trust($trustId) {
-
+    public function trust($trustId)
+    {
         $trust = Node::find($trustId);
 
         $hospitals = Node::whereNodeType($this->hospitalNodeType)
@@ -68,22 +67,21 @@ class ManageController extends BaseController
 
     public function createHospital()
     {
-        $hospital = new Node;
+        $hospital = new Node();
 
         return View::make('manage.hospitals-form', compact('hospital'));
     }
 
     public function storeHospital($trustId)
     {
-        $validator = new Core\Validators\ManageHospital;
+        $validator = new Core\Validators\ManageHospital();
 
         $trustNameValidation = $this->nodeService->checkForUniquenessInType($this->hospitalNodeType, 'name', Input::get('name'));
 
         // If the validator or the required column check fails
         if ($validator->fails() or $trustNameValidation) {
-
             if ($trustNameValidation) {
-                $validator->messages()->add("hospital-name", $trustNameValidation);
+                $validator->messages()->add('hospital-name', $trustNameValidation);
             }
 
             return Redirect::refresh()
@@ -91,14 +89,14 @@ class ManageController extends BaseController
                 ->withErrors($validator->messages());
         }
 
-        $this->nodeService->createNodeOfTypeWithData($this->hospitalNodeType, Str::slug(Input::get('name')), Input::only(array('name')) + ['trust' => $trustId]);
+        $this->nodeService->createPublishedNodeOfTypeWithData($this->hospitalNodeType, Str::slug(Input::get('name')), Input::only(array('name')) + ['trust' => $trustId]);
 
         return Redirect::route('manage.trust.index', array($trustId))
-                ->with('successes', new MessageBag(array('The hospital ' . Input::get('name') . ' has been created.')));
+                ->with('successes', new MessageBag(array('The hospital '.Input::get('name').' has been created.')));
     }
 
-    public function hospital($trustId, $hospitalId) {
-
+    public function hospital($trustId, $hospitalId)
+    {
         $trust = Node::find($trustId);
         $hospital = Node::find($hospitalId);
 
@@ -112,22 +110,21 @@ class ManageController extends BaseController
 
     public function createWard()
     {
-        $ward = new Node;
+        $ward = new Node();
 
         return View::make('manage.wards-form', compact('ward'));
     }
 
     public function storeWard($trustId, $hospitalId)
     {
-        $validator = new Core\Validators\ManageWard;
+        $validator = new Core\Validators\ManageWard();
 
         $trustNameValidation = $this->nodeService->checkForUniquenessInType($this->wardNodeType, 'name', Input::get('name'));
 
         // If the validator or the required column check fails
         if ($validator->fails() or $trustNameValidation) {
-
             if ($trustNameValidation) {
-                $validator->messages()->add("ward-name", $trustNameValidation);
+                $validator->messages()->add('ward-name', $trustNameValidation);
             }
 
             return Redirect::refresh()
@@ -135,9 +132,9 @@ class ManageController extends BaseController
                 ->withErrors($validator->messages());
         }
 
-        $this->nodeService->createNodeOfTypeWithData($this->wardNodeType, Str::slug(Input::get('name')), Input::only(array('name')) + ['hospital' => $hospitalId]);
+        $this->nodeService->createPublishedNodeOfTypeWithData($this->wardNodeType, Str::slug(Input::get('name')), Input::only(array('name')) + ['hospital' => $hospitalId]);
 
         return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
-                ->with('successes', new MessageBag(array('The ward ' . Input::get('name') . ' has been created.')));
+                ->with('successes', new MessageBag(array('The ward '.Input::get('name').' has been created.')));
     }
 }
