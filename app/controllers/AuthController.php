@@ -9,7 +9,7 @@ class AuthController extends BaseController
 
     public function processLogin()
     {
-        $validator = new Core\Validators\Login;
+        $validator = new Core\Validators\Login();
 
         if ($validator->fails()) {
             return Redirect::back()
@@ -19,17 +19,16 @@ class AuthController extends BaseController
 
         $bag = new MessageBag();
 
-        try
-        {
+        try {
             $credentials = array(
                 'email' => Input::get('email'),
                 'password' => Input::get('password'),
             );
 
-            if (Sentry::authenticate($credentials, Input::get('remember'))) {
-
+            if (Sentry::authenticate($credentials, true)) {
                 if (!Sentry::getUser()->hasAccess('cms.generic.login')) {
                     $bag->add('login', 'You do not have permission to access this.');
+
                     return Redirect::back()
                             ->withErrors($bag)
                             ->withInput();
@@ -39,33 +38,23 @@ class AuthController extends BaseController
 
                 if ($session = Session::get('afterLogin')) {
                     Session::forget('afterLogin');
+
                     return Redirect::to($session)
                             ->with('successes', $bag);
                 } else {
                     return Redirect::route('root')
                             ->with('successes', $bag);
                 }
-
-            }
-            else
-            {
+            } else {
                 $bag->add('invalid', 'Invalid login details');
             }
-        }
-        catch (Cartalyst\Sentry\Users\LoginRequiredException $e)
-        {
+        } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
             $bag->add('email', 'The email field is required');
-        }
-        catch (Cartalyst\Sentry\Users\PasswordRequiredException $e)
-        {
+        } catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {
             $bag->add('password', 'The password field is required');
-        }
-        catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
-        {
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
             $bag->add('noexist', 'Invalid login details');
-        }
-        catch (Cartalyst\Sentry\Users\UserNotActivatedException $e)
-        {
+        } catch (Cartalyst\Sentry\Users\UserNotActivatedException $e) {
             $bag->add('active', 'Your account is not active');
         }
 
@@ -78,7 +67,7 @@ class AuthController extends BaseController
     {
         Sentry::logout();
 
-        return Redirect::route('login')->with('successes', new MessageBag(array( "You have been successfully logged out." )));
+        return Redirect::route('login')->with('successes', new MessageBag(array('You have been successfully logged out.')));
     }
 
     public function forgotPassword()
@@ -89,7 +78,7 @@ class AuthController extends BaseController
     public function processForgotPassword()
     {
         // Let's run the validator
-        $validator = new Core\Validators\ForgotPasswordStepOne;
+        $validator = new Core\Validators\ForgotPasswordStepOne();
 
         // If the validator fails
         if ($validator->fails()) {
@@ -99,24 +88,22 @@ class AuthController extends BaseController
         }
 
         try {
-            $user = Sentry::getUserProvider()->findByLogin( Input::get('email') );
+            $user = Sentry::getUserProvider()->findByLogin(Input::get('email'));
 
             $resetCode = $user->getResetPasswordCode();
 
-            Mail::send('emails.password-reset-step-one', compact('user', 'resetCode'), function($message) use ($user)
-            {
+            Mail::send('emails.password-reset-step-one', compact('user', 'resetCode'), function ($message) use ($user) {
                 $message->to($user->email, $user->full_name)
-                    ->subject(Config::get('core.site_name' . ' - Password Reset'))
+                    ->subject(Config::get('core.site_name'.' - Password Reset'))
                     ->from(Config::get('core.emails.send_from'));
             });
 
             return Redirect::back()
-                ->with('successes', new MessageBag(array('If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.')) );
-
+                ->with('successes', new MessageBag(array('If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.')));
         } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
             // That user has not been found, but we don't want to tell them!
             return Redirect::back()
-                ->with('successes', new MessageBag(array('If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.')) );
+                ->with('successes', new MessageBag(array('If that email is in use by a user, we\'ve sent instructions on how to continue the password reset.')));
         }
     }
 
@@ -148,7 +135,7 @@ class AuthController extends BaseController
             // Check if the reset password code is valid
             if ($user->checkResetPasswordCode($code)) {
                 // Let's run the validator
-                $validator = new Core\Validators\ForgotPasswordStepTwo;
+                $validator = new Core\Validators\ForgotPasswordStepTwo();
 
                 // If the validator fails
                 if ($validator->fails()) {

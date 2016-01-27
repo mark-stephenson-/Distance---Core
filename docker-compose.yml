@@ -14,7 +14,7 @@ mysql:
     - MYSQL_USER=user
     - MYSQL_PASSWORD=password
 fpm:
-  image: netsells/fpm
+  image: netsells/fpm:5.5
   volumes_from:
     - site_data
   links:
@@ -36,7 +36,7 @@ artisan:
     - mysql
     - mailcatcher
 composer:
-  image: composer
+  image: netsells/composer:5.6
   working_dir: /data
   volumes_from:
     - site_data

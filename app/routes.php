@@ -211,30 +211,15 @@ Route::group(array('before' => array('auth')), function () {
                     return View::make('data-export.choose', compact('questionSets'));
                 }]);
 
-                Route::post('data/export/{filename?}', ['as' => 'data.export.work', function ($appId, $collectionId, $filename = null) {
-                    if ($filename) {
-                        $path = '/exports/'.$collectionId.'/'.$filename.'.zip';
-                        if (file_exists(storage_path().$path)) {
-                            return Response::download(storage_path().$path);
-                        } else {
-                            return View::make('data-export.404');
-                        }
-                    }
-
+                Route::post('data/export', ['as' => 'data.export.work', function ($appId, $collectionId) {
                     if (PRRecord::first() == null) {
                         return View::make('data-export.empty');
                     }
 
-                    Artisan::call('core:data-export', [
-                        'app-id' => $appId,
-                        'collection-id' => $collectionId,
-                        'user' => Sentry::getUser()->id,
-                        'question_set' => Input::get('question_set'),
-                        'take' => Input::get('take'),
-                        'skip' => Input::get('skip'),
-                    ]);
+                    $exportService = \App::make('Core\Services\ExportService');
+                    $exportPath = $exportService->generateExportForQuestionSet(Input::get('question_set'));
 
-                    return View::make('data-export.queued');
+                    return Response::download($exportPath);
                 }]);
             });
         });
