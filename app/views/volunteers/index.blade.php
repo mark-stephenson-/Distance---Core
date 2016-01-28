@@ -2,15 +2,10 @@
 
 <?php
     $wardIds = array();
-    $trustIds = array();
 
     foreach ($volunteers as $volunteer) {
         if ($wardId = $volunteer->latestRevision()->ward) {
             $wardIds[] = $volunteer->latestRevision()->ward;
-        }
-
-        if ($trustId = $volunteer->latestRevision()->trust) {
-            $trustIds[] = $volunteer->latestRevision()->trust;
         }
     }
 
@@ -18,12 +13,7 @@
         $wards = Node::whereIn('id', $wardIds)->lists('title', 'id');
     }
 
-    if (count($trustIds)) {
-        $trusts = Node::whereIn('id', $trustIds)->lists('title', 'id');
-    }
-
     $wards[0] = $wards[''] = 'No Ward';
-    $trusts[0] = $trusts[''] = 'No Trust';
 ?>
 
 @section('header')
@@ -43,7 +33,6 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Ward</th>
-                <th>Trust</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -64,9 +53,6 @@
                 </td>
                 <td>
                     {{ $wards[$volunteerData->ward] }}
-                </td>
-                <td>
-                    {{ $trusts[$volunteerData->trust] }}
                 </td>
                 <td width="150">
                     <a href="{{ route('volunteers.edit', array($volunteer->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
