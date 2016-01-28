@@ -28,10 +28,10 @@
                 <td>
                     {{ $wardData->name }}
                 </td>
-                <td width="250">
-                    <a href="{{ route('manage.hospital.index', array($trust->id, $ward->id)) }}" class="btn btn-small"><i class="icon-hospital"></i> View Wards</a>
-
-                    {{-- <a href="{{ route('manage.trust.delete', array($ward->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a> --}}
+                <td width="450">
+                    <a href="{{ route('manage.ward.edit', array($trust->id, $hospital->id, $ward->id)) }}" class="btn btn-small"><i class="icon-pencil"></i> Edit</a>
+                    <a href="{{ route('manage.ward.merge', array($trust->id, $hospital->id, $ward->id)) }}" class="btn btn-small"><i class="icon-code-fork"></i> Merge into Another</a>
+                    <a href="{{ route('manage.ward.delete', array($trust->id, $hospital->id, $ward->id)) }}" data-toggle="modal" class="btn btn-small deleteModal" data-toggle="modal"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
             @endforeach
@@ -42,14 +42,14 @@
         <div style="display: none;" class="userDeleteUrl"></div>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Delete User</h3>
+            <h3>Close Ward</h3>
         </div>
         <div class="modal-body">
-            <p>Are you sure you want to delete this user? Deleting this user will transfer ownership of all nodes they own to you. This cannot be undone.</p>
+            <p>Are you sure you want to close this ward?</p>
         </div>
         <div class="modal-footer">
             <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-            <a href="#" class="btn btn-primary yes" id="deleteModelConfirm">Yes, Delete it.</a>
+            <a href="#" class="btn btn-primary yes" id="deleteModelConfirm">Yes, Close it.</a>
         </div>
     </div>
 

@@ -355,6 +355,28 @@ Route::group(array('before' => array('auth')), function () {
                             'as' => 'manage.ward.delete',
                             'uses' => 'ManageController@deleteWard',
                         ));
+
+                        Route::post('{id}/delete', array(
+                            'uses' => 'ManageController@performDeleteWard',
+                        ));
+
+                        Route::get('{id}/edit', array(
+                            'as' => 'manage.ward.edit',
+                            'uses' => 'ManageController@editWard',
+                        ));
+
+                        Route::post('{id}/edit', array(
+                            'uses' => 'ManageController@updateWard',
+                        ));
+
+                        Route::get('{id}/merge', array(
+                            'as' => 'manage.ward.merge',
+                            'uses' => 'ManageController@mergeWard',
+                        ));
+
+                        Route::post('{id}/merge', array(
+                            'uses' => 'ManageController@performMergeWard',
+                        ));
                     });
                 });
             });

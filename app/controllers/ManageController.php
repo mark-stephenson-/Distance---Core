@@ -18,7 +18,7 @@ class ManageController extends BaseController
 
     public function index()
     {
-        $trusts = Node::whereNodeType($this->trustNodeType)->get();
+        $trusts = Node::isPublished()->whereNodeType($this->trustNodeType)->get();
 
         return View::make('manage.trusts-index', compact('trusts'));
     }
@@ -88,7 +88,7 @@ class ManageController extends BaseController
     {
         $trust = Node::find($trustId);
 
-        $hospitals = Node::whereNodeType($this->hospitalNodeType)
+        $hospitals = Node::isPublished()->whereNodeType($this->hospitalNodeType)
             ->join("node_type_{$this->hospitalNodeType}", 'nodes.id', '=', "node_type_{$this->hospitalNodeType}.node_id")
             ->where("node_type_{$this->hospitalNodeType}.trust", $trustId)
             ->get(['nodes.*', 'trust']);
@@ -162,7 +162,7 @@ class ManageController extends BaseController
         $trust = Node::find($trustId);
         $hospital = Node::find($hospitalId);
 
-        $wards = Node::whereNodeType($this->wardNodeType)
+        $wards = Node::isPublished()->whereNodeType($this->wardNodeType)
             ->join("node_type_{$this->wardNodeType}", 'nodes.id', '=', "node_type_{$this->wardNodeType}.node_id")
             ->where("node_type_{$this->wardNodeType}.hospital", $hospitalId)
             ->get(['nodes.*', 'hospital']);
@@ -198,5 +198,106 @@ class ManageController extends BaseController
 
         return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
                 ->with('successes', new MessageBag(array('The ward '.Input::get('name').' has been created.')));
+    }
+
+    public function editWard($trustId, $hospitalId, $wardId)
+    {
+        $ward = Node::find($wardId);
+
+        return View::make('manage.wards-form', compact('ward'));
+    }
+
+    public function updateWard($trustId, $hospitalId, $wardId)
+    {
+        $ward = Node::find($wardId);
+        $validator = new Core\Validators\ManageTrust();
+
+        $trustNameValidation = $this->nodeService->checkForUniquenessInType($this->wardNodeType, 'name', Input::get('name'));
+
+        // If the validator or the required column check fails
+        if ($validator->fails() or $trustNameValidation) {
+            if ($trustNameValidation) {
+                $validator->messages()->add('trust-name', $trustNameValidation);
+            }
+
+            return Redirect::refresh()
+                ->withInput()
+                ->withErrors($validator->messages());
+        }
+
+        $wardChangeComment = Input::get('change_comment');
+
+        if ($wardChangeComment == '') {
+            $wardChangeComment = 'Renamed '.Input::get('old_name').' to '.Input::get('name');
+        }
+
+        // We will update the old ward with the comment, and then create a new one
+        $this->nodeService->updatePublishedNodeWithData($ward, ['ward-change-comment' => $wardChangeComment]);
+        $ward->markAsRetired($ward->published_revision);
+
+        $this->nodeService->createPublishedNodeOfTypeWithData($this->wardNodeType, Str::slug(Input::get('name')), Input::only(array('name')) + ['hospital' => $hospitalId]);
+
+        return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
+                ->with('successes', new MessageBag(array('The ward '.Input::get('name').' has been updated.')));
+    }
+
+    public function mergeWard($trustId, $hospitalId, $wardId)
+    {
+        $ward = Node::find($wardId);
+        $possibleMerges = Node::isPublished()->whereNodeType($this->wardNodeType)
+            ->join("node_type_{$this->wardNodeType}", 'nodes.id', '=', "node_type_{$this->wardNodeType}.node_id")
+            ->where("node_type_{$this->wardNodeType}.hospital", $hospitalId)
+            ->where('nodes.id', '!=', $wardId)
+            ->get(['nodes.*', 'hospital', "node_type_{$this->wardNodeType}.name AS ward_name"]);
+
+        return View::make('manage.wards-merge', compact('ward', 'possibleMerges'));
+    }
+
+    public function performMergeWard($trustId, $hospitalId, $wardId)
+    {
+        $ward = Node::find($wardId);
+        $destWard = Node::find(Input::get('chosen_ward'));
+
+        $wardChangeComment = Input::get('change_comment');
+
+        if ($wardChangeComment == '') {
+            $wardChangeComment = 'Merged '.$ward->latestRevision()->name.' to '.$destWard->latestRevision()->name;
+        }
+
+        // We will update the old ward with the comment, and then create a new one
+        $this->nodeService->updatePublishedNodeWithData($ward, ['ward-change-comment' => $wardChangeComment]);
+        $this->nodeService->updatePublishedNodeWithData($destWard, ['ward-change-comment' => $wardChangeComment]);
+        $ward->markAsRetired($ward->published_revision);
+        $destWard->markAsRetired($destWard->published_revision);
+
+        $this->nodeService->createPublishedNodeOfTypeWithData($this->wardNodeType, Str::slug($destWard->latestRevision()->name), ['name' => $destWard->latestRevision()->name, 'hospital' => $hospitalId]);
+
+        return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
+                ->with('successes', new MessageBag(array('The ward '.$ward->latestRevision()->name.' has been merged into '.$destWard->latestRevision()->name)));
+    }
+
+    public function deleteWard($trustId, $hospitalId, $wardId)
+    {
+        $ward = Node::find($wardId);
+
+        return View::make('manage.wards-delete', compact('ward'));
+    }
+
+    public function performDeleteWard($trustId, $hospitalId, $wardId)
+    {
+        $ward = Node::find($wardId);
+
+        $wardChangeComment = Input::get('change_comment');
+
+        if ($wardChangeComment == '') {
+            $wardChangeComment = 'Closed '.$ward->latestRevision()->name;
+        }
+
+        // We will update the old ward with the comment, and then create a new one
+        $this->nodeService->updatePublishedNodeWithData($ward, ['ward-change-comment' => $wardChangeComment]);
+        $ward->markAsRetired($ward->published_revision);
+
+        return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
+                ->with('successes', new MessageBag(array('The ward '.$ward->latestRevision()->name.' has been closed.')));
     }
 }

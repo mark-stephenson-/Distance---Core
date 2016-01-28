@@ -3,10 +3,11 @@
 namespace Core\Services;
 
 use Node;
-use PRRecord;
 use PRNote;
+use PRRecord;
 use PRConcern;
 use League\Csv\Writer;
+use Illuminate\Support\Collection;
 
 class ExportService
 {
@@ -22,10 +23,10 @@ class ExportService
 
         $zip = new \ZipArchive();
         $zip->open(storage_path($this->directory.'/export.zip'), \ZipArchive::CREATE);
-        $zip->addFromString('QuestionnaireView.csv', $this->createQuestionnaireViewCsv($questionSetId));
-        $zip->addFromString('EnrolmentLogGood.csv', $this->createEnrolmentLogGoodCsv($questionSetId));
-        $zip->addFromString('EnrolmentLogConcern.csv', $this->createEnrolmentLogConcernCsv($questionSetId));
-        $zip->addFromString('Key.csv', $this->createKeyCsv($questionSetId));
+        $zip->addFile($this->createQuestionnaireViewCsv($questionSetId), 'QuestionnaireView.csv');
+        $zip->addFile($this->createEnrolmentLogGoodCsv($questionSetId), 'EnrolmentLogGood.csv');
+        $zip->addFile($this->createEnrolmentLogConcernCsv($questionSetId), 'EnrolmentLogConcern.csv');
+        $zip->addFile($this->createKeyCsv($questionSetId), 'Key.csv');
         $zip->close();
 
         return storage_path($this->directory.'/export.zip');
@@ -44,9 +45,9 @@ class ExportService
 
     public function createQuestionnaireViewCsv($questionSetId)
     {
-        $filename = $this->directory.'/questionnaire-view.csv';
+        $filename = storage_path($this->directory.'/questionnaire-view.csv');
 
-        $csv = Writer::createFromFileObject(new \SplFileObject(storage_path($filename), 'w+'));
+        $csv = Writer::createFromFileObject(new \SplFileObject($filename, 'w+'));
         $csv->setDelimiter(',');
 
         $csv = $this->writeQuestionnaireViewHeaders($questionSetId, $csv);
@@ -68,20 +69,29 @@ class ExportService
                             'node_type_1.domain AS domainId',
                         ]);
                 },
+                'ward',
                 'questions.node',
                 'questions.concern',
                 'questions.note',
                 'questions.answer',
             ))
             ->join('node_type_3', 'prase_records.hospital_node_id', '=', 'node_type_3.node_id') // Hospital name
-            ->join('node_type_4', 'prase_records.ward_node_id', '=', 'node_type_4.node_id') // Ward name
             ->join('node_type_2', 'node_type_3.trust', '=', 'node_type_2.node_id') // Trust name
-            ->get(array(
+            ->where('prase_records.pmos_id', $questionSetId)
+            ->get([
                 'prase_records.*',
                 'node_type_3.name AS hospital_name',
-                'node_type_4.name AS ward_name',
                 'node_type_2.name AS trust_name',
-            ));
+            ]);
+
+        $fetchedWards = \DB::table('node_type_4')
+            ->whereIn('node_id', $fetchedRecords->lists('ward_node_id'))
+            ->where('id', \DB::raw('(SELECT id FROM node_type_4 as wards WHERE wards.node_id = node_type_4.node_id ORDER BY updated_at DESC LIMIT 1)'))
+            ->groupBy('node_id')
+            ->orderBy('updated_at')
+            ->get();
+
+        $fetchedWards = (new Collection($fetchedWards))->keyBy('node_id');
 
         $prefetchedAnswerTypes = array();
 
@@ -105,7 +115,11 @@ class ExportService
                 $record->user, // Researcher
                 $record->trust_name,
                 $record->hospital_name,
-                $record->ward_name,
+                $record->ward_node_id,
+                $fetchedWards[$record->ward_node_id]->name,
+                $record->ward->published_at,
+                $record->ward->retired_at,
+                $fetchedWards[$record->ward_node_id]->{'ward-change-comment'},
                 date('d/m/Y H:i:s', strtotime($record->start_date)), // Date enrolled
                 $basicData['StayLength'],
                 $basicData['Age'],
@@ -201,7 +215,7 @@ class ExportService
     public function writeQuestionnaireViewHeaders($questionSetId, Writer $csv)
     {
         // Write the header
-        $csvHeaders = array('OfflineId', 'Researcher', 'Trust', 'Hospital', 'Ward', 'DateEnrol', 'StayLength', 'Age', 'Gender', 'Ethnicity', 'CompletedBy', 'FirstLanguage', 'TimeRecorded', 'TimeSpentQuestionnaire', 'TimeSpentPatient', 'IncompleteReason');
+        $csvHeaders = array('OfflineId', 'Researcher', 'Trust', 'Hospital', 'Ward Reference', 'Ward', 'Ward Start Date', 'Ward End Date', 'Ward Change Comment', 'DateEnrol', 'StayLength', 'Age', 'Gender', 'Ethnicity', 'CompletedBy', 'FirstLanguage', 'TimeRecorded', 'TimeSpentQuestionnaire', 'TimeSpentPatient', 'IncompleteReason');
 
         $reversed = [];
         $questions = PRRecord::wherePmosId($questionSetId)->orderBy('id', 'asc')->first()
@@ -243,9 +257,9 @@ class ExportService
 
     public function createEnrolmentLogGoodCsv($questionSetId)
     {
-        $filename = $this->directory.'/enrolment-log-good.csv';
+        $filename = storage_path($this->directory.'/enrolment-log-good.csv');
 
-        $csv = Writer::createFromFileObject(new \SplFileObject(storage_path($filename), 'w+'));
+        $csv = Writer::createFromFileObject(new \SplFileObject($filename, 'w+'));
         $csv->setDelimiter(',');
 
         $csv->insertOne(['OfflineId', 'Trust', 'HospitalName', 'Ward', 'QuestionNumber', 'QuestionTextEnglish', 'IncidentReportDescription']);
@@ -312,9 +326,9 @@ class ExportService
 
     public function createEnrolmentLogConcernCsv($questionSetId)
     {
-        $filename = $this->directory.'/enrolment-log-concern.csv';
+        $filename = storage_path($this->directory.'/enrolment-log-concern.csv');
 
-        $csv = Writer::createFromFileObject(new \SplFileObject(storage_path($filename), 'w+'));
+        $csv = Writer::createFromFileObject(new \SplFileObject($filename, 'w+'));
         $csv->setDelimiter(',');
 
         $csv->insertOne(['OfflineId', 'Trust', 'HospitalName', 'Ward', 'QuestionNumber', 'QuestionTextEnglish', 'IncidentReportDescription', 'IncidentReportDescription', 'HowSerious', 'PossibleToStop']);
@@ -378,9 +392,9 @@ class ExportService
 
     public function createKeyCsv($questionSetId)
     {
-        $filename = $this->directory.'/key.csv';
+        $filename = storage_path($this->directory.'/key.csv');
 
-        $csv = Writer::createFromFileObject(new \SplFileObject(storage_path($filename), 'w+'));
+        $csv = Writer::createFromFileObject(new \SplFileObject($filename, 'w+'));
         $csv->setDelimiter(',');
 
         $csv->insertOne(['QuestionId', 'QuestionText', 'OptionId', 'OptionText']);

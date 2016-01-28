@@ -165,6 +165,6 @@ class Node extends BaseModel
 
     public function scopeIsPublished($query)
     {
-        $query->whereStatus('published');
+        $query->where('nodes.status', 'published');
     }
 }

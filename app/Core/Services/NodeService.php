@@ -17,6 +17,7 @@ class NodeService
         $node->node_type = $type;
         $node->collection_id = CORE_COLLECTION_ID;
         $node->status = 'published';
+        $node->published_at = DB::raw('NOW()');
         $node->save();
 
         $nodeType = NodeType::find($type);

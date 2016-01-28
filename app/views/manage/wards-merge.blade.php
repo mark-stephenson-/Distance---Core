@@ -10,11 +10,7 @@
 ?>
 
 @section('header')
-    @if ($ward->exists)
-        <h1>Editing Ward</h1>
-    @else
-        <h1>New Ward</h1>
-    @endif
+    <h1>Merging Ward</h1>
 @stop
 
 @section('body')
@@ -27,7 +23,7 @@
             <div class="control-group">
                 {{ Form::label('name', 'Name', array('class' => 'control-label')) }}
                 <div class="controls">
-                    {{ Form::text('name', Input::old('name', $wardData->name), array('class' => 'span11')) }}
+                    {{ Form::select('chosen_ward', $possibleMerges->lists('ward_name', 'id'), null, array('class' => 'span11')) }}
                     {{ Form::hidden('old_name', $wardData->name, array('class' => 'span11')) }}
                 </div>
             </div>
@@ -39,7 +35,7 @@
                         {{ Form::text('change_comment', Input::old('change_comment'), array('class' => 'span11')) }}
                     </div>
                 </div>
-                <p>If left blank, will be set to "Renamed {{$wardData->name}} to [new name]"</p>
+                <p>If left blank, will be set to "Merged {{$wardData->name}} into [chosen ward]"</p>
             @endif
 
         </div>
