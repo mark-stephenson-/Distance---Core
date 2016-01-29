@@ -331,12 +331,13 @@ class ExportService
         $csv = Writer::createFromFileObject(new \SplFileObject($filename, 'w+'));
         $csv->setDelimiter(',');
 
-        $csv->insertOne(['OfflineId', 'Trust', 'HospitalName', 'Ward', 'QuestionNumber', 'QuestionTextEnglish', 'IncidentReportDescription', 'IncidentReportDescription', 'HowSerious', 'PossibleToStop']);
+        $csv->insertOne(['OfflineId', 'Trust', 'HospitalName', 'Ward', 'QuestionNumber', 'QuestionTextEnglish', 'IncidentReportDescription', 'HowSerious', 'PossibleToStop']);
 
         $prefetchedConcerns = PRConcern::whereHas('record', function ($q) use ($questionSetId) {
                 return $q->wherePmosId($questionSetId);
             })
             ->with([
+                'note',
                 'record' => function ($q) {
                     return $q
                         ->join('node_type_3', 'prase_records.hospital_node_id', '=', 'node_type_3.node_id') // Hospital name
@@ -379,7 +380,7 @@ class ExportService
                 $concern->record->ward_name,
                 $questionNumber,
                 $questionText,
-                $concern->text, // Incident report
+                ($concern->note) ? $concern->note->text : '', // Incident report
                 $concern->serious_answer,
                 $concern->prevent_answer,
             ];
