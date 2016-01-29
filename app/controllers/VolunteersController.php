@@ -44,7 +44,7 @@ class VolunteersController extends BaseController
         $nodeRevision = (array) $volunteer->latestRevision();
         $nodeRevision['updated_at'] = DB::raw('NOW()');
 
-        foreach (array('username', 'password', 'firstname', 'lastname', 'ward', 'trust') as $key) {
+        foreach (array('username', 'password', 'firstname', 'lastname', 'trust') as $key) {
             if (!isset($nodeRevision[$key])) {
                 $nodeRevision[$key] = '';
             }
@@ -103,7 +103,7 @@ class VolunteersController extends BaseController
         $volunteer->save();
 
         // All good
-        $nodeRevision = array_fill_keys(array('username', 'password', 'firstname', 'lastname', 'ward', 'trust'), '');
+        $nodeRevision = array_fill_keys(array('username', 'password', 'firstname', 'lastname', 'trust'), '');
         $nodeRevision['updated_at'] = DB::raw('NOW()');
         $nodeRevision['status'] = 'published';
         $nodeRevision['created_by'] = $volunteer->created_by;

@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 <?php
-    $wardIds = array();
+    $trustIds = array();
 
     foreach ($volunteers as $volunteer) {
-        if ($wardId = $volunteer->latestRevision()->ward) {
-            $wardIds[] = $volunteer->latestRevision()->ward;
+        if ($trustId = $volunteer->latestRevision()->trust) {
+            $trustIds[] = $volunteer->latestRevision()->trust;
         }
     }
 
-    if (count($wardIds)) {
-        $wards = Node::whereIn('id', $wardIds)->lists('title', 'id');
+    if (count($trustIds)) {
+        $trusts = Node::whereIn('id', $trustIds)->lists('title', 'id');
     }
 
-    $wards[0] = $wards[''] = 'No Ward';
+    $trusts[0] = $trusts[''] = 'No Trust';
 ?>
 
 @section('header')
@@ -32,7 +32,7 @@
                 <th>Username</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Ward</th>
+                <th>Trust</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -52,7 +52,7 @@
                     {{ $volunteerData->lastname }}
                 </td>
                 <td>
-                    {{ $wards[$volunteerData->ward] }}
+                    {{ $trusts[$volunteerData->trust] }}
                 </td>
                 <td width="150">
                     <a href="{{ route('volunteers.edit', array($volunteer->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
