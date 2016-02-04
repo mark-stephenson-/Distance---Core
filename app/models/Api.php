@@ -13,6 +13,8 @@ class Api extends \BaseModel
 
         $content = self::cleanContent($content);
 
+        \Carbon\Carbon::setToStringFormat("Y-m-d\TH:i:s\Z");
+
         if ($contentType == 'text/xml') {
             return self::makeXML($content, $root_node, $status);
         } elseif ($contentType == 'application/json') {
@@ -65,7 +67,6 @@ class Api extends \BaseModel
         if ($date instanceof \Carbon\Carbon) {
             $newDate = $date->format('Y-m-d H:i:s');
         } else {
-            $newDate = date("Y-m-d\TH:i:s\Z", strtotime($date));
             $newDate = $date;
         }
 
