@@ -75,13 +75,9 @@ class ExportService
                 'questions.note',
                 'questions.answer',
             ))
-            ->join('node_type_3', 'prase_records.hospital_node_id', '=', 'node_type_3.node_id') // Hospital name
-            ->join('node_type_2', 'node_type_3.trust', '=', 'node_type_2.node_id') // Trust name
             ->where('prase_records.pmos_id', $questionSetId)
             ->get([
                 'prase_records.*',
-                'node_type_3.name AS hospital_name',
-                'node_type_2.name AS trust_name',
             ]);
 
         $fetchedWards = \DB::table('node_type_4')
@@ -92,6 +88,23 @@ class ExportService
             ->get();
 
         $fetchedWards = (new Collection($fetchedWards))->keyBy('node_id');
+
+        $fetchedHospitals = \DB::table('node_type_3')
+            ->whereIn('node_id', $fetchedRecords->lists('hospital_node_id'))
+            ->where('id', \DB::raw('(SELECT id FROM node_type_3 as wards WHERE wards.node_id = node_type_3.node_id ORDER BY updated_at DESC LIMIT 1)'))
+            ->groupBy('node_id')
+            ->orderBy('updated_at')
+            ->get();
+
+        $fetchedHospitals = (new Collection($fetchedHospitals))->keyBy('node_id');
+
+        $fetchedTrusts = \DB::table('node_type_2')
+            ->where('id', \DB::raw('(SELECT id FROM node_type_2 as wards WHERE wards.node_id = node_type_2.node_id ORDER BY updated_at DESC LIMIT 1)'))
+            ->groupBy('node_id')
+            ->orderBy('updated_at')
+            ->get();
+
+        $fetchedTrusts = (new Collection($fetchedTrusts))->keyBy('node_id');
 
         $prefetchedAnswerTypes = array();
 
@@ -113,8 +126,8 @@ class ExportService
             $recordRow = [
                 'T'.date('dmy\-His', strtotime($record->start_date)).strtoupper($record->user), // Offline ID
                 $record->user, // Researcher
-                $record->trust_name,
-                $record->hospital_name,
+                $fetchedTrusts[$fetchedHospitals[$record->hospital_node_id]->trust]->name,
+                $fetchedHospitals[$record->hospital_node_id]->name,
                 $record->ward_node_id,
                 $fetchedWards[$record->ward_node_id]->name,
                 $record->ward->published_at,
