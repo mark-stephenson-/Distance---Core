@@ -13,8 +13,6 @@ class Api extends \BaseModel
 
         $content = self::cleanContent($content);
 
-        \Carbon\Carbon::setToStringFormat("Y-m-d\TH:i:s\Z");
-
         if ($contentType == 'text/xml') {
             return self::makeXML($content, $root_node, $status);
         } elseif ($contentType == 'application/json') {
@@ -26,6 +24,10 @@ class Api extends \BaseModel
 
     protected static function cleanContent($content)
     {
+        if (is_object($content)) {
+            $content = $content->toArray();
+        }
+
         if (!Input::get('modifiedSince')) {
             $unset[] = 'deleted_at';
             $unset[] = 'retired_at';
@@ -64,13 +66,17 @@ class Api extends \BaseModel
 
     public static function convertDate($date)
     {
-        if ($date instanceof \Carbon\Carbon) {
-            $newDate = $date->format('Y-m-d H:i:s');
-        } else {
-            $newDate = $date;
+        try {
+            if (!is_a($date, 'Carbon\Carbon')) {
+                $date = \Carbon\Carbon::parse($date);
+            }
+
+            $date = $date->format('Y-m-d\TH:i:s\Z');
+        } catch (\Exception $e) {
+            dd($e);
         }
 
-        return $newDate;
+        return $date;
     }
 
     protected static function makeJSON($content, $root_node, $status)

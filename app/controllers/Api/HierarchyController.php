@@ -1,24 +1,30 @@
-<?php namespace Api;
+<?php
 
-use App, Input, Request, Response;
-use Api, Collection;
+namespace Api;
 
-class HierarchyController extends \BaseController {
+use App;
+use Input;
+use Request;
+use Response;
+use Api;
+use Collection;
 
+class HierarchyController extends \BaseController
+{
     public function hierarchy()
     {
-        if ( Request::header('Collection-Token') === NULL ) {
+        if (Request::header('Collection-Token') === null) {
             return Response::make('Collection-Token must be specified for this call.', 400);
         }
-        
+
         Input::replace(array_merge(array(
-            'headersOnly'  => 'yes',
+            'headersOnly' => 'yes',
         ), Input::all()));
 
         $nodeData = App::make('Api\NodeController')->nodes(false);
         $nodes = array();
 
-        foreach($nodeData as $node) {
+        foreach ($nodeData as $node) {
             $nodes[$node['id']] = $node;
         }
 
@@ -32,15 +38,14 @@ class HierarchyController extends \BaseController {
         return Api::makeResponse($return, 'hierarchy');
     }
 
-    protected function buildHierarchyLevel($branches, $nodeData) {
-
+    protected function buildHierarchyLevel($branches, $nodeData)
+    {
         $return = array();
 
-        foreach($branches->getChildren() as $branch) {
+        foreach ($branches->getChildren() as $branch) {
             $return[] = array_merge($nodeData[$branch->node_id], array('branches' => $this->buildHierarchyLevel($branch, $nodeData)));
         }
 
         return $return;
-
     }
 }

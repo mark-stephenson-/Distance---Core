@@ -45,6 +45,8 @@ Route::filter('auth.basic', function () {
 });
 
 Route::filter('apiAuthentication', function () {
+    \Carbon\Carbon::setToStringFormat("Y-m-d\TH:i:s\Z");
+
     if (Request::header('User-Token')) {
         $user = User::whereKey(Request::header('User-Token'))->first();
 
