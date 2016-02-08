@@ -25,7 +25,7 @@ class NodeController extends \BaseController
         }
 
         $collection = \App::make('collection');
-        $nodes = Node::whereCollectionId($collection->id)->isPublished();
+        $nodes = Node::whereCollectionId($collection->id)->isPublishedOrRetired();
 
         if (Input::get('nodeType')) {
             $nodeType = \NodeType::find(Input::get('nodeType'));

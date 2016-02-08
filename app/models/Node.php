@@ -167,4 +167,9 @@ class Node extends BaseModel
     {
         $query->where('nodes.status', 'published');
     }
+
+    public function scopeIsPublishedOrRetired($query)
+    {
+        $query->whereIn('nodes.status', ['published', 'retired']);
+    }
 }
