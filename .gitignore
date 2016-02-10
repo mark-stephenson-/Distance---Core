@@ -4,8 +4,6 @@ composer.phar
 .DS_Store
 
 node_modules/
-public/css/*.min.css
-public/js/*.min.js
 
 app/storage
 .env
