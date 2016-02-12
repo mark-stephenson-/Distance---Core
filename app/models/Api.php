@@ -43,20 +43,14 @@ class Api extends \BaseModel
                     $content[$_u] = self::convertDate($content[$_u]);
                 }
             }
-        } elseif (is_object($content)) {
-            foreach (self::$remove as $_u) {
-                unset($content->$_u);
-            }
-
-            foreach (self::$convertDates as $_u) {
-                if (isset($content->$_u)) {
-                    $content->$_u = self::convertDate($content->$_u);
-                }
-            }
         }
 
-        if (is_array($content) || is_object($content)) {
-            foreach ($content as &$value) {
+        if (is_array($content)) {
+            foreach ($content as $key => &$value) {
+                if (is_string($key) and $key == 'retired_at') {
+                    $content['deleted_at'] = $value;
+                }
+
                 $value = self::cleanContent($value);
             }
         }
