@@ -360,6 +360,7 @@ class NodeController extends \BaseController
 
             $record = new PRRecord();
 
+            $record->pmos_id = $data['pmosID'];
             $record->basic_data = json_encode($data['basicData']);
             $record->incomplete_reason = $data['incompleteReason'];
 
