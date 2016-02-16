@@ -119,7 +119,13 @@ Route::filter('checkPermissions', function ($request) {
         (starts_with($property, 'cms.volunteers.') and ends_with($property, '.update')) or
         (starts_with($property, 'cms.volunteers.') and is_numeric(substr($property, -1, 1)))
     ) {
-        $property = 'cms.volunteers.update';
+        $property = 'cms.volunteers.manage';
+    }
+
+    if (
+        (starts_with($property, 'cms.data'))
+    ) {
+        $property = 'cms.export-data.export';
     }
 
     if (
@@ -147,6 +153,10 @@ Route::filter('checkPermissions', function ($request) {
     $properties = array_merge($additionalProperties, array($property, $property.'.*'));
 
     if (!Sentry::getUser()->hasAnyAccess($properties)) {
+        if (Request::segment(1) == 'apps' and count(Request::segments()) == 1) {
+            return Redirect::to('/me');
+        }
+
         App::abort(403);
     }
 });

@@ -89,9 +89,9 @@ return array(
     array(
         'title' => 'Data Export',
         'route' => 'data.export',
-        'params' => array('[app-id]', '[collection-id]'),
+        'params' => [],
         'icon' => 'download',
-        'access' => 'cms.apps.[app-id].collections.[collection-id].data.export',
+        'access' => 'cms.export-data.*',
     ),
 
     /*

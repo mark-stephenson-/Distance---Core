@@ -200,33 +200,33 @@ Route::group(array('before' => array('auth')), function () {
                 Route::post('resources/{id}/{language}/update-file/{redirect?}', array('as' => 'resources.updateFile', 'uses' => 'ResourcesController@updateFile'));
                 Route::post('resources/{id}/{language}/edit-name', array('as' => 'resources.editName', 'uses' => 'ResourcesController@editName'));
                 Route::post('resources/process/{catalogueId}/{language?}', array('as' => 'resources.process', 'uses' => 'ResourcesController@process'));
-
-                Route::get('data/export/{filename?}', ['as' => 'data.export', function ($appId, $collectionId, $filename = null) {
-
-                    $questionSets = Node::where('node_type', 7)
-                        ->orderBy('status')
-                        ->orderBy('published_at')
-                        ->get();
-
-                    return View::make('data-export.choose', compact('questionSets'));
-                }]);
-
-                Route::post('data/export', ['as' => 'data.export.work', function ($appId, $collectionId) {
-                    if (PRRecord::first() == null) {
-                        return View::make('data-export.empty');
-                    }
-
-                    $exportService = \App::make('Core\Services\ExportService');
-                    $exportPath = $exportService->generateExportForQuestionSet(Input::get('question_set'));
-
-                    return Response::download($exportPath);
-                }]);
             });
         });
 
         /*
             Global (with permissions)
          */
+
+        Route::get('data/export/{filename?}', ['as' => 'data.export', function ($filename = null) {
+
+            $questionSets = Node::where('node_type', 7)
+                ->orderBy('status')
+                ->orderBy('published_at')
+                ->get();
+
+            return View::make('data-export.choose', compact('questionSets'));
+        }]);
+
+        Route::post('data/export', ['as' => 'data.export.work', function () {
+            if (PRRecord::first() == null) {
+                return View::make('data-export.empty');
+            }
+
+            $exportService = \App::make('Core\Services\ExportService');
+            $exportPath = $exportService->generateExportForQuestionSet(Input::get('question_set'));
+
+            return Response::download($exportPath);
+        }]);
 
         /*
             Users
