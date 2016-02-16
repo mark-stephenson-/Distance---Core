@@ -207,6 +207,9 @@ Route::group(array('before' => array('auth')), function () {
             Global (with permissions)
          */
 
+        Route::get('data/export/download', ['as' => 'data.export.download', function () {
+            return Response::download(storage_path('export-csvs/export.zip'));
+        }]);
         Route::get('data/export/{filename?}', ['as' => 'data.export', function ($filename = null) {
 
             $questionSets = Node::where('node_type', 7)
@@ -222,10 +225,14 @@ Route::group(array('before' => array('auth')), function () {
                 return View::make('data-export.empty');
             }
 
-            $exportService = \App::make('Core\Services\ExportService');
-            $exportPath = $exportService->generateExportForQuestionSet(Input::get('question_set'));
+            try {
+                $exportService = \App::make('Core\Services\ExportService');
+                $exportPath = $exportService->generateExportForQuestionSet(Input::get('question_set'));
+            } catch (\Exception $e) {
+                return Redirect::route('data.export')->withErrors(new Illuminate\Support\MessageBag([$e->getMessage()]));
+            }
 
-            return Response::download($exportPath);
+            return View::make('data-export.download', compact('exportPath'));
         }]);
 
         /*
