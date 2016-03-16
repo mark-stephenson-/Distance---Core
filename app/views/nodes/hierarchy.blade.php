@@ -163,11 +163,11 @@
                         <small class="muted"><em>{{ $nodeTypes[$branch->node->node_type]->label }}</em></small> {{ $branch->node->statusBadge }}
                         <div class="btn-group">
 
-                            @if ( Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.read'))
+                            @if ( Sentry::getUser()->hasAccess('cms.apps.1.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.read'))
                                 <a href="{{ route('nodes.view', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
                             @endif
 
-                            @if ( Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.update'))
+                            @if ( Sentry::getUser()->hasAccess('cms.apps.1.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.update'))
                                 @if ($branch->node->status != 'published')
                                     <a href="{{ route('nodes.edit', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
                                     <a href="{{ route('questions.publish-revision', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini open-publish-question-set-modal">Publish Revision</a>
