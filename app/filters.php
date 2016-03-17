@@ -116,8 +116,7 @@ Route::filter('checkPermissions', function ($request) {
 
     // Same with volunteers
     if (
-        (starts_with($property, 'cms.volunteers.') and ends_with($property, '.update')) or
-        (starts_with($property, 'cms.volunteers.') and is_numeric(substr($property, -1, 1)))
+        starts_with($property, 'cms.volunteers.')
     ) {
         $property = 'cms.volunteers.manage';
     }
@@ -132,6 +131,12 @@ Route::filter('checkPermissions', function ($request) {
         (starts_with($property, 'cms.manage-trust'))
     ) {
         $property = 'cms.manage-trust.manage';
+    }
+
+    if (
+        (starts_with($property, 'cms.apps.1.collections.1.questions.create-revision'))
+    ) {
+        $property = 'cms.apps.1.collections.1.question.revision-management';
     }
 
     if (
@@ -153,6 +158,7 @@ Route::filter('checkPermissions', function ($request) {
     $properties = array_merge($additionalProperties, array($property, $property.'.*'));
 
     if (!Sentry::getUser()->hasAnyAccess($properties)) {
+        dd($properties);
         if (Request::segment(1) == 'apps' and count(Request::segments()) == 1) {
             return Redirect::to('/me');
         }
