@@ -207,6 +207,13 @@ Route::group(array('before' => array('auth')), function () {
             Global (with permissions)
          */
 
+        Route::group(['prefix' => 'reporting'], function() {
+            Route::get('/', [
+                'as' => 'reporting.index',
+                'uses' => 'ReportingController@index',
+            ]);
+        });
+
         Route::get('data/export/download', ['as' => 'data.export.download', function () {
             return Response::download(storage_path('export-csvs/export.zip'));
         }]);

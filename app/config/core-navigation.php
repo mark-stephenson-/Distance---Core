@@ -93,6 +93,13 @@ return array(
         'icon' => 'download',
         'access' => 'cms.export-data.*',
     ),
+    array(
+        'title' => 'Reporting',
+        'route' => 'reporting.index',
+        'params' => [],
+        'icon' => 'bar-chart',
+        'access' => 'cms.export-data.*',
+    ),
 
     /*
         Custom Node Type Navigation Item
