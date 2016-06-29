@@ -7484,6 +7484,10 @@ disabled look for disabled choices in the results dropdown
   left: auto;
   right: 7px;
 }
+.title-block h1 {
+  text-align: center;
+  text-decoration: underline;
+}
 .gradient {
   background: #4884a9;
   /* Old browsers */

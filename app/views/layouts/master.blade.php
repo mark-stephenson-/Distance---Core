@@ -9,6 +9,7 @@
         <![endif]-->
 
         <link rel="stylesheet" type="text/css" href="/css/app.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css">
 
         <script src="/js/jquery-1.9.1.js"></script>
         <script> CKEDITOR_BASEPATH = '{{ URL::to('') }}/js/ckeditor/'; </script>

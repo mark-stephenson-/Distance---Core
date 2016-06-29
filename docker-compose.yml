@@ -51,3 +51,25 @@ mailcatcher:
   image: schickling/mailcatcher
   ports:
       - 1080:1080
+npm:
+  image: netsells/node:latest
+  entrypoint: npm
+  volumes_from:
+    - site_data
+  working_dir: /data
+  command: --version
+bower:
+  image: netsells/node:latest
+  entrypoint: bower
+  volumes_from:
+    - site_data
+  working_dir: /data
+  command: --version
+grunt:
+  image: andreptb/grunt
+  entrypoint: grunt
+  volumes_from:
+    - site_data
+  working_dir: /data
+  command: --version
+
