@@ -25,7 +25,7 @@
                 <div class="control-group">
                     {{ Form::label('trust', 'Location', array('class' => 'control-label span2')) }}
                     <div class="controls">
-                        {{ Form::select('trust', array(), Input::old('trust'), array('class' => 'span3')) }}
+                        {{ Form::select('trust', $trusts, Input::old('trust'), array('class' => 'span3')) }}
                         {{ Form::select('hospital', array(), Input::old('hospital'), array('class' => 'span3')) }}
                         {{ Form::select('ward', array(), Input::old('ward'), array('class' => 'span3')) }}
                     </div>

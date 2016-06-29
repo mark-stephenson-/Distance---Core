@@ -9,6 +9,8 @@ class ReportingController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make('reporting.index');
+		$trusts = DB::table('nodes')->where('node_type', 2)->lists('title', 'id');
+        array_unshift($trusts, 'Please select a Trust');
+		return View::make('reporting.index', compact('trusts'));
 	}
 }
