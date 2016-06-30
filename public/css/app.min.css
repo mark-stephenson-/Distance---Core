@@ -7488,6 +7488,16 @@ disabled look for disabled choices in the results dropdown
   text-align: center;
   text-decoration: underline;
 }
+.responses {
+  border: 1px solid black;
+  text-align: center;
+}
+.responses p {
+  margin-bottom: 10px;
+}
+.responses .submit-button {
+  margin-bottom: 10px;
+}
 .gradient {
   background: #4884a9;
   /* Old browsers */

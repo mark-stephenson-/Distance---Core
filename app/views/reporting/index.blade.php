@@ -31,10 +31,10 @@
                     </div>
                 </div>
             </div>
-            <div class="span2">
+            <div class="span2 responses">
                 <h3>12</h3>
                 <p>Responses</p>
-                {{ Form::submit('Generate Report') }}
+                {{ Form::submit('Generate Report', array('class' => 'submit-button')) }}
             </div>
         {{ Form::close() }}
     </div>
