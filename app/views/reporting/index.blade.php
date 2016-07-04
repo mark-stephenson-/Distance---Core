@@ -6,12 +6,11 @@
 
 @section('body')
     <div class="title-block">
-        <h1>PRASE Reporting</h1>
         <h3>Bespoke Report Parameters</h3>
     </div>
 
     <div class="reports-form">
-        {{ Form::open() }}
+        {{ Form::open(['id' => 'report-form']) }}
             <div class="span9">
                 <div class="control-group">
 
@@ -42,8 +41,8 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $("#period_start").datepicker();
-            $("#period_end").datepicker();
+            $("#period_start").datepicker({ dateFormat: 'dd-mm-yy' });
+            $("#period_end").datepicker({ dateFormat: 'dd-mm-yy' });
 
             $('[name=trust]').on('change', function() {
                 var trustId = $(this).val();
@@ -78,6 +77,26 @@
                         listitems = '<option value=' + key + '>' + value + '</option>' + listitems;
                     });
                     $('[name=ward]').append(listitems);
+                });
+            });
+
+            $('#report-form').on('submit', function(e) {
+                e.preventDefault();
+
+                var wardId = $('[name=ward]').val();
+
+                var url = "/reporting/_ajax/" + wardId + "/generate";
+
+                $.ajax({
+                    method: 'GET',
+                    url: url,
+                    data: {
+                        'startDate': $('[name=period_start]').val(),
+                        'endDate': $('[name=period_end]').val()
+                    },
+                    dataType: 'json'
+                }).done(function(data) {
+                    alert(data);
                 });
             });
         });

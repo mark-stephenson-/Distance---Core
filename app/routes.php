@@ -222,6 +222,16 @@ Route::group(array('before' => array('auth')), function () {
                 'as' => 'reporting.ajax.wards',
                 'uses' => 'ReportingController@wards',
             ]);
+
+            Route::get('_ajax/{wardId}/generate', [
+                'as' => 'reporting.ajax.generate',
+                'uses' => 'ReportingController@generate',
+            ]);
+            
+            Route::get('{generate}/view', [
+                'as' => 'reporting.view',
+                'uses' => 'ReportingController@view',
+            ]);
         });
 
         Route::get('data/export/download', ['as' => 'data.export.download', function () {

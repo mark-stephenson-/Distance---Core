@@ -1,5 +1,9 @@
 <?php
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+
 class ReportingController extends \BaseController {
 
 	/**
@@ -43,5 +47,22 @@ class ReportingController extends \BaseController {
 		$wards = ['' => 'Please select a Ward'] + $wards;
 
 		return json_encode($wards);
+	}
+
+	public function generate($wardId)
+	{
+		if (!$wardId or !is_numeric($wardId)) {
+			return Response::make("Invalid ward specified.", 400);
+		}
+
+		if (!Input::get('startDate') or !$startDate = Carbon::createFromFormat("d-m-Y", Input::get('startDate'))) {
+			return Response::make("Invalid start date specified.", 400);
+		}
+
+		if (!Input::get('endDate') or !$endDate = Carbon::createFromFormat("d-m-Y", Input::get('endDate'))) {
+			return Response::make("Invalid end date specified.", 400);
+		}
+
+		dd($wardId, $startDate, $endDate);
 	}
 }
