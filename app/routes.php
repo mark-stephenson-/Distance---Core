@@ -212,6 +212,16 @@ Route::group(array('before' => array('auth')), function () {
                 'as' => 'reporting.index',
                 'uses' => 'ReportingController@index',
             ]);
+
+            Route::get('_ajax/{trustId}/hospitals', [
+                'as' => 'reporting.ajax.hospitals',
+                'uses' => 'ReportingController@hospitals',
+            ]);
+
+            Route::get('_ajax/{hospitalId}/wards', [
+                'as' => 'reporting.ajax.wards',
+                'uses' => 'ReportingController@wards',
+            ]);
         });
 
         Route::get('data/export/download', ['as' => 'data.export.download', function () {

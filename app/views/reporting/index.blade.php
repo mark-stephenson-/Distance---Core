@@ -31,10 +31,8 @@
                     </div>
                 </div>
             </div>
-            <div class="span2 responses">
-                <h3>12</h3>
-                <p>Responses</p>
-                {{ Form::submit('Generate Report', array('class' => 'submit-button')) }}
+            <div class="span2">
+                {{ Form::submit('Generate Report', array('class' => 'submit-button btn')) }}
             </div>
         {{ Form::close() }}
     </div>
@@ -44,9 +42,43 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $(function () {
-                $("#period_start").datepicker();
-                $("#period_end").datepicker();
+            $("#period_start").datepicker();
+            $("#period_end").datepicker();
+
+            $('[name=trust]').on('change', function() {
+                var trustId = $(this).val();
+                var url = "/reporting/_ajax/" + trustId + "/hospitals";
+
+                $.ajax({
+                    method: 'GET',
+                    url: url,
+                    dataType: 'json'
+                }).done(function(data) {
+                    $('[name=hospital]').html('');
+                    var listitems = '';
+                    $.each(data, function(key, value){
+                        listitems = '<option value=' + key + '>' + value + '</option>' + listitems;
+                    });
+                    $('[name=hospital]').append(listitems);
+                });
+            });
+
+            $('[name=hospital]').on('change', function() {
+                var hospitalId = $(this).val();
+                var url = "/reporting/_ajax/" + hospitalId + "/wards";
+
+                $.ajax({
+                    method: 'GET',
+                    url: url,
+                    dataType: 'json'
+                }).done(function(data) {
+                    $('[name=ward]').html('');
+                    var listitems = '';
+                    $.each(data, function(key, value){
+                        listitems = '<option value=' + key + '>' + value + '</option>' + listitems;
+                    });
+                    $('[name=ward]').append(listitems);
+                });
             });
         });
     </script>
