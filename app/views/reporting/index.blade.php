@@ -36,13 +36,27 @@
         {{ Form::close() }}
     </div>
 
+    <div class="modal hide fade" id="pmos_modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Please choose a question set.</h3>
+        </div>
+        <div class="modal-body">
+            <select name="pmos_id" id="pmos_id"></select>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn">Close</a>
+            <a href="#" class="btn btn-primary" id="pmos_submit">Save changes</a>
+        </div>
+    </div>
+
 @stop
 
 @section('js')
     <script>
         $(document).ready(function() {
-            $("#period_start").datepicker({ dateFormat: 'dd-mm-yy' });
-            $("#period_end").datepicker({ dateFormat: 'dd-mm-yy' });
+            $("#period_start").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true });
+            $("#period_end").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true  });
 
             $('[name=trust]').on('change', function() {
                 var trustId = $(this).val();
@@ -83,22 +97,49 @@
             $('#report-form').on('submit', function(e) {
                 e.preventDefault();
 
-                var wardId = $('[name=ward]').val();
-
-                var url = "/reporting/_ajax/" + wardId + "/generate";
-
-                $.ajax({
-                    method: 'GET',
-                    url: url,
-                    data: {
-                        'startDate': $('[name=period_start]').val(),
-                        'endDate': $('[name=period_end]').val()
-                    },
-                    dataType: 'json'
-                }).done(function(data) {
-                    alert(data);
-                });
+                generate();
             });
         });
+
+        $('#pmos_submit').on('click', function() {
+            var pmosId = $('#pmos_id').val();
+            generate(pmosId);
+        });
+
+        function generate(pmosId) {
+            if (typeof pmosId == undefined) {
+                pmosId = null;
+            }
+            var wardId = $('[name=ward]').val();
+
+            var url = "/reporting/_ajax/" + wardId + "/generate";
+
+            $.ajax({
+                method: 'GET',
+                url: url,
+                data: {
+                    'startDate': $('[name=period_start]').val(),
+                    'endDate': $('[name=period_end]').val(),
+                    'pmosId': pmosId
+                },
+                dataType: 'json'
+            }).done(function(data) {
+                alert(data);
+            }).fail(function(xhr) {
+                if (xhr.status == 416) {
+
+                    $('#pmos_id').html('');
+                    var listitems = '';
+                    $.each(JSON.parse(xhr.responseText), function(key, value){
+                        listitems = '<option value=' + key + '>' + value + '</option>' + listitems;
+                    });
+                    $('#pmos_id').append(listitems);
+
+                    $('#pmos_modal').modal({
+
+                    });
+                }
+            });
+        }
     </script>
 @stop

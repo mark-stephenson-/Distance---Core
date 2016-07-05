@@ -1,6 +1,8 @@
 <?php
 
 use Carbon\Carbon;
+use Core\Services\ReportService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 
@@ -63,6 +65,41 @@ class ReportingController extends \BaseController {
 			return Response::make("Invalid end date specified.", 400);
 		}
 
-		dd($wardId, $startDate, $endDate);
-	}
+        if (!Input::get('pmosId')) {
+
+            $questionSets = PRRecord::whereWardNodeId($wardId)
+                ->where('start_date', '>=', $startDate)
+                ->where('start_date', '<=', $endDate)
+                ->join('nodes', 'pmos_id', '=', 'nodes.id')
+                ->groupBy('pmos_id')
+                ->get(
+                    [
+                        'pmos_id',
+                        'nodes.created_at',
+                        'nodes.published_at',
+                        'nodes.retired_at',
+                        DB::raw('COUNT(prase_records.id) AS results')
+                    ]
+                );
+
+            $selects = [];
+
+            foreach ($questionSets as $questionSet) {
+                $selects[$questionSet->pmos_id] = "Created: {$questionSet->created_at}, Published: {$questionSet->published_at}, Retired: {$questionSet->retired_at} RESULTS: {$questionSet->results}";
+            }
+
+            if (count($selects) > 1) {
+                return Response::make(json_encode($selects), 416);
+            }
+
+            $pmosId = $questionSets->first()->pmos_id;
+        } else {
+            $pmosId = Input::get('pmosId');
+        }
+
+        $reportService = new ReportService();
+        $reportService->generateReportForQuestionSet($pmosId, $wardId, $startDate, $endDate);
+
+        return url('view');
+    }
 }
