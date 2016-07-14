@@ -20,7 +20,7 @@
                     <tbody>
                         <tr>
                             <td>Submissions</td>
-                            <td></td>
+                            <td>{{ $json['submissions']['total }} - {{ $json["submissions"]["male"] }} Male, {{ $json['submissions']['female'] }} Female</td>
                         </tr>
                         <tr>
                             <td>Response Date Range</td>
@@ -42,7 +42,8 @@
                 </table>
             </div>
             <div class="span4">
-                <a href="#" class="btn btn-lg btn-primary">Export Report</a>
+                <a href="#" class="btn btn-lg btn-primary">Export as PDF</a>
+                <a href="#" class="btn btn-lg btn-primary">Export as CSV</a>
             </div>
         </div>
 

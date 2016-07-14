@@ -122,7 +122,8 @@ class ReportingController extends \BaseController {
 
     public function view($fileKey)
     {
-        return View::make('reporting.summary');
-        dd($fileKey);
+        $json = json_decode(file_get_contents(storage_path("reports/{$fileKey}.json")));
+        die($json);
+        return View::make('reporting.summary', compact('json'));
     }
 }
