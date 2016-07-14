@@ -144,6 +144,10 @@
 
                     });
                 }
+
+                if (xhr.status == 404) {
+                    alert(xhr.responseText);
+                }
             });
         }
     </script>

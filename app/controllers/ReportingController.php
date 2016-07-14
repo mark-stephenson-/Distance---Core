@@ -103,6 +103,10 @@ class ReportingController extends \BaseController
                 return Response::make(json_encode($selects), 416);
             }
 
+            if (!count($questionSets)) {
+                return Response::make('There is no data available for your search parameters.', 404);
+            }
+
             $pmosId = $questionSets->first()->pmos_id;
         } else {
             $pmosId = Input::get('pmosId');
@@ -124,7 +128,7 @@ class ReportingController extends \BaseController
     {
         $reportData = $this->getReportData($fileKey);
 
-        return View::make('reporting.summary', compact('reportData'));
+        return View::make('reporting.summary', compact('reportData', 'fileKey'));
     }
 
     public function viewCsv($fileKey)
