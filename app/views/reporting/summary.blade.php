@@ -91,8 +91,8 @@
                 <ul>
                     <li><a href="#explanation">Report Template Explained</a></li>
                     <li><a href="#summary">Summary Report</a></li>
-                    <li><a href="#3">General Positive Comments Report</a></li>
-                    <li><a href="#4">General Concerns Report</a></li>
+                    <li><a href="#comments">General Positive Comments Report</a></li>
+                    <li><a href="#concerns">General Concerns Report</a></li>
                     <li><a href="#5">Domain Report</a></li>
                     <li><a href="#6">Domain Positive Comments Report</a></li>
                     <li><a href="#7">Domain Concerns Report</a></li>
@@ -185,8 +185,56 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="3"></div>
-                <div id="4"></div>
+                <div id="comments">
+                    <table class="table">
+                        <thead>
+                            <th>Patient Comments</th>
+                        </thead>
+                        <tbody>
+                            @foreach($reportData->notes as $note)
+                                <tr>
+                                    <td>{{ $note->text }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div id="concerns">
+                    <table class="table">
+                        <thead>
+                        <th>Patient Concern</th>
+                        <th>Preventability</th>
+                        <th>Severity</th>
+                        </thead>
+                        <tbody>
+                        @foreach($reportData->concerns as $concern)
+                            <tr>
+                                <td>{{ $concern->text }}</td>
+                                <td>
+                                    @if($concern->preventability < 2)
+                                        Not Preventable
+                                    @elseif($concern->preventability == 2)
+                                        May be preventable
+                                    @elseif($concern->preventability == 3)
+                                        Preventable
+                                    @else
+                                        Unknown
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($concern->severity < 4)
+                                        <p style="color: #59af59">Low</p>
+                                    @elseif($concern->severity >= 4 && $concern->severity <7)
+                                        <p style="color: #f9a124">Medium</p>
+                                    @else
+                                        <p style="color: #e45752">High</p>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 <div id="5"></div>
                 <div id="6"></div>
                 <div id="7"></div>
