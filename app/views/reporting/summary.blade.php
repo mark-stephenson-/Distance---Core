@@ -20,7 +20,7 @@
                     <tbody>
                         <tr>
                             <td>Submissions</td>
-                            <td>{{ $json['submissions']['total }} - {{ $json["submissions"]["male"] }} Male, {{ $json['submissions']['female'] }} Female</td>
+                            <td>{{ $reportData->submissions->total }} ({{ $reportData->submissions->male }} Male, {{ $reportData->submissions->female }} Female)</td>
                         </tr>
                         <tr>
                             <td>Response Date Range</td>
@@ -28,15 +28,15 @@
                         </tr>
                         <tr>
                             <td>Trust</td>
-                            <td></td>
+                            <td>{{ $reportData->trust }}</td>
                         </tr>
                         <tr>
                             <td>Hospital</td>
-                            <td></td>
+                            <td>{{ $reportData->hospital  }}</td>
                         </tr>
                         <tr>
                             <td>Ward</td>
-                            <td></td>
+                            <td>{{ $reportData->ward }}</td>
                         </tr>
                     </tbody>
                 </table>
