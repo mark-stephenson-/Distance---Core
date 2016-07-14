@@ -18,7 +18,7 @@ class ReportService
             ->get();
 
         $answerOptions = (new Collection(DB::table('node_type_5')->get()))->keyBy('node_id');
-        $questionData = (new Collection(DB::table('node_type_1')->get()))->keyBy('node_id');
+        $questionData = (new Collection(DB::table('node_type_1')->join('i18n_strings', 'node_type_1.question', '=', 'i18n_strings.key')->get(['*', 'i18n_strings.value AS value'])))->keyBy('node_id');
 
         $wards = new Collection(DB::table('node_type_4')->whereIn('node_id', $wardIds)->get());
         $hospital = DB::table('node_type_3')->whereNodeId($wards[0]->hospital)->first();
@@ -40,6 +40,7 @@ class ReportService
             'notes' => [],
             'concerns' => [],
             'ward' => $wards->implode('name', ', '),
+            'wardIds' => $wardIds,
             'hospital' => $hospital->name,
             'trust' => $trust->name,
         ];
@@ -47,6 +48,7 @@ class ReportService
         foreach($domains as $domain) {
             $domainData = [
                 'name' => $domain->title,
+                'domainvalue' => $domain->domainvalue,
                 'summary' => [
                 ],
                 'questions' => [],
@@ -103,7 +105,9 @@ class ReportService
                         $domainData['summary'][$answerValue]++;
 
                         // Now per question
-                        $domainData['questions'][$question->node->id]['text'] = $question->node->title;
+                        $domainData['questions'][$question->node->id]['title'] = $question->node->title;
+                        $domainData['questions'][$question->node->id]['text'] = $questionData[$question->node->id]->value;
+                        $domainData['questions'][$question->node->id]['reversescore'] = $questionData[$question->node->id]->reversescore;
                         if (!isset($domainData['questions'][$question->node->id]['answers'][$answerValue])) {
                             $domainData['questions'][$question->node->id]['answers'][$answerValue] = 0;
                         }

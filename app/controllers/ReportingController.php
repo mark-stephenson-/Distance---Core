@@ -68,11 +68,11 @@ class ReportingController extends \BaseController
     {
         $wardIds = array_filter(explode(',', $wardIds));
 
-        if (!Input::get('startDate') or !$startDate = Carbon::createFromFormat('d-m-Y', Input::get('startDate'))) {
+        if (!Input::get('startDate') or !$startDate = Carbon::createFromFormat('d-m-Y', Input::get('startDate'))->startOfDay()) {
             return Response::make('Invalid start date specified.', 400);
         }
 
-        if (!Input::get('endDate') or !$endDate = Carbon::createFromFormat('d-m-Y', Input::get('endDate'))) {
+        if (!Input::get('endDate') or !$endDate = Carbon::createFromFormat('d-m-Y', Input::get('endDate'))->startOfDay()) {
             return Response::make('Invalid end date specified.', 400);
         }
 
@@ -85,6 +85,7 @@ class ReportingController extends \BaseController
                 ->get(
                     [
                         'pmos_id',
+                        'start_date',
                         'nodes.created_at',
                         'nodes.published_at',
                         'nodes.retired_at',
@@ -131,7 +132,8 @@ class ReportingController extends \BaseController
         $reportData = $this->getReportData($fileKey);
 
         $csvReportService = new ReportService\CSV($reportData);
-        dd($csvReportService->generateCSVFromReportData());
+
+        return Response::download($csvReportService->generateCSVFromReportData());
     }
 
     public function getReportData($fileKey)
