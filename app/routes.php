@@ -232,6 +232,11 @@ Route::group(array('before' => array('auth')), function () {
                 'as' => 'reporting.view',
                 'uses' => 'ReportingController@view',
             ]);
+
+            Route::get('view/{id}/csv', [
+                'as' => 'reporting.view-csv',
+                'uses' => 'ReportingController@viewCsv',
+            ]);
         });
 
         Route::get('data/export/download', ['as' => 'data.export.download', function () {

@@ -122,7 +122,22 @@ class ReportingController extends \BaseController {
 
     public function view($fileKey)
     {
+        $reportData = $this->getReportData($fileKey);
+
         return View::make('reporting.summary');
         dd($fileKey);
+    }
+
+    public function viewCsv($fileKey)
+    {
+        $reportData = $this->getReportData($fileKey);
+
+        $csvReportService = new ReportService\CSV();
+        dd($csvReportService->generateCSVFromReportData($reportData));
+    }
+
+    public function getReportData($fileKey)
+    {
+        return json_decode(file_get_contents(storage_path("reports/{$fileKey}.json")));
     }
 }
