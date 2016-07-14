@@ -122,8 +122,10 @@ class ReportingController extends \BaseController
     public function view($fileKey)
     {
         $reportData = $this->getReportData($fileKey);
-
-        return View::make('reporting.summary', compact('reportData'));
+        $start = (new Carbon($reportData->dates->start))->format('d/m/Y');
+        $end = (new Carbon($reportData->dates->end))->format('d/m/Y');
+//        die(json_encode($reportData));
+        return View::make('reporting.summary', compact('reportData', 'start', 'end'));
     }
 
     public function viewCsv($fileKey)
