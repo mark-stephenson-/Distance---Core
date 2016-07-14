@@ -41,11 +41,18 @@ class ReportingController extends \BaseController {
 
 	public function wards($hospitalId)
 	{
+	    $search = Input::get('q');
+
 		$wards = DB::table('nodes')
 			->join('node_type_4', 'node_id', '=', 'nodes.id')
 			->where('node_type', 4)
-			->where('node_type_4.hospital', $hospitalId)
-            ->get(['*', 'node_type_4.name AS node_type_name']);
+			->where('node_type_4.hospital', $hospitalId);
+
+        if ($search) {
+            $wards = $wards->where('node_type_4.name', 'LIKE', "%{$search}%");
+        }
+
+        $wards = $wards->get(['*', 'node_type_4.name AS node_type_name']);
 
         $wards = (new Collection($wards))->map(function($node) {
             return [
