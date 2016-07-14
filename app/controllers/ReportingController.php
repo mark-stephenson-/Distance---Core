@@ -115,6 +115,7 @@ class ReportingController extends \BaseController {
 
     public function view($fileKey)
     {
+        return View::make('reporting.summary');
         dd($fileKey);
     }
 }
