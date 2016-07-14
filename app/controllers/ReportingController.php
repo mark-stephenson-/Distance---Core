@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Core\Services\ReportService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
@@ -44,18 +45,21 @@ class ReportingController extends \BaseController {
 			->join('node_type_4', 'node_id', '=', 'nodes.id')
 			->where('node_type', 4)
 			->where('node_type_4.hospital', $hospitalId)
-			->lists('node_type_4.name', 'node_id');
+            ->get(['*', 'node_type_4.name AS node_type_name']);
 
-		$wards = ['' => 'Please select a Ward'] + $wards;
+        $wards = (new Collection($wards))->map(function($node) {
+            return [
+                'id' => $node->node_id,
+                'text' => $node->node_type_name,
+            ];
+        });
 
-		return json_encode($wards);
+		return json_encode(['results' => $wards]);
 	}
 
-	public function generate($wardId)
+	public function generate($wardIds)
 	{
-		if (!$wardId or !is_numeric($wardId)) {
-			return Response::make("Invalid ward specified.", 400);
-		}
+	    $wardIds = array_filter(explode(',', $wardIds));
 
 		if (!Input::get('startDate') or !$startDate = Carbon::createFromFormat("d-m-Y", Input::get('startDate'))) {
 			return Response::make("Invalid start date specified.", 400);
@@ -67,7 +71,7 @@ class ReportingController extends \BaseController {
 
         if (!Input::get('pmosId')) {
 
-            $questionSets = PRRecord::whereWardNodeId($wardId)
+            $questionSets = PRRecord::whereIn('ward_node_id', $wardIds)
                 ->where('start_date', '>=', $startDate)
                 ->where('start_date', '<=', $endDate)
                 ->join('nodes', 'pmos_id', '=', 'nodes.id')
@@ -98,7 +102,7 @@ class ReportingController extends \BaseController {
         }
 
         $reportService = new ReportService();
-        $reportData = $reportService->generateReportForQuestionSet($pmosId, $wardId, $startDate, $endDate);
+        $reportData = $reportService->generateReportForQuestionSet($pmosId, $wardIds, $startDate, $endDate);
 
         $reportJsonData = json_encode($reportData);
 

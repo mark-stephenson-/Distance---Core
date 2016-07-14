@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class ReportService
 {
-    public function generateReportForQuestionSet($pmosId, $wardId, Carbon $startDate, Carbon $endDate)
+    public function generateReportForQuestionSet($pmosId, $wardIds, Carbon $startDate, Carbon $endDate)
     {
-        $records = \PRRecord::whereWardNodeId($wardId)
+        $records = \PRRecord::whereIn('ward_node_id', $wardIds)
             ->with(['questions.answer', 'questions.node'])
             ->wherePmosId($pmosId)
             ->where('start_date', '>=', $startDate)
@@ -20,8 +20,8 @@ class ReportService
         $answerOptions = (new Collection(DB::table('node_type_5')->get()))->keyBy('node_id');
         $questionData = (new Collection(DB::table('node_type_1')->get()))->keyBy('node_id');
 
-        $ward = DB::table('node_type_4')->whereNodeId($wardId)->first();
-        $hospital = DB::table('node_type_3')->whereNodeId($ward->hospital)->first();
+        $wards = new Collection(DB::table('node_type_4')->whereIn('node_id', $wardIds)->get());
+        $hospital = DB::table('node_type_3')->whereNodeId($wards[0]->hospital)->first();
         $trust = DB::table('node_type_2')->whereNodeId($hospital->trust)->first();
 
         $domains = DB::table('node_type_10')->get();
@@ -34,7 +34,7 @@ class ReportService
             ],
             'notes' => [],
             'concerns' => [],
-            'ward' => $ward->name,
+            'ward' => $wards->implode('name', ', '),
             'hospital' => $hospital->name,
             'trust' => $trust->name,
         ];

@@ -26,7 +26,7 @@
                     <div class="controls">
                         {{ Form::select('trust', $trusts, Input::old('trust'), array('class' => 'span3')) }}
                         {{ Form::select('hospital', array(), Input::old('hospital'), array('class' => 'span3')) }}
-                        {{ Form::select('ward', array(), Input::old('ward'), array('class' => 'span3')) }}
+                        {{ Form::hidden('wards', null, ['id' => 'wards']) }}
                     </div>
                 </div>
             </div>
@@ -55,6 +55,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
+
             $("#period_start").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true });
             $("#period_end").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true  });
 
@@ -78,19 +79,23 @@
 
             $('[name=hospital]').on('change', function() {
                 var hospitalId = $(this).val();
-                var url = "/reporting/_ajax/" + hospitalId + "/wards";
 
-                $.ajax({
-                    method: 'GET',
-                    url: url,
-                    dataType: 'json'
-                }).done(function(data) {
-                    $('[name=ward]').html('');
-                    var listitems = '';
-                    $.each(data, function(key, value){
-                        listitems = '<option value=' + key + '>' + value + '</option>' + listitems;
-                    });
-                    $('[name=ward]').append(listitems);
+                $("#wards").select2("destroy");
+
+                $('#wards').select2({
+                    multiple: true,
+                    ajax: {
+                        url: '/reporting/_ajax/'+hospitalId+'/wards',
+                        dataType: 'json',
+                        data: function(term, page) {
+                            return {
+                                q: term
+                            }
+                        },
+                        results: function(data, page) {
+                            return data;
+                        }
+                    }
                 });
             });
 
@@ -110,7 +115,7 @@
             if (typeof pmosId == undefined) {
                 pmosId = null;
             }
-            var wardId = $('[name=ward]').val();
+            var wardId = $('[name=wards]').val();
 
             var url = "/reporting/_ajax/" + wardId + "/generate";
 
