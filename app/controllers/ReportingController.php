@@ -68,11 +68,11 @@ class ReportingController extends \BaseController
     {
         $wardIds = array_filter(explode(',', $wardIds));
 
-        if (!Input::get('startDate') or !$startDate = Carbon::createFromFormat('d-m-Y', Input::get('startDate'))) {
+        if (!Input::get('startDate') or !$startDate = Carbon::createFromFormat('d-m-Y', Input::get('startDate'))->startOfDay()) {
             return Response::make('Invalid start date specified.', 400);
         }
 
-        if (!Input::get('endDate') or !$endDate = Carbon::createFromFormat('d-m-Y', Input::get('endDate'))) {
+        if (!Input::get('endDate') or !$endDate = Carbon::createFromFormat('d-m-Y', Input::get('endDate'))->startOfDay()) {
             return Response::make('Invalid end date specified.', 400);
         }
 
@@ -85,6 +85,7 @@ class ReportingController extends \BaseController
                 ->get(
                     [
                         'pmos_id',
+                        'start_date',
                         'nodes.created_at',
                         'nodes.published_at',
                         'nodes.retired_at',
@@ -100,6 +101,10 @@ class ReportingController extends \BaseController
 
             if (count($selects) > 1) {
                 return Response::make(json_encode($selects), 416);
+            }
+
+            if (!count($questionSets)) {
+                return Response::make('There is no data available for your search parameters.', 404);
             }
 
             $pmosId = $questionSets->first()->pmos_id;
@@ -122,10 +127,11 @@ class ReportingController extends \BaseController
     public function view($fileKey)
     {
         $reportData = $this->getReportData($fileKey);
+
         $start = (new Carbon($reportData->dates->start))->format('d/m/Y');
         $end = (new Carbon($reportData->dates->end))->format('d/m/Y');
-//        die(json_encode($reportData));
-        return View::make('reporting.summary', compact('reportData', 'start', 'end'));
+
+        return View::make('reporting.summary', compact('reportData', 'start', 'end', 'fileKey'));
     }
 
     public function viewCsv($fileKey)
@@ -133,7 +139,8 @@ class ReportingController extends \BaseController
         $reportData = $this->getReportData($fileKey);
 
         $csvReportService = new ReportService\CSV($reportData);
-        dd($csvReportService->generateCSVFromReportData());
+
+        return Response::download($csvReportService->generateCSVFromReportData());
     }
 
     public function getReportData($fileKey)

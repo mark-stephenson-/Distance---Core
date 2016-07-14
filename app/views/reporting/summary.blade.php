@@ -38,8 +38,8 @@
                 </table>
             </div>
             <div class="span4">
-                <a href="#" class="btn btn-lg btn-primary export-button">Export as PDF</a>
-                <a href="#" class="btn btn-lg btn-primary export-button">Export as CSV</a>
+                <a href="{{ route('reporting.view-pdf', [$fileKey]) }}" class="btn btn-lg btn-primary export-button">Export as PDF</a>
+                <a href="{{ route('reporting.view-csv', [$fileKey]) }}" class="btn btn-lg btn-primary export-button">Export as CSV</a>
             </div>
         </div>
 
