@@ -13,29 +13,25 @@
         <div class="row">
             <div class="span8">
                 <table class="table">
-                    <thead>
-                        <th></th>
-                        <th></th>
-                    </thead>
                     <tbody>
                         <tr>
-                            <td>Submissions</td>
+                            <td class="table-key"><strong>Submissions</strong></td>
                             <td>{{ $reportData->submissions->total }} ({{ $reportData->submissions->male }} Male, {{ $reportData->submissions->female }} Female)</td>
                         </tr>
                         <tr>
-                            <td>Response Date Range</td>
+                            <td class="table-key"><strong>Response Date Range</strong></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Trust</td>
+                            <td class="table-key"><strong>Trust</strong></td>
                             <td>{{ $reportData->trust }}</td>
                         </tr>
                         <tr>
-                            <td>Hospital</td>
+                            <td class="table-key"><strong>Hospital</strong></td>
                             <td>{{ $reportData->hospital  }}</td>
                         </tr>
                         <tr>
-                            <td>Ward</td>
+                            <td class="table-key"><strong>Ward</strong></td>
                             <td>{{ $reportData->ward }}</td>
                         </tr>
                     </tbody>
@@ -53,36 +49,36 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td>Communication and Team working</td>
-                            <td></td>
+                            <td class="table-key"><strong>Communication and Team working</strong></td>
+                            <td>The effective exchange and sharing of information between staff, patients and departments including written and verbal communication systems. Team working of professionals within a group.</td>
                         </tr>
                         <tr>
-                            <td>Organisation and Care planning</td>
-                            <td></td>
+                            <td class="table-key"><strong>Organisation and Care planning</strong></td>
+                            <td>Factors related to the care plan, and the availability of resources for the care plan.</td>
                         </tr>
                         <tr>
-                            <td>Access to resources</td>
-                            <td></td>
+                            <td class="table-key"><strong>Access to resources</strong></td>
+                            <td>The availability of experienced staff, equipment and external resources.</td>
                         </tr>
                         <tr>
-                            <td>Ward type and layout</td>
-                            <td></td>
+                            <td class="table-key"><strong>Ward type and layout</strong></td>
+                            <td>The patients' experience of the ward environment.</td>
                         </tr>
                         <tr>
-                            <td>Staff roles and responsibilities</td>
-                            <td></td>
+                            <td class="table-key"><strong>Staff roles and responsibilities</strong></td>
+                            <td>Clear supervision and lines of accountability for staff.</td>
                         </tr>
                         <tr>
-                            <td>Staff training</td>
-                            <td></td>
+                            <td class="table-key"><strong>Staff training</strong>/td>
+                            <td>Staff competency and ability to perform role at appropriate grade.</td>
                         </tr>
                         <tr>
-                            <td>Delays</td>
-                            <td></td>
+                            <td class="table-key"><strong>Delays</strong></td>
+                            <td>Delays relating to a specific procedure, or to general aspects of care.</td>
                         </tr>
                         <tr>
-                            <td>Dignity and Respect</td>
-                            <td></td>
+                            <td class="table-key"><strong>Dignity and Respect</strong></td>
+                            <td>Lorem ipsum</td>
                         </tr>
                     </tbody>
                 </table>

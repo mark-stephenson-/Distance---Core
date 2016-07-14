@@ -7498,6 +7498,9 @@ disabled look for disabled choices in the results dropdown
 .responses .submit-button {
   margin-bottom: 10px;
 }
+.table-key {
+  background-color: #f5f5f5;
+}
 .gradient {
   background: #4884a9;
   /* Old browsers */
