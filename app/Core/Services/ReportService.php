@@ -90,7 +90,11 @@ class ReportService
                         }
 
                         // Log the answers per domain
-                        $answerValue = $answerOptions[$question->answer->id]->answervalue;
+                        if (!$question->answer) {
+                            $answerValue = 0;
+                        } else {
+                            $answerValue = $answerOptions[$question->answer->id]->answervalue;
+                        }
                         $domainData['summary'][$answerValue]++;
 
                         // Now per question
@@ -105,15 +109,12 @@ class ReportService
 
             $reportData['domains'][$domain->node_id] = $domainData;
 
-            $jsonData = json_encode($reportData);
-            die($jsonData);
         }
 
         foreach($records as $record) {
             $reportData['submissions'][strtolower($record->basicData()->Gender)]++;
         }
 
-        dd($reportData);
-
+        return $reportData;
     }
 }

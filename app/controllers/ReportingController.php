@@ -98,8 +98,19 @@ class ReportingController extends \BaseController {
         }
 
         $reportService = new ReportService();
-        $reportService->generateReportForQuestionSet($pmosId, $wardId, $startDate, $endDate);
+        $reportData = $reportService->generateReportForQuestionSet($pmosId, $wardId, $startDate, $endDate);
 
-        return url('view');
+        $reportJsonData = json_encode($reportData);
+
+        $fileKey = time();
+
+        file_put_contents(storage_path("reports/{$fileKey}.json"), $reportJsonData);
+
+        return $fileKey;
+    }
+
+    public function view($fileKey)
+    {
+        dd($fileKey);
     }
 }

@@ -228,7 +228,7 @@ Route::group(array('before' => array('auth')), function () {
                 'uses' => 'ReportingController@generate',
             ]);
             
-            Route::get('{generate}/view', [
+            Route::get('view/{id}', [
                 'as' => 'reporting.view',
                 'uses' => 'ReportingController@view',
             ]);

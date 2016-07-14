@@ -124,7 +124,7 @@
                 },
                 dataType: 'json'
             }).done(function(data) {
-                alert(data);
+                window.location = "/reporting/view/" + data;
             }).fail(function(xhr) {
                 if (xhr.status == 416) {
 
