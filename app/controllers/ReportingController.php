@@ -122,9 +122,9 @@ class ReportingController extends \BaseController
     public function view($fileKey)
     {
         $reportData = $this->getReportData($fileKey);
-        die($json);
+        die($reportData);
 
-        return View::make('reporting.summary', compact('json'));
+        return View::make('reporting.summary', compact('reportData'));
     }
 
     public function viewCsv($fileKey)
