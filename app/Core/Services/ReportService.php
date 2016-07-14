@@ -115,6 +115,8 @@ class ReportService
             $reportData['submissions'][strtolower($record->basicData()->Gender)]++;
         }
 
+        die(json_encode($reportData));
+
         return $reportData;
     }
 }
