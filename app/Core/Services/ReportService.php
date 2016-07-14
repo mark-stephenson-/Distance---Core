@@ -27,6 +27,11 @@ class ReportService
         $domains = DB::table('node_type_10')->get();
 
         $reportData = [
+            'dates' => [
+                'start' => $startDate->toDateTimeString(),
+                'end' => $endDate->toDateTimeString(),
+            ],
+            'pmos_id' => $pmosId,
             'submissions' => [
                 'total' => $records->count(),
                 'male' => 0,
@@ -115,7 +120,7 @@ class ReportService
             $reportData['submissions'][strtolower($record->basicData()->Gender)]++;
         }
 
-        die(json_encode($reportData));
+//        die(json_encode($reportData));
 
         return $reportData;
     }
