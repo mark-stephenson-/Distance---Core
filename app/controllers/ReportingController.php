@@ -121,7 +121,7 @@ class ReportingController extends \BaseController
 
     public function view($fileKey)
     {
-        $json = json_decode(file_get_contents(storage_path("reports/{$fileKey}.json")));
+        $reportData = $this->getReportData($fileKey);
         die($json);
 
         return View::make('reporting.summary', compact('json'));
@@ -129,7 +129,7 @@ class ReportingController extends \BaseController
 
     public function viewCsv($fileKey)
     {
-        $reportData = $this->getReportData($fileKey);
+
 
         $csvReportService = new ReportService\CSV();
         dd($csvReportService->generateCSVFromReportData($reportData));
