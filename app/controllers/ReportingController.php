@@ -128,8 +128,10 @@ class ReportingController extends \BaseController
 
     public function viewCsv($fileKey)
     {
-        $csvReportService = new ReportService\CSV();
-        dd($csvReportService->generateCSVFromReportData($reportData));
+        $reportData = $this->getReportData($fileKey);
+
+        $csvReportService = new ReportService\CSV($reportData);
+        dd($csvReportService->generateCSVFromReportData());
     }
 
     public function getReportData($fileKey)
