@@ -13,7 +13,8 @@
       "urbanairship/urbanairship":"dev-netsells",
       "barryvdh/laravel-async-queue":"~0.3",
       "vlucas/phpdotenv": "^2.2",
-      "league/csv": "^8.0"
+      "league/csv": "^8.0",
+      "dompdf/dompdf": "^0.7.0"
    },
    "repositories":[
       {

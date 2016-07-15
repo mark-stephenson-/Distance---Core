@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Core\Services\ReportService;
+use Dompdf\Dompdf;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -128,10 +129,34 @@ class ReportingController extends \BaseController
     {
         $reportData = $this->getReportData($fileKey);
 
+        die(json_encode($reportData));
+
         $start = (new Carbon($reportData->dates->start))->format('d/m/Y');
         $end = (new Carbon($reportData->dates->end))->format('d/m/Y');
 
         return View::make('reporting.summary', compact('reportData', 'start', 'end', 'fileKey'));
+    }
+
+    public function viewPdf($fileKey)
+    {
+        $reportData = $this->getReportData($fileKey);
+
+        $start = (new Carbon($reportData->dates->start))->format('d/m/Y');
+        $end = (new Carbon($reportData->dates->end))->format('d/m/Y');
+
+        $pdfHtml = View::make('reporting.pdf', compact('reportData', 'start', 'end', 'fileKey'));
+
+        return $pdfHtml;
+
+        $pdfHtml = $pdfHtml->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($pdfHtml);
+
+        $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->render();
+        return $dompdf->stream();
     }
 
     public function viewCsv($fileKey)
