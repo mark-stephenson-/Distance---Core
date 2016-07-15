@@ -52,6 +52,8 @@ class ReportService
                 'summary' => [
                 ],
                 'questions' => [],
+                'notes' => [],
+                'concerns' => [],
             ];
 
             foreach($answerOptions as $option) {
@@ -112,6 +114,17 @@ class ReportService
                             $domainData['questions'][$question->node->id]['answers'][$answerValue] = 0;
                         }
                         $domainData['questions'][$question->node->id]['answers'][$answerValue]++;
+                    }
+                }
+
+                foreach($domainData['questions'] as $question) {
+
+                    if (isset($question['notes'])) {
+                        $domainData['notes'] = array_merge($domainData['notes'], $question['notes']);
+                    }
+
+                    if (isset($question['concerns'])) {
+                        $domainData['concerns'] = array_merge($domainData['concerns'], $question['concerns']);
                     }
                 }
             }

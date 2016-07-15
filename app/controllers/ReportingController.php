@@ -139,14 +139,14 @@ class ReportingController extends \BaseController
 
     public function viewPdf($fileKey)
     {
+        ini_set('max_execution_time', 300);
+
         $reportData = $this->getReportData($fileKey);
 
         $start = (new Carbon($reportData->dates->start))->format('d/m/Y');
         $end = (new Carbon($reportData->dates->end))->format('d/m/Y');
 
         $pdfHtml = View::make('reporting.pdf', compact('reportData', 'start', 'end', 'fileKey'));
-
-//        return $pdfHtml;
 
         $pdfHtml = $pdfHtml->render();
 
@@ -156,7 +156,8 @@ class ReportingController extends \BaseController
         $dompdf->setPaper('A4', 'portrait');
 
         $dompdf->render();
-        return $dompdf->stream("my_pdf.pdf", array("Attachment" => 0));
+
+        return $dompdf->stream();
     }
 
     public function viewCsv($fileKey)

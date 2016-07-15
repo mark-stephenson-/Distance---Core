@@ -5,7 +5,7 @@
 </div>
 <div class="span4">
     {{ Form::label('preventability', 'Preventability Order') }}
-    {{ Form::select('preventability', ['not' => 'Not Preventable', 'maybe' => 'May be preventable', 'preventable' => 'Preventable', 'unknown' => 'Unknown (Don\'t know'], 'not') }}
+    {{ Form::select('preventability', ['not' => 'Not Preventable', 'maybe' => 'May be preventable', 'preventable' => 'Preventable', 'unknown' => 'Unknown (Don\'t know)'], 'not') }}
 </div>
 <div class="span4">
     {{ Form::label('severity', 'Severity Order') }}

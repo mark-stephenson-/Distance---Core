@@ -1,6 +1,5 @@
 <html>
     <head>
-        {{--<link rel="stylesheet" type="text/css" href="http://dev/css/app.min.css">--}}
         <style>
             body {
                 background: #FFF;
@@ -141,8 +140,13 @@
                 <h3>Summary > {{ $domain->name }}</h3>
 
                 @include('reporting.partials.summary-key')
-                {{--@include('reporting.partials.positive-comments', ['comments' => $reportData->notes])--}}
-                {{--@include('reporting.partials.concerns', ['concerns' => $reportData->concerns])--}}
+                @include('reporting.partials.domain-questions')
+                @if (isset($domain->notes))
+                    @include('reporting.partials.positive-comments', ['comments' => $domain->notes])
+                @endif
+                @if (isset($domain->concerns))
+                    @include('reporting.partials.concerns', ['concerns' => $domain->concerns])
+                @endif
             @endforeach
     </body>
 </html>
