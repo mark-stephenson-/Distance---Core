@@ -71,5 +71,15 @@
                 active: 0
             });
         });
+
+        $('#preventability').change(
+                function(){
+                    $(this).closest('form').trigger('submit');
+                });
+
+        $('#severity').change(
+                function(){
+                    $(this).closest('form').trigger('submit');
+                });
     </script>
 @stop
