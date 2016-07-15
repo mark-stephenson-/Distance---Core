@@ -48,6 +48,7 @@
                     @include('reporting.partials.positive-comments', ['comments' => $reportData->notes])
                 </div>
                 <div id="concerns">
+                    @include('concerns-filter')
                     @include('reporting.partials.concerns', ['concerns' => $reportData->concerns])
                 </div>
                 <div id="5"></div>
