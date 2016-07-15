@@ -1,33 +1,31 @@
-<div class="key-outer">
-    <div class="key-container span1">
-        <div class="key">Key</div>
-    </div>
-    <div class="key-container span1">
-        <div class="colour key-danger"></div>
-        <div class="key">Negative-</div>
-    </div>
-    <div class="key-container span1">
-        <div class="colour key-warning"></div>
-        <div class="key">Negative</div>
-    </div>
-    <div class="key-container span1">
-        <div class="colour key-neutral"></div>
-        <div class="key">Neutral</div>
-    </div>
-    <div class="key-container span1">
-        <div class="colour key-positive"></div>
-        <div class="key">Positive</div>
-    </div>
-    <div class="key-container span1">
-        <div class="colour key-success"></div>
-        <div class="key">Positive+</div>
-    </div>
-    <div class="key-container span1">
-        <div class="colour"></div>
-        <div class="key">Something Good</div>
-    </div>
-    <div class="key-container span1">
-        <div class="colour"></div>
-        <div class="key">Concern</div>
-    </div>
-</div>
+<table width="100%">
+    <tr>
+        <th width="12.5%">Key</th>
+        <td width="12.5%">
+            <span class="colour key-danger"></span>
+            Negative-
+        </td>
+        <td width="12.5%">
+            <span class="colour key-danger"></span>
+            Negative-
+        </td>
+        <td width="12.5%">
+            <span class="colour key-warning"></span>
+            Negative
+        </td>
+        <td width="12.5%">
+            <span class="colour key-neutral"></span>
+            Neutral
+        </td>
+        <td width="12.5%">
+            <span class="colour key-positive"></span>
+            Positive+
+        </td>
+        <td width="12.5%">
+            Something Good
+        </td>
+        <td width="12.5%">
+            Concern
+        </td>
+    </tr>
+</table>

@@ -1,8 +1,10 @@
 <table class="table">
     <thead>
-    <th style="width: 20%;">Domain</th>
-    <th style="width: 60%;"></th>
-    <th style="width: 20%;">Notes</th>
+        <tr>
+            <th style="width: 20%;">Domain</th>
+            <th style="width: 60%;"> </th>
+            <th style="width: 20%;">Notes</th>
+        </tr>
     </thead>
     <tbody>
     @foreach($reportData->domains as $domain)
@@ -10,11 +12,16 @@
             <td>{{ $domain->name }}</td>
             <td>
                 <div class="progress">
-                    <div class="bar bar-danger" style="width: {{ $domain->summary->{"1"} }}%;"></div>
-                    <div class="bar bar-warning" style="width: {{ $domain->summary->{"2"} }}%;"></div>
-                    <div class="bar bar-neutral" style="width: {{ $domain->summary->{"3"} }}%;"></div>
-                    <div class="bar bar-positive" style="width: {{ $domain->summary->{"4"} }}%;"></div>
-                    <div class="bar bar-success" style="width: {{ $domain->summary->{"5"} }}%;"></div>
+                    <?php
+                        $total = 0;
+
+                        foreach($domain->summary as $key => $val) {
+                            if ($key > 0) {
+                                $total += $val;
+                            }
+                        }
+                    ?>
+                    <div class="bar bar-danger" style="width: {{ floor(($domain->summary->{"1"}/$total) * 100) }}%;"> </div><div class="bar bar-warning" style="width: {{ floor(($domain->summary->{"2"}/$total) * 100) }}%;"> </div><div class="bar bar-neutral" style="width: {{ floor(($domain->summary->{"3"}/$total) * 100) }}%;"> </div><div class="bar bar-positive" style="width: {{ floor(($domain->summary->{"4"}/$total) * 100) }}%;"> </div><div class="bar bar-success" style="width: {{ floor(($domain->summary->{"5"}/$total) * 100) }}%;"> </div>
                 </div>
             </td>
             <td>

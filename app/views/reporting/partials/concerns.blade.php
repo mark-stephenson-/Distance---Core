@@ -1,8 +1,10 @@
 <table class="table">
     <thead>
-    <th>Patient Concern</th>
-    <th>Preventability</th>
-    <th>Severity</th>
+        <tr>
+            <th>Patient Concern</th>
+            <th>Preventability</th>
+            <th>Severity</th>
+        </tr>
     </thead>
     <tbody>
     @foreach($concerns as $concern)

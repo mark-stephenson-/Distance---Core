@@ -1,6 +1,8 @@
 <table class="table">
     <thead>
-    <th>Patient Comments</th>
+        <tr>
+            <th>Patient Comments</th>
+        </tr>
     </thead>
     <tbody>
     @foreach($comments as $note)

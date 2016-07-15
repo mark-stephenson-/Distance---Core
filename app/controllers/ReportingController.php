@@ -146,7 +146,7 @@ class ReportingController extends \BaseController
 
         $pdfHtml = View::make('reporting.pdf', compact('reportData', 'start', 'end', 'fileKey'));
 
-        return $pdfHtml;
+//        return $pdfHtml;
 
         $pdfHtml = $pdfHtml->render();
 
@@ -156,7 +156,7 @@ class ReportingController extends \BaseController
         $dompdf->setPaper('A4', 'portrait');
 
         $dompdf->render();
-        return $dompdf->stream();
+        return $dompdf->stream("my_pdf.pdf", array("Attachment" => 0));
     }
 
     public function viewCsv($fileKey)
