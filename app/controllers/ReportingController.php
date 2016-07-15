@@ -129,7 +129,7 @@ class ReportingController extends \BaseController
     {
         $reportData = $this->getReportData($fileKey);
 
-        die(json_encode($reportData));
+//        die(json_encode($reportData));
 
         $start = (new Carbon($reportData->dates->start))->format('d/m/Y');
         $end = (new Carbon($reportData->dates->end))->format('d/m/Y');
