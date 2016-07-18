@@ -1,6 +1,9 @@
 <table class="table">
     <thead>
         <tr>
+            @if (isset($concerns->first()->question))
+                <th>Question</th>
+            @endif
             <th>Patient Concern</th>
             <th>Preventability</th>
             <th>Severity</th>
@@ -11,6 +14,13 @@
     @foreach($concerns as $concern)
 
         <tr>
+            @if (isset($concern->question))
+                @if (isset($noLimit))
+                    <td>{{ $concern->question}}</td>
+                @else
+                    <td data-toggle="tooltip" data-placement="top" title="{{ $concern->question }}">{{ (!isset($noLimit)) ? str_limit($concern->question, 20) : $concern->question }}</td>
+                @endif
+            @endif
             <td>{{ $concern->text }}</td>
             <td>
                 @if($concern->preventability < 2)

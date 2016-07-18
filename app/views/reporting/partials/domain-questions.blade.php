@@ -20,14 +20,22 @@
                         }
                     }
                     ?>
-                    <div class="bar bar-danger" style="width: {{ floor(($domain->summary->{"1"}/$total) * 100) }}%;"> </div><div class="bar bar-warning" style="width: {{ floor(($domain->summary->{"2"}/$total) * 100) }}%;"> </div><div class="bar bar-neutral" style="width: {{ floor(($domain->summary->{"3"}/$total) * 100) }}%;"> </div><div class="bar bar-positive" style="width: {{ floor(($domain->summary->{"4"}/$total) * 100) }}%;"> </div><div class="bar bar-success" style="width: {{ floor(($domain->summary->{"5"}/$total) * 100) }}%;"> </div>
+                        <div class="bar bar-danger" style="width: {{ floor(($domain->summary->{"1"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Negative-: {{ $domain->summary->{"1"} }}"> </div><!--
+                    !--><div class="bar bar-warning" style="width: {{ floor(($domain->summary->{"2"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Negative: {{ $domain->summary->{"2"} }}"> </div><!--
+                    !--><div class="bar bar-neutral" style="width: {{ floor(($domain->summary->{"3"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Neutral: {{ $domain->summary->{"3"} }}"> </div><!--
+                    !--><div class="bar bar-positive" style="width: {{ floor(($domain->summary->{"4"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive: {{ $domain->summary->{"4"} }}"> </div><!--
+                    !--><div class="bar bar-success" style="width: {{ floor(($domain->summary->{"5"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive+: {{ $domain->summary->{"5"} }}"> </div>
                 </div>
             </td>
             <td></td>
         </tr>
     @foreach($domain->questions as $question)
         <tr>
-            <td>{{ $question->text }}</td>
+            @if (isset($noLimit))
+                <td>{{ $question->text}}</td>
+            @else
+                <td data-toggle="tooltip" data-placement="top" title="{{ $question->text }}">{{ str_limit($question->text, 20) }}</td>
+            @endif
             <td>
                 <div class="progress">
                     <?php
@@ -39,31 +47,21 @@
                         }
                     }
                     ?>
-                    <div class="bar bar-danger" style="width: {{ floor((@$question->answers->{"1"}/$total) * 100) }}%;"> </div><div class="bar bar-warning" style="width: {{ floor((@$question->answers->{"2"}/$total) * 100) }}%;"> </div><div class="bar bar-neutral" style="width: {{ floor((@$question->answers->{"3"}/$total) * 100) }}%;"> </div><div class="bar bar-positive" style="width: {{ floor((@$question->answers->{"4"}/$total) * 100) }}%;"> </div><div class="bar bar-success" style="width: {{ floor((@$question->answers->{"5"}/$total) * 100) }}%;"> </div>
+                        <div class="bar bar-danger" style="width: {{ floor((@$question->answers->{"1"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Negative-: {{ @$question->answers->{"1"} }}"> </div><!--
+                    !--><div class="bar bar-warning" style="width: {{ floor((@$question->answers->{"2"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Negative: {{ @$question->answers->{"2"} }}"> </div><!--
+                    !--><div class="bar bar-neutral" style="width: {{ floor((@$question->answers->{"3"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Neutral: {{ @$question->answers->{"3"} }}"> </div><!--
+                    !--><div class="bar bar-positive" style="width: {{ floor((@$question->answers->{"4"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive: {{ @$question->answers->{"4"} }}"> </div><!--
+                    !--><div class="bar bar-success" style="width: {{ floor((@$question->answers->{"5"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive+: {{ @$question->answers->{"5"} }}"> </div>
                 </div>
             </td>
             <td>
-                <?php
-                $somethingGood = false;
-                $concerns = false;
+                @if(isset($question->notes))
+                    <i class="icon-check"></i>
+                @endif
 
-                foreach($domain->questions as $question) {
-                    if(isset($question->notes)) {
-                        $somethingGood = true;
-                    }
-
-                    if(isset($question->concerns)) {
-                        $concerns = true;
-                    }
-                }
-                ?>
-                {{--@if($somethingGood == true)--}}
-                    {{--<i class="fa fa-check" aria-hidden="true"></i>--}}
-                {{--@endif--}}
-
-                {{--@if($concerns == true)--}}
-                    {{--<i class="fa fa-exclamation" aria-hidden="true"></i>--}}
-                {{--@endif--}}
+                @if(isset($question->concerns))
+                    <i class="icon-exclamation"></i>
+                @endif
             </td>
         </tr>
     @endforeach

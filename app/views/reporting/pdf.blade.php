@@ -126,26 +126,26 @@
             @include('reporting.partials.report-table')
             @include('reporting.partials.domain-info')
 
-            <h3>Summary</h3>
+            <h3>Report Summary</h3>
             @include('reporting.partials.explanation')
 
             @include('reporting.partials.summary-key')
 
-            @include('reporting.partials.domain-summary')
+            @include('reporting.partials.domain-summary', ['noLimit' => true])
 
-            @include('reporting.partials.positive-comments', ['comments' => $reportData->notes])
-            @include('reporting.partials.concerns', ['concerns' => $reportData->concerns])
+            @include('reporting.partials.positive-comments', ['comments' => $reportData->notes, 'noLimit' => true])
+            @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $reportData->concerns)), 'noLimit' => true])
 
             @foreach($reportData->domains as $domain)
-                <h3>Summary > {{ $domain->name }}</h3>
+                <h3>Report Summary > {{ $domain->name }}</h3>
 
                 @include('reporting.partials.summary-key')
-                @include('reporting.partials.domain-questions')
+                @include('reporting.partials.domain-questions', ['noLimit' => true])
                 @if (isset($domain->notes))
-                    @include('reporting.partials.positive-comments', ['comments' => $domain->notes])
+                    @include('reporting.partials.positive-comments', ['comments' => $domain->notes, 'noLimit' => true])
                 @endif
                 @if (isset($domain->concerns))
-                    @include('reporting.partials.concerns', ['concerns' => $domain->concerns])
+                    @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $domain->concerns)), 'noLimit' => true])
                 @endif
             @endforeach
     </body>

@@ -2,7 +2,50 @@
 
 @section('header')
     <h1>Reporting - Summary</h1>
+    <style>
+        .progress {
+            margin-bottom: 0;
+        }
+    </style>
 @stop
+
+<?php
+
+function filterConcerns($concerns) {
+    $makeComparer = function($criteria) {
+        $comparer = function ($first, $second) use ($criteria) {
+            foreach ($criteria as $key => $orderType) {
+                // normalize sort direction
+                $orderType = strtolower($orderType);
+                if ($first->$key < $second->$key) {
+                    return $orderType === "asc" ? -1 : 1;
+                } else if ($first->$key > $second->$key) {
+                    return $orderType === "asc" ? 1 : -1;
+                }
+            }
+            // all elements were equal
+            return 0;
+        };
+        return $comparer;
+    };
+
+    $concerns = new \Illuminate\Support\Collection(array_values((array) $concerns));
+
+    if (Input::get('filter', 'preventability') == 'preventability') {
+        $concerns = $concerns->sort($makeComparer([
+                'preventability' => Input::get('preventability'),
+                'severity' => Input::get('severity'),
+        ]));
+    } else {
+        $concerns = $concerns->sort($makeComparer([
+                'severity' => Input::get('severity'),
+                'preventability' => Input::get('preventability'),
+        ]));
+    }
+    return $concerns;
+}
+
+?>
 
 @section('body')
     <div class="container">
@@ -25,36 +68,67 @@
         </div>
 
         <div class="row">
-            <h3>Summary</h3>
-            <div id="tabs">
-                <ul>
-                    <li><a href="#explanation">Report Template Explained</a></li>
-                    <li><a href="#summary">Summary Report</a></li>
-                    <li><a href="#comments">General Positive Comments Report</a></li>
-                    <li><a href="#concerns">General Concerns Report</a></li>
-                    <li><a href="#5">Domain Report</a></li>
-                    <li><a href="#6">Domain Positive Comments Report</a></li>
-                    <li><a href="#7">Domain Concerns Report</a></li>
+            @if (Input::get('domain'))
+                <?php
+                    $domain = null;
+
+                    foreach($reportData->domains as $id => $domainValue) {
+                        if ($id == Input::get('domain')) {
+                            $domain = $domainValue;
+                        }
+                    }
+
+                ?>
+                <h3><a href="{{ Request::url() }}">Report Summary</a> > {{ $domain->name }}</h3>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#summary" data-toggle="tab">Domain Report</a></li>
+                        <li><a href="#comments" data-toggle="tab">Domain Positive Comments Report</a></li>
+                        <li><a href="#concerns" data-toggle="tab">Domain Concerns Report</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="summary">
+                            @include('reporting.partials.summary-key')
+
+                            @include('reporting.partials.domain-questions')
+
+                        </div>
+                        <div class="tab-pane" id="comments">
+                            @include('reporting.partials.positive-comments', ['comments' => (array) $domain->notes])
+                        </div>
+                        <div class="tab-pane" id="concerns">
+                            @include('reporting.partials.concerns-filter')
+                            @include('reporting.partials.concerns', ['concerns' => filterConcerns($domain->concerns)])
+                        </div>
+                    </div>
+            @else
+                <h3>Report Summary</h3>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#explanation" data-toggle="tab">Report Template Explained</a></li>
+                    <li><a href="#summary" data-toggle="tab">Summary Report</a></li>
+                    <li><a href="#comments" data-toggle="tab">General Positive Comments Report</a></li>
+                    <li><a href="#concerns" data-toggle="tab">General Concerns Report</a></li>
                 </ul>
-                @include('reporting.partials.explanation')
 
-                <div id="summary">
-                    @include('reporting.partials.summary-key')
+                <div class="tab-content">
+                    <div class="tab-pane active" id="explanation">
+                        @include('reporting.partials.explanation')
+                    </div>
 
-                    @include('reporting.partials.domain-summary')
+                    <div class="tab-pane" id="summary">
+                        @include('reporting.partials.summary-key')
 
+                        @include('reporting.partials.domain-summary')
+                    </div>
+                    <div class="tab-pane" id="comments">
+                        @include('reporting.partials.positive-comments', ['comments' => (array) $reportData->notes])
+                    </div>
+                    <div class="tab-pane" id="concerns">
+                        @include('reporting.partials.concerns-filter')
+                        @include('reporting.partials.concerns', ['concerns' => filterConcerns($reportData->concerns)])
+                    </div>
                 </div>
-                <div id="comments">
-                    @include('reporting.partials.positive-comments', ['comments' => $reportData->notes])
-                </div>
-                <div id="concerns">
-                    @include('concerns-filter')
-                    @include('reporting.partials.concerns', ['concerns' => $reportData->concerns])
-                </div>
-                <div id="5"></div>
-                <div id="6"></div>
-                <div id="7"></div>
-            </div>
+            @endif
         </div>
     </div>
 
@@ -62,29 +136,49 @@
 
 @section('js')
     <script>
+        var request = {
+            queryString: function(item){
+                var value = location.search.match(new RegExp("[\?\&]" + item + "=([^\&]*)(\&?)","i"));
+                return value ? value[1] : value;
+            }
+        }
+
         $(document).ready(function() {
             $( "#accordian" ).accordion({
                 active: 0,
                 collapsible: true
             });
 
-            $( "#tabs" ).tabs({
-                active: 0
+            $('.filter-form select').change(function(){
+                // Build the URL
+                var url = "{{ Request::url() }}?";
+
+                url = url + "filter=" + $('[name=filter]').val();
+                url = url + "&preventability=" + $('[name=preventability]').val();
+                url = url + "&severity=" + $('[name=severity]').val();
+
+                if (request.queryString("domain")) {
+                    url = url + "&domain=" + request.queryString("domain");
+                }
+
+                url = url + '#concerns';
+
+                window.location = url;
             });
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+            }
+
+            // Change hash for page-reload
+            $('.nav-tabs a').on('shown.bs.tab', function (e) {
+                window.location.hash = e.target.hash;
+            })
+
+
         });
-
-        $('#preventability').change(
-                function(){
-                    $(this).closest('form').trigger('submit');
-                });
-
-        $('#severity').change(
-                function(){
-                    $(this).closest('form').trigger('submit');
-                });
-
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
     </script>
 @stop

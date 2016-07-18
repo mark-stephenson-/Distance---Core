@@ -74,28 +74,36 @@ class ReportService
                     if ($concern->prase_question_id == null) {
                         $reportData['concerns'][$concern->id] = [
                             'text' => $concern->note->text,
-                            'preventability' => $concern->prevent_answer,
-                            'severity' => $concern->serious_answer,
+                            'preventability' => (is_null($concern->prevent_answer)) ? 4 : $concern->prevent_answer,
+                            'severity' => (is_null($concern->serious_answer)) ? 5 : $concern->serious_answer,
                         ];
                     }
                 }
 
                 foreach($record->questions as $question) {
                     if ($domain->node_id == $questionData[$question->node->id]->domain) {
-                        // Check for notes
-                        if ($question->note) {
-                            $domainData['questions'][$question->node->id]['notes'][] = [
-                                'text' => $question->note->text,
-                            ];
-                        }
-
-                        // And notes
+                        // Check for concerns
                         if ($question->concern) {
                             $domainData['questions'][$question->node->id]['concerns'][] = [
                                 'text' => $question->concern->note->text,
-                                'preventability' => $question->concern->prevent_answer,
-                                'severity' => $question->concern->serious_answer,
+                                'preventability' => (is_null($question->concern->prevent_answer)) ? 4 : $question->concern->prevent_answer,
+                                'severity' => (is_null($question->concern->serious_answer)) ? 5 : $question->concern->serious_answer,
                             ];
+                        }
+
+                        // Check for notes
+                        if ($question->note) {
+                            if ($question->concern) {
+                                if ($question->concern->prase_note_id != $question->note->id) {
+                                    $domainData['questions'][$question->node->id]['notes'][] = [
+                                        'text' => $question->note->text,
+                                    ];
+                                }
+                            } else {
+                                $domainData['questions'][$question->node->id]['notes'][] = [
+                                    'text' => $question->note->text,
+                                ];
+                            }
                         }
 
                         // Log the answers per domain
@@ -117,15 +125,27 @@ class ReportService
                     }
                 }
 
-                foreach($domainData['questions'] as $question) {
+            }
 
-                    if (isset($question['notes'])) {
-                        $domainData['notes'] = array_merge($domainData['notes'], $question['notes']);
+            foreach($domainData['questions'] as $key => $question) {
+
+                if (isset($question['notes'])) {
+                    foreach($question['notes'] as $note) {
+                        $note['question'] = $question['text'];
+                        $domainData['notes'][] = $note;
+                    }
+                }
+
+                if (isset($question['concerns'])) {
+
+                    $questionConcerns = [];
+
+                    foreach($question['concerns'] as $concern) {
+                        $concern['question'] = $question['text'];
+                        $questionConcerns[] = $concern;
                     }
 
-                    if (isset($question['concerns'])) {
-                        $domainData['concerns'] = array_merge($domainData['concerns'], $question['concerns']);
-                    }
+                    $domainData['concerns'] = array_merge($domainData['concerns'], $questionConcerns);
                 }
             }
 
@@ -136,8 +156,6 @@ class ReportService
         foreach($records as $record) {
             $reportData['submissions'][strtolower($record->basicData()->Gender)]++;
         }
-
-//        die(json_encode($reportData));
 
         return $reportData;
     }
