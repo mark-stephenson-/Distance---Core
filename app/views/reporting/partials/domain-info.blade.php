@@ -32,7 +32,7 @@
         </tr>
         <tr>
             <td class="table-key"><strong>Dignity and Respect</strong></td>
-            <td>Lorem ipsum</td>
+            <td>Treating patients as individuals, whatever their differences or values, and ensuring that their particular needs are met.</td>
         </tr>
         </tbody>
     </table>
