@@ -129,6 +129,7 @@
             <h3>Report Summary</h3>
             @include('reporting.partials.explanation')
 
+            <div styl="page-break-before: always;"></div>
             @include('reporting.partials.summary-key')
 
             @include('reporting.partials.domain-summary', ['noLimit' => true])
@@ -137,7 +138,7 @@
             @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $reportData->concerns)), 'noLimit' => true])
 
             @foreach($reportData->domains as $domain)
-                <h3>Report Summary > {{ $domain->name }}</h3>
+                <h3 style="page-break-before: always;">Report Summary > {{ $domain->name }}</h3>
 
                 @include('reporting.partials.summary-key')
                 @include('reporting.partials.domain-questions', ['noLimit' => true])
