@@ -87,13 +87,6 @@ return array(
         'access' => 'cms.manage-trust.*',
     ),
     array(
-        'title' => 'Data Export',
-        'route' => 'data.export',
-        'params' => [],
-        'icon' => 'download',
-        'access' => 'cms.export-data.*',
-    ),
-    array(
         'title' => 'Reporting',
         'route' => 'reporting.index',
         'params' => [],
