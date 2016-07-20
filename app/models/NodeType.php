@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class NodeType extends BaseModel {
 
-    protected $softDelete = true;
+    use SoftDeletingTrait;
     
     public function collections()
     {

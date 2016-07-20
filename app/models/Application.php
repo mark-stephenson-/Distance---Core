@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Application extends BaseModel
 {
-    protected $softDelete = true;
+    use SoftDeletingTrait;
     protected $table = 'apps';
 
     public static function current()

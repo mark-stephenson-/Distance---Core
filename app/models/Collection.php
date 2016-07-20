@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Collection extends BaseModel {
 
-    protected $softDelete = true;
+    use SoftDeletingTrait;
     protected $fillable = array('name', 'api_key', 'application_id', 'logo_id');
 
     public static function current()

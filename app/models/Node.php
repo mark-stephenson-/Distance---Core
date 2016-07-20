@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Node extends BaseModel
 {
-    protected $softDelete = true;
+    use SoftDeletingTrait;
     protected $appends = array('node_type_name');
 
     protected $latestRevision;

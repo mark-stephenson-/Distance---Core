@@ -1,9 +1,11 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Resource extends BaseModel
 {
     protected $appends = array('languages');
-    protected $softDelete = true;
+    use SoftDeletingTrait;
 
     public function catalogue()
     {

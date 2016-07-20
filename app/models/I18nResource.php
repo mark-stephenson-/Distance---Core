@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class I18nResource extends BaseModel
 {
-    protected $softDelete = true;
+    use SoftDeletingTrait;
     
 	public function resource(){
 		return $this->belongsTo('resource');

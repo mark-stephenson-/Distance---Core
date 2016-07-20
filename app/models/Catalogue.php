@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Catalogue extends BaseModel {
 
-    protected $softDelete = true;
+    use SoftDeletingTrait;
 
     public static function forNodeTypeSelect($collectionId = null)
     {
