@@ -33,6 +33,7 @@ class ReportingController extends \BaseController
             ->join('node_type_3', 'node_id', '=', 'nodes.id')
             ->where('node_type', 3)
             ->where('node_type_3.trust', $trustId)
+            ->where('nodes.status', 'published')
             ->lists('node_type_3.name', 'node_id');
 
         $hospitals = ['' => 'Please select a Hospital'] + $hospitals;
@@ -47,6 +48,7 @@ class ReportingController extends \BaseController
         $wards = DB::table('nodes')
             ->join('node_type_4', 'node_id', '=', 'nodes.id')
             ->where('node_type', 4)
+            ->where('nodes.status', 'published')
             ->where('node_type_4.hospital', $hospitalId);
 
         if ($search) {
@@ -129,8 +131,6 @@ class ReportingController extends \BaseController
     {
         $reportData = $this->getReportData($fileKey);
 
-//        die(json_encode($reportData));
-
         $start = (new Carbon($reportData->dates->start))->format('d/m/Y');
         $end = (new Carbon($reportData->dates->end))->format('d/m/Y');
 
@@ -157,6 +157,7 @@ class ReportingController extends \BaseController
 
         $dompdf->render();
 
+//        return $dompdf->stream('my.pdf',array('Attachment'=>0));
         return $dompdf->stream();
     }
 

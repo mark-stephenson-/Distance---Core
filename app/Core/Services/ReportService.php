@@ -20,7 +20,7 @@ class ReportService
         $answerOptions = (new Collection(DB::table('node_type_5')->get()))->keyBy('node_id');
         $questionData = (new Collection(DB::table('node_type_1')->join('i18n_strings', 'node_type_1.question', '=', 'i18n_strings.key')->get(['*', 'i18n_strings.value AS value'])))->keyBy('node_id');
 
-        $wards = new Collection(DB::table('node_type_4')->whereIn('node_id', $wardIds)->get());
+        $wards = new Collection(DB::table('node_type_4')->where('status', 'published')->whereIn('node_id', $wardIds)->get());
         $hospital = DB::table('node_type_3')->whereNodeId($wards[0]->hospital)->first();
         $trust = DB::table('node_type_2')->whereNodeId($hospital->trust)->first();
 
