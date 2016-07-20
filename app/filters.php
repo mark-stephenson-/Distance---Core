@@ -122,7 +122,7 @@ Route::filter('checkPermissions', function ($request) {
     }
 
     if (
-        (starts_with($property, 'cms.data'))
+        (starts_with($property, 'cms.reporting'))
     ) {
         $property = 'cms.export-data.export';
     }
@@ -158,7 +158,6 @@ Route::filter('checkPermissions', function ($request) {
     $properties = array_merge($additionalProperties, array($property, $property.'.*'));
 
     if (!Sentry::getUser()->hasAnyAccess($properties)) {
-        dd($properties);
         if (Request::segment(1) == 'apps' and count(Request::segments()) == 1) {
             return Redirect::to('/me');
         }

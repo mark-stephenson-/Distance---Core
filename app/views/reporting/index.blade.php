@@ -56,6 +56,10 @@
     <script>
         $(document).ready(function() {
 
+            if ($('[name=trust]').val()) {
+                window.location.reload(true);
+            }
+
             $("#period_start").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true });
             $("#period_end").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true  });
 
