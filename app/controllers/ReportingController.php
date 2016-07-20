@@ -158,7 +158,11 @@ class ReportingController extends \BaseController
         $dompdf->render();
 
 //        return $dompdf->stream('my.pdf',array('Attachment'=>0));
-        return $dompdf->stream();
+        return $dompdf->stream(
+            (new Carbon($reportData->dates->start))->format('Y-m-d')
+            . "-" .
+            (new Carbon($reportData->dates->end))->format('Y-m-d')
+        );
     }
 
     public function viewCsv($fileKey)
