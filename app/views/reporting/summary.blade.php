@@ -48,12 +48,11 @@ function filterConcerns($concerns) {
 ?>
 
 @section('body')
-    <div class="container">
         <div class="title-block">
             <h3>PRASE Reporting</h3>
         </div>
 
-        <div class="row">
+        <div class="clearfix">
             <div class="span8">
                 @include('reporting.partials.report-table')
             </div>
@@ -63,11 +62,8 @@ function filterConcerns($concerns) {
             </div>
         </div>
 
-        <div class="row">
             @include('reporting.partials.domain-info')
-        </div>
 
-        <div class="row">
             @if (Input::get('domain'))
                 <?php
                     $domain = null;
@@ -129,8 +125,6 @@ function filterConcerns($concerns) {
                     </div>
                 </div>
             @endif
-        </div>
-    </div>
 
 @stop
 

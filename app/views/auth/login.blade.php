@@ -6,7 +6,7 @@
 
 @section('body')
     
-    {{ Form::open(array('class' => 'form-horizontal')) }}
+    {{ Form::open(array('class' => 'form')) }}
 
         <div class="control-group">
             {{ Form::label('email', 'Email', array('class' => 'control-label')) }}
