@@ -33,7 +33,7 @@ class ReportingController extends \BaseController
             ->join('node_type_3', 'node_id', '=', 'nodes.id')
             ->where('node_type', 3)
             ->where('node_type_3.trust', $trustId)
-            ->where('nodes.status', 'published')
+            ->where('node_type_4.status', 'published')
             ->lists('node_type_3.name', 'node_id');
 
         $hospitals = ['' => 'Please select a Hospital'] + $hospitals;
@@ -48,7 +48,7 @@ class ReportingController extends \BaseController
         $wards = DB::table('nodes')
             ->join('node_type_4', 'node_id', '=', 'nodes.id')
             ->where('node_type', 4)
-            ->where('nodes.status', 'published')
+            ->where('node_type_4.status', 'published')
             ->where('node_type_4.hospital', $hospitalId);
 
         if ($search) {
