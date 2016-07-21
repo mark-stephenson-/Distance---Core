@@ -17,9 +17,9 @@ class ReportingController extends \BaseController
      */
     public function index()
     {
-        $trusts = DB::table('nodes')
+        $trusts = Node::isPublished()
+            ->whereNodeType(2)
             ->join('node_type_2', 'node_id', '=', 'nodes.id')
-            ->where('node_type', 2)
             ->lists('node_type_2.name', 'node_id');
 
         $trusts = ['' => 'Please select a Trust'] + $trusts;
@@ -29,11 +29,10 @@ class ReportingController extends \BaseController
 
     public function hospitals($trustId)
     {
-        $hospitals = DB::table('nodes')
+        $hospitals = Node::isPublished()
+            ->whereNodeType(3)
             ->join('node_type_3', 'node_id', '=', 'nodes.id')
-            ->where('node_type', 3)
             ->where('node_type_3.trust', $trustId)
-            ->where('node_type_3.status', 'published')
             ->lists('node_type_3.name', 'node_id');
 
         $hospitals = ['' => 'Please select a Hospital'] + $hospitals;
@@ -45,10 +44,9 @@ class ReportingController extends \BaseController
     {
         $search = Input::get('q');
 
-        $wards = DB::table('nodes')
+        $wards = Node::isPublished()
+            ->whereNodeType(4)
             ->join('node_type_4', 'node_id', '=', 'nodes.id')
-            ->where('node_type', 4)
-            ->where('node_type_4.status', 'published')
             ->where('node_type_4.hospital', $hospitalId);
 
         if ($search) {

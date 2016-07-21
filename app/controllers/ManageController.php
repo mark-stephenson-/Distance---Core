@@ -163,7 +163,7 @@ class ManageController extends BaseController
         $hospital = Node::find($hospitalId);
 
         $wards = Node::isPublished()->whereNodeType($this->wardNodeType)
-            ->join("node_type_{$this->wardNodeType}", 'nodes.id', '=', "node_type_{$this->wardNodeType}.node_id")
+            ->join("node_type_{$this->wardNodeType}", 'nodes.published_revision', '=', "node_type_{$this->wardNodeType}.id")
             ->where("node_type_{$this->wardNodeType}.hospital", $hospitalId)
             ->get(['nodes.*', 'hospital']);
 
