@@ -7,6 +7,7 @@
 @section('body')
     <div class="title-block">
         <h3>Bespoke Report Parameters</h3>
+        <p>You must select a date range and at least one ward to generate a report.</p>
     </div>
 
     <div class="reports-form">
@@ -25,13 +26,13 @@
                     {{ Form::label('trust', 'Location', array('class' => 'control-label span2')) }}
                     <div class="controls">
                         {{ Form::select('trust', $trusts, Input::old('trust'), array('class' => 'span3')) }}
-                        {{ Form::select('hospital', array(), Input::old('hospital'), array('class' => 'span3')) }}
+                        {{ Form::select('hospital', array(), Input::old('hospital'), array('class' => 'span3', 'style' => 'display: none;')) }}
                         {{ Form::hidden('wards', null, ['id' => 'wards']) }}
                     </div>
                 </div>
             </div>
             <div class="span2">
-                {{ Form::submit('Generate Report', array('class' => 'submit-button btn')) }}
+                {{ Form::submit('Generate Report', array('class' => 'submit-button btn', 'id' => 'generate', 'disabled')) }}
             </div>
         {{ Form::close() }}
     </div>
@@ -60,12 +61,20 @@
                 window.location.reload(true);
             }
 
-            $("#period_start").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true });
-            $("#period_end").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true  });
+            $("#period_start").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true }).on('change', function() {
+                checkGenerate();
+            });
+
+            $("#period_end").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true  }).on('change', function() {
+                checkGenerate();
+            });
 
             $('[name=trust]').on('change', function() {
                 var trustId = $(this).val();
                 var url = "/reporting/_ajax/" + trustId + "/hospitals";
+
+                $('[name=hospital]').show();
+                $("#wards").select2("destroy");
 
                 $.ajax({
                     method: 'GET',
@@ -100,6 +109,8 @@
                             return data;
                         }
                     }
+                }).on('change', function(e) {
+                    checkGenerate();
                 });
             });
 
@@ -153,6 +164,29 @@
                     alert(xhr.responseText);
                 }
             });
+        }
+
+        function checkGenerate()
+        {
+            canGenerate = true;
+
+            if (!$("#period_start").val().length) {
+                canGenerate = false;
+            }
+
+            if (!$("#period_end").val().length) {
+                canGenerate = false;
+            }
+
+            if (!$("#wards").val().length) {
+                canGenerate = false;
+            }
+
+            if (!canGenerate) {
+                $('#generate').attr('disabled', 'disabled');
+            } else {
+                $('#generate').removeAttr('disabled');
+            }
         }
     </script>
 @stop
