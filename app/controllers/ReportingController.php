@@ -55,7 +55,7 @@ class ReportingController extends \BaseController
 
         $wards = $wards->get(['*', 'node_type_4.name AS node_type_name']);
 
-        $wards = (new Collection($wards))->map(function ($node) {
+        $wards = $wards->map(function ($node) {
             return [
                 'id' => $node->node_id,
                 'text' => $node->node_type_name,
