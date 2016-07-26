@@ -96,7 +96,7 @@
                 $("#wards").select2("destroy");
 
                 $('#wards').select2({
-                    multiple: true,
+                    multiple: false,
                     ajax: {
                         url: '/reporting/_ajax/'+hospitalId+'/wards',
                         dataType: 'json',

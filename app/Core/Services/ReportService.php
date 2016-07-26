@@ -154,7 +154,9 @@ class ReportService
         }
 
         foreach($records as $record) {
-            $reportData['submissions'][strtolower($record->basicData()->Gender)]++;
+            if(! empty($record->basicData()->Gender)) {
+                $reportData['submissions'][strtolower($record->basicData()->Gender)]++;
+            }
         }
 
         return $reportData;
