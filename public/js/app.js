@@ -78,3 +78,17 @@ function processSingleUploadedFile(uploader, files) {
 
     return false;
 }
+
+var Prase = {
+     alert: function (type, message, container) {
+        var alertStr = '' +
+            '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+                + message +
+            '</div>';
+
+        $(container).prepend(alertStr);
+    }
+}
+
+
+

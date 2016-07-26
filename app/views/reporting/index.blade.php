@@ -161,7 +161,7 @@
                 }
 
                 if (xhr.status == 404) {
-                    alert(xhr.responseText);
+                    Prase.alert('warning', xhr.responseText, '.body');
                 }
             });
         }
