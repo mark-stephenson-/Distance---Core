@@ -57,8 +57,10 @@ function filterConcerns($concerns) {
                 @include('reporting.partials.report-table')
             </div>
             <div class="span4">
-                <a href="{{ route('reporting.view-pdf', [$fileKey]) }}" class="btn btn-lg btn-primary export-button" data-toggle="tooltip" data-placement="top" title="Will take a long time with a large data set.">Export as PDF</a>
-                <a href="{{ route('reporting.view-csv', [$fileKey]) }}" class="btn btn-lg btn-primary export-button">Export as CSV</a>
+                @unless(Input::get('domain'))
+                    <a href="{{ route('reporting.view-pdf', [$fileKey]) }}" class="btn btn-lg btn-primary export-button" data-toggle="tooltip" data-placement="top" title="Will take a long time with a large data set.">Export as PDF</a>
+                    <a href="{{ route('reporting.view-csv', [$fileKey]) }}" class="btn btn-lg btn-primary export-button">Export as CSV</a>
+                @endunless
             </div>
         </div>
 
