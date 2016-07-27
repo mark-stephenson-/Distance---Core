@@ -21,11 +21,11 @@
 @stop
 
 @section('body')
-
-    <p class="pull-right">
-        <a href="{{ route('volunteers.create') }}" class="btn"><i class="icon-plus"></i> New Volunteer</a>
-    </p>
-
+    @if(Sentry::getUser()->hasAccess('cms.volunteers.manage.*'))
+        <p class="pull-right">
+            <a href="{{ route('volunteers.create') }}" class="btn"><i class="icon-plus"></i> New Volunteer</a>
+        </p>
+    @endif
     <table class="table table-striped">
         <thead>
             <tr>
@@ -55,9 +55,10 @@
                     {{ $trusts[$volunteerData->trust] }}
                 </td>
                 <td width="150">
-                    <a href="{{ route('volunteers.edit', array($volunteer->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-
-                    <a href="{{ route('volunteers.delete', array($volunteer->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a>
+                    @if(Sentry::getUser()->hasAccess('cms.volunteers.manage.*'))
+                        <a href="{{ route('volunteers.edit', array($volunteer->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                        <a href="{{ route('volunteers.delete', array($volunteer->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

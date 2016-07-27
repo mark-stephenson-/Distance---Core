@@ -38,8 +38,11 @@ return array(
             'Volunteers' => array(
                 'value' => 'cms.volunteers.*',
                 'children' => array(
-                    'Manage' => array(
-                        'value' => 'cms.volunteers.manage',
+                    'Can Manage All' => array(
+                        'value' => 'cms.volunteers.manage.all',
+                    ),
+                    'Can Manage Own' => array(
+                        'value' => 'cms.volunteers.manage.own',
                     ),
                 ),
             ),
