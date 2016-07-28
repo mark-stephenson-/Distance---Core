@@ -77,7 +77,18 @@ class UsersController extends BaseController
 
         $groups = Sentry::getGroupProvider()->findAll();
 
-        return View::make('users.form', compact('user', 'groups'));
+        $trusts = Node::whereNodeTypeIs($this->trustNodeType, 'published')->get();
+        $trusts->each(function (&$trust) {
+            $trust->hospitals = Node::whereNodeTypeIs($this->hospitalNodeType, 'published')
+                ->where('trust', $trust->node_id)->get();
+
+            $trust->hospitals->each(function (&$hospital) {
+                $hospital->wards = Node::whereNodeTypeIs($this->wardNodeType, 'published')
+                    ->where('hospital', $hospital->node_id)->get();
+            });
+        });
+
+        return View::make('users.form', compact('user', 'groups', 'trusts'));
     }
 
     public function update($userId)
@@ -141,11 +152,11 @@ class UsersController extends BaseController
             );
         }
 
-        // $user->permissions = Input::get('permissions', []);
-
-        // foreach (array_diff_key($user->getPermissions(), Input::get('permissions') ?: array()) as $key => $value) {
-        //     $user->permissions = [$key => 0];
-        // }
+        // node access permissions
+        $user->accessible_nodes = '';
+        if(Input::get('node_ids')) {
+            $user->accessible_nodes = json_encode(Input::get('node_ids'));
+        }
 
         try {
             $user->save();

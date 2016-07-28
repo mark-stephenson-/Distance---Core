@@ -2,6 +2,11 @@
 
 class BaseController extends Controller {
 
+    protected $trustNodeType = 2;
+    protected $hospitalNodeType = 3;
+    protected $wardNodeType = 4;
+    protected $volunteerNodeType = 9;
+
     public function __construct() {
         $appId = Request::segment(2);
         if (is_numeric($appId) and Request::segment(1) == 'apps') {

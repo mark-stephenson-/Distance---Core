@@ -38,6 +38,15 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
         return $this->getAttribute('first_name') . ' ' . $this->getAttribute('last_name');
     }
 
+    public function getAccessibleNodesAttribute($accessible_nodes)
+    {
+        if(empty($accessible_nodes)) {
+            return array();
+        }
+
+        return json_decode($accessible_nodes);
+    }
+
     public function groups()
     {
         return $this->belongsToMany('Group', 'users_groups');

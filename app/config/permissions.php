@@ -38,8 +38,8 @@ return array(
             'Volunteers' => array(
                 'value' => 'cms.volunteers.*',
                 'children' => array(
-                    'Can Manage All' => array(
-                        'value' => 'cms.volunteers.manage.all',
+                    'Can Manage Any' => array(
+                        'value' => 'cms.volunteers.manage.any',
                     ),
                     'Can Manage Own' => array(
                         'value' => 'cms.volunteers.manage.own',
@@ -50,8 +50,11 @@ return array(
             'Manage Trusts, Hospitals and Wards' => array(
                 'value' => 'cms.manage-trust.*',
                 'children' => array(
-                    'Manage' => array(
-                        'value' => 'cms.manage-trust.manage',
+                    'Can Manage Any' => array(
+                        'value' => 'cms.manage-trust.manage.any',
+                    ),
+                    'Can Manage Own' => array(
+                        'value' => 'cms.manage-trust.manage.own',
                     ),
                 ),
             ),
@@ -59,8 +62,11 @@ return array(
             'Export Data' => array(
                 'value' => 'cms.export-data.*',
                 'children' => array(
-                    'Export' => array(
-                        'value' => 'cms.export-data.export',
+                    'Can Export Any' => array(
+                        'value' => 'cms.export-data.export.any',
+                    ),
+                    'Can Export Own' => array(
+                        'value' => 'cms.export-data.export.own',
                     ),
                 ),
             ),

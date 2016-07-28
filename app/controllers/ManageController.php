@@ -6,10 +6,6 @@ class ManageController extends BaseController
 {
     protected $nodeService;
 
-    protected $trustNodeType = 2;
-    protected $hospitalNodeType = 3;
-    protected $wardNodeType = 4;
-
     public function __construct(NodeService $nodeService)
     {
         parent::__construct();
@@ -18,7 +14,7 @@ class ManageController extends BaseController
 
     public function index()
     {
-        $trusts = Node::isPublished()->whereNodeType($this->trustNodeType)->get();
+        $trusts = Node::isPublished()->whereNodeType($this->trustNodeType)->whereUserHasAccess('manage-trust')->get();
 
         return View::make('manage.trusts-index', compact('trusts'));
     }
@@ -88,7 +84,7 @@ class ManageController extends BaseController
     {
         $trust = Node::find($trustId);
 
-        $hospitals = Node::isPublished()->whereNodeType($this->hospitalNodeType)
+        $hospitals = Node::isPublished()->whereNodeType($this->hospitalNodeType)->whereUserHasAccess('manage-trust')
             ->join("node_type_{$this->hospitalNodeType}", 'nodes.id', '=', "node_type_{$this->hospitalNodeType}.node_id")
             ->where("node_type_{$this->hospitalNodeType}.trust", $trustId)
             ->get(['nodes.*', 'trust']);
@@ -162,7 +158,7 @@ class ManageController extends BaseController
         $trust = Node::find($trustId);
         $hospital = Node::find($hospitalId);
 
-        $wards = Node::isPublished()->whereNodeType($this->wardNodeType)
+        $wards = Node::isPublished()->whereNodeType($this->wardNodeType)->whereUserHasAccess('manage-trust')
             ->join("node_type_{$this->wardNodeType}", 'nodes.published_revision', '=', "node_type_{$this->wardNodeType}.id")
             ->where("node_type_{$this->wardNodeType}.hospital", $hospitalId)
             ->get(['nodes.*', 'hospital']);

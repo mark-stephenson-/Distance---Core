@@ -164,7 +164,49 @@
             </div>
 
             <div class="tab-pane" id="permissions">
-
+                @unless($trusts->isEmpty())
+                    <ul class="unstyled">
+                        @foreach($trusts as $trust)
+                            <li>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="nodes-checkbox" data-node-checkbox="{{ $trust->node_id }}" name="node_ids[]" value="{{ $trust->node_id }}" {{ in_array($trust->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $trust->name }}
+                                        <a data-toggle="collapse" href="#collapse_hospitals_{{ $trust->node_id }}" aria-expanded="false" aria-controls="collapse_hospitals_{{ $trust->node_id }}"><i class="icon-caret-right"></i></a>
+                                    </label>
+                                </div>
+                                @unless($trust->hospitals->isEmpty())
+                                    <ul class="collapse" id="collapse_hospitals_{{$trust->node_id}}">
+                                        @foreach($trust->hospitals as $hospital)
+                                            <li>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" class="nodes-checkbox" data-node-checkbox="{{ $hospital->node_id }}" name="node_ids[]" data-parent-node="{{ $trust->node_id }}" value="{{ $hospital->node_id }}" {{ in_array($hospital->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $hospital->name }}
+                                                        @unless($hospital->wards->isEmpty())
+                                                            <a data-toggle="collapse" href="#collapse_wards_{{ $hospital->node_id }}" aria-expanded="false" aria-controls="collapse_wards_{{ $hospital->node_id }}"><i class="icon-caret-right"></i></a>
+                                                        @endif
+                                                    </label>
+                                                </div>
+                                                @unless($hospital->wards->isEmpty())
+                                                    <ul class="collapse" id="collapse_wards_{{$hospital->node_id}}">
+                                                        @foreach($hospital->wards as $ward)
+                                                            <li>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="nodes-checkbox" data-node-checkbox="{{ $ward->node_id }}" name="node_ids[]" data-parent-node="{{ $hospital->node_id }}" value="{{ $ward->node_id }}" {{ in_array($ward->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $ward->name }}
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                @endunless
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endunless
+                            </li>
+                        @endforeach
+                    </ul>
+                @endunless
             </div>
         @endif
 
@@ -180,4 +222,29 @@
 
     {{ Form::close() }}
 
+    <script>
+        $('document').ready(function() {
+            // init the collapse elements
+            $('.collapse').collapse({toggle: false});
+
+            // make sure that if a child element is checked, the parent gets checked as well
+            $('.nodes-checkbox').on('change', function () {
+                var $sibblings_list = $(this).closest('ul').children('li');
+                var $parent_checkbox = $('#permissions').find('[data-node-checkbox="' + $(this).data('parent-node') + '"]');
+
+                // filter through the parent children elem and get the checked ones
+                var checked_sibblings = $sibblings_list.filter(function(key, item) {
+                    return $(item).find('.nodes-checkbox').prop('checked');
+                });
+
+                // check/uncheck parent checkboxes all the way up to root
+                if(checked_sibblings.length) {
+                    $parent_checkbox.prop('checked', true);
+                } else {
+                    $parent_checkbox.prop('checked', false);
+                }
+                $parent_checkbox.trigger('change');
+            });
+        });
+    </script>
 @stop

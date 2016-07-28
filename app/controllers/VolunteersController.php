@@ -9,7 +9,7 @@ class VolunteersController extends BaseController
 
     public function index()
     {
-        $volunteers = Node::whereNodeType(9)->get();
+        $volunteers = Node::whereNodeTypeIs($this->volunteerNodeType, 'published')->whereUserHasAccess('volunteers')->get();
 
         return View::make('volunteers.index', compact('volunteers'));
     }

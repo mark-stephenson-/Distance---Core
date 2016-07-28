@@ -158,7 +158,7 @@ class Node extends BaseModel
             try {
                 $return->user = Sentry::getUserProvider()->findById($return->updated_by);
             } catch (\Exception $e) {
-                dd($this->id);
+                throw new \Exception($e->getMessage());
             }
         }
 
@@ -173,5 +173,33 @@ class Node extends BaseModel
     public function scopeIsPublishedOrRetired($query)
     {
         $query->whereIn('nodes.status', ['published', 'retired']);
+    }
+
+    public function scopeWhereNodeTypeIs($query, $type, $status = '')
+    {
+        $query->select("node_type_{$type}.*", 'nodes.*');
+        $query->where('node_type', $type);
+        if($status) {
+            $query->where("node_type_{$type}.status", $status);
+        }
+        $query->join("node_type_{$type}", 'nodes.id', '=', "node_type_{$type}.node_id");
+    }
+
+    public function scopeWhereUserHasAccess($query, $zone)
+    {
+        $user = Sentry::getUser();
+
+        if($user->isSuperUser()) {
+            return $query;
+        }
+
+        if($user->hasAccess("cms.{$zone}.manage.own")) {
+            if($zone == 'volunteers') {
+                return $query->whereIn('trust', $user->accessible_nodes);
+            }
+            return $query->whereIn('nodes.id', $user->accessible_nodes);
+        }
+
+        return $query;
     }
 }

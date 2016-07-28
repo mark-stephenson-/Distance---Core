@@ -8,7 +8,7 @@
     <h2>{{ $hospital->latestRevision()->name }}</h2>
 
     <p class="pull-right">
-        <a href="{{ route('manage.index') }}" class="btn"><i class="icon-arrow-left"></i> Hospitals</a>
+        <a href="{{ route('manage.trust.index', array($trust->id)) }}" class="btn"><i class="icon-arrow-left"></i> Hospitals</a>
         <a href="{{ route('manage.ward.create', array($trust->id, $hospital->id)) }}" class="btn"><i class="icon-plus"></i> New Ward</a>
     </p>
 
