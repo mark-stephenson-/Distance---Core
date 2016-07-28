@@ -19,7 +19,7 @@ class ReportingController extends \BaseController
     {
         $trusts = Node::isPublished()
             ->whereNodeType(2)
-            ->join('node_type_2', 'node_id', '=', 'nodes.id')
+            ->join('node_type_2', 'node_type_2.id', '=', 'nodes.published_revision')
             ->lists('node_type_2.name', 'node_id');
 
         $trusts = ['' => 'Please select a Trust'] + $trusts;
@@ -31,7 +31,7 @@ class ReportingController extends \BaseController
     {
         $hospitals = Node::isPublished()
             ->whereNodeType(3)
-            ->join('node_type_3', 'node_id', '=', 'nodes.id')
+            ->join('node_type_3', 'node_type_3.id', '=', 'nodes.published_revision')
             ->where('node_type_3.trust', $trustId)
             ->lists('node_type_3.name', 'node_id');
 
@@ -46,7 +46,7 @@ class ReportingController extends \BaseController
 
         $wards = Node::isPublished()
             ->whereNodeType(4)
-            ->join('node_type_4', 'node_id', '=', 'nodes.id')
+            ->join('node_type_4', 'node_type_4.id', '=', 'nodes.published_revision')
             ->where('node_type_4.hospital', $hospitalId);
 
         if ($search) {

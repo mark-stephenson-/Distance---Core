@@ -7797,3 +7797,13 @@ ul.groups li p.lead {
   max-width: 32px;
   max-height: 32px;
 }
+.input-group {
+  display: inline-block;
+  position: relative;
+}
+.input-group i {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  color: #CCCCCC;
+}
