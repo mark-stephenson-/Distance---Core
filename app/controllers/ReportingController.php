@@ -17,10 +17,9 @@ class ReportingController extends \BaseController
      */
     public function index()
     {
-        $trusts = Node::isPublished()
-            ->whereNodeType(2)
-            ->join('node_type_2', 'node_type_2.id', '=', 'nodes.published_revision')
-            ->lists('node_type_2.name', 'node_id');
+        $trusts = Node::whereNodeTypeIs($this->trustNodeType, 'published')
+            ->whereUserHasAccess('manage-trust')
+            ->lists('name', 'node_id');
 
         $trusts = ['' => 'Please select a Trust'] + $trusts;
 
@@ -29,10 +28,9 @@ class ReportingController extends \BaseController
 
     public function hospitals($trustId)
     {
-        $hospitals = Node::isPublished()
-            ->whereNodeType(3)
-            ->join('node_type_3', 'node_type_3.id', '=', 'nodes.published_revision')
-            ->where('node_type_3.trust', $trustId)
+        $hospitals = Node::whereNodeTypeIs($this->hospitalNodeType, 'published')
+            ->where('trust', $trustId)
+            ->whereUserHasAccess('manage-trust')
             ->lists('node_type_3.name', 'node_id');
 
         $hospitals = ['' => 'Please select a Hospital'] + $hospitals;
@@ -44,16 +42,15 @@ class ReportingController extends \BaseController
     {
         $search = Input::get('q');
 
-        $wards = Node::isPublished()
-            ->whereNodeType(4)
-            ->join('node_type_4', 'node_type_4.id', '=', 'nodes.published_revision')
-            ->where('node_type_4.hospital', $hospitalId);
+        $wards = Node::whereNodeTypeIs($this->wardNodeType, 'published')
+            ->where('hospital', $hospitalId)
+            ->whereUserHasAccess('manage-trust');
 
         if ($search) {
-            $wards = $wards->where('node_type_4.name', 'LIKE', "%{$search}%");
+            $wards = $wards->where('name', 'LIKE', "%{$search}%");
         }
 
-        $wards = $wards->get(['*', 'node_type_4.name AS node_type_name']);
+        $wards = $wards->get();
 
         $wards = $wards->map(function ($node) {
             return [

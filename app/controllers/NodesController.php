@@ -435,7 +435,7 @@ class NodesController extends BaseController
                     ->take(20);
 
         if (Input::get('type')) {
-            $nodes->where('node_type', '=', Input::get('type'));
+            $nodes->whereNodeType(Input::get('type'));
         }
 
         $nodes = $nodes->get(array('id', 'title'));
