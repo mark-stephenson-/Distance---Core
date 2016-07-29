@@ -97,7 +97,7 @@ class VolunteersController extends BaseController
 
         $volunteer->title = Input::get('firstname').' '.Input::get('lastname');
         $volunteer->created_by = $volunteer->owned_by = Sentry::getUser()->id;
-        $volunteer->node_type = 9;
+        $volunteer->node_type = $this->volunteerNodeType;
         $volunteer->collection_id = CORE_COLLECTION_ID;
         $volunteer->status = 'published';
         $volunteer->save();
@@ -125,6 +125,15 @@ class VolunteersController extends BaseController
 
         return Redirect::route('volunteers.index')
                 ->with('successes', new MessageBag(array('The volunteer '.$nodeRevision['username'].' has been updated.')));
+    }
+
+    public function delete($volunteerId)
+    {
+        $volunteer = Node::find($volunteerId);
+        $volunteer->delete();
+
+        return Redirect::route('volunteers.index')
+            ->with('successes', new MessageBag(array('The volunteer '.$volunteer->title.' has been archived.')));
     }
 
     protected function checkForUniqueUsernameInTrust($existingId = null)

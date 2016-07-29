@@ -16,6 +16,7 @@ class NodesController extends BaseController
         Session::put('collection-node-view', 'hierarchy');
 
         $branches = $collection->hierarchy;
+        
         $branches->findChildren();
 
         $nodeTypes = NodeType::arrayOfTypes();

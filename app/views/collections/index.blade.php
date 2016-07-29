@@ -33,7 +33,7 @@
                     </td>
                     <td width="330">
                         @if (Config::get('core.features.hierarchy'))
-                            <a href="{{ route('nodes.hierarchy', array($collection->application_id, $collection->id)) }}" class="btn btn-small"><i class="icon-sitemap"></i> Hierarchy</a>
+                            <a href="{{ route('nodes.hierarchy', array($collection->application_id, $collection->id)) }}" class="btn btn-small"><i class="icon-sitemap"></i> Questionnaire management</a>
                         @endif
                         <a href="{{ route("nodes.list", array($collection->application_id, $collection->id)) }}" class="btn btn-small"><i class="icon-list"></i> Node List</a>
 

@@ -10,7 +10,7 @@ return array(
         'access' => 'cms.apps.*',
     ),
     array(
-        'title' => 'Hierarchy',
+        'title' => 'Questionnaire management',
         'route' => 'nodes.hierarchy',
         'params' => array('[app-id]', '[collection-id]'),
         'icon' => 'sitemap',
