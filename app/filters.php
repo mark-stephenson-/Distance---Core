@@ -108,11 +108,20 @@ Route::filter('checkPermissions', function ($request) {
 
     // Editing a user gives the user ID, let's detect and avoid that
     if (
+        (starts_with($property, 'cms.users.') and ends_with($property, '.groups')) or
+        (starts_with($property, 'cms.users.') and str_contains($property, '.add-group')) or
+        (starts_with($property, 'cms.users.') and str_contains($property, '.remove-group'))
+    ) {
+        $property = 'cms.users.addgroup';
+    }
+
+    if (
         (starts_with($property, 'cms.users.') and ends_with($property, '.update')) or
         (starts_with($property, 'cms.users.') and is_numeric(substr($property, -1, 1)))
     ) {
         $property = 'cms.users.update';
     }
+
 
     // Same with volunteers
     if (

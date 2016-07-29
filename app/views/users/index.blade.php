@@ -41,13 +41,17 @@
                         {{ date('j-m-Y', strtotime($user->last_login)) }}
                     @endif
                 </td>
-                <td width="150">
+                <td width="260">
                     @if (Sentry::getUser()->hasAccess('cms.users.update'))
                         <a href="{{ route('users.edit', array($user->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
                     @endif
 
                     @if (Sentry::getUser()->hasAccess('cms.users.delete'))
                         <a href="{{ route('users.delete', array($user->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a>
+                    @endif
+
+                    @if (Sentry::getUser()->hasAccess('cms.users.addgroup') && Sentry::getUser()->hasAccess('cms.users.removegroup'))
+                        <a data-toggle="modal" class="btn btn-small manageGroups" data-groups-url="{{ route('users.manageGroups', array('id' => $user->id)) }}"><i class="icon-group"></i> Manage groups</a>
                     @endif
                 </td>
             </tr>
@@ -70,6 +74,14 @@
         </div>
     </div>
 
+    <div class="modal fade hide" id="manageGroups">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Manage user groups</h3>
+        </div>
+        <div class="modal-body"></div>
+    </div>
+
     <script>
         $(document).ready( function() {
             $('#deleteModelConfirm').on('click', function(e) {
@@ -81,6 +93,17 @@
                 $('#deleteModal .userDeleteUrl').html($(this).attr('href'));
 
                 $("#deleteModal").modal('show');
+            });
+
+            $('.manageGroups').on('click', function (e) {
+                var groupUrl = $(this).data('groups-url');
+
+                $.get(groupUrl, function (response) {
+                    $('#manageGroups').find('.modal-body').html(response);
+                    $('#manageGroups').modal('show');
+                });
+
+                e.preventDefault();
             });
         });
     </script>

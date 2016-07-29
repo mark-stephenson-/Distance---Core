@@ -240,4 +240,12 @@ class UsersController extends BaseController
         return Redirect::route('users.index')->with('successes', new MessageBag(array('This user has been removed.')));
     }
 
+    public function getGroups($userId)
+    {
+        $user = Sentry::getUserProvider()->findById($userId);
+        $groups = Sentry::getGroupProvider()->findAll();
+
+        return View::make('users.groups', compact('user', 'groups'));
+    }
+
 }

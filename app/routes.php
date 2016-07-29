@@ -279,6 +279,7 @@ Route::group(array('before' => array('auth')), function () {
         Route::get('users/{id}/add-group/{group_id}', array('as' => 'users.add-group', 'uses' => 'UsersController@doAddGroup'));
         Route::get('users/{id}/remove-group/{group_id}', array('as' => 'users.remove-group', 'uses' => 'UsersController@doRemoveGroup'));
         Route::get('users/delete/{id}', array('as' => 'users.delete', 'uses' => 'UsersController@delete'));
+        Route::get('users/{id}/groups', array('as' => 'users.manageGroups', 'uses' => 'UsersController@getGroups'));
 
         /*
             Volunteers
