@@ -34,6 +34,7 @@ class GroupsController extends BaseController
             // Create the group
             $group = Sentry::getGroupProvider()->create(array(
                 'name'        => Input::get('name'),
+                'hierarchy'   => Input::get('hierarchy'),
                 'permissions' => Input::get('permissions', array()),
             ));
         }
@@ -84,6 +85,7 @@ class GroupsController extends BaseController
         {
             $group->name = Input::get('name');
             $group->permissions = Input::get('permissions', array());
+            $group->hierarchy = Input::get('hierarchy');
 
             foreach (array_diff_key($group->getPermissions(), Input::get('permissions') ?: array()) as $key => $value) {
                 $group->permissions = array($key => 0);

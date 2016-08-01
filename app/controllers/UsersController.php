@@ -75,7 +75,9 @@ class UsersController extends BaseController
                 ->withErrors(new MessageBag(array('That user could not be found.' )));
         }
 
-        $groups = Sentry::getGroupProvider()->findAll();
+        $groups = array_filter(Sentry::getGroupProvider()->findAll(), function($group) {
+            return $group->hierarchy > Sentry::getUser()->topMostGroupHierarchy();
+        });
 
         $trusts = Node::whereNodeTypeIs($this->trustNodeType, 'published')->get();
         $trusts->each(function (&$trust) {
@@ -243,7 +245,12 @@ class UsersController extends BaseController
     public function getGroups($userId)
     {
         $user = Sentry::getUserProvider()->findById($userId);
+
         $groups = Sentry::getGroupProvider()->findAll();
+
+        $groups = array_filter($groups, function($group) {
+            return $group->hierarchy > Sentry::getUser()->topMostGroupHierarchy();
+        });
 
         return View::make('users.groups', compact('user', 'groups'));
     }

@@ -50,7 +50,7 @@
                         <a href="{{ route('users.delete', array($user->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a>
                     @endif
 
-                    @if (Sentry::getUser()->hasAccess('cms.users.addgroup') && Sentry::getUser()->hasAccess('cms.users.removegroup'))
+                    @if (Sentry::getUser()->hasAccess('cms.users.addgroup') || Sentry::getUser()->hasAccess('cms.users.removegroup'))
                         <a data-toggle="modal" class="btn btn-small manageGroups" data-groups-url="{{ route('users.manageGroups', array('id' => $user->id)) }}"><i class="icon-group"></i> Manage groups</a>
                     @endif
                 </td>

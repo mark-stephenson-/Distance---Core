@@ -17,6 +17,7 @@
             <tr>
                 <th>Name</th>
                 <th>Members</th>
+                <th>Hierarchy level</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -41,6 +42,7 @@
                          - {{ implode(', ', $user_list) }}&hellip;
                     @endif
                 </td>
+                <td>{{ $group->hierarchy }}</td>
                 <td width="150">
                     @if (Sentry::getUser()->hasAccess('cms.groups.update'))
                         <a href="{{ route('groups.edit', array($group->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>

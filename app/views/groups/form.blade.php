@@ -72,6 +72,13 @@
         </div>
     </div>
 
+    <div class="control-group">
+        {{ Form::label('hierarchy', 'Hierarchy level', array('class' => 'control-label')) }}
+        <div class="controls">
+            {{ Form::number('hierarchy', null, array('class' => 'span11')) }}
+        </div>
+    </div>
+
     <section class="permission-tree">
         {{ $permissions }}
     </section>

@@ -88,10 +88,10 @@ return array(
                         'value' => 'cms.users.delete',
                     ),
                     'Add To Group' => array(
-                        'value' => 'cms.users.removegroup',
+                        'value' => 'cms.users.addgroup',
                     ),
                     'Remove From Group' => array(
-                        'value' => 'cms.users.addgroup',
+                        'value' => 'cms.users.removegroup',
                     ),
 
                 ),

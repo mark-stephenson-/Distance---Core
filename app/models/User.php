@@ -87,4 +87,26 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
         return $group->users;
     }
 
+    /**
+     * Returns the top most level in the group hierarchy
+     * users can only add lower level groups to other users
+     *
+     * @return integer
+     */
+    public function topMostGroupHierarchy() {
+        if($this->hasAccess('superuser')) {
+            return 0;
+        }
+
+        $topMostGroup = $this->groups->sortBy(function ($group) {
+            return $group->hierarchy;
+        })->first();
+
+        // if user has no associated groups, just return a big number aka, last in the hierarchy
+        if(empty($topMostGroup)) {
+            return 100;
+        }
+
+        return (int) $topMostGroup->hierarchy;
+    }
 }

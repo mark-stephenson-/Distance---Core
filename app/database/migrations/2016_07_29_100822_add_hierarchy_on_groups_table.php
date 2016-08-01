@@ -12,10 +12,10 @@ class AddHierarchyOnGroupsTable extends Migration {
 	 */
 	public function up()
 	{
-		return;
 		Schema::table('groups', function(Blueprint $table)
 		{
-			$table->tinyInteger('hierarchy')->after('permissions')->default(1);
+			// if no hierarchy is added, we make sure we don't add 0 by default
+			$table->tinyInteger('hierarchy')->after('permissions')->default(10);
 		});
 	}
 
@@ -26,7 +26,6 @@ class AddHierarchyOnGroupsTable extends Migration {
 	 */
 	public function down()
 	{
-		return;
 		Schema::table('groups', function(Blueprint $table)
 		{
 			$table->dropColumn('hierarchy');
