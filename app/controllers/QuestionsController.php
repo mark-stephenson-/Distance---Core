@@ -103,7 +103,7 @@ class QuestionsController extends BaseController
     public function publishRevision($appId, $collectionId, $nodeId, $revisionId, $branchId)
     {
         // First retire the current set
-        $existingPublishedSet = Node::where('status', 'published')->where('node_type', 7)->first();
+        $existingPublishedSet = Node::where('status', 'published')->where('node_type', $this->questionSetNodeType)->first();
 
         if ($existingPublishedSet) {
             $existingHierarchyItem = Hierarchy::where('node_id', $existingPublishedSet->id)->first();
@@ -114,14 +114,10 @@ class QuestionsController extends BaseController
                 foreach ($existingHierarchyItem->getChildren() as $oldQuestionLeaf) {
                     $oldRevision = $oldQuestionLeaf->node->latestRevision();
                     $oldQuestionLeaf->node->markAsRetired($oldRevision->id);
-
-                    $oldQuestionLeaf->delete();
                 }
 
                 $oldRevision = $existingHierarchyItem->node->latestRevision();
                 $existingHierarchyItem->node->markAsRetired($oldRevision->id);
-
-                $existingHierarchyItem->delete();
             }
         }
 

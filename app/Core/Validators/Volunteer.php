@@ -7,6 +7,7 @@ class Volunteer extends Validator
         'password'  => 'required',
         'firstname' => 'required',
         'lastname'  => 'required',
+        'trust'  => 'required',
     );
 
     public static $messages = array();

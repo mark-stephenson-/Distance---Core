@@ -168,13 +168,18 @@
                             @endif
 
                             @if ( Sentry::getUser()->hasAccess('cms.apps.1.collections.' . $collection->id . '.' . $branch->node->nodetype->name . '.update'))
-                                @if ($branch->node->status != 'published')
+                                @if ($branch->node->status == 'published')
+                                    <a href="{{ route('questions.create-revision', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini">Create Revision</a>
+                                @elseif ($branch->node->status == 'draft')
                                     <a href="{{ route('nodes.edit', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
                                     <a href="{{ route('questions.publish-revision', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini open-publish-question-set-modal">Publish Revision</a>
-                                @else
-                                    <a href="{{ route('questions.create-revision', array($appId, $collection->id, $branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini">Create Revision</a>
                                 @endif
 
+                            @endif
+
+                            @if (Sentry::getUser()->hasAccess('cms.collections.' . $collection->id . '.hierarchy-management') && $branch->node->status == 'draft')
+                                <a href="#" rel="tooltip" title="Add Link" class="btn btn-mini open-node-modal"><i class="icon-link"></i></a>
+                                <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini open-remove-link-modal"><i class="icon-unlink"></i></a>
                             @endif
                         </div>
                     </div>

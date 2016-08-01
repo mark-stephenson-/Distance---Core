@@ -5,6 +5,7 @@ class BaseController extends Controller {
     protected $trustNodeType = 2;
     protected $hospitalNodeType = 3;
     protected $wardNodeType = 4;
+    protected $questionSetNodeType = 7;
     protected $volunteerNodeType = 9;
 
     public function __construct() {

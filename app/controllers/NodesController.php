@@ -12,6 +12,7 @@ class NodesController extends BaseController
                 ->withErrors(array('That collection could not be found.'));
         }
 
+        Session::put('last-view', array('url' => Request::fullUrl(), 'collection_id' => $collectionId));
         Session::put('current-collection', $collection->id);
         Session::put('collection-node-view', 'hierarchy');
 
