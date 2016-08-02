@@ -11,12 +11,12 @@
             @foreach($standardReports as $report)
                 <tr>
                     <td>
-                        <a href="{{ route('reporting.view', array('id' => $report->fileName)) }}">{{ $report->generated_at }}</a>
+                        <a href="{{ route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')) }}">{{ $report->generated_at }}</a>
                     </td>
                     <td>{{ $report->trust }}</td>
                     <td>{{ $report->hospital }}</td>
                     <td>{{ $report->ward }}</td>
-                    <td>{{ $report->generated_at }}</td>
+                    <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $report->dates->start)->format('d/m/Y') }} - {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $report->dates->end)->format('d/m/Y') }}</td>
                 </tr>
             @endforeach
         @else

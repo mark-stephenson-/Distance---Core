@@ -15,14 +15,25 @@ class ReportService
         $records = \PRRecord::where('ward_node_id', $wardId)
             ->with(['questions.answer', 'questions.node'])
             ->wherePmosId($pmosId)
-            ->where('start_date', '>=', $startDate)
-            ->where('start_date', '<=', $endDate)
+            ->whereBetween('start_date', array($startDate, $endDate->endOfDay()))
             ->get();
 
+        $reportData = $this->generateReportForRecords($records);
+
+        $reportData['dates'] = [
+            'start' => $startDate->toDateTimeString(),
+            'end' => $endDate->toDateTimeString()
+        ];
+        
+        return $reportData;
+    }
+
+    public function generateReportForRecords($records)
+    {
         $answerOptions = (new Collection(DB::table('node_type_5')->get()))->keyBy('node_id');
         $questionData = (new Collection(DB::table('node_type_1')->join('i18n_strings', 'node_type_1.question', '=', 'i18n_strings.key')->get(['*', 'i18n_strings.value AS value'])))->keyBy('node_id');
 
-        $ward = DB::table('node_type_4')->where('status', 'published')->where('node_id', $wardId)->first();
+        $ward = DB::table('node_type_4')->where('status', 'published')->where('node_id', $records[0]->ward_node_id)->first();
         $hospital = DB::table('node_type_3')->whereNodeId($ward->hospital)->first();
         $trust = DB::table('node_type_2')->whereNodeId($hospital->trust)->first();
 
@@ -30,10 +41,10 @@ class ReportService
 
         $reportData = [
             'dates' => [
-                'start' => $startDate->toDateTimeString(),
-                'end' => $endDate->toDateTimeString(),
+                'start' => $records->first()->start_date,
+                'end' => $records->last()->start_date,
             ],
-            'pmos_id' => $pmosId,
+            'pmos_id' => $records[0]->pmos_id,
             'submissions' => [
                 'total' => $records->count(),
                 'male' => 0,
@@ -42,7 +53,7 @@ class ReportService
             'notes' => [],
             'concerns' => [],
             'ward' => $ward->name,
-            'wardId' => $wardId,
+            'wardId' => $ward->node_id,
             'hospital' => $hospital->name,
             'hospitalId' => $hospital->node_id,
             'trust' => $trust->name,
@@ -77,7 +88,7 @@ class ReportService
                 foreach($record->concerns as $concern) {
                     if ($concern->prase_question_id == null) {
                         $reportData['concerns'][$concern->id] = [
-                            'text' => $concern->note->text,
+                            'text' => isset($concern->note) ? $concern->note->text : null,
                             'preventability' => (is_null($concern->prevent_answer)) ? 4 : $concern->prevent_answer,
                             'severity' => (is_null($concern->serious_answer)) ? 5 : $concern->serious_answer,
                         ];
@@ -100,12 +111,12 @@ class ReportService
                             if ($question->concern) {
                                 if ($question->concern->prase_note_id != $question->note->id) {
                                     $domainData['questions'][$question->node->id]['notes'][] = [
-                                        'text' => $question->note->text,
+                                        'text' => isset($question->note) ? $question->note->text : null,
                                     ];
                                 }
                             } else {
                                 $domainData['questions'][$question->node->id]['notes'][] = [
-                                    'text' => $question->note->text,
+                                    'text' => isset($question->note) ? $question->note->text : null,
                                 ];
                             }
                         }
@@ -168,7 +179,7 @@ class ReportService
 
     public function getStandardReports()
     {
-        $standardReportsPath = storage_path("reports");
+        $standardReportsPath = storage_path("reports/standard");
 
         $standardReportFiles = new Collection(scandir($standardReportsPath, SCANDIR_SORT_DESCENDING));
 
@@ -202,8 +213,40 @@ class ReportService
         return $standardReports;
     }
 
-    public function generateStandardReports($chunks = 20)
+    public function generateAllStandardReports($chunkSize = 20)
     {
-        
+        $records = \PRRecord::with(['questions.answer', 'questions.node'])->orderBy('id', 'asc')->get();
+
+        // group by wards
+        $perWardGroupedRecords = $records->groupBy('ward_node_id');
+
+        foreach ($perWardGroupedRecords as $ward_id => $wardRecords) {
+
+            // group by question sets
+            $perPmosGroupedRecords = (new Collection($wardRecords))->groupBy('pmos_id');
+
+            foreach ($perPmosGroupedRecords as $pmos_id => $pmosRecords) {
+
+                // create chunks of 20
+                $recordChunks = (new Collection($pmosRecords))->chunk($chunkSize);
+
+                foreach($recordChunks as $recordChunk) {
+
+                    if(count($recordChunk) < $chunkSize) {
+                        continue;
+                    }
+
+                    // save json file with report
+                    $reportData = $this->generateReportForRecords($recordChunk);
+
+                    $reportJsonData = json_encode($reportData);
+
+                    $fileKey = Carbon::createFromFormat('Y-m-d H:i:s', $recordChunk->last()->start_date)->timestamp;
+
+                    file_put_contents(storage_path("reports/standard/{$fileKey}.json"), $reportJsonData);
+                }
+            }
+        }
+        echo 'Standard reports created!';
     }
 }

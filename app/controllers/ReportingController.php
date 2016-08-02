@@ -24,7 +24,6 @@ class ReportingController extends \BaseController
         $trusts = ['' => 'Please select a Trust'] + $trusts;
 
         $reportService = new ReportService();
-
         $standardReports = $reportService->getStandardReports();
 
         return View::make('reporting.index', compact('trusts', 'standardReports'));
@@ -171,7 +170,12 @@ class ReportingController extends \BaseController
 
     public function getReportData($fileKey)
     {
-        return json_decode(file_get_contents(storage_path("reports/{$fileKey}.json")));
+        $type = '';
+        if(Input::get('type')) {
+            $type = 'standard/';
+        }
+        $filePath = storage_path("reports/{$type}{$fileKey}.json");
+        return json_decode(file_get_contents($filePath));
     }
     
     public function updateStandardReportsTable()

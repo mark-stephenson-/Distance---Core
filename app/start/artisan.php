@@ -13,3 +13,4 @@
 
 Artisan::add(new createResourceArchive);
 Artisan::add(new DataExportCommand);
+Artisan::add(new GenerateStandardReports);
