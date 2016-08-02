@@ -80,13 +80,25 @@ function processSingleUploadedFile(uploader, files) {
 }
 
 var Prase = {
-     alert: function (type, message, container) {
+    alert: function (type, msg, container) {
         var alertStr = '' +
-            '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
-                + message +
+            '<div class="alert alert-' + type + ' alert-dismissible" role="alert">'
+                + msg +
             '</div>';
+        var $existingAlert = $(container).find('.alert');
 
-        $(container).prepend(alertStr);
+        // if an existing alert is present, we insert the new alert after it and fade it out
+        if($existingAlert.length) {
+            $existingAlert.after(alertStr);
+            $existingAlert.fadeOut({
+                complete: function() {
+                    $(this).remove();
+                },
+                duration: 400
+            });
+        } else {
+            $(container).prepend(alertStr);
+        }
     }
 }
 

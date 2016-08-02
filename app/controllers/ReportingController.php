@@ -23,7 +23,11 @@ class ReportingController extends \BaseController
 
         $trusts = ['' => 'Please select a Trust'] + $trusts;
 
-        return View::make('reporting.index', compact('trusts'));
+        $reportService = new ReportService();
+
+        $standardReports = $reportService->getStandardReports();
+
+        return View::make('reporting.index', compact('trusts', 'standardReports'));
     }
 
     public function hospitals($trustId)
@@ -62,10 +66,8 @@ class ReportingController extends \BaseController
         return json_encode(['results' => $wards]);
     }
 
-    public function generate($wardIds)
+    public function generate($wardId)
     {
-        $wardIds = array_filter(explode(',', $wardIds));
-
         if (!Input::get('startDate') or !$startDate = Carbon::createFromFormat('d-m-Y', Input::get('startDate'))->startOfDay()) {
             return Response::make('Invalid start date specified.', 400);
         }
@@ -75,21 +77,19 @@ class ReportingController extends \BaseController
         }
 
         if (!Input::get('pmosId')) {
-            $questionSets = PRRecord::whereIn('ward_node_id', $wardIds)
+            $questionSets = PRRecord::where('ward_node_id', $wardId)
                 ->where('start_date', '>=', $startDate)
                 ->where('start_date', '<=', $endDate)
                 ->join('nodes', 'pmos_id', '=', 'nodes.id')
                 ->groupBy('pmos_id')
-                ->get(
-                    [
-                        'pmos_id',
-                        'start_date',
-                        'nodes.created_at',
-                        'nodes.published_at',
-                        'nodes.retired_at',
-                        DB::raw('COUNT(prase_records.id) AS results'),
-                    ]
-                );
+                ->get([
+                    'pmos_id',
+                    'start_date',
+                    'nodes.created_at',
+                    'nodes.published_at',
+                    'nodes.retired_at',
+                    DB::raw('COUNT(prase_records.id) AS results'),
+                ]);
 
             $selects = [];
 
@@ -111,7 +111,7 @@ class ReportingController extends \BaseController
         }
 
         $reportService = new ReportService();
-        $reportData = $reportService->generateReportForQuestionSet($pmosId, $wardIds, $startDate, $endDate);
+        $reportData = $reportService->generateReportForQuestionSet($pmosId, $wardId, $startDate, $endDate);
 
         $reportJsonData = json_encode($reportData);
 
@@ -172,5 +172,16 @@ class ReportingController extends \BaseController
     public function getReportData($fileKey)
     {
         return json_decode(file_get_contents(storage_path("reports/{$fileKey}.json")));
+    }
+    
+    public function updateStandardReportsTable()
+    {
+        $reportService = new ReportService();
+
+        $standardReports = $reportService->getStandardReports();
+
+        $markup = View::make('reporting.partials.standard-reports-table', compact('standardReports'))->__toString();
+
+        return Response::json(['status' => 'success', 'markup' => $markup]);
     }
 }

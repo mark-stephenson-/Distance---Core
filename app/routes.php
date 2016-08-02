@@ -227,6 +227,11 @@ Route::group(array('before' => array('auth')), function () {
                 'as' => 'reporting.ajax.generate',
                 'uses' => 'ReportingController@generate',
             ]);
+
+            Route::get('_ajax/update_standard_reports_table', [
+                'as' => 'reporting.ajax.generate',
+                'uses' => 'ReportingController@updateStandardReportsTable',
+            ]);
             
             Route::get('view/{id}', [
                 'as' => 'reporting.view',

@@ -3,14 +3,16 @@
 namespace Core\Services;
 
 use Carbon\Carbon;
+use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class ReportService
 {
-    public function generateReportForQuestionSet($pmosId, $wardIds, Carbon $startDate, Carbon $endDate)
+    public function generateReportForQuestionSet($pmosId, $wardId, Carbon $startDate, Carbon $endDate)
     {
-        $records = \PRRecord::whereIn('ward_node_id', $wardIds)
+        $records = \PRRecord::where('ward_node_id', $wardId)
             ->with(['questions.answer', 'questions.node'])
             ->wherePmosId($pmosId)
             ->where('start_date', '>=', $startDate)
@@ -20,8 +22,8 @@ class ReportService
         $answerOptions = (new Collection(DB::table('node_type_5')->get()))->keyBy('node_id');
         $questionData = (new Collection(DB::table('node_type_1')->join('i18n_strings', 'node_type_1.question', '=', 'i18n_strings.key')->get(['*', 'i18n_strings.value AS value'])))->keyBy('node_id');
 
-        $wards = new Collection(DB::table('node_type_4')->where('status', 'published')->whereIn('node_id', $wardIds)->get());
-        $hospital = DB::table('node_type_3')->whereNodeId($wards[0]->hospital)->first();
+        $ward = DB::table('node_type_4')->where('status', 'published')->where('node_id', $wardId)->first();
+        $hospital = DB::table('node_type_3')->whereNodeId($ward->hospital)->first();
         $trust = DB::table('node_type_2')->whereNodeId($hospital->trust)->first();
 
         $domains = DB::table('node_type_10')->get();
@@ -39,10 +41,12 @@ class ReportService
             ],
             'notes' => [],
             'concerns' => [],
-            'ward' => $wards->implode('name', ', '),
-            'wardIds' => $wardIds,
+            'ward' => $ward->name,
+            'wardId' => $wardId,
             'hospital' => $hospital->name,
+            'hospitalId' => $hospital->node_id,
             'trust' => $trust->name,
+            'trustId' => $trust->node_id,
         ];
 
         foreach($domains as $domain) {
@@ -85,7 +89,7 @@ class ReportService
                         // Check for concerns
                         if ($question->concern) {
                             $domainData['questions'][$question->node->id]['concerns'][] = [
-                                'text' => $question->concern->note->text,
+                                'text' => isset($question->concern->note) ? $question->concern->note->text : null,
                                 'preventability' => (is_null($question->concern->prevent_answer)) ? 4 : $question->concern->prevent_answer,
                                 'severity' => (is_null($question->concern->serious_answer)) ? 5 : $question->concern->serious_answer,
                             ];
@@ -160,5 +164,46 @@ class ReportService
         }
 
         return $reportData;
+    }
+
+    public function getStandardReports()
+    {
+        $standardReportsPath = storage_path("reports");
+
+        $standardReportFiles = new Collection(scandir($standardReportsPath, SCANDIR_SORT_DESCENDING));
+
+        $standardReports = $standardReportFiles->filter(function ($item) {
+            return str_contains($item, '.json');
+        })->map(function ($reportFile) use ($standardReportsPath) {
+            $report = json_decode(file_get_contents($standardReportsPath . '/' . $reportFile));
+            list($timestamp, $extension) = explode('.', $reportFile);
+
+            $report->generated_at = (new Carbon())->createFromTimestampUTC($timestamp)->format('d/m/Y H:i');
+            $report->fileName = $timestamp;
+            return $report;
+        })->filter(function ($report) {
+            $getFilterResult = true;
+
+            if(Input::get('ward_id')) {
+                $getFilterResult = Input::get('ward_id') == $report->wardId;
+            }
+            elseif(Input::get('hospital_id')) {
+                $getFilterResult = $report->hospitalId == Input::get('hospital_id');
+            }
+            elseif(Input::get('trust_id')) {
+                $getFilterResult = $report->trustId == Input::get('trust_id');
+            }
+
+            $userHasAccess = Sentry::getUser()->canAccessNodes($report->wardId);
+
+            return $getFilterResult && $userHasAccess;
+        });
+
+        return $standardReports;
+    }
+
+    public function generateStandardReports($chunks = 20)
+    {
+        
     }
 }

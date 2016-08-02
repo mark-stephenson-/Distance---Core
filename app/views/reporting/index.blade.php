@@ -5,18 +5,17 @@
 @stop
 
 @section('body')
-    <div class="title-block">
-        <h3>Bespoke Report Parameters</h3>
-        <p>You must select a date range and at least one ward to generate a report.</p>
-    </div>
+    <div class="clearfix">
+        <div class="title-block">
+            <h3>Bespoke Report Parameters</h3>
+            <p>You must select a date range and at least one ward to generate a report.</p>
+        </div>
 
-    <div class="reports-form">
-        {{ Form::open(['id' => 'report-form']) }}
-            <div class="span9">
+        <div class="reports-form">
+            {{ Form::open(['id' => 'report-form']) }}
+            <div class="span9 filter-container">
                 <div class="row">
-
                     {{ Form::label('period_start', 'Report Period', array('class' => 'control-label span2')) }}
-
                     <div class="controls">
                         <div class="input-group span4">
                             <i class="icon-calendar"></i>
@@ -32,10 +31,10 @@
                     {{ Form::label('trust', 'Location', array('class' => 'control-label span2')) }}
                     <div class="controls">
                         <div class="input-group span4">
-                            {{ Form::select('trust', $trusts, Input::old('trust'), array('class' => 'span12')) }}
+                            {{ Form::select('trust', $trusts, Input::old('trust'), array('class' => 'trust-select span12')) }}
                         </div>
                         <div class="input-group span4">
-                            {{ Form::select('hospital', array(), Input::old('hospital'), array('class' => 'span12', 'style' => 'display: none;')) }}
+                            {{ Form::select('hospital', array(), Input::old('hospital'), array('class' => 'hospital-select span12', 'style' => 'display: none;')) }}
                         </div>
                     </div>
                 </div>
@@ -43,7 +42,7 @@
                     {{ Form::label('wards', 'Wards', array('class' => 'control-label span2')) }}
                     <div class="controls">
                         <div class="input-group span4">
-                            {{ Form::hidden('wards', null, ['id' => 'wards', 'class' => 'span12']) }}
+                            {{ Form::hidden('wards', null, ['id' => 'wards', 'class' => 'wards-select span12']) }}
                         </div>
                     </div>
                 </div>
@@ -52,7 +51,41 @@
             <div class="span2">
                 {{ Form::submit('Generate Report', array('class' => 'submit-button btn', 'id' => 'generate', 'disabled')) }}
             </div>
-        {{ Form::close() }}
+            {{ Form::close() }}
+        </div>
+    </div>
+    <hr>
+    <div class="clearfix">
+        <div class="title-block">
+            <h3>Standard Prase Ward Reports</h3>
+        </div>
+
+        <div class="span9 filter-container">
+            <div class="row">
+                {{ Form::label('trust', 'Location', array('class' => 'control-label span2')) }}
+                <div class="controls">
+                    <div class="input-group span4">
+                        {{ Form::select('trust', $trusts, Input::old('trust'), array('class' => 'trust-select span12', 'data-can-update-standard-table' => true)) }}
+                    </div>
+                    <div class="input-group span4">
+                        {{ Form::select('hospital', array(), Input::old('hospital'), array('class' => 'hospital-select span12', 'data-can-update-standard-table' => true, 'style' => 'display: none;')) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row wards-row hide">
+                {{ Form::label('wards', 'Wards', array('class' => 'control-label span2')) }}
+                <div class="controls">
+                    <div class="input-group span4">
+                        {{ Form::hidden('wards', null, ['id' => 'wards', 'class' => 'wards-select span12', 'data-can-update-standard-table' => true]) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="standard-reports">
+            @include('reporting.partials.standard-reports-table')
+        </div>
+
     </div>
 
     <div class="modal hide fade" id="pmos_modal">
@@ -87,69 +120,104 @@
                 checkGenerate();
             });
 
-            $('[name=trust]').on('change', function() {
+
+            $('.trust-select').on('change', function() {
                 var trustId = $(this).val();
-                var url = "/reporting/_ajax/" + trustId + "/hospitals";
+                var $filterContainer = $(this).closest('.filter-container');
+                var $hospitalSelect = $filterContainer.find('.hospital-select');
+                var $wardsSelect = $filterContainer.find('.wards-select');
 
-                $('[name=hospital]').show();
-                $("#wards").select2("destroy");
+                $hospitalSelect.show();
+                $wardsSelect.select2("destroy");
 
-                $.ajax({
-                    method: 'GET',
-                    url: url,
-                    dataType: 'json'
-                }).done(function(data) {
-                    $('[name=hospital]').html('');
-                    var listitems = '';
-                    $.each(data, function(key, value){
-                        listitems = '<option value=' + key + '>' + value + '</option>' + listitems;
-                    });
-                    $('[name=hospital]').append(listitems);
-                });
+                updateHospitalSelect(trustId, $hospitalSelect)
+                if($(this).data('can-update-standard-table')) {
+                    updateStandardReportsTable({trust_id: trustId});
+                }
             });
 
-            $('[name=hospital]').on('change', function() {
+            $('.hospital-select').on('change', function() {
                 var hospitalId = $(this).val();
+                var $filterContainer = $(this).closest('.filter-container');
+                var $wardsRow = $filterContainer.find('.wards-row');
+                var $wardsSelect = $filterContainer.find('.wards-select');
 
-                $('.wards-row').show();
-                $("#wards").select2("destroy");
+                $wardsRow.show();
+                $wardsSelect.select2("destroy");
 
-                $('#wards').select2({
-                    multiple: false,
-                    ajax: {
-                        url: '/reporting/_ajax/'+hospitalId+'/wards',
-                        dataType: 'json',
-                        data: function(term, page) {
-                            return {
-                                q: term
-                            }
-                        },
-                        results: function(data, page) {
-                            return data;
-                        }
-                    }
-                }).on('change', function(e) {
-                    checkGenerate();
-                });
+                updateWardsSelect(hospitalId, $wardsSelect);
+
+                if($(this).data('can-update-standard-table')) {
+                    updateStandardReportsTable({hospital_id: hospitalId});
+                }
             });
 
             $('#report-form').on('submit', function(e) {
                 e.preventDefault();
 
-                generate();
+                generate($(this));
             });
         });
 
         $('#pmos_submit').on('click', function() {
             var pmosId = $('#pmos_id').val();
-            generate(pmosId);
+            $('#report-form').append($('<input>', {type: 'hidden', name: 'pmos_id', value: pmosId}));
+            $('#report-form').trigger('submit');
         });
 
-        function generate(pmosId) {
-            if (typeof pmosId == undefined) {
-                pmosId = null;
-            }
-            var wardId = $('[name=wards]').val();
+        function updateHospitalSelect(trustId, $hospitalSelect) {
+            var url = "/reporting/_ajax/" + trustId + "/hospitals";
+            $.ajax({
+                method: 'GET',
+                url: url,
+                dataType: 'json'
+            }).done(function(data) {
+                var listitems = '';
+                $.each(data, function(key, value){
+                    listitems = '<option value=' + key + '>' + value + '</option>' + listitems;
+                });
+                $hospitalSelect.html(listitems);
+            });
+        }
+
+        function updateWardsSelect(hospitalId, $wardsSelect)
+        {
+            $wardsSelect.select2({
+                multiple: false,
+                ajax: {
+                    url: '/reporting/_ajax/'+hospitalId+'/wards',
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            q: term
+                        }
+                    },
+                    results: function(data, page) {
+                        return data;
+                    }
+                }
+            }).on('change', function(e) {
+                checkGenerate();
+                if($wardsSelect.data('can-update-standard-table')) {
+                    updateStandardReportsTable({ward_id: $(this).val()});
+                }
+            });
+        }
+
+        function updateStandardReportsTable(filter)
+        {
+            var url = '/reporting/_ajax/update_standard_reports_table?' + $.param(filter);
+            var $tableContainer = $('.standard-reports');
+
+            $.get(url, function(response) {
+                $tableContainer.html(response.markup);
+            }, 'json');
+        }
+
+        function generate($form)
+        {
+            var wardId = $form.find('[name=wards]').val();
+            var pmosId = $form.find('[name=pmos_id]').val();
 
             var url = "/reporting/_ajax/" + wardId + "/generate";
 
@@ -157,8 +225,8 @@
                 method: 'GET',
                 url: url,
                 data: {
-                    'startDate': $('[name=period_start]').val(),
-                    'endDate': $('[name=period_end]').val(),
+                    'startDate': $form.find('[name=period_start]').val(),
+                    'endDate': $form.find('[name=period_end]').val(),
                     'pmosId': pmosId
                 },
                 dataType: 'json'

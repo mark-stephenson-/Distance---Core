@@ -109,4 +109,16 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
 
         return (int) $topMostGroup->hierarchy;
     }
+
+    public function canAccessNodes($nodes)
+    {
+        if(! is_array($nodes)) {
+            $nodes = array($nodes);
+        }
+        if($this->hasAccess('superuser')) {
+            return true;
+        }
+        
+        return (boolean) count(array_intersect($this->accessible_nodes, $nodes));
+    }
 }
