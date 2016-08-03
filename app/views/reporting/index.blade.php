@@ -8,7 +8,7 @@
     <div class="clearfix">
         <div class="title-block">
             <h3>Bespoke Report Parameters</h3>
-            <p>You must select a date range and at least one ward to generate a report.</p>
+            <p>You must select a date range and one ward to generate a report.</p>
         </div>
 
         <div class="reports-form">

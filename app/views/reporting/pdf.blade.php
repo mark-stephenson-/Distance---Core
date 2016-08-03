@@ -141,23 +141,28 @@
             @include('reporting.partials.explanation')
 
             <div style="page-break-before: always;"></div>
+
             <h3>Overview of the patient measures of safety</h3>
             @include('reporting.partials.summary-key')
-
             @include('reporting.partials.domain-summary', ['noLimit' => true])
 
+            <h3>General patient reported positive experiences of care received</h3>
             @include('reporting.partials.positive-comments', ['comments' => $reportData->notes, 'noLimit' => true])
+
+            <h3>General patient reported safety concerns</h3>
             @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $reportData->concerns)), 'noLimit' => true])
 
             @foreach($reportData->domains as $domain)
-                <h3 style="page-break-before: always;">Report Summary > {{ $domain->name }}</h3>
-
+                <h3 style="page-break-before: always;">{{ $domain->name }} domain</h3>
                 @include('reporting.partials.summary-key')
                 @include('reporting.partials.domain-questions', ['noLimit' => true])
+
                 @if (isset($domain->notes))
+                    <h3>Domain patient reported positive experiences of care received</h3>
                     @include('reporting.partials.positive-comments', ['comments' => $domain->notes, 'noLimit' => true])
                 @endif
                 @if (isset($domain->concerns))
+                    <h3>Domain patient reported safety concerns</h3>
                     @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $domain->concerns)), 'noLimit' => true])
                 @endif
             @endforeach
