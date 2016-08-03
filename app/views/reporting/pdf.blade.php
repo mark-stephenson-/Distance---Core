@@ -140,7 +140,8 @@
             <h3>Report Summary</h3>
             @include('reporting.partials.explanation')
 
-            <div styl="page-break-before: always;"></div>
+            <div style="page-break-before: always;"></div>
+            <h3>Overview of the patient measures of safety</h3>
             @include('reporting.partials.summary-key')
 
             @include('reporting.partials.domain-summary', ['noLimit' => true])
