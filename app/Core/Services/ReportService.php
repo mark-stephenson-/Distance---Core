@@ -177,6 +177,11 @@ class ReportService
         return $reportData;
     }
 
+    /**
+     * The reports are stored in json files
+     *
+     * @return array
+     */
     public function getStandardReports()
     {
         $standardReportsPath = storage_path("reports/standard");
@@ -184,15 +189,24 @@ class ReportService
         $standardReportFiles = new Collection(scandir($standardReportsPath, SCANDIR_SORT_DESCENDING));
 
         $standardReports = $standardReportFiles->filter(function ($item) {
+
+            // make sure we have only json files
             return str_contains($item, '.json');
+
         })->map(function ($reportFile) use ($standardReportsPath) {
+
+            // decode the json file
             $report = json_decode(file_get_contents($standardReportsPath . '/' . $reportFile));
             list($timestamp, $extension) = explode('.', $reportFile);
 
             $report->generated_at = (new Carbon())->createFromTimestampUTC($timestamp)->format('d/m/Y H:i');
             $report->fileName = $timestamp;
+
             return $report;
+
         })->filter(function ($report) {
+            
+            // filter again to make sure the user has access to see the reports and also that filters apply
             $getFilterResult = true;
 
             if(Input::get('ward_id')) {
@@ -213,9 +227,21 @@ class ReportService
         return $standardReports;
     }
 
-    public function generateAllStandardReports($chunkSize = 20)
+    /**
+     * Generates standard reports json files
+     *
+     * @param int $chunkSize
+     * @param bool $all
+     */
+    public function generateStandardReports($chunkSize = 20, $all = false)
     {
-        $records = \PRRecord::with(['questions.answer', 'questions.node'])->orderBy('id', 'asc')->get();
+        $records = \PRRecord::with(['questions.answer', 'questions.node'])->orderBy('id', 'asc');
+
+        if(false === $all) {
+            $records->where('added_on_standard_report', 0);
+        }
+
+        $records = $records->get();
 
         // group by wards
         $perWardGroupedRecords = $records->groupBy('ward_node_id');
@@ -244,9 +270,18 @@ class ReportService
                     $fileKey = Carbon::createFromFormat('Y-m-d H:i:s', $recordChunk->last()->start_date)->timestamp;
 
                     file_put_contents(storage_path("reports/standard/{$fileKey}.json"), $reportJsonData);
+
+                    // update so we know that the records were added to a report
+                    $recordChunk->each(function ($record) {
+                        if(! $record->added_on_standard_report) {
+                            $record->added_on_standard_report = 1;
+                            $record->save();
+                        }
+                    });
+
+                    echo "{$fileKey}.json file was created" . PHP_EOL;
                 }
             }
         }
-        echo 'Standard reports created!';
     }
 }

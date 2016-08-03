@@ -20,6 +20,8 @@ class GenerateStandardReports extends Command {
 	 */
 	protected $description = 'Generate questionnaire reports in chunks of 20 per ward';
 
+
+
 	/**
 	 * Create a new command instance.
 	 *
@@ -40,10 +42,15 @@ class GenerateStandardReports extends Command {
 
 		$this->info('Started to generate standard reports');
 
-		$reportService->generateAllStandardReports(20);
+		$reportService->generateStandardReports(20, $this->option('all'));
 
 		$this->info('Finished to generate standard reports');
 	}
 
-
+	protected function getOptions()
+	{
+		return array(
+			array('all', 'all', InputOption::VALUE_NONE, 'Whether we generate all standard reports or just the ones that have not been created yet'),
+		);
+	}
 }
