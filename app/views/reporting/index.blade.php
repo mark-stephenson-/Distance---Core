@@ -18,11 +18,11 @@
                     {{ Form::label('period_start', 'Report Period', array('class' => 'control-label span2')) }}
                     <div class="controls">
                         <div class="input-group span4">
-                            <i class="icon-calendar"></i>
+                            <i class="icon-calendar" data-trigger="period_start"></i>
                             {{ Form::text('period_start', Input::old('period_start'), array('class' => 'span12', 'id' => 'period_start')) }}
                         </div>
                         <div class="input-group span4">
-                            <i class="icon-calendar"></i>
+                            <i class="icon-calendar" data-trigger="period_end"></i>
                             {{ Form::text('period_end', Input::old('period_end'), array('class' => 'span12', 'id' => 'period_end')) }}
                         </div>
                     </div>
@@ -118,6 +118,13 @@
 
             $("#period_end").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true, changeYear: true  }).on('change', function() {
                 checkGenerate();
+            });
+
+            $('.icon-calendar').click(function () {
+                var elemId = $(this).data('trigger');
+                if(typeof(elemId) != 'undefined') {
+                    $('#' + elemId).focus();
+                }
             });
 
 
@@ -248,7 +255,7 @@
                 }
 
                 if (xhr.status == 404) {
-                    Prase.alert('warning', xhr.responseText, '.body');
+                    Prase.alert('danger', xhr.responseText, '.body');
                 }
             });
         }

@@ -55,12 +55,13 @@
                 </div>
             </td>
             <td>
+
                 @if(isset($question->notes))
-                    <i class="icon-check"></i>
+                        <i class="icon-check" data-toggle="tooltip" data-placement="top" title="No. of positive comments: {{ count($question->notes) }}"></i>
                 @endif
 
                 @if(isset($question->concerns))
-                    <i class="icon-exclamation"></i>
+                        <i class="icon-exclamation" data-toggle="tooltip" data-placement="top" title="No. of concerns: {{ count($question->concerns) }}"></i>
                 @endif
             </td>
         </tr>

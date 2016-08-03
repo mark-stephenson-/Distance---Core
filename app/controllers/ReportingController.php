@@ -101,7 +101,7 @@ class ReportingController extends \BaseController
             }
 
             if (!count($questionSets)) {
-                return Response::make('There is no data available for your search parameters.', 404);
+                return Response::make('No data available within the report period selected.', 404);
             }
 
             $pmosId = $questionSets->first()->pmos_id;

@@ -12,7 +12,7 @@
             @if (isset($noLimit))
                 <td>{{ $domain->name}}</td>
             @else
-                <td data-toggle="tooltip" data-placement="top" title="{{ $domain->name }}"><a href="{{ Request::url() }}?domain={{ $domainId }}">{{ str_limit($domain->name, 20) }}</a></td>
+                <td data-toggle="tooltip" data-placement="top" title="{{ $domain->name }}"><a href="{{ Request::url() }}?domain={{ $domainId }}&type={{ Input::get('type') }}">{{ str_limit($domain->name, 20) }}</a></td>
             @endif
             <td>
                 <div class="progress">
@@ -35,25 +35,24 @@
             </td>
             <td>
                 <?php
-                $somethingGood = false;
-                $concerns = false;
+                $somethingGood = 0;
+                $concerns = 0;
 
                 foreach($domain->questions as $question) {
                     if(isset($question->notes)) {
-                        $somethingGood = true;
+                        $somethingGood += count($question->notes);
                     }
-
                     if(isset($question->concerns)) {
-                        $concerns = true;
+                        $concerns += count($question->concerns);
                     }
                 }
                 ?>
-                @if($somethingGood == true)
-                    <i class="icon-check"></i>
+                @if($somethingGood)
+                    <i class="icon-check" data-toggle="tooltip" data-placement="top" title="No. of positive comments: {{ $somethingGood }}"></i>
                 @endif
 
-                @if($concerns == true)
-                    <i class="icon-exclamation"></i>
+                @if($concerns)
+                    <i class="icon-exclamation" data-toggle="tooltip" data-placement="top" title="No. of concerns: {{ $concerns }}"></i>
                 @endif
             </td>
         </tr>
