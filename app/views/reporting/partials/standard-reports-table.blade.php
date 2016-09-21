@@ -1,5 +1,6 @@
 <table class="table table-bordered data-table">
     <thead>
+        <th>No.</th>
         <th>Report Generated</th>
         <th>Trust</th>
         <th>Hospital</th>
@@ -8,8 +9,9 @@
     </thead>
     <tbody>
         @if(!empty($standardReports))
-            @foreach($standardReports as $report)
+            @foreach($standardReports as $key => $report)
                 <tr>
+                    <td>{{ $key + 1 }}</td>
                     <td>
                         <a href="{{ route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')) }}">{{ $report->generated_at }}</a>
                     </td>

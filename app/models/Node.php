@@ -202,4 +202,17 @@ class Node extends BaseModel
 
         return $query;
     }
+
+    public function scopeNodeTypeAccessibleForUser($query, $collectionId)
+    {
+        $user = Sentry::getUser();
+
+        if($user->isSuperUser()) {
+            return $query;
+        }
+
+        $accessibleNodeTypes = $user->getAccessibleNodeTypes($collectionId);
+
+        $query->whereIn('node_type', $accessibleNodeTypes->lists('id'));
+    }
 }

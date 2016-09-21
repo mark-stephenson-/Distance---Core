@@ -63,10 +63,10 @@ return array(
                 'value' => 'cms.export-data.*',
                 'children' => array(
                     'Can Export Any' => array(
-                        'value' => 'cms.export-data.export.any',
+                        'value' => 'cms.export-data.manage.any',
                     ),
                     'Can Export Own' => array(
-                        'value' => 'cms.export-data.export.own',
+                        'value' => 'cms.export-data.manage.own',
                     ),
                 ),
             ),

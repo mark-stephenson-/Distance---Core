@@ -38,7 +38,9 @@ class NodesController extends BaseController
         Session::put('current-collection', $collection->id);
         Session::put('collection-node-view', 'list');
 
-        $nodes = $collection->nodes();
+        $nodes = $collection->nodes()->nodeTypeAccessibleForUser($collectionId);
+
+        $nodeTypes = NodeType::accessibleForUser($collectionId)->get()->lists('label', 'id');
 
         if ( Input::get('filter') ) {
             $nodes->where('node_type', '=', Input::get('filter'));
@@ -50,7 +52,7 @@ class NodesController extends BaseController
 
         $nodes = $nodes->paginate(20);
         
-        return View::make('nodes.list', compact('collection', 'nodes'));
+        return View::make('nodes.list', compact('collection', 'nodes', 'nodeTypes'));
 
     }
 
@@ -431,20 +433,29 @@ class NodesController extends BaseController
     {
         $search = Input::get('q');
 
-        $nodes = Node::
-                    where('title', 'LIKE', '%' . $search . '%')
+        $nodes = Node::where('nodes.title', 'LIKE', '%' . $search . '%')
                     ->where('collection_id', '=', $collectionId)
                     ->take(20);
 
+        $column = 'title';
         if (Input::get('type')) {
-            $nodes->whereNodeType(Input::get('type'));
+            $nodes->whereNodeTypeIs(Input::get('type'), 'published');
+
+            switch (Input::get('type')) {
+                case $this->trustNodeType:
+                    $column = 'name';
+                    break;
+                default:
+                    $columm = 'title';
+                    break;
+            }
         }
 
-        $nodes = $nodes->get(array('id', 'title'));
+        $nodes = $nodes->get();
 
         $output = array();
         foreach ($nodes as $node) {
-            $output[] = array('id' => $node->id, 'text' => $node->title);
+            $output[] = array('id' => $node->id, 'text' => $node->{$column});
         }
 
         return json_encode(array('results' => $output));

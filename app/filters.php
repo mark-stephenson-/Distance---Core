@@ -133,7 +133,7 @@ Route::filter('checkPermissions', function ($request) {
     if (
         (starts_with($property, 'cms.reporting'))
     ) {
-        $property = 'cms.export-data.export';
+        $property = 'cms.export-data.manage';
     }
 
     if (

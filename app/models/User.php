@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Collection;
+
 class User extends Cartalyst\Sentry\Users\Eloquent\User
 {
 
@@ -45,6 +47,22 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
         }
 
         return json_decode($accessible_nodes);
+    }
+
+
+    public function getAccessibleNodeTypes($collectionId)
+    {
+        $nodeTypes = NodeType::get();
+
+        $accessibleNodeTypes = new Collection();
+
+        foreach ($nodeTypes as $nodeType) {
+            if ($this->hasAccess("cms.apps." . CORE_APP_ID . ".collections.{$collectionId}.{$nodeType->name}.*")) {
+                $accessibleNodeTypes->push($nodeType);
+            }
+        }
+
+        return $accessibleNodeTypes;
     }
 
     public function groups()
@@ -104,7 +122,7 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User
 
         // if user has no associated groups, just return a big number aka, last in the hierarchy
         if(empty($topMostGroup)) {
-            return 100;
+            return 1000;
         }
 
         return (int) $topMostGroup->hierarchy;

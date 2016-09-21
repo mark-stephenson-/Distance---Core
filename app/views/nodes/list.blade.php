@@ -75,9 +75,6 @@
 
     <form class="form-inline pull-left">
         @if (Route::currentRouteName() !== 'nodes.type-list')
-            <?php
-                $nodeTypes = $collection->nodetypes->lists('label', 'id');
-            ?>
             <div class="btn-group change-collection">
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                     @if (Input::get('filter'))

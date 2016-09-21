@@ -67,7 +67,7 @@ class CSV
                 'questions.answer',
             ))
             ->where('prase_records.pmos_id', $this->reportData->pmos_id)
-            ->whereIn('prase_records.ward_node_id', $this->reportData->wardIds)
+            ->where('prase_records.ward_node_id', $this->reportData->wardId)
             ->where('prase_records.start_date', '>=', $this->reportData->dates->start)
             ->where('prase_records.start_date', '<=', $this->reportData->dates->end)
             ->get([
@@ -282,7 +282,7 @@ class CSV
         $prefetchedNotes = PRNote::has('concern', '<', 1)
             ->whereHas('record', function ($q) use ($reportData) {
                 return $q->wherePmosId($reportData->pmos_id)
-                    ->whereIn('prase_records.ward_node_id', $reportData->wardIds)
+                    ->where('prase_records.ward_node_id', $reportData->wardId)
                     ->where('prase_records.start_date', '>=', $reportData->dates->start)
                     ->where('prase_records.start_date', '<=', $reportData->dates->end);
             })
@@ -355,7 +355,7 @@ class CSV
 
         $prefetchedConcerns = PRConcern::whereHas('record', function ($q) use ($reportData) {
             return $q->wherePmosId($reportData->pmos_id)
-                ->whereIn('prase_records.ward_node_id', $reportData->wardIds)
+                ->where('prase_records.ward_node_id', $reportData->wardId)
                 ->where('prase_records.start_date', '>=', $reportData->dates->start)
                 ->where('prase_records.start_date', '<=', $reportData->dates->end);
         })
@@ -427,7 +427,7 @@ class CSV
         $prefetchedAnswerTypeOptions = Node::whereNodeType(5)->join('node_type_5', 'nodes.id', '=', 'node_type_5.node_id')->get(['nodes.*', 'node_type_5.answerValue AS answerValue'])->keyBy('id');
 
         $questions = PRRecord::wherePmosId($this->reportData->pmos_id)
-            ->whereIn('prase_records.ward_node_id', $this->reportData->wardIds)
+            ->where('prase_records.ward_node_id', $this->reportData->wardId)
             ->where('prase_records.start_date', '>=', $this->reportData->dates->start)
             ->where('prase_records.start_date', '<=', $this->reportData->dates->end)
             ->first()

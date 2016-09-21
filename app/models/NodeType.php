@@ -41,6 +41,19 @@ class NodeType extends BaseModel {
         return false;
     }
 
+    public function scopeAccessibleForUser($query, $collectionId)
+    {
+        $user = Sentry::getUser();
+
+        if($user->isSuperUser()) {
+            return $query;
+        }
+
+        $accessibleNodeTypes = $user->getAccessibleNodeTypes($collectionId);
+
+        $query->whereIn('id', $accessibleNodeTypes->lists('id'));
+    }
+
     public function getColumnsAttribute($columns)
     {
         return json_decode($columns);

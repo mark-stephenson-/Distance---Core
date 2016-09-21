@@ -146,7 +146,7 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" class="nodes-checkbox" data-node-checkbox="{{ $trust->node_id }}" name="node_ids[]" value="{{ $trust->node_id }}" {{ in_array($trust->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $trust->name }}
-                                        <a data-toggle="collapse" href="#collapse_hospitals_{{ $trust->node_id }}" aria-expanded="false" aria-controls="collapse_hospitals_{{ $trust->node_id }}"><i class="icon-caret-right"></i></a>
+                                        <a data-toggle="collapse" class="arrow-link" href="#collapse_hospitals_{{ $trust->node_id }}" aria-expanded="false" aria-controls="collapse_hospitals_{{ $trust->node_id }}"><i class="icon-caret-right"></i></a>
                                     </label>
                                 </div>
                                 @unless($trust->hospitals->isEmpty())
@@ -157,7 +157,7 @@
                                                     <label>
                                                         <input type="checkbox" class="nodes-checkbox" data-node-checkbox="{{ $hospital->node_id }}" name="node_ids[]" data-parent-node="{{ $trust->node_id }}" value="{{ $hospital->node_id }}" {{ in_array($hospital->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $hospital->name }}
                                                         @unless($hospital->wards->isEmpty())
-                                                            <a data-toggle="collapse" href="#collapse_wards_{{ $hospital->node_id }}" aria-expanded="false" aria-controls="collapse_wards_{{ $hospital->node_id }}"><i class="icon-caret-right"></i></a>
+                                                            <a data-toggle="collapse" class="arrow-link" href="#collapse_wards_{{ $hospital->node_id }}" aria-expanded="false" aria-controls="collapse_wards_{{ $hospital->node_id }}"><i class="icon-caret-right"></i></a>
                                                         @endif
                                                     </label>
                                                 </div>
@@ -220,6 +220,18 @@
                 }
                 $parent_checkbox.trigger('change');
             });
+
+            $('.arrow-link').click(function () {
+                var $self = $(this)
+                setTimeout(function() {
+                    if($self.hasClass('collapsed')) {
+                        $self.children('i').removeClass('icon-caret-down').addClass('icon-caret-right');
+                    } else {
+                        $self.children('i').removeClass('icon-caret-right').addClass('icon-caret-down');
+                    }
+
+                }, 50)
+            })
         });
     </script>
 @stop

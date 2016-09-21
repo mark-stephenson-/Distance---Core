@@ -18,7 +18,7 @@ class ReportingController extends \BaseController
     public function index()
     {
         $trusts = Node::whereNodeTypeIs($this->trustNodeType, 'published')
-            ->whereUserHasAccess('manage-trust')
+            ->whereUserHasAccess('export-data')
             ->lists('name', 'node_id');
 
         $trusts = ['' => 'Please select a Trust'] + $trusts;
@@ -33,7 +33,7 @@ class ReportingController extends \BaseController
     {
         $hospitals = Node::whereNodeTypeIs($this->hospitalNodeType, 'published')
             ->where('trust', $trustId)
-            ->whereUserHasAccess('manage-trust')
+            ->whereUserHasAccess('export-data')
             ->lists('node_type_3.name', 'node_id');
 
         $hospitals = ['' => 'Please select a Hospital'] + $hospitals;
@@ -47,7 +47,7 @@ class ReportingController extends \BaseController
 
         $wards = Node::whereNodeTypeIs($this->wardNodeType, 'published')
             ->where('hospital', $hospitalId)
-            ->whereUserHasAccess('manage-trust');
+            ->whereUserHasAccess('export-data');
 
         if ($search) {
             $wards = $wards->where('name', 'LIKE', "%{$search}%");

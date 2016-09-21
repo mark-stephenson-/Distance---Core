@@ -10,7 +10,7 @@
     }
 
     if (count($trustIds)) {
-        $trusts = Node::whereIn('id', $trustIds)->lists('title', 'id');
+        $trusts = Node::whereNodeTypeIs(2, 'published')->whereIn('nodes.id', $trustIds)->lists('name', 'id');
     }
 
     $trusts[0] = $trusts[''] = 'No Trust';

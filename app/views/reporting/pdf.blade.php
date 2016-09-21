@@ -158,11 +158,11 @@
                 @include('reporting.partials.domain-questions', ['noLimit' => true])
 
                 @if (isset($domain->notes))
-                    <h3>Domain patient reported positive experiences of care received</h3>
+                    <h3>Patient reported positive experiences of care received</h3>
                     @include('reporting.partials.positive-comments', ['comments' => $domain->notes, 'noLimit' => true])
                 @endif
                 @if (isset($domain->concerns))
-                    <h3>Domain patient reported safety concerns</h3>
+                    <h3>Patient reported safety concerns</h3>
                     @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $domain->concerns)), 'noLimit' => true])
                 @endif
             @endforeach

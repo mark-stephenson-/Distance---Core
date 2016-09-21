@@ -87,8 +87,11 @@ class ReportService
 
                 foreach($record->concerns as $concern) {
                     if ($concern->prase_question_id == null) {
+                        if(isset($concern->note)) {
+                            $note = $concern->note;
+                        }
                         $reportData['concerns'][$concern->id] = [
-                            'text' => isset($concern->note) ? $concern->note->text : null,
+                            'text' => !empty($note->text) ? $note->text : null,
                             'preventability' => (is_null($concern->prevent_answer)) ? 4 : $concern->prevent_answer,
                             'severity' => (is_null($concern->serious_answer)) ? 5 : $concern->serious_answer,
                         ];

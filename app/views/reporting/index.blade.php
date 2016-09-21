@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="row wards-row hide">
-                    {{ Form::label('wards', 'Wards', array('class' => 'control-label span2')) }}
+                    {{ Form::label('wards', 'Ward', array('class' => 'control-label span2')) }}
                     <div class="controls">
                         <div class="input-group span4">
                             {{ Form::hidden('wards', null, ['id' => 'wards', 'class' => 'wards-select span12']) }}
@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="row wards-row hide">
-                {{ Form::label('wards', 'Wards', array('class' => 'control-label span2')) }}
+                {{ Form::label('wards', 'Ward', array('class' => 'control-label span2')) }}
                 <div class="controls">
                     <div class="input-group span4">
                         {{ Form::hidden('wards', null, ['id' => 'wards', 'class' => 'wards-select span12', 'data-can-update-standard-table' => true]) }}
