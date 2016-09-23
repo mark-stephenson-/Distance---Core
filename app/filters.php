@@ -93,6 +93,7 @@ Route::filter('apiAuthentication', function () {
 
 Route::filter('checkPermissions', function ($request) {
     $additionalProperties = array();
+    $params = $request->parameters();
 
     $replacements = array(
         '.list' => '',
@@ -124,27 +125,23 @@ Route::filter('checkPermissions', function ($request) {
 
 
     // Same with volunteers
-    if (
-        starts_with($property, 'cms.volunteers.')
-    ) {
+    if (starts_with($property, 'cms.volunteers.')) {
         $property = 'cms.volunteers.manage';
     }
 
-    if (
-        (starts_with($property, 'cms.reporting'))
-    ) {
+    if (starts_with($property, 'cms.questionnaires')) {
+        $property = 'cms.questionnaires.manage';
+    }
+
+    if ((starts_with($property, 'cms.reporting'))) {
         $property = 'cms.export-data.manage';
     }
 
-    if (
-        (starts_with($property, 'cms.manage-trust'))
-    ) {
+    if ((starts_with($property, 'cms.manage-trust'))) {
         $property = 'cms.manage-trust.manage';
     }
 
-    if (
-        (starts_with($property, 'cms.apps.1.collections.1.questions.create-revision'))
-    ) {
+    if ((starts_with($property, 'cms.apps.1.collections.1.questions.create-revision'))) {
         $property = 'cms.apps.1.collections.1.question.revision-management';
     }
 

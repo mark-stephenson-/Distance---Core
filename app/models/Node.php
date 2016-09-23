@@ -133,7 +133,6 @@ class Node extends BaseModel
                         ->orderBy('updated_at', 'desc')
                         ->where('node_id', '=', $this->getAttribute('id'))
                         ->select(array($this->nodeTypeTableName().'.*'));
-
         if (is_numeric($revision_id)) {
             $revision->where($this->nodeTypeTableName().'.id', '=', $revision_id);
         }

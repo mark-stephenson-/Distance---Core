@@ -9,13 +9,7 @@ return array(
         'icon' => 'lock',
         'access' => 'cms.apps.*',
     ),
-    array(
-        'title' => 'Questionnaire management',
-        'route' => 'nodes.hierarchy',
-        'params' => array('[app-id]', '[collection-id]'),
-        'icon' => 'sitemap',
-        'access' => 'cms.apps.[app-id].collections.[collection-id].*',
-    ),
+
     array(
         'title' => 'Node List',
         'route' => 'nodes.list',
@@ -78,6 +72,13 @@ return array(
         'params' => array(),
         'icon' => 'group',
         'access' => 'cms.volunteers.*',
+    ),
+    array(
+        'title' => 'Questionnaire management',
+        'route' => 'questionnaires.index',
+        'params' => array(),
+        'icon' => 'sitemap',
+        'access' => 'cms.questionnaires.*',
     ),
     array(
         'title' => 'Trusts, Hospitals & Wards',

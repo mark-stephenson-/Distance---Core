@@ -35,6 +35,15 @@ return array(
                 ),
             ),
 
+            'Questionnaires' => array(
+                'value' => 'cms.questionnaires.*',
+                'children' => array(
+                    'Can Manage' => array(
+                        'value' => 'cms.questionnaires.manage.any',
+                    ),
+                ),
+            ),
+
             'Volunteers' => array(
                 'value' => 'cms.volunteers.*',
                 'children' => array(

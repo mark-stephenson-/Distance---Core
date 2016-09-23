@@ -66,102 +66,109 @@ class Permission{
             $html .= "</li>";
         }
 
-        $html .= "<li class='title'><h3>Apps</h3>";
 
         if ($apps) {
-            
-            $html .= "<ul>";
+//            $html .= "<li class='title'><h3>Apps</h3>";
+//                $html .= self::appsPermissionsTree($existing, $apps);
+//            $html .= "</li>";
+        }
 
-            foreach($apps as $app) {
+        $html .= "</ul>";
 
-                $html .= "<li><h4>App: " . $app->name . "</h4><ul>";
+        return $html;
+    }
 
-                $html .= "<h5>App Permissions</h5><ul>";
+    public static function appsPermissionsTree($existing, $apps)
+    {
+        $html = "<ul>";
 
-                $html .= "<li style='display: block; margin-bottom: 10px;'>";
-                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collection-management', 'Collection Management', false);
-                $html .= "</li>";
+        foreach($apps as $app) {
 
-                $html .= "</ul>";
+            $html .= "<li><h4>App: " . $app->name . "</h4><ul>";
 
-                $html .= "<h5>App Distribution</h5><ul>";
+            $html .= "<h5>App Permissions</h5><ul>";
 
-                $html .= "<li style='display: block; margin-bottom: 10px;'>";
-                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.ota.create', 'Create', false);
-                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.ota.read', 'Read', false);
-                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.ota.update', 'Update', false);
-                $html .= "</li>";
+            $html .= "<li style='display: block; margin-bottom: 10px;'>";
+            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collection-management', 'Collection Management', false);
+            $html .= "</li>";
 
-                $html .= "</ul>";
+            $html .= "</ul>";
 
-                foreach($app->collections as $collection) {
+            $html .= "<h5>App Distribution</h5><ul>";
 
-                    $html .= "<li class='title'><h5>Collection: " . $collection->name . "</h5><ul>";
+            $html .= "<li style='display: block; margin-bottom: 10px;'>";
+            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.ota.create', 'Create', false);
+            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.ota.read', 'Read', false);
+            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.ota.update', 'Update', false);
+            $html .= "</li>";
 
-                        $html .= "<li class='title'><h6>Collection Permissions</h6></li>";
+            $html .= "</ul>";
 
-                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.update', 'Update');
-                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.delete', 'Delete');
-                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.hierarchy-management', 'Hierarchy Management');
+            foreach($app->collections as $collection) {
 
-                        $html .= "<li class='title'><h6>Catalogue Permissions</h6></li>";
+                $html .= "<li class='title'><h5>Collection: " . $collection->name . "</h5><ul>";
 
-                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.create', 'Create');
-                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.update', 'Update');
-                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.delete', 'Delete');
+                $html .= "<li class='title'><h6>Collection Permissions</h6></li>";
 
-                        $html .= "<li class='title'><h6>Can Upload to:</h6></li>";
+                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.update', 'Update');
+                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.delete', 'Delete');
+                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.hierarchy-management', 'Hierarchy Management');
+
+                $html .= "<li class='title'><h6>Catalogue Permissions</h6></li>";
+
+                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.create', 'Create');
+                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.update', 'Update');
+                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.delete', 'Delete');
+
+                $html .= "<li class='title'><h6>Can Upload to:</h6></li>";
 
 
-                        $selectId = uniqid();
+                $selectId = uniqid();
 
-                        $html .= Form::selectAllCheckbox($selectId);
+                $html .= Form::selectAllCheckbox($selectId);
 
-                        foreach($collection->catalogues as $catalogue) {
-                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.' . $catalogue->id . '.upload', $catalogue->name, array('data-select-id' => $selectId));
-                        }
+                foreach($collection->catalogues as $catalogue) {
+                    $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.catalogues.' . $catalogue->id . '.upload', $catalogue->name, array('data-select-id' => $selectId));
+                }
 
-                        foreach($collection->nodetypes as $nodetype) {
+                foreach($collection->nodetypes as $nodetype) {
 
-                            $html .= "<li class='title'><h6>Node Type: " . $nodetype->label . "</h6></li>";
+                    $html .= "<li class='title'><h6>Node Type: " . $nodetype->label . "</h6></li>";
 
-                            // CRUD permissions
-                            $html .= "<li style='display: block; margin-bottom: 10px;'>";
-                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.create', 'Create', false);
-                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.read', 'Read', false);
-                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.update', 'Update', false);
-                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.delete', 'Delete', false);
-                            $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management', 'Revision Management', false);
-                            $html .= "</li>";
+                    // CRUD permissions
+                    $html .= "<li style='display: block; margin-bottom: 10px;'>";
+                    $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.create', 'Create', false);
+                    $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.read', 'Read', false);
+                    $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.update', 'Update', false);
+                    $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.delete', 'Delete', false);
+                    $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.revision-management', 'Revision Management', false);
+                    $html .= "</li>";
 
-                            $selectId = uniqid();
-                            $html .= Form::selectAllCheckbox($selectId);
+                    $selectId = uniqid();
+                    $html .= Form::selectAllCheckbox($selectId);
 
-                            foreach ($nodetype->columns as $column) {                                
-                                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name, $column->label, array('data-select-id' => $selectId));
-                            }
-
-                        }
-                    
-                        $html .= "<li class='title'><h6>Data Permissions</h6></li>";
-
-                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.data.export', 'Export');
-
-                    $html .= "</ul></li>";
+                    foreach ($nodetype->columns as $column) {
+                        $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.' . $nodetype->name . '.columns.' . $column->name, $column->label, array('data-select-id' => $selectId));
+                    }
 
                 }
+
+                $html .= "<li class='title'><h6>Data Permissions</h6></li>";
+
+                $html .= Form::permissionCheckbox($existing, 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.data.export', 'Export');
 
                 $html .= "</ul></li>";
 
             }
 
-            $html .= "</ul>";
+            $html .= "</ul></li>";
 
         }
 
-        $html .= "</li>";
+        $html .= "</ul>";
 
-        return $html . '</ul>';
+        return $html;
+
     }
 
 }

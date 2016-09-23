@@ -434,8 +434,11 @@ class NodesController extends BaseController
         $search = Input::get('q');
 
         $nodes = Node::where('nodes.title', 'LIKE', '%' . $search . '%')
-                    ->where('collection_id', '=', $collectionId)
-                    ->take(20);
+                    ->where(function($q) use ($collectionId) {
+                        if(!empty($collectionId)) {
+                            $q->where('collection_id', '=', $collectionId);
+                        }
+                    })->take(20);
 
         $column = 'title';
         if (Input::get('type')) {

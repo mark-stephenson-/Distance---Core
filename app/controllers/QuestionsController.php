@@ -1,13 +1,175 @@
 <?php
 
+use Core\Services\NodeService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+
 class QuestionsController extends BaseController
 {
-    public function __construct()
+    protected $nodeService;
+
+    public function __construct(NodeService $nodeService)
     {
         parent::__construct();
+
+        $this->nodeService = $nodeService;
     }
 
-    public function createRevision($appId, $collectionId, $nodeId, $revisionId, $branchId)
+    public function index()
+    {
+        $branches = Hierarchy::first();
+
+        $branches->findChildren();
+
+        $nodeTypes = NodeType::get();
+        return View::make('questionnaires.index', compact('branches', 'nodeTypes'));
+    }
+
+    public function view($node_id, $revision_id = false, $branch_id = false)
+    {
+        $node = Node::find($node_id);
+
+        if (!$node) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That node could not be found.' )));
+        }
+
+        if ($revision_id == 'branch') {
+            $revision_id = null;
+        }
+
+        $revisionData = $node->fetchRevision($revision_id);
+
+        $branch = ($branch_id) ? Hierarchy::find($branch_id) : new Hierarchy;
+        $revisions = $node->revisions();
+        $nodeType = $node->nodetype;
+        $collection = $node->collection;
+
+        if ($branch->exists) {
+            $breadcrumbPath = $branch->getPath();
+
+            // We need to shave off the first item as that's the collection root
+            array_shift($breadcrumbPath);
+
+            // ... and the last as we can hard-code that
+            array_pop($breadcrumbPath);
+
+            $breadcrumbs = Hierarchy::with('node');
+
+            if ( count($breadcrumbPath) ) {
+                $breadcrumbs = $breadcrumbs->whereIn('id', $breadcrumbPath)->get();
+            }
+        } else {
+            $breadcrumbs = array();
+        }
+
+        return View::make('questionnaires.view', compact(
+            'branch','nodeType','node','revisionData', 'revisionAuthor', 'revisions', 'collection', 'breadcrumbs'
+        ));
+    }
+
+    public function create($nodeTypeId, $parentId = false)
+    {
+        $nodeType = NodeType::find($nodeTypeId);
+        $node = new Node;
+        $node->owned_by = Sentry::getUser()->id;
+        $node->created_by = Sentry::getUser()->id;
+
+        return View::make('questionnaires.form', compact('nodeType', 'node', 'parentId'));
+    }
+
+    public function store($nodeTypeId, $parentId)
+    {
+        $formData = Input::all();
+
+        $nodeType = NodeType::find($nodeTypeId);
+
+        $nodeColumnErrors = $nodeType->checkRequiredColumns($formData['nodetype']);
+
+        // Let's run the validator
+        $validator = new Core\Validators\Node;
+
+        // If the validator or the required column check fails
+        if ($validator->fails() or count($nodeColumnErrors)) {
+
+            // We have missing columns! Add to the bag and send the user back
+            foreach($nodeColumnErrors as $err) {
+                $validator->messages()->add($err, "The $err field is required.");
+            }
+
+            return Redirect::refresh()
+                ->withInput()
+                ->withErrors($validator->messages());
+        }
+
+        $node = $this->nodeService->createNode($formData, $nodeTypeId, $parentId);
+
+        if($node) {
+            return Redirect::route('questionnaires.view', array($node->id))
+                ->with('successes', new MessageBag(array("The node {$formData['title']} has been saved.")));
+        }
+    }
+
+    public function edit($nodeId, $revisionId = false, $branchId = false)
+    {
+        $node = Node::find($nodeId);
+
+        if (!$node) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That node could not be found.' )));
+        }
+
+        if ($branchId) {
+            $branch = Hierarchy::find($branchId);
+        }
+
+        $revisionData = $node->fetchRevision($revisionId);
+        $nodeType = $node->nodetype;
+        $revisions = $node->revisions();
+
+        return View::make('questionnaires.form', compact(
+            'nodeType', 'node', 'revisionData', 'revisions', 'branchId'
+        ));
+    }
+
+    public function update($nodeId, $revisionId = false, $branchId = false)
+    {
+        $node = Node::find($nodeId);
+
+        if (!$node) {
+            return Redirect::back()
+                ->withErrors(new MessageBag(array('That node could not be found.' )));
+        }
+
+        $formData = Input::all();
+
+        $nodeColumnErrors = $node->nodetype->checkRequiredColumns($formData['nodetype']);
+
+        // Let's run the validator
+        $validator = new Core\Validators\Node;
+
+        // If the validator or the required column check fails
+        if ($validator->fails() or count($nodeColumnErrors)) {
+
+            // We have missing columns! Add to the bag and send the user back
+            foreach($nodeColumnErrors as $err) {
+                $validator->messages()->add($err, "The $err field is required.");
+            }
+
+            return Redirect::refresh()
+                ->withInput()
+                ->withErrors($validator->messages());
+        }
+
+        $nodeUpdated = $this->nodeService->updateNode($formData, $node, $revisionId, $branchId);
+
+        if($nodeUpdated) {
+            return Redirect::route('questionnaires.view', array($node->id))
+                ->with('successes', new MessageBag(array("The node {$formData['title']} has been saved.")));
+        }
+    }
+
+    public function createRevision($nodeId, $revisionId, $branchId)
     {
         $oldQuestionSet = Node::find($nodeId);
         $oldBranch = Hierarchy::find($branchId);
@@ -100,7 +262,7 @@ class QuestionsController extends BaseController
         return Redirect::back()->with('successes', new MessageBag(array('A new revision of the question set has been created.')));
     }
 
-    public function publishRevision($appId, $collectionId, $nodeId, $revisionId, $branchId)
+    public function publishRevision($nodeId, $revisionId, $branchId)
     {
         // First retire the current set
         $existingPublishedSet = Node::where('status', 'published')->where('node_type', $this->questionSetNodeType)->first();

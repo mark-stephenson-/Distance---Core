@@ -170,10 +170,15 @@ Route::group(array('before' => array('auth')), function () {
                  */
                 Route::any('nodes/publish/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.publish', 'uses' => 'NodesController@markAsPublished'));
                 Route::any('nodes/retire/{nodeId}/{revisionId}/{branchId?}', array('as' => 'nodes.retire', 'uses' => 'NodesController@markAsRetired'));
+                Route::get('create-revision/{nodeId}/{revisionId}/{branchId?}', array(
+                    'as' => 'questions.create-revision',
+                    'uses' => 'QuestionsController@createRevision'
+                ));
 
-                Route::get('questions/create-revision/{nodeId}/{revisionId}/{branchId?}', array('as' => 'questions.create-revision', 'uses' => 'QuestionsController@createRevision'));
-                Route::get('questions/publish-revision/{nodeId}/{revisionId}/{branchId?}', array('as' => 'questions.publish-revision', 'uses' => 'QuestionsController@publishRevision'));
-
+                Route::get('publish-revision/{nodeId}/{revisionId}/{branchId?}', array(
+                    'as' => 'questions.publish-revision',
+                    'uses' => 'QuestionsController@publishRevision'
+                ));
                 /*
                     Hierarchy Actions
                  */
@@ -206,6 +211,9 @@ Route::group(array('before' => array('auth')), function () {
         /*
             Global (with permissions)
          */
+
+        Route::get('nodes/node-lookup/{appId}/{collectionId}', array('as' => 'nodes.lookup', 'uses' => 'NodesController@lookup'));
+
 
         Route::group(['prefix' => 'reporting'], function() {
             Route::get('/', [
@@ -318,6 +326,51 @@ Route::group(array('before' => array('auth')), function () {
             Route::get('delete/{id}', array(
                 'as' => 'volunteers.delete',
                 'uses' => 'VolunteersController@delete',
+            ));
+        });
+
+        /*
+         * Manage Questionnaires
+         */
+        Route::group(array('prefix' => 'questionnaires'), function () {
+            Route::get('/', array(
+                'as' => 'questionnaires.index',
+                'uses' => 'QuestionsController@index',
+            ));
+
+            Route::get('view/{node_id}/{revision_id?}/{branch_id?}', array(
+                'as' => 'questionnaires.view',
+                'uses' => 'QuestionsController@view',
+            ));
+
+            Route::get('create/{node_id}/{parent_id?}', array(
+                'as' => 'questionnaires.create',
+                'uses' => 'QuestionsController@create',
+            ));
+
+            Route::get('edit/{node_id}/{revision_id?}/{branch_id?}', array(
+                'as' => 'questionnaires.edit',
+                'uses' => 'QuestionsController@edit',
+            ));
+
+            Route::post('store/{nodetypeId}/{parentId}', array(
+                'as' => 'questionnaires.store',
+                'uses' => 'QuestionsController@store',
+            ));
+
+            Route::post('update/{node_id}/{revision_id?}/{branch_id?}', array(
+                'as' => 'questionnaires.update',
+                'uses' => 'QuestionsController@update',
+            ));
+
+            Route::get('create-revision/{nodeId}/{revisionId}/{branchId?}', array(
+                'as' => 'questionnaires.create-revision',
+                'uses' => 'QuestionsController@createRevision'
+            ));
+
+            Route::get('publish-revision/{nodeId}/{revisionId}/{branchId?}', array(
+                'as' => 'questionnaires.publish-revision',
+                'uses' => 'QuestionsController@publishRevision'
             ));
         });
 
