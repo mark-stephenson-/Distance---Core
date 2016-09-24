@@ -87,6 +87,7 @@ class ManageController extends BaseController
         $hospitals = Node::isPublished()->whereNodeType($this->hospitalNodeType, 'published')->whereUserHasAccess('manage-trust')
             ->join("node_type_{$this->hospitalNodeType}", 'nodes.id', '=', "node_type_{$this->hospitalNodeType}.node_id")
             ->where("node_type_{$this->hospitalNodeType}.trust", $trustId)
+            ->where("node_type_{$this->hospitalNodeType}.status", 'published')
             ->get(['nodes.*', 'trust']);
 
         return View::make('manage.hospitals-index', compact('hospitals', 'trust'));
@@ -161,6 +162,7 @@ class ManageController extends BaseController
         $wards = Node::isPublished()->whereNodeType($this->wardNodeType, 'published')->whereUserHasAccess('manage-trust')
             ->join("node_type_{$this->wardNodeType}", 'nodes.published_revision', '=', "node_type_{$this->wardNodeType}.id")
             ->where("node_type_{$this->wardNodeType}.hospital", $hospitalId)
+            ->where("node_type_{$this->wardNodeType}.status", 'published')
             ->get(['nodes.*', 'hospital']);
 
         return View::make('manage.wards-index', compact('wards', 'hospital', 'trust'));
