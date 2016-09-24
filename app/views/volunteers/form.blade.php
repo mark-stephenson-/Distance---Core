@@ -3,7 +3,7 @@
 <?php
 
     if ($volunteer->exists and $trustId = $volunteer->latestRevision()->trust) {
-        $trust = Node::find($trustId);
+        $trust = Node::whereNodeTypeIs(2, 'published')->find($trustId);
     }
 
     if ($volunteer->exists) {
@@ -94,7 +94,7 @@
 
     var trust_preload_data = [];
 @if ($volunteerData->trust)
-    trust_preload_data.push({ 'id': {{ $volunteer->latestRevision()->trust }}, 'text': "{{ $trust->title }}" });
+    trust_preload_data.push({ 'id': {{ $volunteer->latestRevision()->trust }}, 'text': "{{ $trust->name }}" });
 @endif
 
     $(document).ready(function() {

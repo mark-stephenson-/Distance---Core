@@ -225,7 +225,7 @@ class ReportService
             $userHasAccess = Sentry::getUser()->canAccessNodes($report->wardId);
 
             return $getFilterResult && $userHasAccess;
-        });
+        })->values();
 
         return $standardReports;
     }
