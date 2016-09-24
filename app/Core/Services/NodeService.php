@@ -83,9 +83,9 @@ class NodeService
         $node->owned_by = $formData['owned_by'];
 
         // Grab the submitted content and check if any fields are required
-        $translations = $formData['translation'];
+        $translations = isset($formData['translation']) ? $formData['translation'] : array();
         $isRevision = $revisionData->status == 'published';
-        $nodeTypeContent = $formData['nodetype'];
+        $nodeTypeContent = isset($formData['nodetype']) ? $formData['nodetype'] : array();
 
         // That's the main title updated... now for the node content...
         $type = $node->nodetype;
@@ -147,8 +147,8 @@ class NodeService
         $node->save();
 
         // Grab the submitted content and check if any fields are required
-        $nodetypeContent = $formData['nodetype'];
-        $translations = $formData['translation'];
+        $nodetypeContent = isset($formData['nodetype']) ? $formData['nodetype'] : array();
+        $translations = isset($formData['translation']) ? $formData['translation'] : array();
 
         // Let's create the first revision
         $nodetypeContent = $nodeType->parseColumns($nodetypeContent, $translations, false);

@@ -143,7 +143,7 @@ class QuestionsController extends BaseController
 
         $formData = Input::all();
 
-        $nodeColumnErrors = $node->nodetype->checkRequiredColumns($formData['nodetype']);
+        $nodeColumnErrors = $node->nodetype->checkRequiredColumns(isset($formData['nodetype']) ? $formData['nodetype'] : array());
 
         // Let's run the validator
         $validator = new Core\Validators\Node;
