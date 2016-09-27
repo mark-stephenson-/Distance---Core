@@ -87,12 +87,8 @@ function filterConcerns($concerns) {
                     <div class="tab-content">
                         <div class="tab-pane active" id="summary">
                             @include('reporting.partials.summary-key')
-
                             @include('reporting.partials.domain-questions')
-
                         </div>
-                        {{ var_dump($domain->notes) }}
-                        {{ var_dump($domain->concerns) }}
                         <div class="tab-pane" id="comments">
                             @include('reporting.partials.positive-comments', ['comments' => (array) $domain->notes])
                         </div>

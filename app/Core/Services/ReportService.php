@@ -102,8 +102,11 @@ class ReportService
                     if ($domain->node_id == $questionData[$question->node->id]->domain) {
                         // Check for concerns
                         if ($question->concern) {
+                            if(isset($question->concern->note)) {
+                                $note = $question->concern->note;
+                            }
                             $domainData['questions'][$question->node->id]['concerns'][] = [
-                                'text' => isset($question->concern->note) ? $question->concern->note->text : null,
+                                'text' => isset($note) ? $note->text : null,
                                 'preventability' => (is_null($question->concern->prevent_answer)) ? 4 : $question->concern->prevent_answer,
                                 'severity' => (is_null($question->concern->serious_answer)) ? 5 : $question->concern->serious_answer,
                             ];
@@ -113,7 +116,7 @@ class ReportService
                         if ($question->note) {
                             if ($question->concern) {
                                 if ($question->concern->prase_note_id != $question->note->id) {
-                                    $domainData['questions'][$question->node->id]['notes'][] = [
+                                    $domainData['questions'][$question->node->id]['concerns'][] = [
                                         'text' => isset($question->note) ? $question->note->text : null,
                                     ];
                                 }
@@ -222,7 +225,10 @@ class ReportService
                 $getFilterResult = $report->trustId == Input::get('trust_id');
             }
 
-            $userHasAccess = Sentry::getUser()->canAccessNodes($report->wardId);
+            $userHasAccess = true;
+            if(! Sentry::getUser()->hasAccess('cms.export-data.manage.any')) {
+                $userHasAccess = Sentry::getUser()->canAccessNodes($report->wardId);
+            }
 
             return $getFilterResult && $userHasAccess;
         })->values();
