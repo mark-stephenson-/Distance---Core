@@ -77,7 +77,7 @@ function filterConcerns($concerns) {
                     }
 
                 ?>
-                <h3><a href="{{ Request::url() }}">Report Summary</a> > {{ $domain->name }}</h3>
+                <h3><a href="{{ Request::url() }}?type={{ Input::get('type') }}">Report Summary</a> > {{ $domain->name }}</h3>
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#summary" data-toggle="tab">Domain Report</a></li>
                         <li><a href="#comments" data-toggle="tab">Domain Positive Comments Report</a></li>
