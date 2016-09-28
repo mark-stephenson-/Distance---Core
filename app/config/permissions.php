@@ -44,6 +44,15 @@ return array(
                 ),
             ),
 
+            'Domain Nodes' => array(
+                'value' => 'cms.apps.1.collections.1.question-domain.*',
+                'children' => array(
+                    'Can Manage' => array(
+                        'value' => 'cms.apps.1.collections.1.question-domain.*',
+                    ),
+                ),
+            ),
+
             'Volunteers' => array(
                 'value' => 'cms.volunteers.*',
                 'children' => array(
