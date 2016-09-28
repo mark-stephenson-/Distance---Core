@@ -47,15 +47,15 @@
     </div>
 
     <div class="btn-group pull-right">
+        {{--@if ($revisionData->status == 'draft')--}}
+            {{--<a href="#" class="btn open-publish-node-modal"><i class="icon-level-up"></i> Publish</a>--}}
+        {{--@endif--}}
+
+        {{--@if ($revisionData->status == 'published')--}}
+            {{--<a href="#" class="btn open-retire-node-modal"><i class="icon-level-down"></i> Retire</a>--}}
+        {{--@endif--}}
+
         @if ($revisionData->status == 'draft')
-            <a href="#" class="btn open-publish-node-modal"><i class="icon-level-up"></i> Publish</a>
-        @endif
-
-        @if ($revisionData->status == 'published')
-            <a href="#" class="btn open-retire-node-modal"><i class="icon-level-down"></i> Retire</a>
-        @endif
-
-        @if ($revisionData->status != 'retired')
             <a href="{{ route('questionnaires.edit', array($node->id, $revisionData->id)) }}" class="btn"><i class="icon-edit"></i> Edit</a>
         @endif
     </div>

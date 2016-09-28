@@ -358,6 +358,7 @@ Route::group(array('before' => array('auth')), function () {
                 'uses' => 'QuestionsController@store',
             ));
 
+
             Route::post('update/{node_id}/{revision_id?}/{branch_id?}', array(
                 'as' => 'questionnaires.update',
                 'uses' => 'QuestionsController@update',
@@ -371,6 +372,11 @@ Route::group(array('before' => array('auth')), function () {
             Route::get('publish-revision/{nodeId}/{revisionId}/{branchId?}', array(
                 'as' => 'questionnaires.publish-revision',
                 'uses' => 'QuestionsController@publishRevision'
+            ));
+
+            Route::get('delete/{node_id}/{revision_id?}/{branch_id?}', array(
+                'as' => 'questionnaires.delete',
+                'uses' => 'QuestionsController@delete',
             ));
         });
 

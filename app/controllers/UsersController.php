@@ -79,13 +79,15 @@ class UsersController extends BaseController
             return $group->hierarchy > Sentry::getUser()->topMostGroupHierarchy();
         });
 
-        $trusts = Node::whereNodeTypeIs($this->trustNodeType, 'published')->get();
+        $trusts = Node::whereNodeTypeIs($this->trustNodeType, 'published')->whereUserHasAccess('manage-trust')->get();
         $trusts->each(function (&$trust) {
             $trust->hospitals = Node::whereNodeTypeIs($this->hospitalNodeType, 'published')
+                ->whereUserHasAccess('manage-trust')
                 ->where('trust', $trust->node_id)->get();
 
             $trust->hospitals->each(function (&$hospital) {
                 $hospital->wards = Node::whereNodeTypeIs($this->wardNodeType, 'published')
+                    ->whereUserHasAccess('manage-trust')
                     ->where('hospital', $hospital->node_id)->get();
             });
         });

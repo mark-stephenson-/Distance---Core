@@ -98,9 +98,10 @@
                     }
                     handle = handle.closest('.' + list.options.handleClass);
                 }
-                if (!handle.length || list.dragEl || (!hasTouch && e.button !== 0) || (hasTouch && e.touches.length !== 1)) {
+                if (!handle.length || list.dragEl || (!hasTouch && e.button !== 0) || (hasTouch && e.touches.length !== 1) || handle.closest('.' + list.options.noDragClass).length) {
                     return;
                 }
+
                 e.preventDefault();
                 list.dragStart(hasTouch ? e.touches[0] : e);
             };

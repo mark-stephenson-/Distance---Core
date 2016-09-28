@@ -7,6 +7,7 @@
                     <a href="{{ route('questionnaires.view', array($branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="View" class="btn btn-mini"><i class="icon-search"></i></a>
                     @if ($branch->node->status == 'draft' )
                         <a href="{{ route('questionnaires.edit', array($branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
+                        <a href="{{ route('questionnaires.delete', array($branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Delete" class="btn btn-mini" onclick="return confirm('Are you sure you want to delete this question?')"><i class="icon-trash"></i></a>
                     @endif
                 </div>
             </div>

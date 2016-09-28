@@ -13,7 +13,8 @@
             $('.dd').nestable({
                 maxDepth: 50,
                 expandBtnHTML: '<button data-action="expand" class="dd-drag-collapse"><i class="icon icon-plus-sign"></i></button>',
-                collapseBtnHTML: '<button data-action="collapse" class="dd-drag-collapse"><i class="icon icon-minus-sign"></i></button>'
+                collapseBtnHTML: '<button data-action="collapse" class="dd-drag-collapse"><i class="icon icon-minus-sign"></i></button>',
+                draggable: false
             });
 
             $('.dd').on('change', function() {
@@ -156,7 +157,7 @@
     <div class="dd">
         <ol class="dd-list">
             @foreach ($branches->getChildren() as $branch)
-                <li class="dd-item" data-id="{{ $branch->id }}">
+                <li class="dd-item {{ $branch->node->status != 'draft' ? 'dd-nodrag' : '' }}" data-id="{{ $branch->id }}">
                     <div class="pull-right node-hierarchy-buttons">
                         <small class="muted"><em>{{ $nodeTypes[$branch->node->node_type]->label }}</em></small> {{ $branch->node->statusBadge }}
                         <div class="btn-group">
@@ -167,7 +168,6 @@
                                 <a href="{{ route('questionnaires.edit', array($branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
                                 <a href="{{ route('questionnaires.publish-revision', array($branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini open-publish-question-set-modal">Publish Revision</a>
                                 <a href="{{ route('questionnaires.create', array('1', $branch->node->id)) }}" rel="tooltip" title="Add Link" class="btn btn-mini"><i class="icon-link"></i></a>
-                                <a href="#" rel="tooltip" title="Remove Link" class="btn btn-mini open-remove-link-modal"><i class="icon-unlink"></i></a>
                             @endif
                         </div>
                     </div>

@@ -299,4 +299,13 @@ class QuestionsController extends BaseController
 
         return Redirect::back()->with('successes', new MessageBag(array('The questions set has been published and the old set retired')));
     }
+
+    public function delete($nodeId, $revisionId, $branchId)
+    {
+        Node::find($nodeId)->forceDelete();
+        Hierarchy::whereNodeId($nodeId)->forceDelete();
+
+
+        return Redirect::back()->with('successes', new MessageBag(array('The question was deleted')));
+    }
 }

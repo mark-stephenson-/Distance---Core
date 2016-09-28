@@ -444,8 +444,11 @@ class NodesController extends BaseController
         if (Input::get('type')) {
             $nodes->whereNodeTypeIs(Input::get('type'), 'published');
 
+
+
             switch (Input::get('type')) {
                 case $this->trustNodeType:
+                    $nodes->whereUserHasAccess('manage-trust');
                     $column = 'name';
                     break;
                 default:
