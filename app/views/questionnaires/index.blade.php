@@ -145,14 +145,6 @@
             <a href="#" class="btn btn-primary" id="publishQuestionSetConfirm">Yes, I'm Sure</a>
         </div>
     </div>
-
-    <div class="btn-group pull-right">
-        <a href="{{ route('nodes.list', array(CORE_APP_ID, CORE_COLLECTION_ID)) }}" class="btn"><i class="icon-list"></i> Node List</a>
-
-        {{--@if ( count(NodeType::forSelect($collection, false, 'create')) )--}}
-            {{--<a href="#" class="btn" id="openRootNodeModal"><i class="icon-plus"></i> New Root Node</a>--}}
-        {{--@endif--}}
-    </div>
     
     <div class="dd">
         <ol class="dd-list">
@@ -165,7 +157,7 @@
                             @if ($branch->node->status == 'published')
                                 <a href="{{ route('questionnaires.create-revision', array($branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini">Create Revision</a>
                             @elseif ($branch->node->status == 'draft')
-                                <a href="{{ route('questionnaires.edit', array($branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>
+{{--                                <a href="{{ route('questionnaires.edit', array($branch->node->id, 'branch', $branch->id)) }}" rel="tooltip" title="Edit" class="btn btn-mini"><i class="icon-edit"></i></a>--}}
                                 <a href="{{ route('questionnaires.publish-revision', array($branch->node->id, 'branch', $branch->id)) }}" class="btn btn-mini open-publish-question-set-modal">Publish Revision</a>
                                 <a href="{{ route('questionnaires.create', array('1', $branch->node->id)) }}" rel="tooltip" title="Add Link" class="btn btn-mini"><i class="icon-link"></i></a>
                             @endif

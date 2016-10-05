@@ -11,7 +11,7 @@ return array(
     ),
 
     array(
-        'title' => 'Node List',
+        'title' => 'Manage domains',
         'route' => 'nodes.list',
         'params' => array('[app-id]', '[collection-id]'),
         'icon' => 'th-list',
