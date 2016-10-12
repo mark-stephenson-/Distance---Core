@@ -154,6 +154,9 @@ function filterConcerns($concerns) {
                 if (request.queryString("domain")) {
                     url = url + "&domain=" + request.queryString("domain");
                 }
+                if (request.queryString("type")) {
+                    url = url + "&type=" + request.queryString("type");
+                }
 
                 url = url + '#concerns';
 
