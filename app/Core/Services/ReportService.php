@@ -78,7 +78,7 @@ class ReportService
             foreach($records as $record) {
 
                 foreach($record->notes as $note) {
-                    if ($note->prase_question_id == null) {
+                    if ($note->prase_question_id == null && $note->concern == null) {
                         $reportData['notes'][$note->id] = [
                             'text' => $note->text,
                         ];
@@ -88,10 +88,10 @@ class ReportService
                 foreach($record->concerns as $concern) {
                     if ($concern->prase_question_id == null) {
                         if(isset($concern->note)) {
-                            $note = $concern->note;
+                            $concernNote = $concern->note;
                         }
                         $reportData['concerns'][$concern->id] = [
-                            'text' => !empty($note->text) ? $note->text : null,
+                            'text' => !empty($concernNote->text) ? $concernNote->text : null,
                             'preventability' => (is_null($concern->prevent_answer)) ? 4 : $concern->prevent_answer,
                             'severity' => (is_null($concern->serious_answer)) ? 5 : $concern->serious_answer,
                         ];
@@ -103,10 +103,10 @@ class ReportService
                         // Check for concerns
                         if ($question->concern) {
                             if(isset($question->concern->note)) {
-                                $note = $question->concern->note;
+                                $questionConcernNote = $question->concern->note;
                             }
                             $domainData['questions'][$question->node->id]['concerns'][] = [
-                                'text' => isset($note) ? $note->text : null,
+                                'text' => isset($questionConcernNote) ? $questionConcernNote->text : null,
                                 'preventability' => (is_null($question->concern->prevent_answer)) ? 4 : $question->concern->prevent_answer,
                                 'severity' => (is_null($question->concern->serious_answer)) ? 5 : $question->concern->serious_answer,
                             ];
