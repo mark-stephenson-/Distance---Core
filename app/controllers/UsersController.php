@@ -59,7 +59,7 @@ class UsersController extends BaseController
                 ->withErrors(new MessageBag(array("A user with this email already exists on the system.")));
         }
 
-        return Redirect::route('users.index')
+        return Redirect::route('users.edit', array($user->id))
                 ->with('successes', new MessageBag(array($user->fullName . ' has been created.')));
     }
 
@@ -172,7 +172,7 @@ class UsersController extends BaseController
                 ->withErrors(new \MessageBag(array("A user with this email already exists on the system, it is likely they exist above your access level or they are an existing reviewer.")));
         }
 
-        return Redirect::route('users.index')
+        return Redirect::route('users.edit', array($user->id))
                 ->with('successes', new MessageBag(array($user->fullName . ' has been updated.')));
     }
 
