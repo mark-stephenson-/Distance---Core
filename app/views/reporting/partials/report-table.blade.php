@@ -1,7 +1,7 @@
 <table class="table">
     <tbody>
     <tr>
-        <td class="table-key"><strong>Submissions</strong></td>
+        <td class="table-key"><strong>Number of Patient Responses</strong></td>
         <td>{{ $reportData->submissions->total }} ({{ $reportData->submissions->male }} Male, {{ $reportData->submissions->female }} Female)</td>
     </tr>
     <tr>
