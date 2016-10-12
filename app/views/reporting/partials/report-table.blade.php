@@ -5,7 +5,7 @@
         <td>{{ $reportData->submissions->total }} ({{ $reportData->submissions->male }} Male, {{ $reportData->submissions->female }} Female)</td>
     </tr>
     <tr>
-        <td class="table-key"><strong>Response Date Range</strong></td>
+        <td class="table-key"><strong>Data Collection Period</strong></td>
         <td>{{ $start }} - {{ $end }}</td>
     </tr>
     <tr>
