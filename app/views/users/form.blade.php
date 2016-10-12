@@ -55,15 +55,6 @@
                 </div>
             </div>
 
-            <hr />
-
-            <div class="control-group">
-                {{ Form::label('bio', 'Bio', array('class' => 'control-label')) }}
-                <div class="controls">
-                    {{ Form::textarea('bio', null, array('class' => 'span11')) }}
-                </div>
-            </div>
-
             @if ($field_1 = Config::get('core.labels.user_field_1'))
                 <div class="control-group">
                     {{ Form::label('field_1', $field_1, array('class' => 'control-label')) }}
