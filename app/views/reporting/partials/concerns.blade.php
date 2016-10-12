@@ -5,9 +5,9 @@
                 @if (isset($concerns->first()->question))
                     <th>Question</th>
                 @endif
-                <th>Patient Concern</th>
-                <th>Preventability</th>
-                <th>Severity</th>
+                <th>Safety Concern</th>
+                <th>Patient Rated Preventability</th>
+                <th>Patient Rated Preventability</th>
             </tr>
         </thead>
         <tbody>
