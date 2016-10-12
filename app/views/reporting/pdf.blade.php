@@ -69,13 +69,13 @@
             }
 
             .key-positive {
-                background-color: #93c476;
+                background-color: #0e90d2;
                 width: 10px;
                 height: 10px;
             }
 
             .bar-positive {
-                background: #93c476;
+                background: #0e90d2;
             }
 
             .key-success {

@@ -251,7 +251,7 @@ class UsersController extends BaseController
         $groups = Sentry::getGroupProvider()->findAll();
 
         $groups = array_filter($groups, function($group) {
-            return $group->hierarchy > Sentry::getUser()->topMostGroupHierarchy();
+            return $group->hierarchy >= Sentry::getUser()->topMostGroupHierarchy();
         });
 
         return View::make('users.groups', compact('user', 'groups'));
