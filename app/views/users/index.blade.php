@@ -18,6 +18,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email Address</th>
+                <th>Groups</th>
                 <th>Created</th>
                 <th>Actions</th>
             </tr>
@@ -33,6 +34,13 @@
                 </td>
                 <td>
                     <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                </td>
+                <td>
+                    @if($user->groups)
+                        @foreach($user->groups as $group)
+                            {{ $group->name }} <br>
+                        @endforeach
+                    @endif
                 </td>
                 <td>
                     @if (is_null($user->last_login))

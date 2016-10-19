@@ -20,6 +20,10 @@ class UsersController extends BaseController
             });
         }
 
+        array_map(function($user) {
+            $user->load('groups');
+        }, $users);
+
         return View::make('users.index', compact('users'));
     }
 
