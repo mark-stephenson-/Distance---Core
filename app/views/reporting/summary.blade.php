@@ -57,7 +57,7 @@ function filterConcerns($concerns) {
                 @include('reporting.partials.report-table')
             </div>
             <div class="span4">
-                @unless(Input::get('domain'))
+                @unless(Input::get('domain') || !Sentry::getUser()->hasAccess('cms.export-data.download'))
                     <a href="{{ route('reporting.view-pdf', [$fileKey, 'type' => Input::get('type')]) }}" class="btn btn-lg btn-primary export-button" data-toggle="tooltip" data-placement="top" title="Will take a long time with a large data set.">Export as PDF</a>
                     <a href="{{ route('reporting.view-csv', [$fileKey, 'type' => Input::get('type')]) }}" class="btn btn-lg btn-primary export-button">Export as CSV</a>
                 @endunless

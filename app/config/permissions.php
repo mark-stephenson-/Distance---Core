@@ -86,6 +86,12 @@ return array(
                     'Can Export Own' => array(
                         'value' => 'cms.export-data.manage.own',
                     ),
+                    'Can Generate Bespoke Reports' => array(
+                        'value' => 'cms.export-data.generate-reports',
+                    ),
+                    'Can Download' => array(
+                        'value' => 'cms.export-data.download',
+                    ),
                 ),
             ),
 
