@@ -26,7 +26,7 @@
             <a href="{{ route('volunteers.create') }}" class="btn"><i class="icon-plus"></i> New Volunteer</a>
         </p>
     @endif
-    <table class="table table-striped">
+    <table class="table table-striped" id="volunteer-table">
         <thead>
             <tr>
                 <th>Username</th>
@@ -80,6 +80,11 @@
         </div>
     </div>
 
+@stop
+
+@section('js')
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.12/datatables.min.js"></script>
+
     <script>
         $(document).ready( function() {
             $('#deleteModelConfirm').on('click', function(e) {
@@ -93,6 +98,9 @@
                 $("#deleteModal").modal('show');
             });
         });
+        $('#volunteer-table').dataTable({
+            pageLength: 25
+        });
+        console.log('aaaaaaaaa');
     </script>
-
 @stop

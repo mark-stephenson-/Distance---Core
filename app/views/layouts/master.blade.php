@@ -14,6 +14,7 @@
         <script src="/js/jquery-1.9.1.js"></script>
         <script> CKEDITOR_BASEPATH = '{{ URL::to('') }}/js/ckeditor/'; </script>
         <script src="/js/app.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.12/datatables.min.css"/>
     </head>
     <body>
         <div class="gradient"></div>
