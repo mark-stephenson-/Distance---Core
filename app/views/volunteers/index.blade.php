@@ -99,8 +99,11 @@
             });
         });
         $('#volunteer-table').dataTable({
-            pageLength: 25
+            pageLength: 25,
+            oSearch: {
+                sSearch: "{{ Input::get('search') }}"
+            }
         });
-        console.log('aaaaaaaaa');
+
     </script>
 @stop

@@ -26,9 +26,9 @@
                 <td>
                     {{ $trustData->name }}
                 </td>
-                <td width="250">
+                <td width="350">
+                    <a href="{{ route('volunteers.index') }}?search={{ $trustData->name }}" class="btn btn-small"><i class="icon-hospital"></i> View Volunteers</a>
                     <a href="{{ route('manage.trust.index', array($trust->id)) }}" class="btn btn-small"><i class="icon-hospital"></i> View Hospitals</a>
-
                     <a href="{{ route('manage.trust.edit', array($trust->id)) }}" data-toggle="modal" class="btn btn-small"><i class="icon-pencil"></i> Edit Trust</a>
                 </td>
             </tr>
