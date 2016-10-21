@@ -89,6 +89,9 @@ return array(
                     'Can Generate Bespoke Reports' => array(
                         'value' => 'cms.export-data.generate-reports',
                     ),
+                    'Can Generate For Multiple Wards' => array(
+                        'value' => 'cms.export-data.generate-for-multiple-wards',
+                    ),
                     'Can Download' => array(
                         'value' => 'cms.export-data.download',
                     ),

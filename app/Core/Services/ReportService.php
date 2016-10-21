@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Input;
 
 class ReportService
 {
-    public function generateReportForQuestionSet($pmosId, $wardId, Carbon $startDate, Carbon $endDate)
+    public function generateReportForQuestionSet($pmosId, $wardIds, Carbon $startDate, Carbon $endDate)
     {
-        $records = \PRRecord::where('ward_node_id', $wardId)
+        $records = \PRRecord::whereIn('ward_node_id', $wardIds)
             ->with(['questions.answer', 'questions.node'])
             ->wherePmosId($pmosId)
             ->whereBetween('start_date', array($startDate, $endDate->endOfDay()))
             ->get();
 
-        $reportData = $this->generateReportForRecords($records);
+        $reportData = $this->generateReportForRecords($records, $wardIds);
 
         $reportData['dates'] = [
             'start' => $startDate->toDateTimeString(),
@@ -28,13 +28,14 @@ class ReportService
         return $reportData;
     }
 
-    public function generateReportForRecords($records)
+    public function generateReportForRecords($records, $wardIds = array())
     {
+        $wardIds  = $wardIds ? $wardIds : array($records[0]->ward_node_id);
         $answerOptions = (new Collection(DB::table('node_type_5')->get()))->keyBy('node_id');
         $questionData = (new Collection(DB::table('node_type_1')->join('i18n_strings', 'node_type_1.question', '=', 'i18n_strings.key')->get(['*', 'i18n_strings.value AS value'])))->keyBy('node_id');
 
-        $ward = DB::table('node_type_4')->where('status', 'published')->where('node_id', $records[0]->ward_node_id)->first();
-        $hospital = DB::table('node_type_3')->whereNodeId($ward->hospital)->first();
+        $wards = new Collection(DB::table('node_type_4')->where('status', 'published')->whereIn('node_id', $wardIds)->get());
+        $hospital = DB::table('node_type_3')->whereNodeId($wards[0]->hospital)->first();
         $trust = DB::table('node_type_2')->whereNodeId($hospital->trust)->first();
 
         $domains = DB::table('node_type_10')->get();
@@ -52,8 +53,8 @@ class ReportService
             ],
             'notes' => [],
             'concerns' => [],
-            'ward' => $ward->name,
-            'wardId' => $ward->node_id,
+            'ward' => $wards->implode('name', ', '),
+            'wardIds' => $wardIds,
             'hospital' => $hospital->name,
             'hospitalId' => $hospital->node_id,
             'trust' => $trust->name,
@@ -76,7 +77,6 @@ class ReportService
             }
 
             foreach($records as $record) {
-
                 foreach($record->notes as $note) {
                     if ($note->prase_question_id == null && $note->concern == null) {
                         $reportData['notes'][$note->id] = [
@@ -87,11 +87,8 @@ class ReportService
 
                 foreach($record->concerns as $concern) {
                     if ($concern->prase_question_id == null) {
-                        if(isset($concern->note)) {
-                            $concernNote = $concern->note;
-                        }
                         $reportData['concerns'][$concern->id] = [
-                            'text' => !empty($concernNote->text) ? $concernNote->text : null,
+                            'text' => !is_null($concern->note) ? $concern->note->text : '',
                             'preventability' => (is_null($concern->prevent_answer)) ? 4 : $concern->prevent_answer,
                             'severity' => (is_null($concern->serious_answer)) ? 5 : $concern->serious_answer,
                         ];
@@ -102,11 +99,8 @@ class ReportService
                     if ($domain->node_id == $questionData[$question->node->id]->domain) {
                         // Check for concerns
                         if ($question->concern) {
-                            if(isset($question->concern->note)) {
-                                $questionConcernNote = $question->concern->note;
-                            }
                             $domainData['questions'][$question->node->id]['concerns'][] = [
-                                'text' => isset($questionConcernNote) ? $questionConcernNote->text : null,
+                                'text' => !is_null($question->concern->note) ? $question->concern->note->text : '',
                                 'preventability' => (is_null($question->concern->prevent_answer)) ? 4 : $question->concern->prevent_answer,
                                 'severity' => (is_null($question->concern->serious_answer)) ? 5 : $question->concern->serious_answer,
                             ];
@@ -211,12 +205,12 @@ class ReportService
             return $report;
 
         })->filter(function ($report) {
-            
+
             // filter again to make sure the user has access to see the reports and also that filters apply
             $getFilterResult = true;
 
             if(Input::get('ward_id')) {
-                $getFilterResult = Input::get('ward_id') == $report->wardId;
+                $getFilterResult = in_array(Input::get('ward_id'), $report->wardIds);
             }
             elseif(Input::get('hospital_id')) {
                 $getFilterResult = $report->hospitalId == Input::get('hospital_id');
@@ -227,7 +221,7 @@ class ReportService
 
             $userHasAccess = true;
             if(! Sentry::getUser()->hasAccess('cms.export-data.manage.any')) {
-                $userHasAccess = Sentry::getUser()->canAccessNodes($report->wardId);
+                $userHasAccess = Sentry::getUser()->canAccessNodes($report->wardIds);
             }
 
             return $getFilterResult && $userHasAccess;

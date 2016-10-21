@@ -13,7 +13,6 @@
         <tbody>
 
         @foreach($concerns as $concern)
-
             <tr>
                 @if (isset($concern->question))
                     @if (isset($noLimit))
@@ -24,18 +23,20 @@
                 @endif
                 <td>{{ $concern->text }}</td>
                 <td>
-                    @if($concern->preventability < 2)
+                    @if(isset($concern->preventability) && $concern->preventability < 2)
                         Not Preventable
-                    @elseif($concern->preventability == 2)
+                    @elseif(isset($concern->preventability) && $concern->preventability == 2)
                         May be preventable
-                    @elseif($concern->preventability == 3)
+                    @elseif(isset($concern->preventability) && $concern->preventability == 3)
                         Preventable
                     @else
                         Unknown
                     @endif
                 </td>
                 <td>
-                    @if($concern->severity < 4)
+                    @if(!isset($concern->severity))
+                        <p style="color: #e45752">Unknown</p>
+                    @elseif($concern->severity < 4)
                         <p style="color: #59af59">Low</p>
                     @elseif($concern->severity >= 4 && $concern->severity <7)
                         <p style="color: #f9a124">Medium</p>

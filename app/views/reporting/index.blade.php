@@ -61,6 +61,7 @@
 
 @section('js')
     <script>
+        var canSelectMultipleWards = {{ Sentry::getUser()->hasAccess('cms.export-data.generate-for-multiple-wards') ? 'true' : 'false' }};
         $(document).ready(function() {
 
             if ($('[name=trust]').val()) {
@@ -145,7 +146,7 @@
         function updateWardsSelect(hospitalId, $wardsSelect)
         {
             $wardsSelect.select2({
-                multiple: false,
+                multiple: canSelectMultipleWards,
                 ajax: {
                     url: '/reporting/_ajax/'+hospitalId+'/wards',
                     dataType: 'json',
