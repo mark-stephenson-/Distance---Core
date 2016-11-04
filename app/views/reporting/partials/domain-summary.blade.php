@@ -17,8 +17,7 @@
             <td>
                 <div class="progress">
                     <?php
-                        $total = 0;
-
+                        $total = 1;
                         foreach($domain->summary as $key => $val) {
                             if ($key > 0) {
                                 $total += $val;
