@@ -1,1 +1,0 @@
-{{ ($data->{$column->name}) ? 'Yes' : 'No' }}

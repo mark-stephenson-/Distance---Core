@@ -1,0 +1,2 @@
+# every minute, run the laravel scheduler
+* * * * *  vagrant  php /home/vagrant/ats/artisan scheduled:run

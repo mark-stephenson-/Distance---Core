@@ -4,6 +4,10 @@
 * PHP >= 5.4
 * Composer (globally or a local copy in the project) - [Instructions] (http://getcomposer.org/doc/00-intro.md#installation-nix)
 * Homebrew & Grunt (globally or a local copy in the project) - [Instructions] (http://thechangelog.com/install-node-js-with-homebrew-on-os-x/)
+
+If you get the error 'sudo chown -R $USER /usr/local'.
+Enter 'sudo chown -R $USER /usr/local' and try again.
+
 * MCrypt PHP Extension - [Instructions] (run 'brew install mcrypt' in terminal and update /etc/php.ini libs to reference mcrypt.so')
 
 ## Setup Guide

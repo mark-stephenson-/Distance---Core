@@ -1,0 +1,55 @@
+alias ..="cd .."
+alias ...="cd ../.."
+
+alias h='cd ~'
+alias c='clear'
+
+function serve() {
+	if [[ "$1" && "$2" ]]
+	then
+		sudo dos2unix /vagrant/scripts/serve.sh
+		sudo bash /vagrant/scripts/serve.sh "$1" "$2"
+	else
+		echo "Error: missing required parameters."
+		echo "Usage: "
+		echo "  serve domain path"
+	fi
+}
+
+function core() {
+    if [[ "$1" == "install" ]]
+    then
+	echo " " &&
+	echo "Creating Database... " &&
+	echo " " &&
+	
+	cd ~/the-core &&
+	echo "create database thecore" | mysql -u homestead -p'secret' &&
+
+	echo "Database 'thecore' created!"
+	
+	echo " " &&
+	echo "Installing Dependencies... " &&
+	echo " " &&
+	
+	composer install -o &&
+	npm install &&
+	grunt dev &&
+	
+	chgrp -R www-data app/storage &&
+	chmod -R 775 app/storage &&
+
+	echo " " &&
+	echo " Running Migrations... " &&
+	echo " " &&
+	
+	php artisan migrate:install &&
+	php artisan migrate &&
+	php artisan db:seed &&
+	
+	echo " " &&
+	echo " Installation Finished! " &&
+	echo " "
+    fi
+}
+
