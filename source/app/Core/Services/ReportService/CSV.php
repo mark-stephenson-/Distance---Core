@@ -230,30 +230,55 @@ class CSV
 
         $questions = new Collection();
 
-        foreach($this->reportData->domains as $domain) {
-            foreach($domain->questions as $questionId => $question) {
-                $questions->put($questionId, $question);
-            }
-        }
-
+        $fetchedRecord = PRRecord::orderBy('created_at', 'desc')
+            ->with(array(
+                'questions' => function ($q) {
+                    return $q
+                        ->join('node_type_5', 'prase_questions.answer_node_id', '=', 'node_type_5.node_id')
+                        ->join('node_type_1', 'prase_questions.question_node_id', '=', 'node_type_1.node_id')
+                        ->groupBy('prase_questions.id')
+                        ->select([
+                            'prase_questions.*',
+                            'node_type_5.answervalue AS answerValue',
+                            'node_type_1.answertypes AS answerTypes',
+                            'node_type_1.reversescore AS reverseScore',
+                            'node_type_1.domain AS domainId',
+                        ]);
+                },
+                'ward',
+                'questions.node',
+                'questions.concern',
+                'questions.note',
+                'questions.answer',
+            ))
+            ->where('prase_records.pmos_id', $this->reportData->pmos_id)
+            ->whereIn('prase_records.ward_node_id', $this->reportData->wardIds)
+            ->where('prase_records.start_date', '>=', $this->reportData->dates->start)
+            ->where('prase_records.start_date', '<=', $this->reportData->dates->end)
+            ->select([
+                'prase_records.*',
+            ])->first();
+        
         $reversed = [];
 
-        foreach ($questions->sortBy(function ($record) { return explode(' ', $record->title)[1]; }, SORT_NUMERIC) as $i => $question) {
-            $csvHeaders[] = 'Q'.explode(' ', $question->title)[1];
+        foreach ($fetchedRecord->questions->sortBy(function ($record) { return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question) {
+            $csvHeaders[] = 'Q'.explode(' ', $question->node->title)[1];
 
-            if ($question->reversescore) {
+            if ($question->reverseScore) {
                 $reversed[] = $question;
             }
         }
 
         foreach ($reversed as $i => $question) {
-            $csvHeaders[] = 'RQ'.explode(' ', $question->title)[1];
+            $csvHeaders[] = 'RQ'.explode(' ', $question->node->title)[1];
         }
 
-        $domains = [];
         // Fetch domains
-        foreach($this->reportData->domains as $domainId => $domain) {
-            $domains[$domain->domainvalue] = $domain;
+
+        $domains = [];
+
+        foreach (Node::where('node_type', '10')->join('node_type_10', 'nodes.id', '=', 'node_type_10.node_id')->get(['nodes.*', 'node_type_10.domainvalue']) as $node) {
+            $domains[$node->domainvalue] = $node;
         }
 
         ksort($domains);
