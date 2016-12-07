@@ -18,12 +18,12 @@
    },
    "repositories":[
       {
-         "type":"vcs",
-         "url":"https://bitbucket.org/thedistance/nested-sets.git"
+         "type":"git",
+         "url":"git@bitbucket.org:thedistance/nested-sets.git"
       },
       {
          "type":"composer",
-         "url":"http://packages.cartalyst.com"
+         "url":"https://packages.cartalyst.com"
       },
       {
          "type":"vcs",

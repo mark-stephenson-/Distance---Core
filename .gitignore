@@ -5,6 +5,5 @@
 
 /source/node_modules/
 
-/source/app/storage
 /source/.env
 .idea
