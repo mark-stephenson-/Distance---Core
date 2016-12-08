@@ -20,13 +20,14 @@
 ?>
 
 @section('header')
-    <h1>{{ $collection->name }}</h1>
+    <!--<h1>{{ $collection->name }}</h1>-->
+    <h1>Manage domains</h1>
 @stop
 
 @section('js')
     <style> table thead .cursor{ cursor: pointer; }</style>
     <script>
-    
+
         var nodeToPublish = null;
 
         $('.open-publish-node-modal').on('click', function(e) {
@@ -104,10 +105,10 @@
         {{--@endif--}}
 
         @if (count(NodeType::forSelect($collection, false, 'create')))
-            <a href="{{ route('nodes.create', array($collection->application_id, $collection->id)) }}" class="btn" id="openNodeModal"><i class="icon-plus"></i> New Node</a>
+            <a href="{{ route('nodes.create', array($collection->application_id, $collection->id)) }}" class="btn" id="openNodeModal"><i class="icon-plus"></i> New Domain</a>
         @endif
     </p>
-    
+
     <table class="table">
 
         <thead>

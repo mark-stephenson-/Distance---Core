@@ -3,7 +3,7 @@
 return array(
 
     array(
-        'title' => 'Apps',
+        'title' => 'Home',
         'route' => 'apps.index',
         'params' => array(),
         'icon' => 'lock',

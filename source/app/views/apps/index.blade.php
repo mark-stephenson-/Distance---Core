@@ -1,10 +1,13 @@
 @extends('layouts.master')
 
 @section('header')
-    <h1>Apps</h1>
+    <h1>Home</h1>
 @stop
 
 @section('body')
+  <div class="title-block">
+      <h3>Welcome to the PRASE Report Management System</h3>
+    </div>
 
     @if (Sentry::getUser()->isSuperUser())
     <p class="pull-right">
@@ -26,7 +29,7 @@
                 <?php
                     $collectionAccess = array();
                     $collectionAccess[] = 'cms.apps.' . $app->id . '.collection-management';
-                    
+
                     foreach($app->collections as $collection) {
                         $collectionAccess[] = 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.*';
                     }

@@ -153,7 +153,7 @@
             @foreach($reportData->domains as $domain)
                 <h3 style="page-break-before: always;">{{ $domain->name }} domain</h3>
                 @include('reporting.partials.summary-key')
-                @include('reporting.partials.domain-questions', ['noLimit' => true])
+                <!--@include('reporting.partials.domain-questions', ['noLimit' => true])-->
 
                 @if (isset($domain->notes))
                     <h3>Patient reported positive experiences of care received</h3>

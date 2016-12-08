@@ -1,5 +1,16 @@
-<div id="accordian">
-    <h3>Patient Safety Domains</h3>
+<div class="accordion-heading" id="accordian">
+    <a class="accordion-toggle"
+        data-toggle="collapse"
+        data-parent="#accordion2"
+        href="#collapseOne">Patient Safety Domains
+    </a>
+</div>
+
+<div
+    id="collapseOne"
+    class="accordion-body collapse"
+    data-toggle="false">
+
     <table class="table">
         <tbody>
         <tr>
