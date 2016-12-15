@@ -40,6 +40,8 @@ class ReportService
 
         $domains = DB::table('node_type_10')->get();
 
+        $reverseAnswerLookup = ['-1' => -1, '0' => 0, '1' => 5, '2' => 4, '3' => 3, '4' => 2, '5' => 1];
+
         $reportData = [
             'dates' => [
                 'start' => $records->first()->start_date,
@@ -125,8 +127,13 @@ class ReportService
                         if (!$question->answer) {
                             $answerValue = 0;
                         } else {
-                            $answerValue = $answerOptions[$question->answer->id]->answervalue;
+                            if($questionData[$question->node->id]->reversescore) {
+                                $answerValue = $reverseAnswerLookup[$answerOptions[$question->answer->id]->answervalue];
+                            } else {
+                                $answerValue = $answerOptions[$question->answer->id]->answervalue;
+                            }
                         }
+
                         $domainData['summary'][$answerValue]++;
 
                         // Now per question
