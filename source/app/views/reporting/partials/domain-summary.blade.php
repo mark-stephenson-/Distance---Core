@@ -25,11 +25,11 @@
                         }
                     ?>
                     @if($total > 0)
-                        <div class="bar bar-danger" style="width: {{ floor(($domain->summary->{"1"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Negative-: {{ $domain->summary->{"1"} }}"> </div>
-                        <div class="bar bar-warning" style="width: {{ floor(($domain->summary->{"2"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Negative: {{ $domain->summary->{"2"} }}"> </div>
-                        <div class="bar bar-neutral" style="width: {{ floor(($domain->summary->{"3"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Neutral: {{ $domain->summary->{"3"} }}"> </div>
-                        <div class="bar bar-positive" style="width: {{ floor(($domain->summary->{"4"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive: {{ $domain->summary->{"4"} }}"> </div>
-                        <div class="bar bar-success" style="width: {{ floor(($domain->summary->{"5"}/$total) * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive+: {{ $domain->summary->{"5"} }}"> </div>
+                        <div class="bar bar-danger" style="width: {{ ($domain->summary->{"1"}/$total) * 100 }}%;" data-toggle="tooltip" data-placement="top" title="Negative-: {{ $domain->summary->{"1"} }}"> </div>
+                        <div class="bar bar-warning" style="width: {{ ($domain->summary->{"2"}/$total * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Negative: {{ $domain->summary->{"2"} }}"> </div>
+                        <div class="bar bar-neutral" style="width: {{ ($domain->summary->{"3"}/$total * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Neutral: {{ $domain->summary->{"3"} }}"> </div>
+                        <div class="bar bar-positive" style="width: {{ ($domain->summary->{"4"}/$total * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive: {{ $domain->summary->{"4"} }}"> </div>
+                        <div class="bar bar-success" style="width: {{ ($domain->summary->{"5"}/$total * 100) }}%;" data-toggle="tooltip" data-placement="top" title="Positive+: {{ $domain->summary->{"5"} }}"> </div>
                     @else
                         <div class="bar bar-danger" style="width: 0%;" data-toggle="tooltip" data-placement="top" title="Negative-: {{ $domain->summary->{"1"} }}"> </div>
                         <div class="bar bar-warning" style="width: 0%;" data-toggle="tooltip" data-placement="top" title="Negative: {{ $domain->summary->{"2"} }}"> </div>

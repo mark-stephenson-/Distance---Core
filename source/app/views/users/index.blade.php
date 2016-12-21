@@ -12,7 +12,7 @@
         @endif
     </p>
 
-    <table class="table table-striped">
+    <table class="table table-striped" id="user-table">
         <thead>
             <tr>
                 <th>First Name</th>
@@ -89,6 +89,10 @@
         </div>
         <div class="modal-body"></div>
     </div>
+@stop
+
+@section('js')
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.12/datatables.min.js"></script>
 
     <script>
         $(document).ready( function() {
@@ -114,6 +118,12 @@
                 e.preventDefault();
             });
         });
-    </script>
 
+        $('#user-table').dataTable({
+            pageLength: 25,
+            oSearch: {
+                sSearch: "{{ Input::get('search') }}"
+            }
+        });
+    </script>
 @stop

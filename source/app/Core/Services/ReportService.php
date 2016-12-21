@@ -24,7 +24,7 @@ class ReportService
             'start' => $startDate->toDateTimeString(),
             'end' => $endDate->toDateTimeString()
         ];
-        
+
         return $reportData;
     }
 
@@ -39,6 +39,8 @@ class ReportService
         $trust = DB::table('node_type_2')->whereNodeId($hospital->trust)->first();
 
         $domains = DB::table('node_type_10')->get();
+
+        $reverseAnswerLookup = ['-1' => -1, '0' => 0, '1' => 5, '2' => 4, '3' => 3, '4' => 2, '5' => 1];
 
         $reportData = [
             'dates' => [
@@ -125,7 +127,11 @@ class ReportService
                         if (!$question->answer) {
                             $answerValue = 0;
                         } else {
-                            $answerValue = $answerOptions[$question->answer->id]->answervalue;
+                          if($questionData[$question->node->id]->reversescore) {
+                                 $answerValue = $reverseAnswerLookup[$answerOptions[$question->answer->id]->answervalue];
+                             } else {
+                                 $answerValue = $answerOptions[$question->answer->id]->answervalue;
+                             }
                         }
                         $domainData['summary'][$answerValue]++;
 

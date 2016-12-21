@@ -49,8 +49,8 @@ class CSV
             ->with(array(
                 'questions' => function ($q) {
                     return $q
-                        ->join('node_type_5', 'prase_questions.answer_node_id', '=', 'node_type_5.node_id')
-                        ->join('node_type_1', 'prase_questions.question_node_id', '=', 'node_type_1.node_id')
+                        ->leftJoin('node_type_5', 'prase_questions.answer_node_id', '=', 'node_type_5.node_id')
+                        ->leftJoin('node_type_1', 'prase_questions.question_node_id', '=', 'node_type_1.node_id')
                         ->groupBy('prase_questions.id')
                         ->select([
                             'prase_questions.*',
@@ -234,8 +234,8 @@ class CSV
             ->with(array(
                 'questions' => function ($q) {
                     return $q
-                        ->join('node_type_5', 'prase_questions.answer_node_id', '=', 'node_type_5.node_id')
-                        ->join('node_type_1', 'prase_questions.question_node_id', '=', 'node_type_1.node_id')
+                        ->leftJoin('node_type_5', 'prase_questions.answer_node_id', '=', 'node_type_5.node_id')
+                        ->leftJoin('node_type_1', 'prase_questions.question_node_id', '=', 'node_type_1.node_id')
                         ->groupBy('prase_questions.id')
                         ->select([
                             'prase_questions.*',
@@ -258,7 +258,7 @@ class CSV
             ->select([
                 'prase_records.*',
             ])->first();
-        
+
         $reversed = [];
 
         foreach ($fetchedRecord->questions->sortBy(function ($record) { return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question) {

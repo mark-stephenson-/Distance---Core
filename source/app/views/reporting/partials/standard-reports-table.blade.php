@@ -13,7 +13,7 @@
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>
-                        <a href="{{ route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')) }}">{{ $report->generated_at }}</a>
+                        <a href="{{ route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')) }}" title = "Click here!">{{ $report->generated_at }}</a>
                     </td>
                     <td>{{ $report->trust }}</td>
                     <td>{{ $report->hospital }}</td>

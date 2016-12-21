@@ -1,5 +1,6 @@
 <html>
     <head>
+
         <style>
             body {
                 background: #FFF;
@@ -35,57 +36,57 @@
             }
 
             .key-outer {
-                height: 50px;
+                height: 30px;
             }
 
             .key-danger {
-                background-color: #dd514c;
+                background-color: #8B0000;
                 width: 10px;
                 height: 10px;
             }
 
             .bar-danger {
-                background: #dd514c;
+                background: #8B0000;
             }
 
             .key-warning {
-                background-color: #faa732;
+                background-color: #FF0000;
                 width: 10px;
                 height: 10px;
             }
 
             .bar-warning {
-                background: #faa732;
+                background: #FF0000;
             }
 
             .key-neutral {
-                background-color: #fbfa37;
+                background-color: #FFC200;
                 width: 10px;
                 height: 10px;
             }
 
             .progress .bar.bar-neutral {
-                background: #fbfa37;
+                background: #FFC200;
             }
 
             .key-positive {
-                background-color: #0e90d2;
+                background-color: #88E188;
                 width: 10px;
                 height: 10px;
             }
 
             .bar-positive {
-                background: #0e90d2;
+                background: #88E188;
             }
 
             .key-success {
-                background-color: #009c0f;
+                background-color: #006400;
                 width: 10px;
                 height: 10px;
             }
 
             .bar-success {
-                background: #009c0f;
+                background: #006400;
             }
 
             .progress {
@@ -102,19 +103,23 @@
             }
 
             .progress .bar-danger {
-                background-color: #dd514c;
+                background-color: #8B0000;
             }
 
             .progress .bar-positive {
-                background-color: #0e90d2;
+                background-color: #88E188;
             }
 
             .progress .bar-neutral {
-                background-color: #fbfa37;
+                background-color: #FFC200;
             }
 
             .progress .bar-warning {
-                background-color: #faa732;
+                background-color: #FF0000;
+            }
+
+            .progress .bar-success {
+                background-color: #006400;
             }
         </style>
     </head>
@@ -153,7 +158,7 @@
             @foreach($reportData->domains as $domain)
                 <h3 style="page-break-before: always;">{{ $domain->name }} domain</h3>
                 @include('reporting.partials.summary-key')
-                <!--@include('reporting.partials.domain-questions', ['noLimit' => true])-->
+                @include('reporting.partials.domain-questions', ['noLimit' => true])
 
                 @if (isset($domain->notes))
                     <h3>Patient reported positive experiences of care received</h3>

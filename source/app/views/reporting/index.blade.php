@@ -12,7 +12,7 @@
 
     <div class="clearfix">
         <div class="title-block">
-            <h3>Standard Prase Ward Reports</h3>
+            <h3>Standard Ward feeback report</h3>
         </div>
 
         <div class="span9 filter-container">
