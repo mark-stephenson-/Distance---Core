@@ -7,7 +7,9 @@
 @section('body')
 
     <p class="pull-right">
+      @if (Sentry::getUser()->hasAccess('cms.manage-trust.manage.any'))
         <a href="{{ route('manage.trust.create') }}" class="btn"><i class="icon-plus"></i> New Trust</a>
+      @endif
     </p>
 
     <table class="table table-striped">
@@ -21,6 +23,7 @@
             @foreach($trusts as $trust)
                 <?php
                     $trustData = $trust->latestRevision();
+
                 ?>
             <tr>
                 <td>

@@ -86,7 +86,7 @@
             }
 
             .bar-success {
-                background: #006400;
+              background: #006400 !important;
             }
 
             .progress {
@@ -119,7 +119,7 @@
             }
 
             .progress .bar-success {
-                background-color: #006400;
+                background-color: #006400 !important;;
             }
         </style>
     </head>
