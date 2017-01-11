@@ -5759,13 +5759,13 @@ disabled look for disabled choices in the results dropdown
     background-image: url('/js/fancybox/fancybox_sprite@2x.png');
     background-size: 44px 152px;
     /*The size of the normal image, half the size of the hi-res image*/
-
+  
   }
   #fancybox-loading div {
     background-image: url('/js/fancybox/fancybox_loading@2x.gif');
     background-size: 24px 24px;
     /*The size of the normal image, half the size of the hi-res image*/
-
+  
   }
 }
 /*!
@@ -6080,6 +6080,24 @@ disabled look for disabled choices in the results dropdown
 }
 .bar-success {
   background: #009c0f;
+}
+.progress table {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-image: none;
+}
+.progress table tr {
+  padding: 0;
+  margin: 0;
+}
+.progress table td {
+  height: 20px;
+  padding: 0;
+  margin: 0;
 }
 /*!
  *  Font Awesome 3.2.1

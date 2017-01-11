@@ -124,6 +124,27 @@
                 height: 20px;
                 display: inline-block;
             }
+
+            .progress table {
+              margin:0;
+              padding:0;
+              background:none;
+              border:none;
+              border-collapse:collapse;
+              border-spacing:0;
+              background-image:none;
+            }
+
+            .progress table tr {
+              padding: 0;
+              margin: 0;
+            }
+            
+            .progress table td {
+              height: 20px;
+              padding: 0;
+              margin: 0;
+            }
         </style>
     </head>
     <body>

@@ -154,7 +154,7 @@ class ReportingController extends \BaseController
         $options->setIsRemoteEnabled(true);
         $dompdf->setOptions($options);
 
-        file_put_contents(storage_path("reports/{$fileKey}.html"), $pdfHtml);
+        //file_put_contents(storage_path("reports/{$fileKey}.html"), $pdfHtml);
 
         $dompdf->setPaper('A4', 'portrait');
 
