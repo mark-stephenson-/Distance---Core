@@ -48,6 +48,7 @@
                 </header>
                 <div class="content">
                     <header>
+                      @if (Sentry::getUser()->isSuperUser())
                         @if (count(Collection::all()) and Application::current() and Collection::current())
                             <div class="btn-group change-collection">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -59,21 +60,24 @@
                                         <li><a href="{{ switchCollectionUrl($collection->application_id, $collection->id) }}">{{ $collection->name }}</a></li>
                                     @endforeach
                                 </ul>
-                            </div>
+                              </div>
+                          @endif
                         @endif
 
-                        @if (count(Application::all()) and Application::current())
-                            <div class="btn-group change-app">
-                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                    {{ @Application::current()->name }}
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    @foreach(Application::allWithPermission() as $app)
-                                        <li><a href="{{ switchAppUrl($app->id) }}">{{ $app->name }}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        @if (Sentry::getUser()->isSuperUser())
+                          @if (count(Application::all()) and Application::current())
+                              <div class="btn-group change-app">
+                                  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                      {{ @Application::current()->name }}
+                                      <span class="caret"></span>
+                                  </a>
+                                  <ul class="dropdown-menu pull-right">
+                                      @foreach(Application::allWithPermission() as $app)
+                                          <li><a href="{{ switchAppUrl($app->id) }}">{{ $app->name }}</a></li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+                          @endif
                         @endif
 
                         @yield('header')

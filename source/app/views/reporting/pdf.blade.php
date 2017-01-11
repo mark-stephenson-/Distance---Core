@@ -1,7 +1,29 @@
 <html>
     <head>
-
         <style>
+            .fa {
+              display: inline-block;
+              font-style: normal;
+              font-variant: normal;
+              font-weight: normal;
+              font-size: 14px
+              line-height: 1;
+              font-family: FontAwesome;
+              font-size: inherit;
+              text-rendering: auto;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              width: 14px;
+              height: 14px;
+            }
+            .icon-check {
+              background-image: url('../../public/css/check.png');
+              background-repeat: no-repeat;
+            }
+            .icon-exclamation {
+              background-image: url('<?php echo realpath(dirname(__FILE__)); ?>/reporting/exclamation.png');
+              background-repeat: no-repeat;
+            }
             body {
                 background: #FFF;
                 margin: 0;
@@ -65,7 +87,7 @@
                 height: 10px;
             }
 
-            .progress .bar.bar-neutral {
+            .bar-neutral {
                 background: #FFC200;
             }
 
@@ -86,7 +108,7 @@
             }
 
             .bar-success {
-              background: #006400 !important;
+              background: #006400;
             }
 
             .progress {
@@ -95,31 +117,12 @@
                 height: 20px;
                 margin-bottom: 20px;
                 background-color: #f7f7f7;
+                font-size: 0px;
             }
 
             .bar {
                 height: 20px;
                 display: inline-block;
-            }
-
-            .progress .bar-danger {
-                background-color: #8B0000;
-            }
-
-            .progress .bar-positive {
-                background-color: #88E188;
-            }
-
-            .progress .bar-neutral {
-                background-color: #FFC200;
-            }
-
-            .progress .bar-warning {
-                background-color: #FF0000;
-            }
-
-            .progress .bar-success {
-                background-color: #006400 !important;;
             }
         </style>
     </head>

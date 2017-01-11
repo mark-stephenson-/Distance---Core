@@ -6,6 +6,7 @@
         <th>Hospital</th>
         <th>Ward</th>
         <th>Responses Date Range</th>
+        <th>&nbsp;</th>
     </thead>
     <tbody>
         @if(!empty($standardReports))
@@ -13,12 +14,15 @@
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>
-                        <a href="{{ route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')) }}" title = "Click here!">{{ $report->generated_at }}</a>
+                        <a href="{{ route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')) }}">{{ $report->generated_at }}</a>
                     </td>
                     <td>{{ $report->trust }}</td>
                     <td>{{ $report->hospital }}</td>
                     <td>{{ $report->ward }}</td>
                     <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $report->dates->start)->format('d/m/Y') }} - {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $report->dates->end)->format('d/m/Y') }}</td>
+                    <td>
+                        <a href="{{ route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')) }}">View</a>
+                    </td>
                 </tr>
             @endforeach
         @else

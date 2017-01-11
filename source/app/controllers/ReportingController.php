@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Core\Services\ReportService;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -149,6 +150,12 @@ class ReportingController extends \BaseController
         $dompdf = new Dompdf();
         $dompdf->loadHtml($pdfHtml);
 
+        $options = new Options();
+        $options->setIsRemoteEnabled(true);
+        $dompdf->setOptions($options);
+
+        file_put_contents(storage_path("reports/{$fileKey}.html"), $pdfHtml);
+
         $dompdf->setPaper('A4', 'portrait');
 
         $dompdf->render();
@@ -179,7 +186,7 @@ class ReportingController extends \BaseController
         $filePath = storage_path("reports/{$type}{$fileKey}.json");
         return json_decode(file_get_contents($filePath));
     }
-    
+
     public function updateStandardReportsTable()
     {
         $reportService = new ReportService();
