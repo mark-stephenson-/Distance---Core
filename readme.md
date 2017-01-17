@@ -12,5 +12,6 @@
 2. Assuming you installed composer globally, run 'composer install -o' to install dependancies
 3. Set recursive write permissions on the 'app/storage' and 'resources'
 4. Create a MySQL database and fill in the details in 'app/config/database.php' under the mysql key
-5. Compile .less files to .css by running 'grunt dev' via the terminal in the directory of 'GruntFile.js'
-6. Run the remaining migrations 'php artisan migrate --env=local'
+5. Run npm install
+6. Compile .less files to .css by running 'grunt dev' via the terminal in the directory of 'GruntFile.js'
+7. Run the remaining migrations 'php artisan migrate --env=local'
