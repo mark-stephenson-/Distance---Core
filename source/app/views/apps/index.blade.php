@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('header')
-    <h1>Home</h1>
+    <h1>PRASE</h1>
 @stop
 
 @section('body')

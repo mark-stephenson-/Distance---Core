@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('header')
-    <h1>The Core</h1>
+    <h1>PRASE</h1>
 @stop
 
 @section('body')

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>The Core</title>
+        <title>PRASE</title>
 
         <!--[if lt IE 9]>
             <script src="/js/html5shiv.js"></script>
@@ -23,7 +23,7 @@
         <div class="row-fluid">
             <div class="span2">
                 <nav class="main">
-                    <a class="logo" href="/"><i class="icon-bullseye"></i></a>
+                    <a class="logo" href="/"><img src="images/prase-logo.png" /></a>
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
                             <?php
