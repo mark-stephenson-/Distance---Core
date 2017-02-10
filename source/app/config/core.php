@@ -2,7 +2,7 @@
 
 return array(
 
-    'site_name' => 'The Core',
+    'site_name' => 'PRASE',
 
     'version' => '1.0.4',
 

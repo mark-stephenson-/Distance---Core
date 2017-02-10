@@ -7,3 +7,5 @@
 
 /source/.env
 .idea
+
+.vagrant
