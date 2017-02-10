@@ -52,7 +52,7 @@
                     {{ $volunteerData->lastname }}
                 </td>
                 <td>
-                    {{ $trusts[$volunteerData->trust] }}
+                  {{ $trusts[$volunteerData->trust] }}
                 </td>
                 <td width="150">
                     @if(Sentry::getUser()->hasAccess('cms.volunteers.manage.*'))

@@ -1,5 +1,15 @@
-<p>This report will give you a detailed overview of the patient feedback collected on your ward. A chart is presented that will provide you an overview of the patient measures of safety scores against the patient safety domains. Further sections will allow you to look at the patient safety domains and individual questions to asceertain exactly where patient safety concerns or positive comments are being reported.</p>
+<p><strong>How to use your PRASE report</strong></p>
 
-<p>All graphs are displayed using a traffic light system - dark red indicates the most negative response possible, dark green indicates the most positive response possible. It is strongly encouraged that staff view traffic light charts and textual tables together.</p>
+<p>This PRASE report will give you a detailed overview of patient feedback and their experiences of safety collected during their stay on your ward.</p>
 
-<p>The report breaks down patients responses into the 8 patient safety domains, patient measures of safety scores and also provides a description of patient reported experiences.</p>
+<p>The “Overview of the patient measures of safety” gives you an overview of the patient feedback, broken down into the patient safety domains.</p>
+
+<p>Using a traffic light style of presentation, you can quickly see where you are doing well (green), and what areas may need further improvement (red).</p>
+
+<p>Each ‘domain’ is reported in the same style, displaying the results from each question.  The positive comments and the concerns from your patients are included in each domain.</p>
+
+<p>We recommend that you:
+<br>View the graph and comments together. </br>
+<br>Share the feedback with all your ward staff. </br>
+<br>Assemble a multidisciplinary team or share this at a multidisciplinary team meeting to consider this feedback, alongside other ward metrics/feedback, to plan any changes required to improve.</br>
+</p>

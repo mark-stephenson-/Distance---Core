@@ -57,10 +57,14 @@ function filterConcerns($concerns) {
                 @include('reporting.partials.report-table')
             </div>
             <div class="span4">
-                @unless(Input::get('domain') || !Sentry::getUser()->hasAccess('cms.export-data.download'))
+                @if(Sentry::getUser()->hasAccess('cms.export-data.generate-reports'))
                     <a href="{{ route('reporting.view-pdf', [$fileKey, 'type' => Input::get('type')]) }}" class="btn btn-lg btn-primary export-button" data-toggle="tooltip" data-placement="top" title="Will take a long time with a large data set.">Download Ward Report</a>
+                @endif
+
+                @unless(Input::get('domain') || !Sentry::getUser()->hasAccess('cms.export-data.download'))
                     <a href="{{ route('reporting.view-csv', [$fileKey, 'type' => Input::get('type')]) }}" class="btn btn-lg btn-primary export-button">Download CSV Report</a>
                 @endunless
+
             </div>
         </div>
 
@@ -100,20 +104,19 @@ function filterConcerns($concerns) {
             @else
                 <h3>Report Summary</h3>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#explanation" data-toggle="tab">Report Template Explained</a></li>
-                    <li><a href="#summary" data-toggle="tab">Summary Report</a></li>
+                    <li><a href="#explanation" data-toggle="tab">Report Template Explained</a></li>
+                    <li class="active"><a href="#summary" data-toggle="tab">Summary Report</a></li>
                     <li><a href="#comments" data-toggle="tab">General Positive Comments Report</a></li>
                     <li><a href="#concerns" data-toggle="tab">General Concerns Report</a></li>
                 </ul>
 
                 <div class="tab-content">
-                    <div class="tab-pane active" id="explanation">
-                        @include('reporting.partials.explanation')
+                    <div class="tab-pane" id="explanation">
+                        @include('reporting.partials.explanation_web')
                     </div>
 
-                    <div class="tab-pane" id="summary">
+                    <div class="tab-pane active" id="summary">
                         @include('reporting.partials.summary-key')
-
                         @include('reporting.partials.domain-summary')
                     </div>
                     <div class="tab-pane" id="comments">

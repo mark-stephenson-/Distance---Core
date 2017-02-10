@@ -9,11 +9,20 @@
             </tr>
         </thead>
         <tbody>
+
+          @if(isset($firstComment->question))
+            <?php $lastQuestion = $firstComment->question ?>
+          @endif
             @foreach($comments as $note)
                 <tr>
                     @if (isset($note->question))
                         @if (isset($noLimit))
+                            @if($lastQuestion != $note->question || $lastQuestion == $firstComment->question)
                             <td>{{ $note->question }}</td>
+                            <?php $lastQuestion = $note->question ?>
+                              @else
+                            <td></td>
+                            @endif
                         @else
                             <td data-toggle="tooltip" data-placement="top" title="{{ $note->question }}">{{ str_limit($note->question, 20) }}</td>
                         @endif

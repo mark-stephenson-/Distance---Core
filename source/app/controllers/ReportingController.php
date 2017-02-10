@@ -156,8 +156,6 @@ class ReportingController extends \BaseController
 
         //file_put_contents(storage_path("reports/{$fileKey}.html"), $pdfHtml);
 
-        $dompdf->setPaper('A4', 'portrait');
-
         $dompdf->render();
 
 //        return $dompdf->stream('my.pdf',array('Attachment'=>0));
@@ -183,7 +181,7 @@ class ReportingController extends \BaseController
         if(Input::get('type')) {
             $type = 'standard/';
         }
-        $filePath = storage_path("reports/{$type}{$fileKey}.json");
+        $filePath = storage_path("reports/{$type}{$fileKey}.json"); //no json is being generated
         return json_decode(file_get_contents($filePath));
     }
 

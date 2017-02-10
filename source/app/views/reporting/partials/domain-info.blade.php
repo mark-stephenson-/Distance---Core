@@ -1,9 +1,12 @@
 <div class="accordion-heading" id="accordian">
-    <a class="accordion-toggle"
+    <div class="accordion-toggle"
         data-toggle="collapse"
         data-parent="#accordion2"
-        href="#collapseOne">Patient Safety Domains
-    </a>
+        href="#collapseOne"
+        onMouseOver="this.style.color='#FFF'"
+        title="Click to expand/contract section"
+        style="text-decoration:none; color: white;">Patient Safety Domains
+    </div>
 </div>
 
 <div

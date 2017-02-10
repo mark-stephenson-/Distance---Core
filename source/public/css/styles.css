@@ -1,5 +1,6 @@
 .bar-danger {
   background: #8B0000 !important;
+
 }
 .bar-warning {
   background: #FF0000 !important;
@@ -13,7 +14,6 @@
 .bar-success {
   background: #006400 !important;
 }
-
 .key-danger {
   background: #8B0000 !important;
 }

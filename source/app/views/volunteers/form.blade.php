@@ -27,7 +27,7 @@
 @stop
 
 @section('body')
-    
+
     {{ Form::open(array('autocomplete' => 'off')) }}
 
     <div class="tab-content">
@@ -39,7 +39,7 @@
                     <div class="controls">
                         {{ Form::text('username', Input::old('username', $volunteerData->username), array('class' => 'span11')) }}
                     </div>
-                </div>            
+                </div>
             @else
                 {{ Form::hidden('username', $volunteerData->username) }}
             @endif
@@ -73,11 +73,11 @@
                     {{ Form::hidden('trust', null, array('id' => 'input_trust')) }}
                 </div>
             </div>
-            
+
 
         </div>
 
-    </div>   
+    </div>
 
     <div class="form-actions">
         @if ($volunteer->exists)

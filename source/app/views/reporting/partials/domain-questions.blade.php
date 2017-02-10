@@ -2,8 +2,8 @@
     <thead>
     <tr>
         <th style="width: 20%;">Question</th>
-        <th style="width: 60%;"> </th>
-        <th style="width: 20%;">Notes</th>
+        <th style="width: 70%;"> </th>
+        <th style="width: 10%;">Notes</th>
     </tr>
     </thead>
     <tbody>

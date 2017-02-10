@@ -7,16 +7,27 @@
                 @endif
                 <th>Safety Concern</th>
                 <th>Patient Rated Preventability</th>
-                <th>Patient Rated Preventability</th>
+                <th>Patient Rated Severity</th>
             </tr>
         </thead>
         <tbody>
+
+        @if(isset($concerns->first()->question))
+          <?php $lastQuestion = $concerns->first()->question ?>
+        @endif
 
         @foreach($concerns as $concern)
             <tr>
                 @if (isset($concern->question))
                     @if (isset($noLimit))
+
+                      @if($lastQuestion != $concern->question || $lastQuestion == $concerns->first()->question)
                         <td>{{ $concern->question}}</td>
+                        <?php $lastQuestion = $concern->question ?>
+                        @else
+                        <td></td>
+                      @endif
+
                     @else
                         <td data-toggle="tooltip" data-placement="top" title="{{ $concern->question }}">{{ (!isset($noLimit)) ? str_limit($concern->question, 20) : $concern->question }}</td>
                     @endif

@@ -139,7 +139,7 @@
               padding: 0;
               margin: 0;
             }
-            
+
             .progress table td {
               height: 20px;
               padding: 0;
@@ -162,6 +162,7 @@
                     </td>
                 </tr>
             </table>
+            <h3>Patient Safety Domains</h3>
             @include('reporting.partials.domain-info')
 
             <h3>Report Summary</h3>
@@ -180,7 +181,7 @@
             @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $reportData->concerns)), 'noLimit' => true])
 
             @foreach($reportData->domains as $domain)
-                <h3 style="page-break-before: always;">{{ $domain->name }} domain</h3>
+                <h3 style="page-break-before: always;">{{ $domain->name }} </h3>
                 @include('reporting.partials.summary-key')
                 @include('reporting.partials.domain-questions', ['noLimit' => true])
 

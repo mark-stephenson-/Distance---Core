@@ -2,8 +2,8 @@
     <thead>
         <tr>
             <th style="width: 20%;">Domain</th>
-            <th style="width: 60%;"> </th>
-            <th style="width: 20%;">Notes</th>
+            <th style="width: 70%;"> </th>
+            <th style="width: 10%;">Notes</th>
         </tr>
     </thead>
     <tbody>
@@ -27,11 +27,35 @@
                     @if($total > 0)
                         <table style="width:100%;">
                           <tr style="padding: 0;">
-                            <td class="bar-danger" style="padding: 0;width: {{ ($domain->summary->{"1"}/$total) * 100 }}%;"><div title="Negative-: {{ $domain->summary->{"1"} }}">&nbsp;</div></td>
-                            <td class="bar-warning" style="padding: 0;width: {{ ($domain->summary->{"2"}/$total) * 100 }}%;"><div title="Negative: {{ $domain->summary->{"2"} }}">&nbsp;</div></td>
+                            @if(($domain->summary->{"1"} == 0))
+                            <td class="bar-danger" style="display: none;"></td>
+                            @else
+                            <td class="bar-danger" style="padding: 0;width: {{ ($domain->summary->{"1"}/$total) * 100 }}%;"><div title="Negative-: {{ $domain->summary->{"1"} }}"></div></td>
+                            @endif
+
+                            @if(($domain->summary->{"2"} == 0))
+                            <td class="bar-warning" style="display: none;"></td>
+                            @else
+                            <td class="bar-warning" style="padding: 0;width: {{ ($domain->summary->{"2"}/$total) * 100 }}%;"><div title="Negative: {{ $domain->summary->{"2"} }}"></div></td>
+                            @endif
+
+                            @if(($domain->summary->{"3"} == 0))
+                            <td class="bar-neutral" style="display:none;"></td>
+                            @else
                             <td class="bar-neutral" style="padding: 0;width: {{ ($domain->summary->{"3"}/$total) * 100 }}%;"><div title="Neutral: {{ $domain->summary->{"3"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if(($domain->summary->{"4"} == 0))
+                            <td class="bar-positive" style="display:none;"></td>
+                            @else
                             <td class="bar-positive" style="padding: 0;width: {{ ($domain->summary->{"4"}/$total) * 100 }}%;"><div title="Positive: {{ $domain->summary->{"4"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if(($domain->summary->{"5"} == 0))
+                            <td class="bar-success" style="display:none;"></td>
+                            @else
                             <td class="bar-success" style="padding: 0;width: {{ ($domain->summary->{"5"}/$total) * 100 }}%;"><div title="Positive+: {{ $domain->summary->{"5"} }}">&nbsp;</div></td>
+                            @endif
                           </tr>
                         </table>
                     @else
