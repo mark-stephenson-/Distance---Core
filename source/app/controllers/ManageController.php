@@ -268,7 +268,7 @@ class ManageController extends BaseController
         $ward->markAsRetired($ward->published_revision);
         $destWard->markAsRetired($destWard->published_revision);
 
-        $this->nodeService->createPublishedNodeOfTypeWithData($this->wardNodeType, Str::slug($destWard->latestRevision()->name), ['name' => $destWard->latestRevision()->name, 'hospital' => $hospitalId]);
+        $this->nodeService->createPublishedNodeOfTypeWithData($this->wardNodeType, Str::slug($destWard->latestRevision()->name), ['name' => $wardChangeComment, 'hospital' => $hospitalId]);
 
         return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
                 ->with('successes', new MessageBag(array('The ward '.$ward->latestRevision()->name.' has been merged into '.$destWard->latestRevision()->name)));
@@ -288,7 +288,7 @@ class ManageController extends BaseController
         $wardChangeComment = Input::get('change_comment');
 
         if ($wardChangeComment == '') {
-            $wardChangeComment = 'Closed '.$ward->latestRevision()->name;
+            $wardChangeComment = 'Deleted '.$ward->latestRevision()->name;
         }
 
         // We will update the old ward with the comment, and then create a new one
@@ -296,6 +296,6 @@ class ManageController extends BaseController
         $ward->markAsRetired($ward->published_revision);
 
         return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
-                ->with('successes', new MessageBag(array('The ward '.$ward->latestRevision()->name.' has been closed.')));
+                ->with('successes', new MessageBag(array('The ward '.$ward->latestRevision()->name.' has been deleted.')));
     }
 }

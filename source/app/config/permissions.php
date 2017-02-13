@@ -11,6 +11,15 @@ return array(
                 'children' => array(
                     'Can Login' => array(
                         'value' => 'cms.generic.login',
+                    )
+                ),
+            ),
+
+            'Application' => array(
+                'value' => 'cms.apps',
+                'children' => array(
+                    'Can View' => array(
+                        'value' => 'cms.apps',
                     ),
                 ),
             ),

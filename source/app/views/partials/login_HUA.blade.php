@@ -1,0 +1,13 @@
+<p><strong>You are logged in as a Healthcare User Administrator (HUA). Your access level should give you permission and responsibility for:</strong></p>
+
+<p>Setting up any new users from your Trust to the system – this will include setting up access to the 2 user groups ie the "Healthcare unit admin” and the "Health Professional Observer" users
+Setting up access for the PRASE volunteers to allow them access the app on the Ipads - NB: PRASE volunteers will not have access to the reporting system;</br>
+Manage all user access for the Trust
+Generate customised and standard reports (in pdf and csv formats) for own Trust</br>
+Have access to the raw values and coded datasets for all feedback collected for own Trust</bre>
+</p>
+
+<p><strong>For Further information and support please contact:</strong></br>
+PRASE Project Manager - Dr Sally-Anne Wilson; Email: <a href="mailto:sally-anne.wilson@bthft.nhs.uk?Subject=Support%20">sally-anne.wilson@bthft.nhs.uk</a></br>
+Contact no: 01274 383929</br>
+</p>

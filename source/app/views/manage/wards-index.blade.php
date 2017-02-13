@@ -23,10 +23,13 @@
             @foreach($wards as $ward)
                 <?php
                     $wardData = $ward->latestRevision();
+
                 ?>
             <tr>
                 <td>
+
                     {{ $wardData->name }}
+
                 </td>
                 <td width="450">
                     <a href="{{ route('manage.ward.edit', array($trust->id, $hospital->id, $ward->id)) }}" class="btn btn-small"><i class="icon-pencil"></i> Edit</a>

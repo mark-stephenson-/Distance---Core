@@ -153,10 +153,19 @@ class ReportingController extends \BaseController
         $options = new Options();
         $options->setIsRemoteEnabled(true);
         $dompdf->setOptions($options);
-
+        $dompdf->set_option('isPhpEnabled', true);
+        $dompdf->set_option('isHtml5ParserEnabled', true);
         //file_put_contents(storage_path("reports/{$fileKey}.html"), $pdfHtml);
 
         $dompdf->render();
+        $canvas = $dompdf->get_canvas();
+
+        //For Footer
+        $footer = $canvas->open_object();
+        //$font = $fontMetrics->getFont("helvetica", "bold");
+        $canvas->page_text(280, 770, "{PAGE_NUM} of {PAGE_COUNT}", "Helvetica",10, array(0,0,0));
+        $canvas->close_object();
+        $canvas->add_object($footer, "all");
 
 //        return $dompdf->stream('my.pdf',array('Attachment'=>0));
         return $dompdf->stream(

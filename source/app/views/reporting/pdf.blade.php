@@ -165,6 +165,8 @@
             <h3>Patient Safety Domains</h3>
             @include('reporting.partials.domain-info')
 
+            <div style="page-break-before: always;"></div>
+
             <h3>Report Summary</h3>
             @include('reporting.partials.explanation')
 

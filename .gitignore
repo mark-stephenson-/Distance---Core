@@ -3,7 +3,8 @@
 /source/composer.phar
 .DS_Store
 
-/source/node_modules/
+/node_modules
+/source/node_modules
 
 /source/.env
 .idea

@@ -7,7 +7,7 @@ return array(
         'route' => 'apps.index',
         'params' => array(),
         'icon' => 'lock',
-        'access' => 'cms.apps.*',
+        'access' => 'cms.generic.login',
     ),
 
     array(

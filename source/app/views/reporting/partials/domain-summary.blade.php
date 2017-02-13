@@ -7,12 +7,12 @@
         </tr>
     </thead>
     <tbody>
-    @foreach($reportData->domains as $domainId => $domain)
+    @foreach($reportData->domains as $domainValue => $domain)
         <tr>
             @if (isset($noLimit))
-                <td>{{ $domain->name}}</td>
+                <td>{{ $domain->name }}</td>
             @else
-                <td data-toggle="tooltip" data-placement="top" title="{{ $domain->name }}"><a href="{{ Request::url() }}?domain={{ $domainId }}&type={{ Input::get('type') }}">{{ str_limit($domain->name, 20) }}</a></td>
+                <td data-toggle="tooltip" data-placement="top" title="{{ $domain->name }}"><a href="{{ Request::url() }}?domain={{ $domainValue }}&type={{ Input::get('type') }}">{{ str_limit($domain->name, 33) }}</a></td>
             @endif
             <td>
                 <div class="progress">

@@ -17,6 +17,10 @@
     <table class="table">
         <tbody>
         <tr>
+            <td class="table-key"><strong>Dignity and Respect</strong></td>
+            <td>Treating patients as individuals, whatever their differences or values, and ensuring that their particular needs are met.</td>
+        </tr>
+        <tr>
             <td class="table-key"><strong>Communication and Team working</strong></td>
             <td>The effective exchange and sharing of information between staff, patients and departments including written and verbal communication systems. Team working of professionals within a group.</td>
         </tr>
@@ -43,10 +47,6 @@
         <tr>
             <td class="table-key"><strong>Delays</strong></td>
             <td>Delays relating to a specific procedure, or to general aspects of care.</td>
-        </tr>
-        <tr>
-            <td class="table-key"><strong>Dignity and Respect</strong></td>
-            <td>Treating patients as individuals, whatever their differences or values, and ensuring that their particular needs are met.</td>
         </tr>
         </tbody>
     </table>

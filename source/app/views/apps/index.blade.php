@@ -9,11 +9,16 @@
       <h3>Welcome to the PRASE Report Management System</h3>
     </div>
 
+    <?php
+    $hpo = Sentry::findGroupByName('Health Professional Observer');
+    $hua = Sentry::findGroupByName('Healthcare Unit Admin');
+    $su = Sentry::findGroupByName('Super User');
+    ?>
+
     @if (Sentry::getUser()->isSuperUser())
     <p class="pull-right">
         <a href="{{ route('apps.create') }}" class="btn"><i class="icon-plus"></i> New App</a>
     </p>
-    @endif
 
     <table class="table table-striped">
         <thead>
@@ -51,16 +56,23 @@
                         </td>
                         <td width="250">
                             <a href="{{ route('collections.index', array($app->id)) }}" class="btn btn-small"><i class="icon-th-large"></i> Collections</a>
-                            @if (Sentry::getUser()->isSuperUser())
-                                <a href="{{ route('apps.edit', array($app->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                                <a href="#deleteModal" class="btn btn-small deleteModal" data-name="{{ $app->name }}" data-id="{{ $app->id }}"><i class="icon-trash"></i> Delete</a>
-                            @endif
+                            <a href="{{ route('apps.edit', array($app->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                            <a href="#deleteModal" class="btn btn-small deleteModal" data-name="{{ $app->name }}" data-id="{{ $app->id }}"><i class="icon-trash"></i> Delete</a>
                         </td>
                     </tr>
                 @endif
             @endforeach
         </tbody>
     </table>
+    @elseif(Sentry::getUser()->inGroup($su))
+        @include('partials.login_SU')
+    @elseif(Sentry::getUser()->inGroup($hua))
+        @include('partials.login_HUA')
+    @elseif(Sentry::getUser()->inGroup($hpo))
+        @include('partials.login_HPO')
+
+
+    @endif
 
     <div class="modal fade hide" id="deleteModal">
         <div class="modal-header">

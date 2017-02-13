@@ -11,25 +11,20 @@
             </tr>
         </thead>
         <tbody>
-
-        @if(isset($concerns->first()->question))
-          <?php $lastQuestion = $concerns->first()->question ?>
-        @endif
-
+          
+        <?php $lastQuestion = "" ?>
         @foreach($concerns as $concern)
             <tr>
                 @if (isset($concern->question))
-                    @if (isset($noLimit))
-
-                      @if($lastQuestion != $concern->question || $lastQuestion == $concerns->first()->question)
-                        <td>{{ $concern->question}}</td>
+                    @if($lastQuestion != $concern->question)
                         <?php $lastQuestion = $concern->question ?>
+                        @if (isset($noLimit))
+                            <td>{{ $concern->question}}</td>
                         @else
-                        <td></td>
-                      @endif
-
+                            <td data-toggle="tooltip" data-placement="top" title="{{ $concern->question }}">{{ (!isset($noLimit)) ? str_limit($concern->question, 20) : $concern->question }}</td>
+                        @endif
                     @else
-                        <td data-toggle="tooltip" data-placement="top" title="{{ $concern->question }}">{{ (!isset($noLimit)) ? str_limit($concern->question, 20) : $concern->question }}</td>
+                        <td></td>
                     @endif
                 @endif
                 <td>{{ $concern->text }}</td>

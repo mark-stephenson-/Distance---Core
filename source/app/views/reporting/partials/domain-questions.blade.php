@@ -20,16 +20,40 @@
                             $total += $val;
                         }
                     }
-
                     ?>
+
                     @if($total > 0)
                         <table style="width:100%;">
                           <tr style="padding: 0;">
+                            @if($domain->summary->{"1"}/$total == 0)
+                            <td class="bar-danger" style="display: none;"></td>
+                            @else
                             <td class="bar-danger" style="padding: 0;width: {{ ($domain->summary->{"1"}/$total) * 100 }}%;"><div title="Negative-: {{ $domain->summary->{"1"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if($domain->summary->{"2"}/$total == 0)
+                            <td class="bar-warning" style="display: none;"></td>
+                            @else
                             <td class="bar-warning" style="padding: 0;width: {{ ($domain->summary->{"2"}/$total) * 100 }}%;"><div title="Negative: {{ $domain->summary->{"2"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if($domain->summary->{"3"}/$total == 0)
+                            <td class="bar-neutral" style="display: none;"></td>
+                            @else
                             <td class="bar-neutral" style="padding: 0;width: {{ ($domain->summary->{"3"}/$total) * 100 }}%;"><div title="Neutral: {{ $domain->summary->{"3"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if($domain->summary->{"4"}/$total == 0)
+                            <td class="bar-positive" style="display: none;"></td>
+                            @else
                             <td class="bar-positive" style="padding: 0;width: {{ ($domain->summary->{"4"}/$total) * 100 }}%;"><div title="Positive: {{ $domain->summary->{"4"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if($domain->summary->{"5"}/$total == 0)
+                            <td class="bar-success" style="display: none;"></td>
+                            @else
                             <td class="bar-success" style="padding: 0;width: {{ ($domain->summary->{"5"}/$total) * 100 }}%;"><div title="Positive+: {{ $domain->summary->{"5"} }}">&nbsp;</div></td>
+                            @endif
                           </tr>
                         </table>
                     @else
@@ -44,7 +68,7 @@
             @if (isset($noLimit))
                 <td>{{ $question->text}}</td>
             @else
-                <td data-toggle="tooltip" data-placement="top" title="{{ $question->text }}">{{ str_limit($question->text, 20) }}</td>
+                <td data-toggle="tooltip" data-placement="top" title="{{ $question->text }}">{{ str_limit($question->text, 25) }}</td>
             @endif
             <td>
                 <div class="progress">
@@ -60,11 +84,35 @@
                     @if($total > 0)
                         <table style="width:100%;">
                           <tr style="padding: 0;">
+                            @if(@$question->answers->{"1"}/$total == 0)
+                            <td class="bar-danger" style="display: none;"></td>
+                            @else
                             <td class="bar-danger" style="padding: 0;width: {{ (@$question->answers->{"1"}/$total) * 100 }}%;"><div title="Negative-: {{ @$question->answers->{"1"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if(@$question->answers->{"2"}/$total == 0)
+                            <td class="bar-warning" style="display: none;"></td>
+                            @else
                             <td class="bar-warning" style="padding: 0;width: {{ (@$question->answers->{"2"}/$total) * 100 }}%;"><div title="Negative: {{ @$question->answers->{"2"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if(@$question->answers->{"3"}/$total == 0)
+                            <td class="bar-neutral" style="display: none;"></td>
+                            @else
                             <td class="bar-neutral" style="padding: 0;width: {{ (@$question->answers->{"3"}/$total) * 100 }}%;"><div title="Neutral: {{ @$question->answers->{"3"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if(@$question->answers->{"4"}/$total == 0)
+                            <td class="bar-positive" style="display: none;"></td>
+                            @else
                             <td class="bar-positive" style="padding: 0;width: {{ (@$question->answers->{"4"}/$total) * 100 }}%;"><div title="Positive: {{ @$question->answers->{"4"} }}">&nbsp;</div></td>
+                            @endif
+
+                            @if(@$question->answers->{"5"}/$total == 0)
+                            <td class="bar-success" style="display: none;"></td>
+                            @else
                             <td class="bar-success" style="padding: 0;width: {{ (@$question->answers->{"5"}/$total) * 100 }}%;"><div title="Positive+: {{ @$question->answers->{"5"} }}">&nbsp;</div></td>
+                            @endif
                           </tr>
                         </table>
                     @else

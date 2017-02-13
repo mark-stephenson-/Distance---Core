@@ -38,7 +38,7 @@ class ReportService
         $hospital = DB::table('node_type_3')->whereNodeId($wards[0]->hospital)->first();
         $trust = DB::table('node_type_2')->whereNodeId($hospital->trust)->first();
 
-        $domains = DB::table('node_type_10')->get();
+        $domains = DB::table('node_type_10')->orderBy('domainValue','asc')->get();
 
         $reverseAnswerLookup = ['-1' => -1, '0' => 0, '1' => 5, '2' => 4, '3' => 3, '4' => 2, '5' => 1];
 
@@ -67,8 +67,7 @@ class ReportService
             $domainData = [
                 'name' => $domain->title,
                 'domainvalue' => $domain->domainvalue,
-                'summary' => [
-                ],
+                'summary' => [],
                 'questions' => [],
                 'notes' => [],
                 'concerns' => [],
