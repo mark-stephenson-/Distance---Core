@@ -30,13 +30,13 @@
                             @if(($domain->summary->{"1"} == 0))
                             <td class="bar-danger" style="display: none;"></td>
                             @else
-                            <td class="bar-danger" style="padding: 0;width: {{ ($domain->summary->{"1"}/$total) * 100 }}%;"><div title="Negative-: {{ $domain->summary->{"1"} }}"></div></td>
+                            <td class="bar-danger" style="padding: 0;width: {{ ($domain->summary->{"1"}/$total) * 100 }}%;"><div title="Negative-: {{ $domain->summary->{"1"} }}">&nbsp;</div></td>
                             @endif
 
                             @if(($domain->summary->{"2"} == 0))
                             <td class="bar-warning" style="display: none;"></td>
                             @else
-                            <td class="bar-warning" style="padding: 0;width: {{ ($domain->summary->{"2"}/$total) * 100 }}%;"><div title="Negative: {{ $domain->summary->{"2"} }}"></div></td>
+                            <td class="bar-warning" style="padding: 0;width: {{ ($domain->summary->{"2"}/$total) * 100 }}%;"><div title="Negative: {{ $domain->summary->{"2"} }}">&nbsp;</div></td>
                             @endif
 
                             @if(($domain->summary->{"3"} == 0))

@@ -37,6 +37,10 @@
             <td>The patients' experience of the ward environment.</td>
         </tr>
         <tr>
+            <td class="table-key"><strong>Information flow</strong></td>
+            <td>The availability of information about the patient and transfer of information between staff.</td>
+        </tr>
+        <tr>
             <td class="table-key"><strong>Staff roles and responsibilities</strong></td>
             <td>Clear supervision and lines of accountability for staff.</td>
         </tr>

@@ -61,7 +61,7 @@ function filterConcerns($concerns) {
                     <a href="{{ route('reporting.view-pdf', [$fileKey, 'type' => Input::get('type')]) }}" class="btn btn-lg btn-primary export-button" data-toggle="tooltip" data-placement="top" title="Will take a long time with a large data set.">Download Ward Report</a>
                 @endif
 
-                @unless(Input::get('domain') || !Sentry::getUser()->hasAccess('cms.export-data.download'))
+                @unless(!Sentry::getUser()->hasAccess('cms.export-data.download'))
                     <a href="{{ route('reporting.view-csv', [$fileKey, 'type' => Input::get('type')]) }}" class="btn btn-lg btn-primary export-button">Download CSV Report</a>
                 @endunless
 

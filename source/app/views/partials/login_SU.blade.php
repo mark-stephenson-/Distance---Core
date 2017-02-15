@@ -9,6 +9,9 @@ Responsibility for questionnaire management which will involve – development, 
 Generating customised and standard reports (in pdf and csv formats) for all Trusts</br>
 Have access to the raw values and coded datasets for all feedback collected</p>
 
+<p>Links: Access the Improvement Academy PRASE page <a href="http://www.improvementacademy.org/tools-and-resources/patient-reporting-and-action-for-a-safe-environment.html">here</a>
+</p>
+
 <p><strong>For Further information and support please contact:</strong></br>
 PRASE Project Manager - Dr Sally-Anne Wilson; Email: <a href="mailto:sally-anne.wilson@bthft.nhs.uk?Subject=Support%20">sally-anne.wilson@bthft.nhs.uk</a></br>
 Contact no: 01274 383929</br>
