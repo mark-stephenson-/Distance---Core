@@ -287,13 +287,13 @@ class ManageController extends BaseController
 
         $wardChangeComment = Input::get('change_comment');
 
+
         if ($wardChangeComment == '') {
             $wardChangeComment = 'Deleted '.$ward->latestRevision()->name;
         }
 
-        // We will update the old ward with the comment, and then create a new one
         $this->nodeService->updatePublishedNodeWithData($ward, ['ward-change-comment' => $wardChangeComment]);
-        $ward->markAsRetired($ward->published_revision);
+        //$ward->markAsRetired($ward->published_revision);
 
         return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
                 ->with('successes', new MessageBag(array('The ward '.$ward->latestRevision()->name.' has been deleted.')));

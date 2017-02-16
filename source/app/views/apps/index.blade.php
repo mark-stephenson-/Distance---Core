@@ -70,8 +70,6 @@
         @include('partials.login_HUA')
     @elseif(Sentry::getUser()->inGroup($hpo))
         @include('partials.login_HPO')
-
-
     @endif
 
     <div class="modal fade hide" id="deleteModal">

@@ -16,21 +16,26 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Comment</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
+
             @foreach($wards as $ward)
                 <?php
                     $wardData = $ward->latestRevision();
-
                 ?>
             <tr>
                 <td>
-
                     {{ $wardData->name }}
-
                 </td>
+
+                <td>
+                    {{ $wardData->status }}
+                    <!-- Not a clue why I cant print ward-change-comment -->
+                </td>
+
                 <td width="450">
                     <a href="{{ route('manage.ward.edit', array($trust->id, $hospital->id, $ward->id)) }}" class="btn btn-small"><i class="icon-pencil"></i> Edit</a>
                     <a href="{{ route('manage.ward.merge', array($trust->id, $hospital->id, $ward->id)) }}" class="btn btn-small"><i class="icon-code-fork"></i> Merge into Another</a>
