@@ -9,7 +9,6 @@ return array(
         'icon' => 'lock',
         'access' => 'cms.generic.login',
     ),
-
     array(
         'title' => 'Manage domains',
         'route' => 'nodes.list',

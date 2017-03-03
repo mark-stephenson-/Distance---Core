@@ -192,7 +192,7 @@ class UsersController extends BaseController
             $user->addGroup($group);
 
             return Redirect::back()
-                ->with('successes', new MessageBag(array('This user has been added to the <b>' . $group->name .'</b> group.' )));            
+                ->with('successes', new MessageBag(array('This user has been added to the <b>' . $group->name .'</b> group.' )));
 
         } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
 

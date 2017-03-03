@@ -293,7 +293,7 @@ class ManageController extends BaseController
         }
 
         $this->nodeService->updatePublishedNodeWithData($ward, ['ward-change-comment' => $wardChangeComment]);
-        //$ward->markAsRetired($ward->published_revision);
+        $ward->markAsRetired($ward->published_revision);
 
         return Redirect::route('manage.hospital.index', array($trustId, $hospitalId))
                 ->with('successes', new MessageBag(array('The ward '.$ward->latestRevision()->name.' has been deleted.')));

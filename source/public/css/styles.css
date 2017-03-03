@@ -1,6 +1,9 @@
+.logos{
+  width: 300px;
+}
+
 .bar-danger {
   background: #8B0000 !important;
-
 }
 .bar-warning {
   background: #FF0000 !important;

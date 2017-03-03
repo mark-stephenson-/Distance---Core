@@ -167,12 +167,11 @@
 
             <div style="page-break-before: always;"></div>
 
-            <h3>Report Summary</h3>
             @include('reporting.partials.explanation')
 
             <div style="page-break-before: always;"></div>
+            <h3>Report Summary - Overview of the Patient  Measures of Safety report</h3>
 
-            <h3>Overview of the patient measures of safety</h3>
             @include('reporting.partials.summary-key')
             @include('reporting.partials.domain-summary', ['noLimit' => true])
 
@@ -183,10 +182,14 @@
             @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $reportData->concerns)), 'noLimit' => true])
 
             @foreach($reportData->domains as $domain)
-                <h3 style="page-break-before: always;">{{ $domain->name }} </h3>
+                @if ($domain->name == "Dignity and Respect")
+                    <h3 style="page-break-before: always;">Patient Safety Domain reports</h3>
+                    <h3>{{ $domain->name }}</h3>
+                    @else
+                    <h3 style="page-break-before: always;">{{ $domain->name }} </h3>
+                @endif
                 @include('reporting.partials.summary-key')
                 @include('reporting.partials.domain-questions', ['noLimit' => true])
-
                 @if (isset($domain->notes))
                     <h3>Patient reported positive experiences of care received</h3>
                     @include('reporting.partials.positive-comments', ['comments' => $domain->notes, 'noLimit' => true])
@@ -194,7 +197,8 @@
                 @if (isset($domain->concerns))
                     <h3>Patient reported safety concerns</h3>
                     @include('reporting.partials.concerns', ['concerns' => new \Illuminate\Support\Collection(array_values((array) $domain->concerns)), 'noLimit' => true])
-                @endif
+                @endif                  
             @endforeach
+
     </body>
 </html>

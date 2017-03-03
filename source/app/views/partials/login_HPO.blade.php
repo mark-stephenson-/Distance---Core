@@ -1,7 +1,10 @@
 <p><strong>You are logged in as a Health Professional Observer (HPO).  Your access level should give you permission to:</strong></br>
-Be able to access ward reports for wards linked to/ associated with
 </p>
-
+<ul>
+  <li>
+    Be able to access ward reports for wards linked to / associated with.
+  </li>
+</ul>
 <p>Links: Access the Improvement Academy PRASE page <a href="http://www.improvementacademy.org/tools-and-resources/patient-reporting-and-action-for-a-safe-environment.html">here</a>
 </p>
 

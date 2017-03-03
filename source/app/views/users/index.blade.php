@@ -19,6 +19,7 @@
                 <th>Last Name</th>
                 <th>Email Address</th>
                 <th>Groups</th>
+                <th>Trust</th>
                 <th>Created</th>
                 <th>Actions</th>
             </tr>
@@ -27,6 +28,7 @@
             @foreach($users as $user)
             <tr>
                 <td>
+
                     {{ $user->first_name }}
                 </td>
                 <td>
@@ -41,6 +43,13 @@
                             {{ $group->name }} <br>
                         @endforeach
                     @endif
+                </td>
+                <td>
+                  {{-- CHECK HOW TO GET THE TRUST
+                    @foreach($user->trusts as $trust)
+                        {{ $trust->name }} <br>
+                    @endforeach
+                    --}}
                 </td>
                 <td>
                     @if (is_null($user->last_login))
@@ -58,8 +67,8 @@
                         <a href="{{ route('users.delete', array($user->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a>
                     @endif
 
-                    @if (Sentry::getUser()->hasAccess('cms.users.addgroup') || Sentry::getUser()->hasAccess('cms.users.removegroup'))
-                        <a data-toggle="modal" class="btn btn-small manageGroups" data-groups-url="{{ route('users.manageGroups', array('id' => $user->id)) }}"><i class="icon-group"></i> Manage groups</a>
+                    @if (Sentry::getUser()->hasAccess('cms.users.addgroup'))
+                        <a data-toggle="modal" class="btn btn-small manageGroups" data-href-url="{{ route('users.manageGroups', array('id' => $user->id)) }}"><i class="icon-group"></i> Manage groups</a>
                     @endif
                 </td>
             </tr>

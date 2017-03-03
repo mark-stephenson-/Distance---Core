@@ -5,6 +5,13 @@
 @stop
 
 @section('body')
+
+  <img src="/images/logos/prase-logo.png" alt="Prase logo" width="200" style="padding:20px;">
+  <img src="/images/logos/improvement.jpg" alt="Improvement" width="200" style="padding:20px;">
+  <img src="/images/logos/yqsr.jpg" alt="Health Foundation logo" width="200" style="padding:20px;">
+  <img src="/images/logos/health_foundation.jpg" alt="Health Foundation logo" width="200" style="padding:20px;">
+
+
   <div class="title-block">
       <h3>Welcome to the PRASE Report Management System</h3>
     </div>

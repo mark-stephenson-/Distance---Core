@@ -23,14 +23,13 @@
         <div class="row-fluid">
             <div class="span2">
                 <nav class="main">
-                    <a class="logo" href="/"><img src="/images/prase-logo.png" alt="NHS - PRASE" /></a>
+                    <a class="logo" href="/"><img src="/images/logos/prase-logo.png" alt="NHS - PRASE" /></a>
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
                             <?php
                                 $item['access'] = str_replace($item['params'], replaceNavigationParams($item['params']), $item['access']);
-
                             ?>
-                            
+
                             @if (Sentry::getUser()->hasAccess($item['access']))
                                 <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
                             @endif
