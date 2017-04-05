@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Collection;
-
 class User extends Cartalyst\Sentry\Users\Eloquent\User
 {
 

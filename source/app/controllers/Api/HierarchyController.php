@@ -43,7 +43,9 @@ class HierarchyController extends \BaseController
         $return = array();
 
         foreach ($branches->getChildren() as $branch) {
-            $return[] = array_merge($nodeData[$branch->node_id], array('branches' => $this->buildHierarchyLevel($branch, $nodeData)));
+            if (isset($nodeData[$branch->node_id])) {
+                $return[] = array_merge($nodeData[$branch->node_id], array('branches' => $this->buildHierarchyLevel($branch, $nodeData)));
+            }
         }
 
         return $return;
