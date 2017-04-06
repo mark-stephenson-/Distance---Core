@@ -127,7 +127,7 @@ class CSV
                 $fetchedWards[$record->ward_node_id]->name,
                 $record->ward->published_at,
                 $record->ward->retired_at,
-                $fetchedWards[$record->ward_node_id]->{'ward-change-comment'},
+                '',//$fetchedWards[$record->ward_node_id]->{'ward-change-comment'},
                 date('d/m/Y H:i:s', strtotime($record->start_date)), // Date enrolled
                 $basicData['StayLength'],
                 $basicData['Age'],

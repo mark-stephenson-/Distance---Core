@@ -13,7 +13,13 @@ class ReportService
     public function generateReportForQuestionSet($pmosId, $wardIds, Carbon $startDate, Carbon $endDate)
     {
         $records = \PRRecord::whereIn('ward_node_id', $wardIds)
-            ->with(['questions.answer', 'questions.node'])
+            ->with([
+                'questions' => function ($q) {
+                    $q->orderBy('question_node_id', 'asc');
+                },
+                'questions.answer',
+                'questions.node'
+            ])
             ->wherePmosId($pmosId)
             ->whereBetween('start_date', array($startDate, $endDate->endOfDay()))
             ->get();
@@ -243,7 +249,13 @@ class ReportService
      */
     public function generateStandardReports($chunkSize = 20, $all = false)
     {
-        $records = \PRRecord::with(['questions.answer', 'questions.node'])->orderBy('id', 'asc');
+        $records = \PRRecord::with([
+            'questions' => function ($q) {
+                $q->orderBy('question_node_id', 'asc');
+            },
+            'questions.answer',
+            'questions.node'
+        ])->orderBy('id', 'asc');
 
         if(false === $all) {
             $records->where('added_on_standard_report', 0);
