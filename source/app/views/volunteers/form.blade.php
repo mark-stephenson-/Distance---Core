@@ -20,7 +20,7 @@
 
 @section('header')
     @if ($volunteer->exists)
-        <h1>Editing User</h1>
+        <h1>Editing Volunteer</h1>
     @else
         <h1>New User</h1>
     @endif

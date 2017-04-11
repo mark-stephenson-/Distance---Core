@@ -6,6 +6,12 @@
 
 @section('body')
 
+<?php
+  $hpo = Sentry::findGroupByName('Health Professional Observer');
+  $hua = Sentry::findGroupByName('Healthcare Unit Admin');
+  $su = Sentry::findGroupByName('Super User');
+?>
+
     <p class="pull-right">
         @if (Sentry::getUser()->hasAccess('cms.users.create'))
             <a href="{{ route('users.create') }}" class="btn"><i class="icon-plus"></i> New User</a>
@@ -25,10 +31,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($users as $user)
+          @foreach($users as $user)
+              @if(((Sentry::getUser()->inGroup($hua) AND !($user->inGroup($su))) OR !Sentry::getUser()->inGroup($hua)))
             <tr>
                 <td>
-
                     {{ $user->first_name }}
                 </td>
                 <td>
@@ -45,7 +51,7 @@
                     @endif
                 </td>
                 <td>
-                  {{-- CHECK HOW TO GET THE TRUST
+                  {{-- 
                     @foreach($user->trusts as $trust)
                         {{ $trust->name }} <br>
                     @endforeach
@@ -71,8 +77,9 @@
                         <a data-toggle="modal" class="btn btn-small manageGroups" data-href-url="{{ route('users.manageGroups', array('id' => $user->id)) }}"><i class="icon-group"></i> Manage groups</a>
                     @endif
                 </td>
-            </tr>
-            @endforeach
+              </tr>
+            @endif
+          @endforeach
         </tbody>
     </table>
 
