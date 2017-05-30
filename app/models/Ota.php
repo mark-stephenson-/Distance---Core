@@ -67,7 +67,7 @@ class Ota extends BaseModel {
 
     function downloadUrl($file = 'manifest') {
 
-        $url = route('ota.download.deliver', array($this->platform, $this->environment, $this->version, $file));
+        $url = secure_url(route('ota.download.deliver', array($this->platform, $this->environment, $this->version, $file)));
 
         if ($file == 'manifest' and $this->platform == 'ios') {
             return 'itms-services://?action=download-manifest&url=' . $url;

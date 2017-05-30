@@ -11,6 +11,8 @@
 |
 */
 
+URL::forceSchema("https");
+
 Route::group(array('before' => array('auth', 'super')), function () {
 
     Route::get('artisan/{command}', function ($command) {

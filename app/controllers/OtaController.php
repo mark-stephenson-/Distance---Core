@@ -56,11 +56,8 @@ class OtaController extends \BaseController
             Input::file('application')->move($path, 'app.ipa');
             Input::file('profile')->move($path, 'profile.mobileprovision');
 
-            \App::make('ipa-distribution', array(
-                base_path().'/resources/ota/ios/'.Input::get('environment').'/'.Input::get('version').'/app.ipa',
-                Input::get('environment'),
-                Input::get('version'),
-            ));
+          \App::make('ipa-distribution', array(base_path() . '/resources/ota/ios/' . Input::get('environment') . '/' . Input::get('version') . '/app.ipa', Input::get('environment'), Input::get('version')));
+
         } elseif (Input::get('platform') == 'android') {
             Input::file('application')->move($path, 'app.apk');
         } elseif (Input::get('platform') == 'windows') {
