@@ -1,0 +1,6 @@
+{
+    "require": {
+        "barryvdh/laravel-debugbar": "^2.4",
+        "spatie/laravel-tail": "^1.4"
+    }
+}

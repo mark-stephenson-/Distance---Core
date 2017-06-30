@@ -240,7 +240,7 @@ Route::group(array('before' => array('auth')), function () {
                 'as' => 'reporting.ajax.generate',
                 'uses' => 'ReportingController@updateStandardReportsTable',
             ]);
-            
+
             Route::get('view/{id}', [
                 'as' => 'reporting.view',
                 'uses' => 'ReportingController@view',

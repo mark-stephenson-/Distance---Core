@@ -22,7 +22,7 @@
     @if ($volunteer->exists)
         <h1>Editing Volunteer</h1>
     @else
-        <h1>New User</h1>
+        <h1>New Volunteer</h1>
     @endif
 @stop
 
@@ -83,7 +83,7 @@
         @if ($volunteer->exists)
             <input type="submit" class="btn btn-primary" value="Save changes" />
         @else
-            <input type="submit" class="btn btn-primary" value="Create User" />
+            <input type="submit" class="btn btn-primary" value="Create Volunteer" />
         @endif
     </div>
 

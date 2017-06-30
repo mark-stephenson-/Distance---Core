@@ -57,7 +57,7 @@
                 <td width="150">
                     @if(Sentry::getUser()->hasAccess('cms.volunteers.manage.*'))
                         <a href="{{ route('volunteers.edit', array($volunteer->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                        <a href="{{ route('volunteers.delete', array($volunteer->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a>
+                        <a href="{{ route('volunteers.delete', array($volunteer->id)) }}" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
                     @endif
                 </td>
             </tr>

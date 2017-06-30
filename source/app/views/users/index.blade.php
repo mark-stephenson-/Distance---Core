@@ -51,7 +51,7 @@
                     @endif
                 </td>
                 <td>
-                  {{-- 
+                  {{--
                     @foreach($user->trusts as $trust)
                         {{ $trust->name }} <br>
                     @endforeach
@@ -70,11 +70,7 @@
                     @endif
 
                     @if (Sentry::getUser()->hasAccess('cms.users.delete'))
-                        <a href="{{ route('users.delete', array($user->id)) }}" data-toggle="modal" class="btn btn-small deleteModal"><i class="icon-trash"></i> Delete</a>
-                    @endif
-
-                    @if (Sentry::getUser()->hasAccess('cms.users.addgroup'))
-                        <a data-toggle="modal" class="btn btn-small manageGroups" data-href-url="{{ route('users.manageGroups', array('id' => $user->id)) }}"><i class="icon-group"></i> Manage groups</a>
+                        <a href="{{ route('users.delete', array($user->id)) }}" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
                     @endif
                 </td>
               </tr>

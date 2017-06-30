@@ -130,6 +130,7 @@ class VolunteersController extends BaseController
     public function delete($volunteerId)
     {
         $volunteer = Node::find($volunteerId);
+        $volunteer->markAsRetired($volunteer->published_revision);
         $volunteer->delete();
 
         return Redirect::route('volunteers.index')

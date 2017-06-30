@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class UsersController extends BaseController
 {
 
@@ -232,6 +234,7 @@ class UsersController extends BaseController
 
     public function delete($userId)
     {
+      
         $currentUser = Sentry::getUser();
 
         $user = Sentry::findUserById($userId);
