@@ -1,0 +1,67 @@
+site_data:
+  image: netsells/data
+  volumes:
+    - .:/data
+fpm:
+  image: netsells/fpm:5.5
+  volumes_from:
+    - site_data
+  external_links:
+      - mysql:db
+  links:
+    - mailcatcher
+nginx:
+  image: netsells/nginx
+  volumes_from:
+    - site_data
+  ports:
+    - 80:80
+  links:
+    - fpm
+artisan:
+  image: netsells/artisan
+  volumes_from:
+    - site_data
+  external_links:
+      - mysql:db
+  links:
+    - mailcatcher
+composer:
+  image: netsells/composer:5.6
+  working_dir: /data
+  volumes_from:
+    - site_data
+phpunit:
+  image: netsells/phpunit
+  volumes_from:
+    - site_data
+  external_links:
+      - mysql:db
+  links:
+    - mailcatcher
+mailcatcher:
+  image: schickling/mailcatcher
+  ports:
+      - 1080:1080
+npm:
+  image: netsells/node:latest
+  entrypoint: npm
+  volumes_from:
+    - site_data
+  working_dir: /data
+  command: --version
+bower:
+  image: netsells/node:latest
+  entrypoint: bower
+  volumes_from:
+    - site_data
+  working_dir: /data
+  command: --version
+grunt:
+  image: andreptb/grunt
+  entrypoint: grunt
+  volumes_from:
+    - site_data
+  working_dir: /data
+  command: --version
+
