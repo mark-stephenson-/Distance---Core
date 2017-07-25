@@ -13,6 +13,11 @@
 
 URL::forceSchema("https");
 
+App::bind('ipa-distribution', function($app, $arguments)
+{
+    return new ipaDistrubution($arguments[0], $arguments[1], $arguments[2]);
+});
+
 Route::group(array('before' => array('auth', 'super')), function () {
 
     Route::get('artisan/{command}', function ($command) {
