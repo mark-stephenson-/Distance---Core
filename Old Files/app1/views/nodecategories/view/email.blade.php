@@ -1,0 +1,1 @@
+<a href="mailto:{{ $data->{$column->name} }}">{{ $data->{$column->name} }}</a>
