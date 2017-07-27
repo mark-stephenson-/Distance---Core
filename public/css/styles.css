@@ -1,0 +1,34 @@
+.logos{
+  width: 300px;
+}
+
+.bar-danger {
+  background: #8B0000 !important;
+}
+.bar-warning {
+  background: #FF0000 !important;
+}
+.bar-neutral {
+  background: #FFC200 !important;
+}
+.bar-positive {
+  background: #88E188 !important;
+}
+.bar-success {
+  background: #006400 !important;
+}
+.key-danger {
+  background: #8B0000 !important;
+}
+.key-warning {
+  background: #FF0000 !important;
+}
+.key-neutral {
+  background: #FFC200 !important;
+}
+.key-positive {
+  background: #88E188 !important;
+}
+.key-success {
+  background: #006400 !important;
+}
