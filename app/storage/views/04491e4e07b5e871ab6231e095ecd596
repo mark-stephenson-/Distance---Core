@@ -1,0 +1,20 @@
+<?php if($successes = Session::get('successes')): ?>
+    <div class="alert alert-success">
+        <?php echo implode('<br />', $successes->all()); ?>
+
+    </div>
+<?php endif; ?>
+
+<?php if($notices = Session::get('notices')): ?>
+    <div class="alert info">
+        <?php echo implode('<br />', $notices->all()); ?>
+
+    </div>
+<?php endif; ?>
+
+<?php if($errors = Session::get('errors')): ?>
+    <div class="alert alert-error">
+        <?php echo implode('<br />', $errors->all()); ?>
+
+    </div>
+<?php endif; ?>

@@ -1,0 +1,1 @@
+<a href="{{ $data->{$column->name} }}">{{ $data->{$column->name} }}</a>

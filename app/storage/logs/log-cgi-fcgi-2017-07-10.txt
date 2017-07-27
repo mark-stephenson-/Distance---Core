@@ -1,0 +1,12 @@
+[2017-07-10 11:56:19] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-10 12:05:23] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-10 12:10:53] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []

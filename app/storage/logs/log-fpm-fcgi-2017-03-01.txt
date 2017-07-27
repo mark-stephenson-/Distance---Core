@@ -1,0 +1,8 @@
+[2017-03-01 15:21:03] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected 'endforeach' (T_ENDFOREACH)' in /home/vagrant/the-core/app/storage/views/0bbb843181f45ef460a651454fb50a92:203
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-03-01 15:25:56] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected 'endforeach' (T_ENDFOREACH)' in /home/vagrant/the-core/app/storage/views/0bbb843181f45ef460a651454fb50a92:203
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []

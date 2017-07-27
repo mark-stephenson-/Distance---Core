@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>PRASE</title>
+
+        <!--[if lt IE 9]>
+            <script src="/js/html5shiv.js"></script>
+        <![endif]-->
+
+        <link rel="stylesheet" type="text/css" href="/css/app.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css">
+
+        <script src="/js/jquery-1.9.1.js"></script>
+        <script> CKEDITOR_BASEPATH = '<?php echo URL::to(''); ?>/js/ckeditor/'; </script>
+        <script src="/js/app.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.12/datatables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    </head>
+    <body>
+        <div class="gradient"></div>
+        <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <nav class="main">
+                    <a class="logo" href="/"><img src="/images/logos/prase-logo.png" alt="NHS - PRASE" /></a>
+                    <ul>
+                        <?php foreach(Config::get('core-navigation') as $item): ?>
+                            <?php
+                                $item['access'] = str_replace($item['params'], replaceNavigationParams($item['params']), $item['access']);
+                            ?>
+
+                            <?php if(Sentry::getUser()->hasAccess($item['access'])): ?>
+                                <li><a href="<?php echo route($item['route'], replaceNavigationParams($item['params'])); ?>"><i class="icon-<?php echo $item['icon']; ?>"></i> <?php echo $item['title']; ?></a></li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
+                </nav>
+            </div>
+            <div class="span10">
+                <header class="meta">
+                    <nav>
+                        <ul>
+                            <li><a href="<?php echo route('me'); ?>"><?php echo Sentry::getUser()->full_name ?: Sentry::getUser()->email; ?></a></li>
+                            <!-- <li><a href="#"><i class="icon-cog"></i></a></li> -->
+                            <li><a href="<?php echo route('logout'); ?>"><i class="icon-signout "></i></a></li>
+                        </ul>
+                    </nav>
+                </header>
+                <div class="content">
+                    <header>
+                      <?php if(Sentry::getUser()->isSuperUser()): ?>
+                        <?php if(count(Collection::all()) and Application::current() and Collection::current()): ?>
+                            <div class="btn-group change-collection">
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <?php echo @Collection::current()->name; ?>
+
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <?php foreach(Application::current()->collectionsWithPermission() as $collection): ?>
+                                        <li><a href="<?php echo switchCollectionUrl($collection->application_id, $collection->id); ?>"><?php echo $collection->name; ?></a></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                              </div>
+                          <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php if(Sentry::getUser()->isSuperUser()): ?>
+                          <?php if(count(Application::all()) and Application::current()): ?>
+                              <div class="btn-group change-app">
+                                  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                      <?php echo @Application::current()->name; ?>
+
+                                      <span class="caret"></span>
+                                  </a>
+                                  <ul class="dropdown-menu pull-right">
+                                      <?php foreach(Application::allWithPermission() as $app): ?>
+                                          <li><a href="<?php echo switchAppUrl($app->id); ?>"><?php echo $app->name; ?></a></li>
+                                      <?php endforeach; ?>
+                                  </ul>
+                              </div>
+                          <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php echo $__env->yieldContent('header'); ?>
+                    </header>
+                    <section class="body">
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <?php echo $__env->make('partials.alerts', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+                                <?php echo $__env->yieldContent('body'); ?>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php echo $__env->yieldContent('js'); ?>
+
+    </body>
+</html>

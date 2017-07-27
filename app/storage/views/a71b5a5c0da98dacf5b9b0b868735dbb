@@ -1,0 +1,113 @@
+<?php $__env->startSection('header'); ?>
+    <h1>PRASE</h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('body'); ?>
+
+  <img src="/images/logos/prase-logo.png" alt="Prase logo" width="200" style="padding:20px;">
+  <img src="/images/logos/improvement.jpg" alt="Improvement" width="200" style="padding:20px;">
+  <img src="/images/logos/yqsr.jpg" alt="Health Foundation logo" width="200" style="padding:20px;">
+  <img src="/images/logos/health_foundation.jpg" alt="Health Foundation logo" width="200" style="padding:20px;">
+
+
+  <div class="title-block">
+      <h3>Welcome to the PRASE Report Management System</h3>
+    </div>
+
+    <?php
+    $hpo = Sentry::findGroupByName('Health Professional Observer');
+    $hua = Sentry::findGroupByName('Healthcare Unit Admin');
+    $su = Sentry::findGroupByName('Super User');
+    ?>
+
+    <?php if(Sentry::getUser()->isSuperUser()): ?>
+    <p class="pull-right">
+        <a href="<?php echo route('apps.create'); ?>" class="btn"><i class="icon-plus"></i> New App</a>
+    </p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>API Key</th>
+                <th>Collections</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($apps as $app): ?>
+                <?php
+                    $collectionAccess = array();
+                    $collectionAccess[] = 'cms.apps.' . $app->id . '.collection-management';
+
+                    foreach($app->collections as $collection) {
+                        $collectionAccess[] = 'cms.apps.' . $app->id . '.collections.' . $collection->id . '.*';
+                    }
+                ?>
+                <?php if(Sentry::getUser()->hasAnyAccess($collectionAccess)): ?>
+                    <tr>
+                        <td>
+                            <?php echo $app->name; ?>
+
+                        </td>
+                        <td>
+                            <?php echo $app->api_key; ?>
+
+                        </td>
+                        <td>
+                            <?php foreach($app->collections as $collection): ?>
+                                <?php if(Sentry::getUser()->hasAnyAccess(array('cms.apps.' . $app->id . '.collections.' . $collection->id . '.*', 'cms.apps.' . $app->id . '.collection-management'))): ?>
+                                    <?php echo $collection->name; ?><br />
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </td>
+                        <td width="250">
+                            <a href="<?php echo route('collections.index', array($app->id)); ?>" class="btn btn-small"><i class="icon-th-large"></i> Collections</a>
+                            <a href="<?php echo route('apps.edit', array($app->id)); ?>" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                            <a href="#deleteModal" class="btn btn-small deleteModal" data-name="<?php echo $app->name; ?>" data-id="<?php echo $app->id; ?>"><i class="icon-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php elseif(Sentry::getUser()->inGroup($su)): ?>
+        <?php echo $__env->make('partials.login_SU', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <?php elseif(Sentry::getUser()->inGroup($hua)): ?>
+        <?php echo $__env->make('partials.login_HUA', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <?php elseif(Sentry::getUser()->inGroup($hpo)): ?>
+        <?php echo $__env->make('partials.login_HPO', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <?php endif; ?>
+
+    <div class="modal fade hide" id="deleteModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3></h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this app? This cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+            <a href="" class="btn btn-primary yes">Yes, Delete it.</a>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready( function() {
+            $(".deleteModal").click( function(e) {
+                var data_id = $(this).attr('data-id');
+                var data_name = $(this).attr('data-name');
+                var url = '<?php echo route('app.destroy', 'id'); ?>';
+
+                $("#deleteModal").find('h3').html( "Delete app <small>" + data_name + "</small>");
+                $("#deleteModal").find('.yes').attr('href', url.replace('id', data_id));
+
+                $("#deleteModal").modal('show');
+            });
+        });
+    </script>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

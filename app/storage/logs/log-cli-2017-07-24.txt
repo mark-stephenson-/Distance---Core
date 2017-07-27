@@ -1,0 +1,84 @@
+[2017-07-24 09:16:19] false.ERROR: exception 'RuntimeException' with message 'Too many arguments, expected arguments "command".' in P:\CMS\vendor\symfony\console\Input\ArgvInput.php:182
+Stack trace:
+#0 P:\CMS\vendor\symfony\console\Input\ArgvInput.php(86): Symfony\Component\Console\Input\ArgvInput->parseArgument('\x97-all')
+#1 P:\CMS\vendor\symfony\console\Input\Input.php(59): Symfony\Component\Console\Input\ArgvInput->parse()
+#2 P:\CMS\vendor\symfony\console\Command\Command.php(219): Symfony\Component\Console\Input\Input->bind(Object(Symfony\Component\Console\Input\InputDefinition))
+#3 P:\CMS\vendor\laravel\framework\src\Illuminate\Console\Command.php(100): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 P:\CMS\vendor\symfony\console\Application.php(843): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 P:\CMS\vendor\symfony\console\Application.php(188): Symfony\Component\Console\Application->doRunCommand(Object(GenerateStandardReports), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 P:\CMS\vendor\symfony\console\Application.php(119): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 P:\CMS\artisan(59): Symfony\Component\Console\Application->run()
+#8 {main} [] []
+[2017-07-24 09:22:21] false.ERROR: exception 'RuntimeException' with message 'Too many arguments, expected arguments "command".' in P:\CMS\vendor\symfony\console\Input\ArgvInput.php:182
+Stack trace:
+#0 P:\CMS\vendor\symfony\console\Input\ArgvInput.php(86): Symfony\Component\Console\Input\ArgvInput->parseArgument('a--ll')
+#1 P:\CMS\vendor\symfony\console\Input\Input.php(59): Symfony\Component\Console\Input\ArgvInput->parse()
+#2 P:\CMS\vendor\symfony\console\Command\Command.php(219): Symfony\Component\Console\Input\Input->bind(Object(Symfony\Component\Console\Input\InputDefinition))
+#3 P:\CMS\vendor\laravel\framework\src\Illuminate\Console\Command.php(100): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 P:\CMS\vendor\symfony\console\Application.php(843): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 P:\CMS\vendor\symfony\console\Application.php(188): Symfony\Component\Console\Application->doRunCommand(Object(GenerateStandardReports), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 P:\CMS\vendor\symfony\console\Application.php(119): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 P:\CMS\artisan(59): Symfony\Component\Console\Application->run()
+#8 {main} [] []
+[2017-07-24 09:22:23] false.ERROR: exception 'RuntimeException' with message 'Too many arguments, expected arguments "command".' in P:\CMS\vendor\symfony\console\Input\ArgvInput.php:182
+Stack trace:
+#0 P:\CMS\vendor\symfony\console\Input\ArgvInput.php(86): Symfony\Component\Console\Input\ArgvInput->parseArgument('aall')
+#1 P:\CMS\vendor\symfony\console\Input\Input.php(59): Symfony\Component\Console\Input\ArgvInput->parse()
+#2 P:\CMS\vendor\symfony\console\Command\Command.php(219): Symfony\Component\Console\Input\Input->bind(Object(Symfony\Component\Console\Input\InputDefinition))
+#3 P:\CMS\vendor\laravel\framework\src\Illuminate\Console\Command.php(100): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 P:\CMS\vendor\symfony\console\Application.php(843): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 P:\CMS\vendor\symfony\console\Application.php(188): Symfony\Component\Console\Application->doRunCommand(Object(GenerateStandardReports), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 P:\CMS\vendor\symfony\console\Application.php(119): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 P:\CMS\artisan(59): Symfony\Component\Console\Application->run()
+#8 {main} [] []
+[2017-07-24 09:22:39] false.ERROR: exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'added_on_standard_report' in 'field list'' in P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php:389
+Stack trace:
+#0 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(389): PDO->prepare('update `prase_r...')
+#1 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(623): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'update `prase_r...', Array)
+#2 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(587): Illuminate\Database\Connection->runQueryCallback('update `prase_r...', Array, Object(Closure))
+#3 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(394): Illuminate\Database\Connection->run('update `prase_r...', Array, Object(Closure))
+#4 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(339): Illuminate\Database\Connection->affectingStatement('update `prase_r...', Array)
+#5 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(1925): Illuminate\Database\Connection->update('update `prase_r...', Array)
+#6 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(316): Illuminate\Database\Query\Builder->update(Array)
+#7 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(1515): Illuminate\Database\Eloquent\Builder->update(Array)
+#8 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(1448): Illuminate\Database\Eloquent\Model->performUpdate(Object(Illuminate\Database\Eloquent\Builder), Array)
+#9 P:\CMS\app\Core\Services\ReportService.php(298): Illuminate\Database\Eloquent\Model->save()
+#10 [internal function]: Core\Services\ReportService->Core\Services\{closure}(Object(PRRecord))
+#11 P:\CMS\vendor\laravel\framework\src\Illuminate\Support\Collection.php(112): array_map(Object(Closure), Array)
+#12 P:\CMS\app\Core\Services\ReportService.php(300): Illuminate\Support\Collection->each(Object(Closure))
+#13 P:\CMS\app\commands\GenerateStandardReports.php(45): Core\Services\ReportService->generateStandardReports(20, true)
+#14 P:\CMS\vendor\laravel\framework\src\Illuminate\Console\Command.php(112): GenerateStandardReports->fire()
+#15 P:\CMS\vendor\symfony\console\Command\Command.php(261): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 P:\CMS\vendor\laravel\framework\src\Illuminate\Console\Command.php(100): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 P:\CMS\vendor\symfony\console\Application.php(843): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 P:\CMS\vendor\symfony\console\Application.php(188): Symfony\Component\Console\Application->doRunCommand(Object(GenerateStandardReports), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 P:\CMS\vendor\symfony\console\Application.php(119): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 P:\CMS\artisan(59): Symfony\Component\Console\Application->run()
+#21 {main}
+
+Next exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'added_on_standard_report' in 'field list' (SQL: update `prase_records` set `updated_at` = 2017-07-24 09:22:39, `added_on_standard_report` = 1 where `id` = 1)' in P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php:631
+Stack trace:
+#0 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(587): Illuminate\Database\Connection->runQueryCallback('update `prase_r...', Array, Object(Closure))
+#1 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(394): Illuminate\Database\Connection->run('update `prase_r...', Array, Object(Closure))
+#2 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Connection.php(339): Illuminate\Database\Connection->affectingStatement('update `prase_r...', Array)
+#3 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(1925): Illuminate\Database\Connection->update('update `prase_r...', Array)
+#4 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(316): Illuminate\Database\Query\Builder->update(Array)
+#5 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(1515): Illuminate\Database\Eloquent\Builder->update(Array)
+#6 P:\CMS\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(1448): Illuminate\Database\Eloquent\Model->performUpdate(Object(Illuminate\Database\Eloquent\Builder), Array)
+#7 P:\CMS\app\Core\Services\ReportService.php(298): Illuminate\Database\Eloquent\Model->save()
+#8 [internal function]: Core\Services\ReportService->Core\Services\{closure}(Object(PRRecord))
+#9 P:\CMS\vendor\laravel\framework\src\Illuminate\Support\Collection.php(112): array_map(Object(Closure), Array)
+#10 P:\CMS\app\Core\Services\ReportService.php(300): Illuminate\Support\Collection->each(Object(Closure))
+#11 P:\CMS\app\commands\GenerateStandardReports.php(45): Core\Services\ReportService->generateStandardReports(20, true)
+#12 P:\CMS\vendor\laravel\framework\src\Illuminate\Console\Command.php(112): GenerateStandardReports->fire()
+#13 P:\CMS\vendor\symfony\console\Command\Command.php(261): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#14 P:\CMS\vendor\laravel\framework\src\Illuminate\Console\Command.php(100): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 P:\CMS\vendor\symfony\console\Application.php(843): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 P:\CMS\vendor\symfony\console\Application.php(188): Symfony\Component\Console\Application->doRunCommand(Object(GenerateStandardReports), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 P:\CMS\vendor\symfony\console\Application.php(119): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 P:\CMS\artisan(59): Symfony\Component\Console\Application->run()
+#19 {main} [] []
+[2017-07-24 09:28:52] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Allowed memory size of 134217728 bytes exhausted (tried to allocate 25562 bytes)' in P:\CMS\app\Core\Services\ReportService.php:288
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []

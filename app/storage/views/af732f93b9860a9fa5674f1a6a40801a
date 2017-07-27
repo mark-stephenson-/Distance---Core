@@ -1,0 +1,74 @@
+<tr>
+    <td><?php echo $node->id; ?></td>
+    <td><?php echo $node->title; ?></td>
+    <td><?php echo $node->nodetype->label; ?></td>
+    <td>
+        <?php if($node->status == 'published'): ?>
+            <?php if($node->published_revision and ($node->latest_revision != $node->published_revision)): ?>
+                <?php
+                    $latestDraft = $node->fetchRevision($node->latest_revision);
+                ?>
+                <a rel="tooltip" title="Draft created <?php echo date('j/m/Y H:i:s', strtotime($latestDraft->created_at)); ?>">Published with Draft</a>
+            <?php else: ?>
+                <?php echo ucfirst($node->status); ?>
+
+            <?php endif; ?>
+        <?php else: ?>
+            <?php echo ucfirst($node->status); ?>
+
+        <?php endif; ?>
+    </td>
+    <td>
+        <?php echo @$node->owner->fullName; ?>
+
+    </td>
+    <td><?php echo date('d M Y H:i', strtotime($node->updated_at)); ?></td>
+    <td class="actions">
+
+        <div class="btn-group pull-right">
+
+            <?php if(Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodeType->name . '.revision-management')): ?>
+                <?php if($node->latest_revision != $node->published_revision): ?>
+                    <a href="<?php echo route('nodes.publish', array(CORE_APP_ID, $collection->id, $node->id, $node->latest_revision)); ?>" rel="tooltip" title="Publish" class="btn btn-small open-publish-node-modal"><i class="icon-level-up"></i></a>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if(isset($node->branch_id) and $node->branch_id): ?>
+                <?php if( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.read')): ?>
+                    <a rel="tooltip" title="View" href="<?php echo route('nodes.view', array($collection->application_id, $collection->id, $node->id, 'branch', $node->branch_id)); ?>" class="btn btn-small"><i class="icon-search"></i></a>
+                <?php endif; ?>
+
+                <?php if( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update')): ?>
+                    <a rel="tooltip" title="Edit" href="<?php echo route('nodes.edit', array($collection->application_id, $collection->id, $node->id, 'branch', $node->branch_id)); ?>" class="btn btn-small"><i class="icon-edit"></i></a>
+                <?php endif; ?>
+
+                <?php if( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.delete')): ?>
+                    <a rel="tooltip" title="Delete" href="#deleteNodeModal"
+                        data-application-id="<?php echo $collection->application_id; ?>"
+                        data-collection-id="<?php echo $collection->id; ?>"
+                        data-node-id="<?php echo $node->id; ?>"
+                        data-branch-id="<?php echo $node->branch_id; ?>"
+                        class="btn btn-small modal-toggle"><i class="icon-trash"></i></a>
+                <?php endif; ?>
+            <?php else: ?>
+                <?php if( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.read')): ?>
+                    <a rel="tooltip" title="View" href="<?php echo route('nodes.view', array($collection->application_id, $collection->id, $node->id)); ?>" class="btn btn-small"><i class="icon-search"></i></a>
+                <?php endif; ?>
+
+                <?php if( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.update')): ?>
+                    <a rel="tooltip" title="Edit" href="<?php echo route('nodes.edit', array($collection->application_id, $collection->id, $node->id, $node->latest_revision)); ?>" class="btn btn-small"><i class="icon-edit"></i></a>
+                <?php endif; ?>
+
+                <?php if( Sentry::getUser()->hasAccess('cms.apps.' . CORE_APP_ID . '.collections.' . $collection->id . '.' . $node->nodetype->name . '.delete')): ?>
+                    <a rel="tooltip" title="Delete" href="#deleteNodeModal" class="btn btn-small modal-toggle"
+                            data-application-id="<?php echo $collection->application_id; ?>"
+                            data-collection-id="<?php echo $collection->id; ?>"
+                            data-node-id="<?php echo $node->id; ?>"
+                            data-latest-revision="<?php echo $node->latest_revision; ?>"
+                        ><i class="icon-trash"></i></a>
+                <?php endif; ?>
+            <?php endif; ?>
+
+        </div>
+    </td>
+</tr>

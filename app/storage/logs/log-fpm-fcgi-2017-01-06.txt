@@ -1,0 +1,8 @@
+[2017-01-06 15:59:48] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on null' in /home/vagrant/the-core/app/storage/views/8c756b2aa82ab8f1d05eac22abf663c4:32
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-01-06 15:59:48] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on null' in /home/vagrant/the-core/app/storage/views/8c756b2aa82ab8f1d05eac22abf663c4:32
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []

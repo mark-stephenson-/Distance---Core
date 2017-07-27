@@ -1,0 +1,81 @@
+<?php $__env->startSection('header'); ?>
+    <h1>Add New Version - App Distribution</h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('body'); ?>
+    <?php echo formModel($new, 'app-distribution', array('enctype' => 'multipart/form-data')); ?>
+
+
+    <div class="control-group">
+        <?php echo Form::label('version', 'Version', array('class' => 'control-label')); ?>
+
+        <div class="controls">
+            <?php echo Form::text('version', Input::old('version'), array('class' => 'span11')); ?>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo Form::label('platform', 'Platform', array('class' => 'control-label')); ?>
+
+        <div class="controls">
+            <?php echo Form::select('platform', array('-', 'android' => 'Android', 'ios' => 'iOS'), Input::old('platform')); ?>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo Form::label('environment', 'Environment', array('class' => 'control-label')); ?>
+
+        <div class="controls">
+            <?php echo Form::select('environment', array('-', 'testing' => 'Testing', 'production' => 'Production'), Input::old('environment')); ?>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo Form::label('release_notes', 'Release Notes', array('class' => 'control-label')); ?>
+
+        <div class="controls">
+            <?php echo Form::textarea('release_notes', Input::old('release_notes'), array('class' => 'span11', 'rows' => 4)); ?>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo Form::label('file', 'Application File', array('class' => 'control-label')); ?>
+
+        <div class="controls">
+            <?php echo Form::file('application'); ?>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo Form::label('profile', 'Provisioning Profile (iOS)', array('class' => 'control-label')); ?>
+
+        <div class="controls">
+            <?php echo Form::file('profile'); ?>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo Form::label('certificate', 'Certificate (Windows)', array('class' => 'control-label')); ?>
+
+        <div class="controls">
+            <?php echo Form::file('certificate'); ?>
+
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <input type="submit" class="btn btn-primary" value="Upload New Version" />
+        <a href="<?php echo route('app-distribution.index', array(CORE_APP_ID)); ?>" class="btn">Back</a>
+    </div>
+
+    <?php echo Form::close(); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

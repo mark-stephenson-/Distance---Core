@@ -1,0 +1,118 @@
+[2017-07-12 07:46:06] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 10:37:26] false.ERROR: exception 'ReflectionException' with message 'Class ipa-distribution does not exist' in \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php:504
+Stack trace:
+#0 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php(504): ReflectionClass->__construct('ipa-distributio...')
+#1 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php(428): Illuminate\Container\Container->build('ipa-distributio...', Array)
+#2 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(462): Illuminate\Container\Container->make('ipa-distributio...', Array)
+#3 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Support\Facades\Facade.php(211): Illuminate\Foundation\Application->make('ipa-distributio...', Array)
+#4 \\HEE-FS-01\DATA\PRASE\CMS\app\controllers\OtaController.php(59): Illuminate\Support\Facades\Facade::__callStatic('make', Array)
+#5 \\HEE-FS-01\DATA\PRASE\CMS\app\controllers\OtaController.php(59): Illuminate\Support\Facades\App::make('ipa-distributio...', Array)
+#6 [internal function]: OtaController->store('1')
+#7 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(231): call_user_func_array(Array, Array)
+#8 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(93): Illuminate\Routing\Controller->callAction('store', Array)
+#9 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(62): Illuminate\Routing\ControllerDispatcher->call(Object(OtaController), Object(Illuminate\Routing\Route), 'store')
+#10 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(967): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'OtaController', 'store')
+#11 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}('1')
+#12 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Route.php(109): call_user_func_array(Object(Closure), Array)
+#13 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1033): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#14 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#15 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(781): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#16 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#17 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#18 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#19 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#20 \\HEE-FS-01\DATA\PRASE\CMS\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#21 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#22 \\HEE-FS-01\DATA\PRASE\CMS\public\index.php(48): Illuminate\Foundation\Application->run()
+#23 {main} [] []
+[2017-07-12 11:55:36] false.ERROR: exception 'ReflectionException' with message 'Class ipa-distribution does not exist' in \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php:504
+Stack trace:
+#0 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php(504): ReflectionClass->__construct('ipa-distributio...')
+#1 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php(428): Illuminate\Container\Container->build('ipa-distributio...', Array)
+#2 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(462): Illuminate\Container\Container->make('ipa-distributio...', Array)
+#3 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Support\Facades\Facade.php(211): Illuminate\Foundation\Application->make('ipa-distributio...', Array)
+#4 \\HEE-FS-01\DATA\PRASE\CMS\app\controllers\OtaController.php(59): Illuminate\Support\Facades\Facade::__callStatic('make', Array)
+#5 \\HEE-FS-01\DATA\PRASE\CMS\app\controllers\OtaController.php(59): Illuminate\Support\Facades\App::make('ipa-distributio...', Array)
+#6 [internal function]: OtaController->store('1')
+#7 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(231): call_user_func_array(Array, Array)
+#8 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(93): Illuminate\Routing\Controller->callAction('store', Array)
+#9 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(62): Illuminate\Routing\ControllerDispatcher->call(Object(OtaController), Object(Illuminate\Routing\Route), 'store')
+#10 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(967): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'OtaController', 'store')
+#11 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}('1')
+#12 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Route.php(109): call_user_func_array(Object(Closure), Array)
+#13 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1033): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#14 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#15 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(781): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#16 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#17 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#18 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#19 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#20 \\HEE-FS-01\DATA\PRASE\CMS\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#21 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#22 \\HEE-FS-01\DATA\PRASE\CMS\public\index.php(48): Illuminate\Foundation\Application->run()
+#23 {main} [] []
+[2017-07-12 11:56:30] false.ERROR: exception 'ReflectionException' with message 'Class ipa-distribution does not exist' in \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php:504
+Stack trace:
+#0 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php(504): ReflectionClass->__construct('ipa-distributio...')
+#1 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Container\Container.php(428): Illuminate\Container\Container->build('ipa-distributio...', Array)
+#2 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(462): Illuminate\Container\Container->make('ipa-distributio...', Array)
+#3 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Support\Facades\Facade.php(211): Illuminate\Foundation\Application->make('ipa-distributio...', Array)
+#4 \\HEE-FS-01\DATA\PRASE\CMS\app\controllers\OtaController.php(59): Illuminate\Support\Facades\Facade::__callStatic('make', Array)
+#5 \\HEE-FS-01\DATA\PRASE\CMS\app\controllers\OtaController.php(59): Illuminate\Support\Facades\App::make('ipa-distributio...', Array)
+#6 [internal function]: OtaController->store('1')
+#7 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(231): call_user_func_array(Array, Array)
+#8 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(93): Illuminate\Routing\Controller->callAction('store', Array)
+#9 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(62): Illuminate\Routing\ControllerDispatcher->call(Object(OtaController), Object(Illuminate\Routing\Route), 'store')
+#10 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(967): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'OtaController', 'store')
+#11 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}('1')
+#12 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Route.php(109): call_user_func_array(Object(Closure), Array)
+#13 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1033): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#14 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Routing\Router.php(1001): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#15 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(781): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#16 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(745): Illuminate\Foundation\Application->dispatch(Object(Illuminate\Http\Request))
+#17 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Session\Middleware.php(72): Illuminate\Foundation\Application->handle(Object(Illuminate\Http\Request), 1, true)
+#18 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Cookie\Queue.php(47): Illuminate\Session\Middleware->handle(Object(Illuminate\Http\Request), 1, true)
+#19 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Cookie\Guard.php(51): Illuminate\Cookie\Queue->handle(Object(Illuminate\Http\Request), 1, true)
+#20 \\HEE-FS-01\DATA\PRASE\CMS\vendor\stack\builder\src\Stack\StackedHttpKernel.php(23): Illuminate\Cookie\Guard->handle(Object(Illuminate\Http\Request), 1, true)
+#21 \\HEE-FS-01\DATA\PRASE\CMS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(641): Stack\StackedHttpKernel->handle(Object(Illuminate\Http\Request))
+#22 \\HEE-FS-01\DATA\PRASE\CMS\public\index.php(48): Illuminate\Foundation\Application->run()
+#23 {main} [] []
+[2017-07-12 12:17:05] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 12:17:58] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 12:28:07] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 12:44:04] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 13:16:36] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 13:16:40] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 13:38:29] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 13:40:43] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []
+[2017-07-12 14:31:57] false.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function hasAccess() on a non-object' in \\HEE-FS-01\DATA\PRASE\CMS\app\storage\views\de52f3018cd176ef26c0610ecbf91e63:33
+Stack trace:
+#0 [internal function]: Illuminate\Exception\Handler->handleShutdown()
+#1 {main} [] []

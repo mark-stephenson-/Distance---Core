@@ -1,0 +1,36 @@
+<table class="table table-bordered data-table">
+    <thead>
+        <th>No.</th>
+        <th>Report Generated</th>
+        <th>Trust</th>
+        <th>Hospital</th>
+        <th>Ward</th>
+        <th>Responses Date Range</th>
+        <th>&nbsp;</th>
+    </thead>
+    <tbody>
+        <?php if(!empty($standardReports)): ?>
+            <?php foreach($standardReports as $key => $report): ?>
+                <tr>
+                    <td><?php echo $key + 1; ?></td>
+                    <td>
+                        <a href="<?php echo route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')); ?>"><?php echo $report->generated_at; ?></a>
+                    </td>
+                    <td><?php echo $report->trust; ?></td>
+                    <td><?php echo $report->hospital; ?></td>
+                    <td><?php echo $report->ward; ?></td>
+                    <td><?php echo \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $report->dates->start)->format('d/m/Y'); ?> - <?php echo \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $report->dates->end)->format('d/m/Y'); ?></td>
+                    <td>
+                        <a href="<?php echo route('reporting.view', array('id' => $report->fileName, 'type' => 'standard')); ?>">View</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td>
+                    There are no standard reports available.
+                </td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
