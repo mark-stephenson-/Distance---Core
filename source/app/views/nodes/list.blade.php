@@ -74,6 +74,13 @@
 
 @section('body')
 
+<?php
+  $hpo = Sentry::findGroupByName('Health Professional Observer');
+  $hua = Sentry::findGroupByName('Healthcare Unit Admin');
+  $su = Sentry::findGroupByName('Super User');
+?>
+
+@if(Sentry::getUser()->inGroup($su) || Sentry::getUser()->inGroup($hua) || Sentry::getUser()->inGroup($su))
     <form class="form-inline pull-left">
         @if (Route::currentRouteName() !== 'nodes.type-list')
             <div class="btn-group change-collection">
@@ -86,13 +93,32 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu pull-right">
-                    @foreach($nodeTypes as $id => $nodeType)
-                        <li><a href="?filter={{ $id }}">{{ $nodeType }}</a></li>
-                    @endforeach
+                        <li><a href="?filter={{ 10 }}">Question Domain</a></li>
                 </ul>
             </div>
         @endif
     </form>
+@else
+  <form class="form-inline pull-left">
+      @if (Route::currentRouteName() !== 'nodes.type-list')
+          <div class="btn-group change-collection">
+              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                  @if (Input::get('filter'))
+                      {{ $nodeTypes[Input::get('filter')] }}
+                  @else
+                      Filter by Node Type
+                  @endif
+                  <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu pull-right">
+                  @foreach($nodeTypes as $id => $nodeType)
+                      <li><a href="?filter={{ $id }}">{{ $nodeType }}</a></li>
+                  @endforeach
+              </ul>
+          </div>
+      @endif
+  </form>
+@endif
 
     <p class="pull-right">
 
