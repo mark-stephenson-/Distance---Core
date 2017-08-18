@@ -69,8 +69,14 @@ class UsersController extends BaseController
                 ->with('successes', new MessageBag(array($user->fullName . ' has been created.')));
     }
 
+
+
     public function edit($userId)
     {
+      $hpo = Sentry::findGroupByName('Health Professional Observer');
+      $hua = Sentry::findGroupByName('Healthcare Unit Admin');
+      $su = Sentry::findGroupByName('Super User');
+
         try
         {
             $user = Sentry::getUserProvider()->findById($userId);
@@ -80,9 +86,12 @@ class UsersController extends BaseController
             return Redirect::back()
                 ->withErrors(new MessageBag(array('That user could not be found.' )));
         }
-
         $groups = array_filter(Sentry::getGroupProvider()->findAll(), function($group) {
-            return $group->hierarchy > Sentry::getUser()->topMostGroupHierarchy();
+            if (Sentry::getUser()->inGroup(Sentry::findGroupByName('Super User'))) {
+              return $group;
+            } else {
+              return $group->hierarchy > Sentry::getUser()->topMostGroupHierarchy();
+            }
         });
 
         $trusts = Node::whereNodeTypeIs($this->trustNodeType, 'published')->whereUserHasAccess('manage-trust')->get();
@@ -234,7 +243,7 @@ class UsersController extends BaseController
 
     public function delete($userId)
     {
-      
+
         $currentUser = Sentry::getUser();
 
         $user = Sentry::findUserById($userId);
