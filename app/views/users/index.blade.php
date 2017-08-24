@@ -31,51 +31,116 @@
             </tr>
         </thead>
         <tbody>
-          @foreach($users as $user)
-              @if(((Sentry::getUser()->inGroup($hua) AND !($user->inGroup($su))) OR !Sentry::getUser()->inGroup($hua)))
-            <tr>
-                <td>
-                    {{ $user->first_name }}
-                </td>
-                <td>
-                    {{ $user->last_name }}
-                </td>
-                <td>
-                    <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
-                </td>
-                <td>
-                    @if($user->groups)
-                        @foreach($user->groups as $group)
-                            {{ $group->name }} <br>
-                        @endforeach
-                    @endif
-                </td>
-                <td>
-                  {{--
-                    @foreach($user->trusts as $trust)
-                        {{ $trust->name }} <br>
-                    @endforeach
-                    --}}
-                </td>
-                <td>
-                    @if (is_null($user->last_login))
-                        Never
-                    @else
-                        {{ date('j-m-Y', strtotime($user->last_login)) }}
-                    @endif
-                </td>
-                <td width="260">
-                    @if (Sentry::getUser()->hasAccess('cms.users.update'))
-                        <a href="{{ route('users.edit', array($user->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
-                    @endif
 
-                    @if (Sentry::getUser()->hasAccess('cms.users.delete'))
-                        <a href="{{ route('users.delete', array($user->id)) }}" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
-                    @endif
-                </td>
-              </tr>
+        @if(!Sentry::getUser()->isSuperUser())
+
+        <?php $users_already_added = array();
+              $i = 0; ?>
+
+          @foreach($users as $user)
+
+          <?php $i++; ?>
+            @foreach(Sentry::getUser()->accessible_nodes as $node)
+
+                @if(((Sentry::getUser()->inGroup($hua) AND !($user->inGroup($su))
+                      AND in_array($node, $user->accessible_nodes))
+                      OR (!Sentry::getUser()->inGroup($hua) AND in_array($node, $user->accessible_nodes))) AND !in_array($user, $users_already_added))
+
+                      <?php $users_already_added[] = $user; ?>
+
+                  <tr>
+                      <td>
+                          {{ $user->first_name }}
+                      </td>
+                      <td>
+                          {{ $user->last_name }}
+                      </td>
+                      <td>
+                          <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                      </td>
+                      <td>
+                          @if($user->groups)
+                              @foreach($user->groups as $group)
+                                  {{ $group->name }} <br>
+                              @endforeach
+                          @endif
+                      </td>
+                      <td>
+                        {{--
+                          @foreach($user->accessible_nodes as $node)
+                              {{ $node->name }} <br>
+                          @endforeach
+                          --}}
+                      </td>
+                      <td>
+                          @if (is_null($user->last_login))
+                              Never
+                          @else
+                              {{ date('j-m-Y', strtotime($user->last_login)) }}
+                          @endif
+                      </td>
+                      <td width="260">
+                          @if (Sentry::getUser()->hasAccess('cms.users.update'))
+                              <a href="{{ route('users.edit', array($user->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                          @endif
+
+                          @if (Sentry::getUser()->hasAccess('cms.users.delete'))
+                              <a href="{{ route('users.delete', array($user->id)) }}" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
+                          @endif
+                      </td>
+                    </tr>
+
+                  @endif
+
+              @endforeach
+
+            @endforeach
+          @else
+            @foreach($users as $user)
+                    <tr>
+                        <td>
+                            {{ $user->first_name }}
+                        </td>
+                        <td>
+                            {{ $user->last_name }}
+                        </td>
+                        <td>
+                            <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                        </td>
+                        <td>
+                            @if($user->groups)
+                                @foreach($user->groups as $group)
+                                    {{ $group->name }} <br>
+                                @endforeach
+                            @endif
+                        </td>
+                        <td>
+                          {{--
+                            @foreach($user->accessible_nodes as $node)
+                                {{ $node->name }} <br>
+                            @endforeach
+                            --}}
+                        </td>
+                        <td>
+                            @if (is_null($user->last_login))
+                                Never
+                            @else
+                                {{ date('j-m-Y', strtotime($user->last_login)) }}
+                            @endif
+                        </td>
+                        <td width="260">
+                            @if (Sentry::getUser()->hasAccess('cms.users.update'))
+                                <a href="{{ route('users.edit', array($user->id)) }}" class="btn btn-small"><i class="icon-edit"></i> Edit</a>
+                            @endif
+
+                            @if (Sentry::getUser()->hasAccess('cms.users.delete'))
+                                <a href="{{ route('users.delete', array($user->id)) }}" class="btn btn-small"><i class="icon-trash"></i> Delete</a>
+                            @endif
+                        </td>
+                      </tr>
+                @endforeach
+
             @endif
-          @endforeach
         </tbody>
     </table>
 
