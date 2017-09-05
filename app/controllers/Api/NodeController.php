@@ -344,6 +344,8 @@ class NodeController extends \BaseController
                 $monolog = new Logger('log');
                 $monolog->pushHandler(new StreamHandler(storage_path('logs/log-submission-'.date('Y-m-d').'.txt')), Logger::WARNING);
                 $monolog->debug('parsing submission failed', compact('node', 'error'));
+
+                return Response::make(array('success' => false, 'error' => 'System error saving node, view Log file: log-submission-'.date('Y-m-d')), 500);
             }
 
             return Response::make(array('success' => true, 'error' => null), 201);
@@ -360,7 +362,7 @@ class NodeController extends \BaseController
 
             $record = new PRRecord();
 
-            $record->pmos_id = $data['pmosID'];
+            $record->pmos_id = array_key_exists('pmosID', $data) ? $data['pmosID'] : 12;
             $record->basic_data = json_encode($data['basicData']);
             $record->incomplete_reason = $data['incompleteReason'];
 
