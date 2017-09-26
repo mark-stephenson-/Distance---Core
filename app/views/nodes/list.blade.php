@@ -74,25 +74,33 @@
 
 @section('body')
 
-    <form class="form-inline pull-left">
-        @if (Route::currentRouteName() !== 'nodes.type-list')
-            <div class="btn-group change-collection">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                    @if (Input::get('filter'))
-                        {{ $nodeTypes[Input::get('filter')] }}
-                    @else
-                        Filter by Node Type
-                    @endif
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu pull-right">
-                    @foreach($nodeTypes as $id => $nodeType)
-                        <li><a href="?filter={{ $id }}">{{ $nodeType }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </form>
+<?php
+  $hpo = Sentry::findGroupByName('Health Professional Observer');
+  $hua = Sentry::findGroupByName('Healthcare Unit Admin');
+  $su = Sentry::findGroupByName('Super User');
+?>
+
+@if(!Sentry::getUser()->inGroup($su) && !Sentry::getUser()->inGroup($hua) && !Sentry::getUser()->inGroup($su))
+  <form class="form-inline pull-left">
+      @if (Route::currentRouteName() !== 'nodes.type-list')
+          <div class="btn-group change-collection">
+              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                  @if (Input::get('filter'))
+                      {{ $nodeTypes[Input::get('filter')] }}
+                  @else
+                      Filter by Node Type
+                  @endif
+                  <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu pull-right">
+                  @foreach($nodeTypes as $id => $nodeType)
+                      <li><a href="?filter={{ $id }}">{{ $nodeType }}</a></li>
+                  @endforeach
+              </ul>
+          </div>
+      @endif
+  </form>
+@endif
 
     <p class="pull-right">
 
@@ -109,6 +117,7 @@
         @endif
     </p>
 
+
     <table class="table">
 
         <thead>
@@ -124,14 +133,24 @@
         </thead>
 
         <tbody>
+          @if(Sentry::getUser()->inGroup($su) || Sentry::getUser()->inGroup($hua) || Sentry::getUser()->inGroup($su))
+            @foreach ($nodes as $node)
+              @if($node->node_type_name == "question-domain")
+                @include('nodes.list-row', compact('node', 'nodeTypes'))
+              @endif
+            @endforeach
+          @else
             @foreach ($nodes as $node)
                 @include('nodes.list-row', compact('node', 'nodeTypes'))
             @endforeach
+          @endif
         </tbody>
     </table>
 
     <div style="text-align: center">
-        <?php echo $nodes->appends( array('filter' => Input::get('filter'), 'column' => Input::get('column'), 'sort' => Input::get('sort')) )->links(); ?>
+        <?php
+            echo $nodes->appends( array('filter' => Input::get('filter'), 'column' => Input::get('column'), 'sort' => Input::get('sort')) )->links();
+          ?>
     </div>
 
     <div class="modal hide fade" id="addNodeModal">
@@ -189,6 +208,7 @@
 
     <script>
         $(document).ready( function() {
+
             var application_id;
             var collection_id;
             var node_id;
@@ -228,6 +248,7 @@
                         // There is a branch ID
                     }
             });
+
         });
     </script>
 
