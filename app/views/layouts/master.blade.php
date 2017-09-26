@@ -23,6 +23,7 @@
         <div class="row-fluid">
             <div class="span2">
                 <nav class="main">
+
                     <a class="logo" href="/"><img src="/images/logos/prase-logo.png" alt="NHS - PRASE" /></a>
                     <ul>
                         @foreach(Config::get('core-navigation') as $item)
@@ -31,7 +32,7 @@
                             ?>
 
                             @if (Sentry::getUser()->hasAccess($item['access']))
-                                <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
+                                <li><a href="{{ route($item['route'], replaceNavigationParams($item['params'])) . (array_key_exists('querystring', $item) ? '?' . $item['querystring'] : '') }}"><i class="icon-{{ $item['icon'] }}"></i> {{ $item['title']}}</a></li>
                             @endif
                         @endforeach
                     </ul>
