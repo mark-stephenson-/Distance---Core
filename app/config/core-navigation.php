@@ -13,6 +13,7 @@ return array(
         'title' => 'Manage domains',
         'route' => 'nodes.list',
         'params' => array('[app-id]', '[collection-id]'),
+        'querystring' => 'filter=10',
         'icon' => 'th-list',
         'access' => 'cms.apps.[app-id].collections.[collection-id].*',
     ),
