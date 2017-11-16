@@ -340,6 +340,8 @@ class CSV
             ])
             ->get();
 
+        Log::info('$prefetchedNotes size: '. sizeof($prefetchedNotes)); // always 0 so notes[] is null
+        $notes = [];
         foreach ($prefetchedNotes as $i => $note) {
             if ($note->record == null) {
                 continue;
@@ -414,6 +416,7 @@ class CSV
             ])
             ->get();
 
+        $concerns = []; // In case $prefetchedConcerns is 0
         foreach ($prefetchedConcerns as $i => $concern) {
             $questionNumber = '';
             $questionText = '';
@@ -468,6 +471,7 @@ class CSV
                 'i18n_strings.value AS questionText',
             ]);
 
+        $key = []; // In case $prefetchedConcerns is 0
         foreach ($questions->sortBy(function ($record) { return explode(' ', $record->node->title)[1]; }, SORT_NUMERIC) as $i => $question) {
             foreach (explode(',', $question->answerTypes) as $a => $answerTypeId) {
                 foreach (explode(',', Node::find($answerTypeId)->fetchRevision()->options) as $b => $_optionId) {
