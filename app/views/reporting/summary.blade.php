@@ -14,14 +14,16 @@
 function filterConcerns($concerns) {
     $makeComparer = function($criteria) {
         $comparer = function ($first, $second) use ($criteria) {
-            foreach ($criteria as $key => $orderType) {
-                // normalize sort direction
-                $orderType = strtolower($orderType);
-                if ($first->$key < $second->$key) {
-                    return $orderType === "asc" ? -1 : 1;
-                } else if ($first->$key > $second->$key) {
-                    return $orderType === "asc" ? 1 : -1;
-                }
+            if(!isset($first) || !isset($second)){
+              foreach ($criteria as $key => $orderType) {
+                  // normalize sort direction
+                  $orderType = strtolower($orderType);
+                  if ($first->$key < $second->$key) {
+                      return $orderType === "asc" ? -1 : 1;
+                  } else if ($first->$key > $second->$key) {
+                      return $orderType === "asc" ? 1 : -1;
+                  }
+              }
             }
             // all elements were equal
             return 0;
