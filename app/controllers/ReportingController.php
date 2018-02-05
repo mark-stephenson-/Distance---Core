@@ -119,7 +119,7 @@ class ReportingController extends \BaseController
 
         $fileKey = time();
 
-        file_put_contents(storage_path("reports/{$fileKey}.json"), $reportJsonData);
+        file_put_contents(storage_path("reports/standard/{$fileKey}.json"), $reportJsonData);
 
         return $fileKey;
     }
@@ -190,7 +190,7 @@ class ReportingController extends \BaseController
         if(Input::get('type')) {
             $type = 'standard/';
         }
-        $filePath = storage_path("reports/{$type}{$fileKey}.json"); //no json is being generated
+        $filePath = storage_path("reports/standard/{$type}{$fileKey}.json"); //no json is being generated
         return json_decode(file_get_contents($filePath));
     }
 
