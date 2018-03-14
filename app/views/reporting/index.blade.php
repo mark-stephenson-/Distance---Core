@@ -91,6 +91,7 @@
                 var $wardsSelect = $filterContainer.find('.wards-select');
 
                 $hospitalSelect.show();
+                $wardsSelect.select2("val", "");
                 $wardsSelect.select2("destroy");
 
                 updateHospitalSelect(trustId, $hospitalSelect)
@@ -106,6 +107,7 @@
                 var $wardsSelect = $filterContainer.find('.wards-select');
 
                 $wardsRow.show();
+                $wardsSelect.select2("val", "");
                 $wardsSelect.select2("destroy");
 
                 updateWardsSelect(hospitalId, $wardsSelect);
