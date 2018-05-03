@@ -41,11 +41,18 @@ if (Request::segment(1) == 'apps' and is_numeric($appId)) {
     define('CORE_APP_ID', Application::currentId());
 }
 
+// PRASE - 274
+// Some users were creating volunteers that couldnt log in the iOS apps
+// This was because in the table "nodes" the volunteer was created using collection_id: 0
+// So we put always the collection_id as 1:
+define('CORE_COLLECTION_ID', 1);
+/*
 if (Request::segment(3) == 'collections' and is_numeric($collectionId)) {
     define('CORE_COLLECTION_ID', $collectionId);
 } else {
     define('CORE_COLLECTION_ID', Collection::currentId());
 }
+*/
 
 View::composer('*', function ($view) {
     $view->with('appId', CORE_APP_ID);
