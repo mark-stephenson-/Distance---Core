@@ -73,6 +73,8 @@ class NodeController extends \BaseController
             $return = $nodes->toArray();
         }
 
+        // $return = $nodes->toArray();
+
         if ($forAPI === true) {
             return Api::makeResponse($return, 'nodes');
         } else {
@@ -562,6 +564,20 @@ class NodeController extends \BaseController
             if ($item->category == 'date') {
                 $node->{$item->name} = Api::convertDate($published_revision->{$item->name});
             }
+        }
+
+        if ($node->nodetype->id == 9) {
+          if ($published_revision->trust) {
+              $trusts = @Node::whereId($published_revision->trust)->first();
+              if ($trusts) {
+                  $trust = $this->doExtended($trusts)->toArray();
+                  $node->trustID = $trust["id"];
+              } else {
+                  $node->trustID = null;
+              }
+          } else {
+              $node->trustID = null;
+          }
         }
 
         return $node;
