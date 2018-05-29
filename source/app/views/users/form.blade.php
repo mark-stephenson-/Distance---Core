@@ -9,7 +9,7 @@
 @stop
 
 @section('body')
-    
+
     {{ formModel($user, 'users', array('autocomplete' => 'off'), false) }}
 
     <ul class="nav nav-tabs">
@@ -24,7 +24,6 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="info">
-
             @if (Sentry::getUser()->isSuperUser())
                 <div class="control-group">
                     {{ Form::label('super_admin', 'Super Admin', array('class' => 'control-label')) }}
@@ -120,12 +119,13 @@
                 <div class="controls">
                     {{ Form::password('password_confirmation', null, array('class' => 'span11')) }}
                 </div>
-            </div> 
+            </div>
 
         </div>
 
         @if ( $user->exists )
             <div class="tab-pane" id="groups">
+
                 @include('users.groups')
             </div>
 
@@ -136,7 +136,7 @@
                             <li>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" class="nodes-checkbox" data-node-checkbox="{{ $trust->node_id }}" name="node_ids[]" value="{{ $trust->node_id }}" {{ in_array($trust->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $trust->name }}
+                                        <input type="checkbox" class="nodes-checkbox trust-checkbox" id="{{$trust->node_id}}" data-node-checkbox="{{ $trust->node_id }}" name="node_ids[]" value="{{ $trust->node_id }}" {{ in_array($trust->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $trust->name }}
                                         <a data-toggle="collapse" class="arrow-link" href="#collapse_hospitals_{{ $trust->node_id }}" aria-expanded="false" aria-controls="collapse_hospitals_{{ $trust->node_id }}"><i class="icon-caret-right"></i></a>
                                     </label>
                                 </div>
@@ -146,7 +146,7 @@
                                             <li>
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox" class="nodes-checkbox" data-node-checkbox="{{ $hospital->node_id }}" name="node_ids[]" data-parent-node="{{ $trust->node_id }}" value="{{ $hospital->node_id }}" {{ in_array($hospital->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $hospital->name }}
+                                                        <input type="checkbox" class="nodes-checkbox hospital-checkbox" id="{{$hospital->node_id}}" data-node-checkbox="{{ $hospital->node_id }}" name="node_ids[]" data-parent-node="{{ $trust->node_id }}" value="{{ $hospital->node_id }}" {{ in_array($hospital->node_id, $user->accessible_nodes) ? 'checked' : '' }}>{{ $hospital->name }}
                                                         @unless($hospital->wards->isEmpty())
                                                             <a data-toggle="collapse" class="arrow-link" href="#collapse_wards_{{ $hospital->node_id }}" aria-expanded="false" aria-controls="collapse_wards_{{ $hospital->node_id }}"><i class="icon-caret-right"></i></a>
                                                         @endif
@@ -176,7 +176,7 @@
             </div>
         @endif
 
-    </div>   
+    </div>
 
     <div class="form-actions">
         @if ($user->exists)
@@ -194,6 +194,22 @@
             $('.collapse').collapse({toggle: false});
 
             // make sure that if a child element is checked, the parent gets checked as well
+            $('.trust-checkbox').on('change', function (event) {
+              if (event.originalEvent !== undefined) {
+                var id = '#collapse_hospitals_' + event.target.id;
+                var childUL = $(id);
+                childUL.children().find('.nodes-checkbox').prop('checked', $(this).prop('checked'));
+              }
+            })
+
+            $('.hospital-checkbox').on('change', function (event) {
+              if (event.originalEvent !== undefined) {
+                var id = '#collapse_wards_' + event.target.id;
+                var childUL = $(id);
+                childUL.children().find('.nodes-checkbox').prop('checked', $(this).prop('checked'));
+              }
+            })
+
             $('.nodes-checkbox').on('change', function () {
                 var $sibblings_list = $(this).closest('ul').children('li');
                 var $parent_checkbox = $('#permissions').find('[data-node-checkbox="' + $(this).data('parent-node') + '"]');
@@ -209,7 +225,9 @@
                 } else {
                     $parent_checkbox.prop('checked', false);
                 }
+
                 $parent_checkbox.trigger('change');
+
             });
 
             $('.arrow-link').click(function () {
