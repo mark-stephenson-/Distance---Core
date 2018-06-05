@@ -12,6 +12,12 @@
 */
 
 App::before(function ($request) {
+
+    if( ! Request::secure())
+    {
+        return Redirect::secure(Request::path());
+    }
+
     if (App::environment('production')) {
         Request::setTrustedProxies([
             '172.27.30.240',
